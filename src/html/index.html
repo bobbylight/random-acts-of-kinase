@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TypeScript Webpack Starter Application</title>
+</head>
+<body>
+
+Hello world!
+<p>
+    From the server: <div id="response"></div>
+</p>
+
+<script>
+    var req = new XMLHttpRequest();
+    req.addEventListener("load", function() {
+        document.getElementById('response').innerHTML = this.responseText;
+    });
+    req.open("GET", 'api/decks');
+    req.send();
+</script>
+
+</body>
+</html>

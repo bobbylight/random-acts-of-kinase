@@ -1,0 +1,7 @@
+node_modules
+coverage
+dist
+.idea/
+npm-debug.log
+kinase.db
+
