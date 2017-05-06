@@ -11,35 +11,58 @@ const fs = require('fs');
 const path = require('path');
 const async = require('async');
 
-// A quick test verifying DB connectivity
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database(path.join(__dirname, './kinase.db'));
-const data = [];
-db.serialize(() => {
+//import Promise from 'bluebird';
+const Promise = require('bluebird');
+const db = require('sqlite');
 
-    db.each('select * from data_report limit 10;', (err, row) => {
-        console.log(JSON.stringify(row));
-        data.push(row);
-    });
-});
-db.close();
+db.open(path.join(__dirname, './kinase.db'), { Promise });
 
-const createDeckMetadata = () => {
+const createCompoundMetadata = async (filter, offset, limit) => {
 
-    return {
-        one: 'one',
-        boolean: true,
-        number: 42,
-        data: data
-    };
+    // const query = 'select * from data_report where compound_nm like \'%' + filter + '%\';';
+    // const [ data ] = await Promise.all([ db.all(query) ]);
+
+    try {
+        const query = 'select * from data_report where compound_nm like ? limit ? offset ?';
+        const countQuery = 'select count(1) as count from data_report where compound_nm like ?';
+        console.log('Query: ' + query);
+        filter = '%' + filter + '%';
+        const statement = await db.prepare(query);
+        const countStatement = await db.prepare(countQuery);
+        const [ data, count ] = await Promise.all([
+            statement.all(filter, limit, offset),
+            countStatement.get(filter)
+        ]);
+        //statement.finalize();
+        return { data, count: count.count };
+    } catch (e) {
+        console.error('An error occurred fetching data: ' + e);
+        return [];
+    }
 };
 
-app.get('/api/decks', (req, res) => {
+app.get('/api/compounds', async (req, res) => {
+
+    const start = req.query.offset || 0;
+    const limit = req.query.limit || 20;
+    const compoundData = await createCompoundMetadata(req.query.filter, start, limit);
+
+    // Our response is built to the DataTables spec:
+    // https://datatables.net/manual/server-side
+    const response = {
+        draw: req.query.draw || 1,
+        recordsTotal: compoundData.count, // This isn't really true, but I don't think we need to do another query
+        recordsFiltered: compoundData.count,
+        data: compoundData.data
+    };
+
     res.type('application/json');
-    res.json(createDeckMetadata());
+    console.log('... returning: ' + JSON.stringify(response));
+    res.json(response);
 });
 
 app.use(express.static(path.join(__dirname, '../../dist')));
+app.use(express.static(path.join(__dirname, '../../semantic')));
 
 // Single-page app; always route to index.html for non-static content URLs
 app.get('/', (req, res) => {

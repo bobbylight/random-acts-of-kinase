@@ -13,7 +13,7 @@ const webpack = require('webpack');
 
 module.exports = {
     entry: {
-        main: [ path.resolve('./src/app/index.ts') ]
+        main: [ path.resolve('./src/app/index.js') ]
     },
     output: {
         filename: 'build.js',

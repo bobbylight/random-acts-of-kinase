@@ -1,11 +1,12 @@
 {
     "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
         "allowJs": false,
         "allowUnreachableCode": false,
         "allowUnusedLabels": false,
         "declaration": false,
         "forceConsistentCasingInFileNames": true,
-        "noImplicitAny": true,
+        //"noImplicitAny": true,
         "noImplicitReturns": true,
         //"noUnusedLocals": true,
         //"noUnusedParameters": true,
@@ -14,7 +15,9 @@
         "strictNullChecks": true,
 
         "target": "es5",
-        "module": "commonjs",
+//        "module": "commonjs",
+        "module": "es2015",
+        "moduleResolution": "node",
         "sourceMap": true
     }
 }

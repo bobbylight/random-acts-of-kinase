@@ -31,7 +31,7 @@
 		"new-parens": true,
 		//"no-any": true,
 		"no-arg": true,
-		"no-consecutive-blank-lines": true,
+		//"no-consecutive-blank-lines": true, // TODO: Reenable when vue file parsing works - https://github.com/palantir/tslint/issues/2099
 		"no-construct": true,
 		"no-debugger": true,
 		"no-duplicate-variable": true,

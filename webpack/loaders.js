@@ -4,6 +4,15 @@ module.exports = [
         exclude: /node_modules/,
         loader: 'ts-loader'
     }, {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+        options: {
+            loaders: {
+                //ts: 'ts-loader!tslint-loader', // TODO: Reenable when this stops causing errors when building
+                css: 'vue-style-loader!css-loader' // <style lang="css">
+            }
+        }
+    }, {
         test: /\.css$/,
         loader: 'style-loader!css-loader'
     }, {

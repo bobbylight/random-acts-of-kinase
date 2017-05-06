@@ -3,22 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>TypeScript Webpack Starter Application</title>
+
+    <!--<link rel="stylesheet" type="text/css" href="dist/semantic.min.css">-->
+    <!--<script-->
+        <!--src="https://code.jquery.com/jquery-3.1.1.min.js"-->
+        <!--integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="-->
+        <!--crossorigin="anonymous"></script>-->
+    <!--<script src="dist/semantic.min.js"></script>-->
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/dataTables.semanticui.min.css">-->
+<!--<script src="https://cdn.datatables.net/1.10.15/js/dataTables.semanticui.min.js"></script>-->
+    <!--<script src="https://unpkg.com/vue"></script>-->
 </head>
 <body>
 
-Hello world!
-<p>
-    From the server: <div id="response"></div>
-</p>
-
-<script>
-    var req = new XMLHttpRequest();
-    req.addEventListener("load", function() {
-        document.getElementById('response').innerHTML = this.responseText;
-    });
-    req.open("GET", 'api/decks');
-    req.send();
-</script>
+<div id="app"></div>
 
 </body>
 </html>

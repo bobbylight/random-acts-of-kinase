@@ -18,15 +18,18 @@ loaders.push({
 
 module.exports = [{
     entry: {
-        main: [ path.resolve('./src/client/index.ts') ]
+        main: [ path.resolve('./src/client/index.js') ]
     },
     output: {
         path: path.resolve('dist'),
         filename: '[name].js'
     },
     resolve: {
-        extensions: [ '.ts', '.tsx', '.js', '.json' ],
-        modules: [ 'src/client', 'src/styles', 'node_modules' ]
+        extensions: [ '.ts', '.tsx', '.js', '.json', '.vue' ],
+        modules: [ 'src/client', 'src/styles', 'node_modules' ],
+        alias: {
+            'vue$': 'vue/dist/vue.esm.js'
+        }
     },
     devtool: 'source-map', //devBuild ? 'cheap-eval-source-map' : 'source-map',
     plugins: [
@@ -39,7 +42,7 @@ module.exports = [{
         })
     ],
     module: {
-        loaders: loaders
+        rules: loaders//loaders: loaders
     }
 }];
 
