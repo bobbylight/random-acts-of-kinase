@@ -5,15 +5,31 @@
 
         <div class="ui main text container">
 
-            This is the application body
-            <search-field :initial-filter="filter" @change="filterChanged"></search-field>
+            <div class="ui grid">
 
-            <result-table :filter="gridFilter"></result-table>
+                <div class="eight wide column">
+                    <search-field type="inhibitor" v-model="filters.inhibitor"
+                            place-holder="Inhibitor"></search-field>
+                </div>
+
+                <div class="eight wide column">
+                    <search-field type="kinase" v-model="filters.kinase"
+                            place-holder="Kinase"></search-field>
+                </div>
+
+                <div class="eight wide column">
+                    <search-field type="activity" v-model="filters.activity"
+                          place-holder="Remaining activity" label="%"></search-field>
+                </div>
+
+            </div>
+
+            <result-table :filters="gridFilters"></result-table>
         </div>
     </div>
 </template>
 
-<script type="typescript">
+<script>
 
     import debounce from 'debounce';
     import navbar from './navbar.vue';
@@ -29,23 +45,45 @@
         },
         data() {
             return {
-                filter: 'TAK',
-                gridFilter: 'TAK',
+                filters: {
+                    inhibitor: '',
+                    kinase: '',
+                    activity: ''
+                },
+                gridFilters: {
+                    inhibitor: '',
+                    kinase: '',
+                    activity: ''
+                },
                 compounds: []
             };
         },
         created() {
         	console.log('app created!');
-        	this.debouncedRefreshTable = debounce(this.refreshTable, 500);
+        	this.debouncedRefreshTable = debounce(this.refreshTable, 750);
+        },
+        watch: {
+            'filters.inhibitor': function(newFilter) {
+                this.debouncedRefreshTable();
+            },
+            'filters.kinase': function(newFilter) {
+                this.debouncedRefreshTable();
+            },
+            'filters.activity': function(newFilter) {
+                this.debouncedRefreshTable();
+            }
         },
         methods: {
-            filterChanged: function(newValue) {
-                console.log('Filter changed to: ' + newValue);
-                this.debouncedRefreshTable(newValue);
+            filterChanged: function(type, newValue) {
+                this.debouncedRefreshTable();
             },
 
-            refreshTable: function(newValue) {
-                this.gridFilter = this.filter = newValue;
+            refreshTable: function() {
+                //this.gridFilters = JSON.parse(JSON.stringify(this.filters));
+                this.gridFilters.inhibitor = this.filters.inhibitor;
+                this.gridFilters.kinase = this.filters.kinase;
+                this.gridFilters.activity = this.filters.activity;
+                console.log('New gridFilters: ' + JSON.stringify(this.gridFilters));
             }
         }
     };

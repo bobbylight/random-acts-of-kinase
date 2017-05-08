@@ -17,21 +17,63 @@ const db = require('sqlite');
 
 db.open(path.join(__dirname, './kinase.db'), { Promise });
 
-const createCompoundMetadata = async (filter, offset, limit) => {
+const createCompoundMetadata = async (queryParams, offset, limit) => {
 
-    // const query = 'select * from data_report where compound_nm like \'%' + filter + '%\';';
-    // const [ data ] = await Promise.all([ db.all(query) ]);
+    let query = 'select * from data_report';
+    let countQuery = 'select count(1) as count from data_report';
+
+    let whereClauseDefined = false;
+    if (queryParams.inhibitor) {
+        query += ' where compound_nm like ?';
+        countQuery += ' where compound_nm like ?';
+        whereClauseDefined = true;
+    }
+    if (queryParams.activity) {
+        const whereClausePart = (whereClauseDefined ? ' and' : ' where') + ' activity like ?';
+        query += whereClausePart;
+        countQuery += whereClausePart;
+        whereClauseDefined = true;
+    }
+    if (queryParams.kinase) {
+        const whereClausePart = (whereClauseDefined ? ' and' : ' where') + ' (discoverx_gene_symbol like ? or entrez_gene_symbol like ?)';
+        query += whereClausePart;
+        countQuery += whereClausePart;
+    }
+
+    query += ' limit ? offset ?';
+    console.log('Query params: ' + JSON.stringify(queryParams));
+    console.log('Query:        ' + query);
+    console.log('Count query:  ' + countQuery);
+
+    const stmtArgs = [];
+    const countStmtArgs = [];
+    if (queryParams.inhibitor) {
+        const arg = '%' + queryParams.inhibitor + '%';
+        stmtArgs.push(arg);
+        countStmtArgs.push(arg);
+        queryParams.inhibitor = arg;
+    }
+    if (queryParams.activity) {
+        const arg = '%' + queryParams.activity + '%';
+        stmtArgs.push(arg);
+        countStmtArgs.push(arg);
+    }
+    if (queryParams.kinase) {
+        const arg = '%' + queryParams.kinase + '%';
+        stmtArgs.push(arg);
+        countStmtArgs.push(arg);
+    }
+    stmtArgs.push(limit, offset);
+
+    console.log('Query args:       ' + JSON.stringify(stmtArgs));
+    console.log('Count query args: ' + JSON.stringify(countStmtArgs));
 
     try {
-        const query = 'select * from data_report where compound_nm like ? limit ? offset ?';
-        const countQuery = 'select count(1) as count from data_report where compound_nm like ?';
-        console.log('Query: ' + query);
-        filter = '%' + filter + '%';
         const statement = await db.prepare(query);
         const countStatement = await db.prepare(countQuery);
         const [ data, count ] = await Promise.all([
-            statement.all(filter, limit, offset),
-            countStatement.get(filter)
+            statement.all(queryParams.inhibitor, limit, offset),
+            countStatement.get(queryParams.inhibitor)
         ]);
         //statement.finalize();
         return { data, count: count.count };
@@ -45,7 +87,7 @@ app.get('/api/compounds', async (req, res) => {
 
     const start = req.query.offset || 0;
     const limit = req.query.limit || 20;
-    const compoundData = await createCompoundMetadata(req.query.filter, start, limit);
+    const compoundData = await createCompoundMetadata(req.query, start, limit);
 
     // Our response is built to the DataTables spec:
     // https://datatables.net/manual/server-side

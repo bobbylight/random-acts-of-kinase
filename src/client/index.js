@@ -17,17 +17,7 @@ window.onload = () => {
     new Vue({
         el: '#app',
         render: (h) => {
-            console.log('Runnieng h(App)... ' + App + ', ' + document.getElementById('app'));
             return h(App);
-        },
-        created: function() {
-            console.log('index.js created');
-        },
-        mounted: function() {
-            console.log('index.js mounted');
-        },
-        destroyed: function() {
-            console.log('index.js destroyed');
         }
     });
 };

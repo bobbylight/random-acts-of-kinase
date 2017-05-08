@@ -1,6 +1,7 @@
 <template>
-    <div class="ui input">
-        <input type="text" placeholder="Search..." v-model="filter" v-on:input="valueChanged($event)">
+    <div class="ui input search-field" v-bind:class="{ 'right labeled': label }">
+        <input type="text" :placeholder="placeHolder" :value="value" @input="$emit('input', $event.target.value)">
+        <div class="ui label" v-bind:style="{ display: labelDisplay }">{{label}}</div>
     </div>
 </template>
 
@@ -10,26 +11,39 @@ export default {
     name: 'searchField',
 
     props: {
-        initialFilter: {
+        type: {
             type: String,
             required: true
+        },
+        value: { // Special prop received from v-model
+            type: String,
+            required: true
+        },
+        placeHolder: {
+            type: String,
+            required: true
+        },
+        label: {
+            type: String,
+            required: false
+        }
+    },
+
+    computed: {
+        labelDisplay: function() {
+            return this.label ? 'inherit' : 'none';
         }
     },
 
     data: function() {
         return {
-            filter: this.initialFilter,
-            hardCoded: 'Hello'
         };
-    },
-
-    methods: {
-        valueChanged($event) {
-            this.$emit('change', $event.target.value);
-        }
     }
 };
 </script>
 
 <style scoped>
+    .search-field {
+        width: 100%;
+    }
 </style>
