@@ -65,7 +65,8 @@
             },
 
             compoundRenderer: function(data, type, row) {
-                return '<a href="http://www.google.com">' + data + '</a>';
+                return '<a href="#/compound/' + data + '">' + data + '</a>';
+//                return '<a v-link="{ path: \'/compound/' + data + '\' }">' + data + '</a>';
             }
         },
         mounted: function() { // tslint:disable-line
@@ -81,7 +82,7 @@
                 pageLength: 20,
                 pagingType: 'first_last_numbers',
                 ajax: {
-                    url: 'api/compounds',
+                    url: '/api/compounds',
                     data: (d) => {
 
                         this.addSuppliedFilters(d);

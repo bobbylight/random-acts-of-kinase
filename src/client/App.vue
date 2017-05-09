@@ -3,6 +3,8 @@
 
         <navbar></navbar>
 
+        <router-view></router-view>
+
         <div class="ui main text container">
 
             <div class="ui grid">

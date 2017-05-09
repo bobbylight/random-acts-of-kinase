@@ -8,14 +8,39 @@
 
 import Vue from 'vue';
 import App from './App.vue';
+import VueRouter from 'vue-router';
 import './../../semantic/dist/semantic.min.css';
 import 'datatables.net';
 //import 'datatables.net-dt/css/jquery.dataTables.css';
 import './dataTables.semanticui';
+import Main from './main.vue';
+import Compound from './compound.vue';
+
+Vue.use(VueRouter);
 
 window.onload = () => {
+
+    const routes = [
+        {
+            path: '/',
+            name: 'home',
+            component: Main
+        },
+        {
+            path: '/compound/:id',
+            name: 'compound',
+            component: Compound
+        }
+    ];
+
+    const router = new VueRouter({
+        /*mode: 'history',*/
+        routes
+    });
+
     new Vue({
         el: '#app',
+        router: router,
         render: (h) => {
             return h(App);
         }

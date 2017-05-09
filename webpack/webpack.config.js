@@ -21,6 +21,7 @@ module.exports = [{
         main: [ path.resolve('./src/client/index.js') ]
     },
     output: {
+        publicPath: '/',
         path: path.resolve('dist'),
         filename: '[name].js'
     },
