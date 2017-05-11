@@ -6,14 +6,11 @@
             KINASE!
         </div>
 
-        <a class="item" v-bind:class="{ active: 'search' === activeTab}" v-on:click="setActiveTab('search')">
+        <a class="item" v-bind:class="{ active: isActiveTab('home') }" v-on:click="setActiveTab('home')">
             Search
         </a>
-        <a class="item" v-bind:class="{ active: 'messages' === activeTab}" v-on:click="setActiveTab('messages')">
-            Messages
-        </a>
-        <a class="item" v-bind:class="{ active: 'friends' === activeTab}" v-on:click="setActiveTab('friends')">
-            Friends
+        <a class="item" v-bind:class="{ active: isActiveTab('about') }" v-on:click="setActiveTab('about')">
+            About
         </a>
 
         <div class="button-section item">
@@ -35,25 +32,27 @@ export default {
     },
     data: () => {
         return {
-            activeTab: 'search',
+            activeTab: 'home',
             openCompounds: []
         };
     },
     methods: {
 
+        isActiveTab(tabName) {
+            const tabNameRegex = new RegExp(tabName);
+            console.log(tabName + ' -- ' + this.$route.name + ', ' + (this.$route.name && this.$route.name.match(tabNameRegex)));
+            return this.$route.name && !!this.$route.name.match(tabNameRegex);
+        },
+
         setActiveTab(tabName) {
-            this.activeTab = tabName;
-        },
 
-        foo() {
-            console.log('foo foo baby');
-        },
+            switch (tabName) {
 
-        createCompoundTab(compound) {
-            new NavbarPill({
-                el: this.$el.querySelector('.button-section'),
-                parent: this
-            });
+                case 'home':
+                default:
+                    this.$router.push({ name: 'home' });
+                    break;
+            }
         }
     },
     watch: {
@@ -71,17 +70,4 @@ export default {
 </script>
 
 <style>
-
-    /* pill styles are essentially copied from ui inverted menu */
-    .ui.menu .ui.button.pill {
-        background: rgba(255, 255, 255, 0.08);
-        color: rgba(255,255,255,.9);
-        font-weight: 400;
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
-    }
-    .ui.menu .ui.button.pill:hover {
-        background: rgba(255, 255, 255, 0.15);
-        color: #fff;
-    }
 </style>

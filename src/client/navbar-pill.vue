@@ -1,5 +1,6 @@
 <template>
-    <button class="ui button pill" v-on:click="navigate">{{label}}</button>
+    <button class="ui button pill" v-bind:class="{ active: isActiveTab() }"
+            v-on:click="navigate">{{label}}</button>
 </template>
 
 <script>
@@ -12,6 +13,12 @@ export default {
         }
     },
     methods: {
+
+        isActiveTab() {
+            const pathRegex = new RegExp(this.label);
+            return !!this.$route.fullPath.match(pathRegex);
+        },
+
         navigate: function() {
             this.$router.push({ name: 'compound', params: { id: this.label }});
         }
@@ -19,7 +26,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
 
     /* pill styles are essentially copied from ui inverted menu */
     .ui.button.pill {
@@ -29,9 +36,10 @@ export default {
         padding-top: 0.5rem;
         padding-bottom: 0.5rem;
         border-radius: 0.8rem;
-    }
-    .ui.button.pill:hover {
-        background: rgba(255, 255, 255, 0.15);
-        color: #fff;
+
+        &:hover, &.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
     }
 </style>

@@ -13,7 +13,7 @@ import './../../semantic/dist/semantic.min.css';
 import 'datatables.net';
 //import 'datatables.net-dt/css/jquery.dataTables.css';
 import './dataTables.semanticui';
-import Main from './main.vue';
+import Main from './search.vue';
 import Compound from './compound.vue';
 
 Vue.use(VueRouter);
@@ -29,7 +29,8 @@ window.onload = () => {
         {
             path: '/compound/:id',
             name: 'compound',
-            component: Compound
+            component: Compound,
+            props: true
         }
     ];
 
