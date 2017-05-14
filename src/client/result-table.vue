@@ -21,7 +21,7 @@
     export default {
         name: 'result-table',
         props: {
-            inhibitor: String,
+            //inhibitor: String,
             filters: {
                 type: Object,
                 required: true

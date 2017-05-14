@@ -63,6 +63,37 @@ const createLikeParam = (like) => {
 };
 
 /**
+ * The response format here is that expected by semantic-ui.
+ * @returns {Promise.<*>}
+ */
+const getKinases = async (filter) => {
+
+    try {
+
+        let query = 'select distinct(discoverx_gene_symbol) from data_report ';
+        if (filter) {
+            query += 'where discoverx_gene_symbol like ?';
+        }
+        query += 'order by discoverx_gene_symbol';
+        const statement = await db.prepare(query);
+
+        const promise = filter ? statement.all(filter + '%') : statement.all();
+        const [ data ] = await Promise.all([ promise ]);
+        //statement.finalize();
+
+        const response = {
+            success: true,
+            results: data
+        };
+        response.results = response.results.map((record) => { return { name: record.discoverx_gene_symbol, value: record.discoverx_gene_symbol }; });
+        return response;
+    } catch (e) {
+        console.error('An error occurred fetching kinase names: ' + e);
+        return { success: false };
+    }
+};
+
+/**
  * Returns records filtered by inhibitor or kinase+activity.  All 3 together is not yet supported.
  * Current bugs:
  *    1. If none of the three are specified, an error occurs
@@ -137,5 +168,6 @@ const getCompoundsMatching = async (queryParams, compoundNamesOnly, offset, limi
 
 module.exports = {
     getCompoundsByName: getCompoundsByName,
-    getCompoundsMatching: getCompoundsMatching
+    getCompoundsMatching: getCompoundsMatching,
+    getKinases: getKinases
 };

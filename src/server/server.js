@@ -20,7 +20,7 @@ app.get('/api/compounds/names', async(req, res) => {
 
     const start = req.query.offset || 0;
     const limit = req.query.limit || 20;
-    const compoundData = await dao.getCompoundsByName(req.query.filter, start, limit);
+    const compoundData = await dao.getCompoundsMatching(req.query, true, start, limit);//getCompoundsByName(req.query.filter, start, limit);
 
     // Our response is built to the DataTables spec:
     // https://datatables.net/manual/server-side
@@ -54,6 +54,15 @@ app.get('/api/compounds', async (req, res) => {
     res.type('application/json');
     console.log('... returning: ' + JSON.stringify(response));
     res.json(response);
+});
+
+app.get('/api/kinases', async (req, res) => {
+
+    const kinaseResponse = await dao.getKinases(req.query.filter);
+
+    res.type('application/json');
+    console.log('... returning: ' + JSON.stringify(kinaseResponse));
+    res.json(kinaseResponse);
 });
 
 app.use(express.static(path.join(__dirname, '../../dist')));

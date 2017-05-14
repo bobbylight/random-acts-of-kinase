@@ -6,7 +6,7 @@
             KINASE!
         </div>
 
-        <a class="item" v-bind:class="{ active: isActiveTab('home') }" v-on:click="setActiveTab('home')">
+        <a class="item" v-bind:class="{ active: isActiveTab('/') }" v-on:click="setActiveTab('home')">
             Search
         </a>
         <a class="item" v-bind:class="{ active: isActiveTab('about') }" v-on:click="setActiveTab('about')">
@@ -15,7 +15,7 @@
 
         <div class="button-section item">
             <div v-for="compound in openCompounds">
-                <navbar-pill :label="compound"></navbar-pill>
+                <navbar-pill :compound="compound" v-on:close="close($event)"></navbar-pill>
             </div>
         </div>
     </div>
@@ -39,9 +39,9 @@ export default {
     methods: {
 
         isActiveTab(tabName) {
-            const tabNameRegex = new RegExp(tabName);
-            console.log(tabName + ' -- ' + this.$route.name + ', ' + (this.$route.name && this.$route.name.match(tabNameRegex)));
-            return this.$route.name && !!this.$route.name.match(tabNameRegex);
+            const tabNameRegex = new RegExp(tabName + '$');
+            console.log(tabName + ' -- ' + this.$route.fullPath + ', ' + (this.$route.fullPath && this.$route.fullPath.match(tabNameRegex)));
+            return this.$route.fullPath && !!this.$route.fullPath.match(tabNameRegex);
         },
 
         setActiveTab(tabName) {
@@ -52,6 +52,18 @@ export default {
                 default:
                     this.$router.push({ name: 'home' });
                     break;
+            }
+        },
+
+        close($event) {
+            const index = this.openCompounds.indexOf($event);
+            if (index > -1) {
+                this.openCompounds.splice(index, 1);
+            }
+            const tabNameRegex = new RegExp($event + '$');
+            if (this.$route.fullPath && !!this.$route.fullPath.match(tabNameRegex)) {
+                console.log('Going back');
+                this.$router.back();
             }
         }
     },
@@ -69,5 +81,9 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less">
+.ui.menu a.item {
+    transition: color .5s ease,
+    background-color .5s ease;
+}
 </style>

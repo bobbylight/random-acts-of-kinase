@@ -69,7 +69,7 @@
             // Limit number of page buttons in pagination widget
             $.fn.dataTable.ext.pager.numbers_length = 4;
 
-            this.table = $('#compound-table').DataTable({
+            this.table = $('#compound-name-table').DataTable({
                 serverSide: true,
                 searching: false,
                 lengthChange: false,
@@ -77,7 +77,7 @@
                 pageLength: 20,
                 pagingType: 'first_last_numbers',
                 ajax: {
-                    url: '/api/compounds',
+                    url: '/api/compounds/names',
                     data: (d) => {
 
                         this.addSuppliedFilters(d);

@@ -1,38 +1,49 @@
 <template>
     <div>
 
-        <div class="ui grid">
+        <h2 class="ui header">Search Compounds</h2>
 
-            <div class="eight wide column">
-                <search-field type="inhibitor" v-model="filters.inhibitor"
+        <div>Search by compound:</div>
+        <div class="ui grid">
+            <div class="sixteen wide column">
+                <search-field v-model="filters.inhibitor"
                               place-holder="Inhibitor"></search-field>
             </div>
+        </div>
 
+        <div style="margin-top: 1rem">Or by kinase and activity:</div>
+        <div class="ui grid">
             <div class="eight wide column">
-                <search-field type="kinase" v-model="filters.kinase"
-                              place-holder="Kinase"></search-field>
+                <!--<search-field type="kinase" v-model="filters.kinase"-->
+                              <!--place-holder="Kinase"></search-field>-->
+                <lazy-dropdown v-model="filters.kinase"
+                               name="kinase" url="api/kinases?filter={query}"></lazy-dropdown>
             </div>
 
             <div class="eight wide column">
-                <search-field type="activity" v-model="filters.activity"
+                <search-field type="number" v-model="filters.activity" numeric="true"
                               place-holder="Remaining activity" label="%"></search-field>
             </div>
 
         </div>
 
-        <result-table :filters="gridFilters"></result-table>
+        <div class="ui divider"></div>
+
+        <compound-name-table :filters="gridFilters"></compound-name-table>
     </div>
 </template>
 
 <script>
 import debounce from 'debounce';
 import SearchField from './search-field.vue';
-import ResultTable from './result-table.vue';
+import LazyDropdown from './lazy-dropdown.vue';
+import CompoundNameTable from './compound-name-table.vue';
 
 export default {
     components: {
         SearchField,
-        ResultTable
+        LazyDropdown,
+        CompoundNameTable
     },
     data() {
         return {
@@ -45,11 +56,11 @@ export default {
                 inhibitor: '',
                 kinase: '',
                 activity: ''
-            },
-            compounds: []
+            }
         };
     },
     created() {
+
         console.log('main.vue created!');
         this.debouncedRefreshTable = debounce(this.refreshTable, 750);
     },
