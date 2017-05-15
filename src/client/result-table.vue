@@ -74,6 +74,7 @@
             // Limit number of page buttons in pagination widget
             $.fn.dataTable.ext.pager.numbers_length = 4;
 
+            const that = this;
             this.table = $('#compound-table').DataTable({
                 serverSide: true,
                 searching: false,
@@ -94,6 +95,16 @@
 
                         d.limit = d.length;
                         delete d.length;
+
+                        if (that.table) {
+                            const newOrder = d.order.map((orderArg) => {
+                                return that.table.column(orderArg.column).dataSrc() + ':' + orderArg.dir;
+                            }).join(',');
+                            d.order = newOrder;
+                        }
+                        else {
+                            delete d.order;
+                        }
 
                         return d;
                     }

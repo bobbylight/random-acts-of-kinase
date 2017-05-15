@@ -20,7 +20,8 @@ app.get('/api/compounds/names', async(req, res) => {
 
     const start = req.query.offset || 0;
     const limit = req.query.limit || 20;
-    const compoundData = await dao.getCompoundsMatching(req.query, true, start, limit);//getCompoundsByName(req.query.filter, start, limit);
+
+    const compoundData = await dao.getCompoundsMatching(req.query, true, start, limit);
 
     // Our response is built to the DataTables spec:
     // https://datatables.net/manual/server-side

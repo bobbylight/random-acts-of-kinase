@@ -128,6 +128,18 @@ const getCompoundsMatching = async (queryParams, compoundNamesOnly, offset, limi
         whereClauseDefined = true;
     }
 
+    const orderBy = queryParams.order || 'compound_nm:asc';
+    orderBy.split(',').forEach((orderByPart, index) => {
+        if (index === 0) {
+            query += ' order by ';
+        }
+        else {
+            query += ', ';
+        }
+        const [ orderCol, orderDir ] = orderByPart.split(':');
+        query += orderCol + ' ' + orderDir;
+    });
+
     query += ' limit ? offset ?';
     console.log('Query params: ' + JSON.stringify(queryParams));
     console.log('Query:        ' + query);
