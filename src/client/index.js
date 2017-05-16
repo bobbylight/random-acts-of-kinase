@@ -14,7 +14,7 @@ import 'datatables.net';
 import './../../semantic/dist/semantic';
 //import 'datatables.net-dt/css/jquery.dataTables.css';
 import './dataTables.semanticui';
-import Main from './search.vue';
+import Search from './search.vue';
 import Compound from './compound.vue';
 
 Vue.use(VueRouter);
@@ -25,7 +25,7 @@ window.onload = () => {
         {
             path: '/',
             name: 'home',
-            component: Main
+            component: Search
         },
         {
             path: '/compound/:id',

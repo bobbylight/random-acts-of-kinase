@@ -1,5 +1,5 @@
 <template>
-    <div class="ui main text container">
+    <div class="ui main container">
 
         <navbar></navbar>
 

@@ -13,14 +13,14 @@
 
         <div style="margin-top: 1rem">Or by kinase and activity:</div>
         <div class="ui grid">
-            <div class="eight wide column">
+            <div class="twelve wide column">
                 <!--<search-field type="kinase" v-model="filters.kinase"-->
                               <!--place-holder="Kinase"></search-field>-->
                 <lazy-dropdown v-model="filters.kinase"
                                name="kinase" url="api/kinases?filter={query}"></lazy-dropdown>
             </div>
 
-            <div class="eight wide column">
+            <div class="four wide column">
                 <search-field type="number" v-model="filters.activity" numeric="true"
                               place-holder="Remaining activity" label="%"></search-field>
             </div>
