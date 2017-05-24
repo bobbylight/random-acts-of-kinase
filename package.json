@@ -5,12 +5,13 @@
   "main": "/",
   "scripts": {
     "clean": "rimraf dist coverage",
-    "build": "cross-env NODE_ENV=production webpack --config webpack/webpack.config.js",
+    "build": "./node_modules/.bin/cross-env NODE_ENV=production ./node_modules/.bin/webpack --config webpack/webpack.config.js",
     "watch": "cross-env NODE_ENV=dev webpack --config webpack/webpack.config.js --watch",
     "dev": "cross-env NODE_ENV=dev webpack-dev-server --config ./webpack/webpack.config.js",
     "start": "node src/server/server.js",
     "test": "cross-env NODE_ENV=test karma start karma.unit.js",
-    "coverage": "cross-env NODE_ENV=test karma start karma.coverage.js"
+    "coverage": "cross-env NODE_ENV=test karma start karma.coverage.js",
+    "aws-package": "rm -f aws-archive.zip && git archive -o aws-archive.zip HEAD && zip -r aws-archive.zip dist semantic src/server/kinase.db"
   },
   "author": "Robert Futrell <robert.e.futrell@gmail.com>",
   "license": "MIT",

@@ -5,3 +5,12 @@ dist
 npm-debug.log
 kinase.db
 semantic
+
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
+aws-*.zip
+
