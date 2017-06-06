@@ -8,6 +8,7 @@
                     <th>Concentration (nM)</th>
                     <th>DiscX Gene Symbol</th>
                     <th>Entrez Gene Symbol</th>
+                    <th>KD</th>
                 </tr>
             </thead>
         </table>
@@ -114,7 +115,8 @@
                     { 'data': 'percent_control' },
                     { 'data': 'compound_concentration_nm' },
                     { 'data': 'discoverx_gene_symbol' },
-                    { 'data': 'entrez_gene_symbol' }
+                    { 'data': 'entrez_gene_symbol' },
+                    { 'data': 'kd_nm' }
                 ],
                 language: {
                     paginate: {

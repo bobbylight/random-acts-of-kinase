@@ -5,61 +5,12 @@ const db = require('sqlite');
 
 db.open(path.join(__dirname, '../kinase.db'), { Promise });
 
-/**
- * Returns a list of compound names, with a filter optionally applied.
- *
- * @param filter
- * @param offset
- * @param limit
- * @returns {Promise.<*>}
- */
-const getCompoundsByName = async (filter, offset, limit) => {
-
-    let query = 'select distinct compound_nm from data_report';
-    let countQuery = 'select count(distinct compound_nm) as count from data_report';
-
-    if (filter) {
-        const whereClause = ' where compound_nm like ?';
-        query += whereClause;
-        countQuery += whereClause;
-    }
-
-    query += ' limit ? offset ?';
-    console.log('Query params: ' + filter);
-    console.log('Query:        ' + query);
-    console.log('Count query:  ' + countQuery);
-
-    try {
-
-        let data, count;
-
-        if (filter) {
-            filter = '%' + filter + '%';
-            const statement = await db.prepare(query);
-            const countStatement = await db.prepare(countQuery);
-            [ data, count ] = await Promise.all([
-                statement.all(filter, limit, offset),
-                countStatement.get(filter)
-            ]);
-        }
-        else {
-            const statement = await db.prepare(query);
-            const countStatement = await db.prepare(countQuery);
-            [ data, count ] = await Promise.all([
-                statement.all(limit, offset),
-                countStatement.get()
-            ]);
-        }
-        //statement.finalize();
-        return { data, count: count.count };
-    } catch (e) {
-        console.error('An error occurred fetching data: ' + e);
-        return [];
-    }
-};
-
 const createLikeParam = (like) => {
     return '%' + like + '%';
+};
+
+const createSelectClause = (searchFields) => {
+    return `select ${searchFields} from data_report d left join kd_report kd on d.compound_nm = kd.compound_nm`;
 };
 
 /**
@@ -108,23 +59,21 @@ const getKinases = async (filter) => {
  */
 const getCompoundsMatching = async (queryParams, compoundNamesOnly, offset, limit) => {
 
-    const searchFor = compoundNamesOnly ? 'distinct(compound_nm)' : '*';
-    let query = `select ${searchFor} from data_report`;
-    let countQuery = `select count(${searchFor}) as count from data_report`;
+    const searchFor = compoundNamesOnly ? 'distinct(d.compound_nm)' :
+        'd.compound_nm, d.discoverx_gene_symbol, d.entrez_gene_symbol, d.percent_control, d.compound_concentration_nm, kd.modifier, kd.kd_nm';
+    let query = createSelectClause(searchFor);
 
     let whereClauseDefined = false;
     if (queryParams.inhibitor) {
-        const whereClausePart = ' where compound_nm like ?';
+        const whereClausePart = ' where d.compound_nm like ?';
         query += whereClausePart;
-        countQuery += whereClausePart;
         whereClauseDefined = true;
     }
     else if (queryParams.kinase) {
 
-        const whereClausePart = (whereClauseDefined ? ' and' : ' where') + ' discoverx_gene_symbol like ?' +
-            ' and percent_control < ?';
+        const whereClausePart = (whereClauseDefined ? ' and' : ' where') + ' d.discoverx_gene_symbol like ?' +
+            ' and d.percent_control < ?';
         query += whereClausePart;
-        countQuery += whereClausePart;
         whereClauseDefined = true;
     }
 
@@ -137,8 +86,19 @@ const getCompoundsMatching = async (queryParams, compoundNamesOnly, offset, limi
             query += ', ';
         }
         const [ orderCol, orderDir ] = orderByPart.split(':');
+
+        // TODO: Do this better
+        if (orderCol === 'modifier' || orderCol === 'kd_nm') {
+            query += 'kd.';
+        }
+        else {
+            query += 'd.';
+        }
+
         query += orderCol + ' ' + orderDir;
     });
+
+    const countQuery = `select count(1) as count from (${query})`;
 
     query += ' limit ? offset ?';
     console.log('Query params: ' + JSON.stringify(queryParams));
@@ -179,7 +139,6 @@ const getCompoundsMatching = async (queryParams, compoundNamesOnly, offset, limi
 };
 
 module.exports = {
-    getCompoundsByName: getCompoundsByName,
     getCompoundsMatching: getCompoundsMatching,
     getKinases: getKinases
 };
