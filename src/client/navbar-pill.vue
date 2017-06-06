@@ -1,9 +1,9 @@
 <template>
     <div class="navbar-pill-parent">
-        <button class="ui button pill" v-bind:class="{ active: isActiveTab() }"
+        <div class="ui button pill" v-bind:class="{ active: isActiveTab() }"
                 v-on:click="navigate">{{compound}}
             <i class="fa fa-times close-icon" aria-hidden="true" v-on:click="close"></i>
-        </button>
+        </div>
     </div>
 </template>
 
@@ -38,6 +38,9 @@ export default {
 
 <style lang="less">
 
+    @close-icon-color: gray;
+    @transition-time: .5s;
+
     .navbar-pill-parent {
         position: relative;
     }
@@ -50,21 +53,25 @@ export default {
         padding-top: 0.5rem;
         padding-bottom: 0.5rem;
         border-radius: 0.8rem;
-        transition: color .5s ease,
-                    background-color .5s ease;
+        transition: color @transition-time ease,
+                    background-color @transition-time ease;
 
         &:hover, &.active {
             background: rgba(255, 255, 255, 0.15);
             color: #fff;
+
+            .close-icon {
+                color: lighten(@close-icon-color, 25%);
+            }
         }
 
         .close-icon {
-            color: gray;
+            color: @close-icon-color;
             font-size: 1.3rem;
             position: absolute;
             top: -6px;
             right: 0;
-            transition: color .5s ease;
+            transition: color @transition-time ease;
             &:hover {
                 color: white;
             }
