@@ -53,7 +53,7 @@ export default {
             const value = $event.target.value;
             const input = $(this.$el);
 
-            if ($(event.target).is(':invalid')) {
+            if ($($event.target).is(':invalid')) {
                 input.addClass('error');
                 return;
             }
