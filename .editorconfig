@@ -3,7 +3,7 @@
 # top-most EditorConfig file
 root = true
 
-[*.{ts,json,html,less,scss,css}]
+[*.{ts,js,vue,json,html,less,scss,css}]
 charset = utf-8
 end_of_line = lf
 insert_final_newline = true

@@ -5,6 +5,7 @@
   "main": "/",
   "scripts": {
     "clean": "rimraf dist coverage",
+    "build-semantic-ui": "cd ./semantic && gulp build",
     "build": "./node_modules/.bin/cross-env NODE_ENV=production ./node_modules/.bin/webpack --config webpack/webpack.config.js",
     "watch": "cross-env NODE_ENV=dev webpack --config webpack/webpack.config.js --watch",
     "dev": "cross-env NODE_ENV=dev webpack-dev-server --config ./webpack/webpack.config.js",

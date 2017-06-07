@@ -8,6 +8,7 @@ This is very rough at the moment.
 git clone git@github.com/github.com/bobbylight/rak.git
 cd rak
 npm install
+npm run build-semantic-ui  # Create our custom semantic-ui build
 # Manually copy kinase db into ./src/server/
 npm run watch  # Start webpack, builds client stuff into dist/
 npm run start  # Starts node server on port 8080
