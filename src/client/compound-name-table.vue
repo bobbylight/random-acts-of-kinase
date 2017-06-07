@@ -119,3 +119,9 @@
         }
     };
 </script>
+
+<style lang="less">
+    #compound-name-table thead {
+        display: none;
+    }
+</style>

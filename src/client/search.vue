@@ -3,31 +3,7 @@
 
         <h2 class="ui header">Search Compounds</h2>
 
-        <div>Search by compound:</div>
-        <div class="ui grid">
-            <div class="sixteen wide column">
-                <search-field v-model="filters.inhibitor"
-                              place-holder="Inhibitor"></search-field>
-            </div>
-        </div>
-
-        <div style="margin-top: 1rem">Or by kinase and activity:</div>
-        <div class="ui grid">
-            <div class="twelve wide column">
-                <!--<search-field type="kinase" v-model="filters.kinase"-->
-                              <!--place-holder="Kinase"></search-field>-->
-                <lazy-dropdown v-model="filters.kinase"
-                               name="kinase" url="api/kinases?filter={query}"></lazy-dropdown>
-            </div>
-
-            <div class="four wide column">
-                <search-field type="number" v-model="filters.activity" numeric="true"
-                              place-holder="Remaining activity" label="%"></search-field>
-            </div>
-
-        </div>
-
-        <div class="ui divider"></div>
+        <search-filters :filters="filters"></search-filters>
 
         <compound-name-table :filters="gridFilters"></compound-name-table>
     </div>
@@ -35,14 +11,12 @@
 
 <script>
 import debounce from 'debounce';
-import SearchField from './search-field.vue';
-import LazyDropdown from './lazy-dropdown.vue';
+import SearchFilters from './search-filters.vue';
 import CompoundNameTable from './compound-name-table.vue';
 
 export default {
     components: {
-        SearchField,
-        LazyDropdown,
+        SearchFilters,
         CompoundNameTable
     },
     data() {
@@ -61,7 +35,7 @@ export default {
     },
     created() {
 
-        console.log('main.vue created!');
+        console.log('search.vue created!');
         this.debouncedRefreshTable = debounce(this.refreshTable, 750);
     },
     watch: {
