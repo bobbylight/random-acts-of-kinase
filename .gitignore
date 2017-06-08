@@ -5,7 +5,7 @@ dist
 npm-debug.log
 kinase.db
 semantic
-
+.DS_Store
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
