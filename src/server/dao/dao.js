@@ -10,7 +10,8 @@ const createLikeParam = (like) => {
 };
 
 const createSelectClause = (searchFields) => {
-    return `select ${searchFields} from data_report d left join kd_report kd on d.compound_nm = kd.compound_nm`;
+    return `select ${searchFields} from data_report d left join kd_report kd on ` +
+            'd.compound_nm = kd.compound_nm and d.discoverx_gene_symbol = kd.discoverx_gene_symbol';
 };
 
 /**
