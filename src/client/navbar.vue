@@ -3,14 +3,12 @@
     <div class="ui top fixed inverted menu">
 
         <div class="item">
+            <!--<img src="img/molecule.svg" width="50" height="50">-->
             KINASE!
         </div>
 
         <a class="item" v-bind:class="{ active: isActiveTab('/') }" v-on:click="setActiveTab('home')">
             Search
-        </a>
-        <a class="item" v-bind:class="{ active: isActiveTab('about') }" v-on:click="setActiveTab('about')">
-            About
         </a>
 
         <div class="button-section item">
@@ -18,17 +16,27 @@
                 <navbar-pill :compound="compound" v-on:close="close($event)"></navbar-pill>
             </div>
         </div>
+
+        <div class="right menu">
+            <a class="item" v-on:click="showAbout()">
+                <i class="fa fa-question-circle" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <about-modal id="aboutModal"></about-modal>
     </div>
 
 </template>
 
 <script>
 import NavbarPill from './navbar-pill.vue';
+import AboutModal from './about-modal.vue';
 
 export default {
     name: 'navbar',
     components: {
-        NavbarPill
+        NavbarPill,
+        AboutModal
     },
     data: () => {
         return {
@@ -65,6 +73,10 @@ export default {
                 console.log('Going back');
                 this.$router.back();
             }
+        },
+
+        showAbout() {
+            $('#aboutModal').modal('show');
         }
     },
     watch: {
@@ -82,8 +94,23 @@ export default {
 </script>
 
 <style lang="less">
+.ui.top.menu {
+    height: 4rem;
+}
 .ui.menu a.item {
     transition: color .5s ease,
     background-color .5s ease;
+}
+
+.ui.menu .button-section.item:before {
+    width: 0; // Turn off right-aligned 1-pixel border
+}
+
+.right.menu {
+    font-size: 2rem;
+
+    .item {
+        padding: 0 1rem;
+    }
 }
 </style>

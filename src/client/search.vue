@@ -1,11 +1,17 @@
 <template>
     <div>
+        <div class="search-filter-wrapper">
+            <div class="ui container">
 
-        <h2 class="ui header">Search Compounds</h2>
+                <h2 class="ui header">Search Compounds</h2>
 
-        <search-filters :filters="filters"></search-filters>
+                <search-filters :filters="filters"></search-filters>
+            </div>
+        </div>
 
-        <compound-name-table :filters="gridFilters"></compound-name-table>
+        <div class="ui container">
+            <compound-name-table :filters="gridFilters"></compound-name-table>
+        </div>
     </div>
 </template>
 
@@ -62,4 +68,13 @@ export default {
 </script>
 
 <style lang="less">
+.search-filter-wrapper {
+    background: #f5f5f5;
+    border-bottom: 1px solid lightgray;
+    padding: 1rem 6rem;
+
+    .ui.header {
+        margin-top: 0;
+    }
+}
 </style>

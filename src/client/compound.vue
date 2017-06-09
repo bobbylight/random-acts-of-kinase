@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <div>Showing all results for compound: {{this.id}}</div>
+    <div class="ui container compound-results">
+        <div class="ui header">Results for {{this.id}}</div>
         <result-table :filters="gridFilters"></result-table>
     </div>
 </template>
@@ -34,3 +34,9 @@ export default {
     }
 }
 </script>
+
+<style lang="less">
+.compound-results {
+    padding-top: 1rem; // Matches search.vue
+}
+</style>

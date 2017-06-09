@@ -1,14 +1,16 @@
 <template>
-    <div class="ui main container">
+    <div class="app-wrapper">
 
         <navbar></navbar>
 
-        <router-view></router-view>
+        <div class="ui main">
+
+            <router-view></router-view>
+        </div>
     </div>
 </template>
 
 <script>
-
 import navbar from './navbar.vue';
 
 export default {
@@ -20,7 +22,10 @@ export default {
 </script>
 
 <style lang="less">
-.main.container {
-    margin-top: 7em;
+/*.top-padding {*/
+    /*background: #f8f8f8;*/
+/*}*/
+.app-wrapper {
+    margin-top: 4em;
 }
 </style>

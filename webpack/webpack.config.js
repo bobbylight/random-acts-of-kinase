@@ -1,5 +1,6 @@
 const loaders = require("./loaders");
 const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 
@@ -26,14 +27,17 @@ module.exports = [{
         filename: '[name].js'
     },
     resolve: {
-        extensions: [ '.ts', '.tsx', '.js', '.json', '.vue' ],
-        modules: [ 'src/client', 'src/styles', 'node_modules' ],
+        extensions: [ '.ts', '.tsx', '.js', '.json', '.vue', '.svg' ],
+        modules: [ 'src/client', 'src/img', 'src/styles', 'node_modules' ],
         alias: {
             'vue$': 'vue/dist/vue.esm.js'
         }
     },
     devtool: 'source-map', //devBuild ? 'cheap-eval-source-map' : 'source-map',
     plugins: [
+        new CopyWebpackPlugin([
+                { from: 'src/img', to: 'img' }
+        ]),
         new HtmlWebpackPlugin({
             template: './src/html/index.html',
             inject: 'body',

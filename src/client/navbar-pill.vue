@@ -43,6 +43,7 @@ export default {
 
     .navbar-pill-parent {
         position: relative;
+        margin-right: 1rem;
     }
 
     /* pill styles are essentially copied from ui inverted menu */
