@@ -1,6 +1,6 @@
 <template>
 
-    <div class="ui top fixed inverted menu">
+    <div class="ui top inverted menu">
 
         <div class="item">
             <!--<img src="img/molecule.svg" width="50" height="50">-->
@@ -18,7 +18,10 @@
         </div>
 
         <div class="right menu">
-            <a class="item" v-on:click="showAbout()">
+            <a class="item" v-on:click="showAbout()" title="About" aria-label="About">
+                <i class="fa fa-comment" aria-hidden="true"></i>
+            </a>
+            <a class="item" v-on:click="showAbout()" title="About" aria-label="About">
                 <i class="fa fa-question-circle" aria-hidden="true"></i>
             </a>
         </div>
@@ -96,6 +99,8 @@ export default {
 <style lang="less">
 .ui.top.menu {
     height: 4rem;
+    border-radius: 0;
+    margin-bottom: 0;
 }
 .ui.menu a.item {
     transition: color .5s ease,
@@ -107,7 +112,7 @@ export default {
 }
 
 .right.menu {
-    font-size: 2rem;
+    font-size: 1.5rem;
 
     .item {
         padding: 0 1rem;

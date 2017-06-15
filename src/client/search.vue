@@ -71,7 +71,7 @@ export default {
 .search-filter-wrapper {
     background: #f5f5f5;
     border-bottom: 1px solid lightgray;
-    padding: 1rem 6rem;
+    padding: 2rem 6rem;
 
     .ui.header {
         margin-top: 0;

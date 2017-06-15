@@ -1,11 +1,6 @@
 <template>
     <div>
-       <table id="compound-name-table" class="ui celled table">
-            <thead>
-                <tr>
-                    <th>Compound</th>
-                </tr>
-            </thead>
+       <table id="compound-name-table" class="ui celled table" width="100%">
         </table>
     </div>
 </template>
@@ -61,7 +56,12 @@
             },
 
             compoundRenderer: function(data, type, row) {
-                return '<a href="#/compound/' + data + '">' + data + '</a>';
+
+                const imgSize = 40;
+                const url = `#/compound/${data}`;
+
+                return `<div><img src="img/molecule.svg" width="${imgSize}" height="${imgSize}">` +
+                    `&nbsp;&nbsp;&nbsp;<a href="${url}">${data}</a></div>`;
             }
         },
         mounted: function() { // tslint:disable-line
@@ -121,7 +121,21 @@
 </script>
 
 <style lang="less">
-    #compound-name-table thead {
-        display: none;
+    #compound-name-table {
+        thead {
+            display: none;
+        }
+
+        tr {
+            &:hover {
+                background: #f8f8f8;
+            }
+        }
+
+        border: none;
+        font-size: 1.5rem;
+        img {
+            vertical-align: middle;
+        }
     }
 </style>
