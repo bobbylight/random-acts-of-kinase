@@ -10,6 +10,9 @@ app.use(history());
 const compression = require('compression');
 app.use(compression());
 
+const cors = require('cors');
+app.use(cors());
+
 const fs = require('fs');
 const path = require('path');
 const async = require('async');

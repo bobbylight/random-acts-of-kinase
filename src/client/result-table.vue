@@ -8,7 +8,7 @@
                     <th>Concentration (nM)</th>
                     <th>DiscX Gene Symbol</th>
                     <th>Entrez Gene Symbol</th>
-                    <th>KD</th>
+                    <th>K<sub>d</sub></th>
                 </tr>
             </thead>
         </table>
