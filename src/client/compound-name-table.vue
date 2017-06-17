@@ -1,6 +1,6 @@
 <template>
     <div>
-       <table id="compound-name-table" class="ui celled table" width="100%">
+        <table id="compound-name-table" class="ui celled table" width="100%">
         </table>
     </div>
 </template>

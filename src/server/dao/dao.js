@@ -80,6 +80,7 @@ const getCompoundsMatching = async (queryParams, compoundNamesOnly, offset, limi
 
     const orderBy = queryParams.order || 'compound_nm:asc';
     orderBy.split(',').forEach((orderByPart, index) => {
+
         if (index === 0) {
             query += ' order by ';
         }
@@ -89,6 +90,9 @@ const getCompoundsMatching = async (queryParams, compoundNamesOnly, offset, limi
         const [ orderCol, orderDir ] = orderByPart.split(':');
 
         // TODO: Do this better
+        if (orderCol === 'kd_nm') {
+            query += 'case when kd.kd_nm is null then 1 else 0 end, ';
+        }
         if (orderCol === 'modifier' || orderCol === 'kd_nm') {
             query += 'kd.';
         }

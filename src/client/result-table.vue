@@ -75,12 +75,22 @@
             // Limit number of page buttons in pagination widget
             $.fn.dataTable.ext.pager.numbers_length = 4;
 
+            const columns = [
+                { 'data': 'compound_nm', render: this.compoundRenderer },
+                { 'data': 'percent_control' },
+                { 'data': 'compound_concentration_nm' },
+                { 'data': 'discoverx_gene_symbol' },
+                { 'data': 'entrez_gene_symbol' },
+                { 'data': 'kd_nm' }
+            ];
+
             const that = this;
             this.table = $('#compound-table').DataTable({
                 serverSide: true,
                 searching: false,
                 lengthChange: false,
                 info: false,
+                order: [ [ 5, 'asc' ], [ 1, 'asc' ] ],
                 pageLength: 20,
                 pagingType: 'first_last_numbers',
                 ajax: {
@@ -97,27 +107,15 @@
                         d.limit = d.length;
                         delete d.length;
 
-                        if (that.table) {
-                            const newOrder = d.order.map((orderArg) => {
-                                return that.table.column(orderArg.column).dataSrc() + ':' + orderArg.dir;
-                            }).join(',');
-                            d.order = newOrder;
-                        }
-                        else {
-                            delete d.order;
-                        }
+                        const newOrder = d.order.map((orderArg) => {
+                            return columns[orderArg.column].data + ':' + orderArg.dir;
+                        }).join(',');
+                        d.order = newOrder;
 
                         return d;
                     }
                 },
-                columns: [
-                    { 'data': 'compound_nm', render: this.compoundRenderer },
-                    { 'data': 'percent_control' },
-                    { 'data': 'compound_concentration_nm' },
-                    { 'data': 'discoverx_gene_symbol' },
-                    { 'data': 'entrez_gene_symbol' },
-                    { 'data': 'kd_nm' }
-                ],
+                columns: columns,
                 language: {
                     paginate: {
                         first: '<<',
