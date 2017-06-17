@@ -5,7 +5,11 @@
 
         <div class="ui main">
 
-            <router-view></router-view>
+            <transition name="fade">
+                <keep-alive>
+                    <router-view :key="$route.params.id"></router-view>
+                </keep-alive>
+            </transition>
         </div>
 
         <div class="ui bottom inverted menu footer">
@@ -49,5 +53,18 @@ export default {
     .footer-content {
         margin: 0 auto;
     }
+}
+
+.fade-enter-active, .fade-leave-active {
+    transition-property: opacity;
+    transition-duration: .25s;
+}
+
+.fade-enter-active {
+    transition-delay: .25s;
+}
+
+.fade-enter, .fade-leave-active {
+    opacity: 0
 }
 </style>
