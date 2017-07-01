@@ -59,9 +59,14 @@
 
                 const imgSize = 40;
                 const url = `#/compound/${data}`;
+                const metadata = `${row.chemotype || '...'}, s(10): ${row.s_10 || '?'}`;
 
                 return `<div><img src="img/molecule.svg" width="${imgSize}" height="${imgSize}">` +
-                    `&nbsp;&nbsp;&nbsp;<a href="${url}">${data}</a></div>`;
+                    `&nbsp;&nbsp;&nbsp;` +
+                    `<div class="compoundDesc">` +
+                    `   <a class="compoundName" href="${url}">${data}</a><br>` +
+                    `   <span class="chemotype">${metadata}</span>` +
+                    '</div>';
             }
         },
         mounted: function() { // tslint:disable-line
@@ -134,8 +139,22 @@
 
         border: none;
         font-size: 1.5rem;
+
         img {
             vertical-align: middle;
+        }
+
+        .compoundDesc {
+            vertical-align: middle;
+            display: inline-block;
+
+            .compoundName {
+                color: gray;
+            }
+            .chemotype {
+                font-size: medium;
+                color: lightgray;
+            }
         }
     }
 </style>
