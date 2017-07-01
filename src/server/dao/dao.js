@@ -11,7 +11,9 @@ const createLikeParam = (like) => {
 
 const createSelectClause = (searchFields) => {
     return `select ${searchFields} from data_report d left join kd_report kd on ` +
-            'd.compound_nm = kd.compound_nm and d.discoverx_gene_symbol = kd.discoverx_gene_symbol';
+            'd.compound_nm = kd.compound_nm and d.discoverx_gene_symbol = kd.discoverx_gene_symbol ' +
+            'left join s_10 s10 on d.compound_nm = s10.compound_nm'
+        ;
 };
 
 /**
@@ -60,8 +62,10 @@ const getKinases = async (filter) => {
  */
 const getCompoundsMatching = async (queryParams, compoundNamesOnly, offset, limit) => {
 
-    const searchFor = compoundNamesOnly ? 'distinct(d.compound_nm)' :
-        'd.compound_nm, d.discoverx_gene_symbol, d.entrez_gene_symbol, d.percent_control, d.compound_concentration_nm, kd.modifier, kd.kd_nm';
+    const searchFor = compoundNamesOnly ? 'distinct(d.compound_nm), s10.chemotype, s10.s_10' :
+        'd.compound_nm, d.discoverx_gene_symbol, d.entrez_gene_symbol, d.percent_control, d.compound_concentration_nm, ' +
+        'kd.modifier, kd.kd_nm, ' +
+        's10.chemotype, s10.s_10';
     let query = createSelectClause(searchFor);
 
     let whereClauseDefined = false;
