@@ -59,7 +59,7 @@
 
                 const imgSize = 40;
                 const url = `#/compound/${data}`;
-                const metadata = `${row.chemotype || '...'}, s(10): ${row.s_10 || '?'}`;
+                const metadata = `${row.chemotype || '...'}, s(10): ${row.s10 || '?'}`;
 
                 return `<div><img src="img/molecule.svg" width="${imgSize}" height="${imgSize}">` +
                     `&nbsp;&nbsp;&nbsp;` +
@@ -74,43 +74,55 @@
             // Limit number of page buttons in pagination widget
             $.fn.dataTable.ext.pager.numbers_length = 4;
 
+            const pageSize = 20;
+
             const that = this;
             this.table = $('#compound-name-table').DataTable({
                 serverSide: true,
                 searching: false,
                 lengthChange: false,
                 info: false,
-                pageLength: 20,
+                pageLength: pageSize,
                 pagingType: 'first_last_numbers',
                 ajax: {
-                    url: '/api/compounds/names',
+                    url: '/api/compounds',
+                    traditional: true,
                     data: (d) => {
 
                         this.addSuppliedFilters(d);
                         delete d.columns;
                         delete d.search;
 
-                        d.offset = d.start;
+                        d.page = d.start / pageSize;
+                        console.log('... requesting page: ' + d.page);
                         delete d.start;
 
-                        d.limit = d.length;
+                        d.size = d.length;
                         delete d.length;
 
                         if (that.table) {
-                            const newOrder = d.order.map((orderArg) => {
-                                return that.table.column(orderArg.column).dataSrc() + ':' + orderArg.dir;
-                            }).join(',');
-                            d.order = newOrder;
+                            d.sort = d.order.map((orderArg) => {
+                                return that.table.column(orderArg.column).dataSrc() + ',' + orderArg.dir;
+                            });
                         }
-                        else {
-                            delete d.order;
-                        }
+                        delete d.order;
 
                         return d;
+                    },
+                    dataFilter: (data) => {
+
+                        // Convert the (string) JSON response into that expected by DataTables
+
+                        const json = JSON.parse(data);
+                        return JSON.stringify({
+                            recordsTotal: json.total, // This isn't really true, but I don't think we need to do another query
+                            recordsFiltered: json.total,
+                            data: json.data
+                        });
                     }
                 },
                 columns: [
-                    { 'data': 'compound_nm', render: this.compoundRenderer }
+                    { 'data': 'compoundName', render: this.compoundRenderer }
                 ],
                 language: {
                     paginate: {

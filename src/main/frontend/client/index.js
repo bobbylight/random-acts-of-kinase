@@ -9,9 +9,9 @@ import 'font-awesome/css/font-awesome.css';
 import Vue from 'vue';
 import App from './App.vue';
 import VueRouter from 'vue-router';
-import './../../semantic/dist/semantic.min.css';
+import './../semantic/dist/semantic.min.css';
 import 'datatables.net';
-import './../../semantic/dist/semantic';
+import './../semantic/dist/semantic';
 //import 'datatables.net-dt/css/jquery.dataTables.css';
 import './dataTables.semanticui';
 import Search from './search.vue';
@@ -36,7 +36,7 @@ window.onload = () => {
     ];
 
     const router = new VueRouter({
-        /*mode: 'history',*/
+        /*mode: 'history'w,*/
         routes
     });
 

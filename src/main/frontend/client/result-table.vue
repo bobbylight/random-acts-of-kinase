@@ -76,13 +76,15 @@
             $.fn.dataTable.ext.pager.numbers_length = 4;
 
             const columns = [
-                { 'data': 'compound_nm', render: this.compoundRenderer },
-                { 'data': 'percent_control' },
-                { 'data': 'compound_concentration_nm' },
-                { 'data': 'discoverx_gene_symbol' },
-                { 'data': 'entrez_gene_symbol' },
-                { 'data': 'kd_nm' }
+                { 'data': 'compoundName', render: this.compoundRenderer },
+                { 'data': 'percentControl' },
+                { 'data': 'compoundConcentration' },
+                { 'data': 'kinase.discoverxGeneSymbol' },
+                { 'data': 'kinase.entrezGeneSymbol' },
+                { 'data': 'kd' }
             ];
+
+            const pageSize = 20;
 
             const that = this;
             this.table = $('#compound-table').DataTable({
@@ -94,25 +96,39 @@
                 pageLength: 20,
                 pagingType: 'first_last_numbers',
                 ajax: {
-                    url: '/api/compounds',
+                    url: '/api/activityProfiles',
+                    traditional: true,
                     data: (d) => {
 
                         this.addSuppliedFilters(d);
                         delete d.columns;
                         delete d.search;
 
-                        d.offset = d.start;
+                        d.page = d.start / pageSize;
+                        console.log('... requesting page: ' + d.page);
                         delete d.start;
 
-                        d.limit = d.length;
+                        d.size = d.length;
                         delete d.length;
 
                         const newOrder = d.order.map((orderArg) => {
-                            return columns[orderArg.column].data + ':' + orderArg.dir;
-                        }).join(',');
-                        d.order = newOrder;
+                            return columns[orderArg.column].data + ',' + orderArg.dir;
+                        });
+                        d.sort = newOrder;
+                        delete d.order;
 
                         return d;
+                    },
+                    dataFilter: (data) => {
+
+                        // Convert the (string) JSON response into that expected by DataTables
+
+                        const json = JSON.parse(data);
+                        return JSON.stringify({
+                            recordsTotal: json.total, // This isn't really true, but I don't think we need to do another query
+                            recordsFiltered: json.total,
+                            data: json.data
+                        });
                     }
                 },
                 columns: columns,

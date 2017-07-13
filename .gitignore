@@ -1,4 +1,7 @@
+.gradle
+build
 node_modules
+static/
 coverage
 dist
 .idea/

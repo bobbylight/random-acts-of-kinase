@@ -1,6 +1,6 @@
 {
   "name": "rak",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "The source code for randomactsofkinase.com",
   "main": "/",
   "scripts": {
@@ -8,11 +8,11 @@
     "build-semantic-ui": "cd ./semantic && gulp build",
     "build": "./node_modules/.bin/cross-env NODE_ENV=production ./node_modules/.bin/webpack --config webpack/webpack.config.js",
     "watch": "cross-env NODE_ENV=dev webpack --config webpack/webpack.config.js --watch",
-    "dev": "cross-env NODE_ENV=dev webpack-dev-server --config ./webpack/webpack.config.js",
+    "watch-static-into-build": "cpx \"../resources/**/*\" ../../../build/resources/main/ --watch",
+    "dev": "cross-env NODE_ENV=dev webpack-dev-server --config webpack/webpack.config.js",
     "start": "node src/server/server.js",
     "test": "cross-env NODE_ENV=test karma start karma.unit.js",
-    "coverage": "cross-env NODE_ENV=test karma start karma.coverage.js",
-    "aws-package": "rm -f aws-archive.zip && git archive -o aws-archive.zip HEAD && zip -r aws-archive.zip dist semantic src/server/kinase.db"
+    "coverage": "cross-env NODE_ENV=test karma start karma.coverage.js"
   },
   "author": "Robert Futrell <robert.e.futrell@gmail.com>",
   "license": "MIT",
@@ -36,6 +36,7 @@
   "devDependencies": {
     "@types/jasmine": "2.5.47",
     "copy-webpack-plugin": "4.0.1",
+    "cpx": "1.5.0",
     "cross-env": "4.0.0",
     "css-loader": "0.28.0",
     "file-loader": "0.11.1",

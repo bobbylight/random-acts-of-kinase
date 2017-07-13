@@ -1,0 +1,99 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE'
+    }
+}
+plugins {
+    id 'com.moowork.node' version '1.2.0'
+}
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+apply plugin: "com.moowork.node"
+
+group 'org.sgc'
+version '0.2.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+node {
+    version = '7.10.0'
+    npmVersion = '5.0.4'
+    download = true
+
+    // Node and npm should work in our 'frontend' folder
+    workDir = file("${project.buildDir}/nodejs")
+    npmWorkDir = file("${project.buildDir}/npm")
+    yarnWorkDir = file("${project.buildDir}/yarn")
+
+    // Where node_modules should be located
+    nodeModulesDir = file("${project.projectDir}/src/main/frontend")
+}
+
+dependencies {
+
+    compile 'org.springframework.boot:spring-boot-starter-web'
+// Use this instead of the full dependency above for Jetty
+//    compile 'org.springframework.boot:spring-boot-starter-web' {
+//        exclude module: 'spring-boot-starter-tomcat'
+//    }
+//    compile 'org.springframework.boot:spring-boot-starter-jetty'
+
+    compile 'org.springframework.boot:spring-boot-devtools'
+    compile 'org.springframework.boot:spring-boot-starter-actuator'
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    compile 'org.apache.commons:commons-lang3:3.6'
+    compile 'org.postgresql:postgresql:42.1.1'
+
+    testCompile 'junit:junit:4.11'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.0'
+}
+
+idea {
+    module {
+        downloadSources = true
+    }
+}
+
+clean.doLast {
+    delete "${rootDir}/aws-archive.zip"
+}
+
+task webpack(type: NpmTask, dependsOn: 'npmInstall') {
+    execOverrides {
+        it.workingDir = "${project.projectDir}/src/main/frontend/"
+    }
+    args = [ 'run', 'build' ]
+}
+
+processResources.dependsOn 'webpack'
+
+task webpackWatch(type: NpmTask) {
+    args = [ 'run', 'watch' ]
+}
+
+task copyStaticResourcesToBuildWatch(type: NpmTask) {
+    args = [ 'run', 'watch-static-into-build' ]
+}
+
+task makeAwsArchive(type: Zip) {
+    from "${rootDir}/build/libs/"
+    include 'random-acts-of-kinase*.jar'
+    from '.'
+    include 'Procfile'
+    archiveName 'aws-archive.zip'
+    destinationDir(file("${rootDir}"))
+}
+

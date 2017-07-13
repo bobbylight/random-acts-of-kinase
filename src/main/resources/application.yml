@@ -1,0 +1,26 @@
+spring:
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL94Dialect
+
+---
+
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    driverClassName: org.postgresql.Driver
+    username: postgres
+    password: postgres
+
+---
+
+# RDS_* environment variables defined in AWS console, ${PORT} set magically (typically 5000)
+spring:
+  profiles: production
+  datasource:
+    url: jdbc:postgresql://${RDS_HOSTNAME}:${RDS_PORT}/${RDS_DB_NAME}
+    driverClassName: org.postgresql.Driver
+    username: ${RDS_USERNAME}
+    password: ${RDS_PASSWORD}
+server:
+  port: ${PORT}

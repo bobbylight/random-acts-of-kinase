@@ -4,7 +4,7 @@
 
         <div class="item">
             <!--<img src="img/molecule.svg" width="50" height="50">-->
-            KINASE!
+            KINASE!!!!1111
         </div>
 
         <a class="item" v-bind:class="{ active: isActiveTab('/') }" v-on:click="setActiveTab('home')">

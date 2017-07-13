@@ -1,10 +1,10 @@
-const loaders = require("./loaders");
+const loaders = require('./loaders');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 
-const devBuild = process.env.NODE_ENV === 'dev';
+const devBuild = true;//process.env.NODE_ENV === 'dev';
 
 // Loaders specific to compiling
 loaders.push({
@@ -19,16 +19,17 @@ loaders.push({
 
 module.exports = [{
     entry: {
-        main: [ path.resolve('./src/client/index.js') ]
+        main: [ path.resolve('./client/index.js') ]
     },
     output: {
         publicPath: '/',
-        path: path.resolve('dist'),
+        // path: path.resolve('../../../build/resources/main/static/'),
+        path: path.resolve('../resources/static/'),
         filename: '[name].js'
     },
     resolve: {
         extensions: [ '.ts', '.tsx', '.js', '.json', '.vue', '.svg' ],
-        modules: [ 'src/client', 'src/img', 'src/styles', 'node_modules' ],
+        modules: [ 'client', 'img', 'styles', 'node_modules' ],
         alias: {
             'vue$': 'vue/dist/vue.esm.js'
         }
@@ -36,10 +37,10 @@ module.exports = [{
     devtool: 'source-map', //devBuild ? 'cheap-eval-source-map' : 'source-map',
     plugins: [
         new CopyWebpackPlugin([
-                { from: 'src/img', to: 'img' }
+                { from: 'img', to: 'img' }
         ]),
         new HtmlWebpackPlugin({
-            template: './src/html/index.html',
+            template: './html/index.html',
             inject: 'body',
             hash: true
         }),
