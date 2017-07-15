@@ -1,6 +1,9 @@
 spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL94Dialect
+logging:
+  level:
+    root: INFO
 
 ---
 
