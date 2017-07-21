@@ -5,6 +5,8 @@ static/
 coverage
 dist
 .idea/
+out/
+*.iml
 npm-debug.log
 kinase.db
 semantic

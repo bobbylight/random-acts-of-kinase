@@ -4,7 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.5.1.RELEASE'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.5.4.RELEASE'
     }
 }
 plugins {
@@ -12,11 +12,11 @@ plugins {
 }
 apply plugin: 'java'
 apply plugin: 'idea'
-apply plugin: 'spring-boot'
+apply plugin: 'org.springframework.boot'
 apply plugin: "com.moowork.node"
 
 group 'org.sgc'
-version '0.2.0-SNAPSHOT'
+version '0.3.0-SNAPSHOT'
 
 apply plugin: 'java'
 
@@ -73,7 +73,7 @@ task webpack(type: NpmTask, dependsOn: 'npmInstall') {
     execOverrides {
         it.workingDir = "${project.projectDir}/src/main/frontend/"
     }
-    args = [ 'run', 'build' ]
+    args = [ 'run', File.separator == '\\' ? 'build-windows' : 'build' ]
 }
 
 processResources.dependsOn 'webpack'
