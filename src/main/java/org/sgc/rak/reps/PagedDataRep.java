@@ -4,6 +4,8 @@ import java.util.List;
 
 /**
  * Represents a page of data in a resource collection.
+ *
+ * @param <T> The type of data being paged through.
  */
 public class PagedDataRep<T> {
 

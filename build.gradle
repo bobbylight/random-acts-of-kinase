@@ -13,7 +13,8 @@ plugins {
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
-apply plugin: "com.moowork.node"
+apply plugin: 'checkstyle'
+apply plugin: 'com.moowork.node'
 
 group 'org.sgc'
 version '0.3.0-SNAPSHOT'
@@ -51,8 +52,10 @@ dependencies {
 
     compile 'org.apache.commons:commons-lang3:3.6'
     compile 'org.postgresql:postgresql:42.1.1'
+    compile 'com.h2database:h2:1.4.196'
 
-    testCompile 'junit:junit:4.11'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-all:1.10.19'
 }
 
 task wrapper(type: Wrapper) {

@@ -48,10 +48,12 @@ public class ActivityProfileDao {
      * @return The list of kinase activity profiles.
      * @see #getKinaseActivityProfiles(Pageable)
      */
-    public Page<KinaseActivityProfile> getKinaseActivityProfilesByCompoundNameIgnoreCaseAndKinaseIgnoreCaseAndPercentControl(
-                                        String compoundName, String kinase, double activity, Pageable pageInfo) {
-        return activityProfileRepository.getKinaseActivityProfilesByCompoundNameIgnoreCaseAndKinaseIgnoreCaseAndPercentControl(
-            compoundName, kinase, activity, pageInfo);
+    public Page<KinaseActivityProfile>
+            getKinaseActivityProfilesByCompoundNameIgnoreCaseAndKinaseIgnoreCaseAndPercentControl(
+                                    String compoundName, String kinase, double activity, Pageable pageInfo) {
+        return activityProfileRepository.
+            getKinaseActivityProfilesByCompoundNameIgnoreCaseAndKinaseIgnoreCaseAndPercentControl(
+                    compoundName, kinase, activity, pageInfo);
     }
 
     public Page<KinaseActivityProfile> getKinaseActivityProfilesByKinaseIgnoreCaseAndPercentControl(String kinase,

@@ -24,10 +24,10 @@ public class KinaseActivityProfile {
     @JoinColumn(name = "kinase", nullable = false, updatable = false)
     private Kinase kinase;
 
-    @Column(name = "percentControl", updatable = false)
+    @Column(name = "percent_control", updatable = false)
     private double percentControl;
 
-    @Column(name = "compoundConcentration", updatable = false)
+    @Column(name = "compound_concentration", updatable = false)
     private int compoundConcentration;
 
     @Column(name = "kd", updatable = false)

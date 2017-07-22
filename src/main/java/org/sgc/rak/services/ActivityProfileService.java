@@ -54,8 +54,8 @@ public class ActivityProfileService {
      * @return The list of kinase activity profiles.
      * @see #getKinaseActivityProfiles(Pageable)
      */
-    public Page<KinaseActivityProfile> getKinaseActivityProfilesForCompoundAndKinaseAndPercentControl(String compoundName,
-                                                            String kinase, double activity, Pageable pageInfo) {
+    public Page<KinaseActivityProfile> getKinaseActivityProfilesForCompoundAndKinaseAndPercentControl(
+            String compoundName, String kinase, double activity, Pageable pageInfo) {
         compoundService.getCompound(compoundName); // Throw exception if compound not found
         //kinaseService.getKinase(kinase); // Throw exception if kinase not found
         return activityProfileDao.getKinaseActivityProfilesByCompoundNameIgnoreCaseAndKinaseIgnoreCaseAndPercentControl(

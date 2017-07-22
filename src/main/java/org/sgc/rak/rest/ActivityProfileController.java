@@ -60,7 +60,8 @@ class ActivityProfileController {
                 page = activityProfileService.getKinaseActivityProfiles(pageInfo);
             }
             else {
-                page = activityProfileService.getKinaseActivityProfilesForKinaseAndPercentControl(kinase, activity, pageInfo);
+                page = activityProfileService.getKinaseActivityProfilesForKinaseAndPercentControl(kinase, activity,
+                    pageInfo);
             }
         }
         else {

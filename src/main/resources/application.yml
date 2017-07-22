@@ -8,7 +8,21 @@ logging:
 ---
 
 spring:
-  profiles: dev
+  profiles: dev,test
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+  datasource:
+    # platform needed to load data-h2.sql
+    platform: h2
+    url: jdbc:h2:mem:test
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+
+---
+
+spring:
+  profiles: dev-postgres
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
     driverClassName: org.postgresql.Driver

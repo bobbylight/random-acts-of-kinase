@@ -45,6 +45,7 @@ public class CompoundDao {
      */
     public Page<Compound> getCompoundsByCompoundNameStartsWithIgnoreCase(String compoundNamePart,
                                                                Pageable pageInfo) {
-        return compoundRepository.getCompoundsByCompoundNameStartsWithIgnoreCaseAndSourceIsNull(compoundNamePart, pageInfo);
+        return compoundRepository.getCompoundsByCompoundNameStartsWithIgnoreCaseAndSourceIsNull(
+            compoundNamePart, pageInfo);
     }
 }
