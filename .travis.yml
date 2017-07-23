@@ -1,8 +1,13 @@
-language: node_js
+env:
+  - DISPLAY=:99.0
+jdk:
+  - oraclejdk8
 
-node_js:
-    - "stable"
+script:
+  - cd src/main/frontend && CLI_WIDTH=80 npm install
+  - cd src/main/frontend && npm rum build-semantic-ui
+  - ./gradlew build
 
-before_script:
-    - npm run clean
-script: npm run build && npm run test
+# Update coverage info on coveralls.io
+#after_success:
+#  - ./gradlew jacocoTestReport coveralls

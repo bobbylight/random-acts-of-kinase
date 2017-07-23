@@ -13,8 +13,9 @@ plugins {
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
-apply plugin: 'checkstyle'
 apply plugin: 'com.moowork.node'
+apply plugin: 'findbugs'
+apply plugin: 'checkstyle'
 
 group 'org.sgc'
 version '0.3.0-SNAPSHOT'

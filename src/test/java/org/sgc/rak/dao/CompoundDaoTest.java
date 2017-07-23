@@ -16,6 +16,9 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Arrays;
 
+/**
+ * Unit tests for the {@code CompoundDao} class.
+ */
 public class CompoundDaoTest {
 
     @Mock

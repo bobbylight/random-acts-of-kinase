@@ -8,6 +8,9 @@ import org.sgc.rak.i18n.Messages;
 
 import java.util.Locale;
 
+/**
+ * Unit tests for the {@code AppConfigurationTest} class.
+ */
 public class AppConfigurationTest {
 
     private AppConfiguration config;
