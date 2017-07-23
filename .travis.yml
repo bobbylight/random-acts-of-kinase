@@ -4,8 +4,9 @@ jdk:
   - oraclejdk8
 
 script:
-  - cd src/main/frontend && npm install
-  - cd src/main/frontend && npm rum build-semantic-ui
+# Not installing UI bits until this is fixed: https://github.com/Semantic-Org/Semantic-UI/issues/4292
+#  - cd src/main/frontend && npm install
+#  - cd src/main/frontend && npm rum build-semantic-ui
   - ./gradlew build
 
 # Update coverage info on coveralls.io
