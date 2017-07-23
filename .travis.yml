@@ -1,10 +1,11 @@
 env:
   - DISPLAY=:99.0
+  - CLI_WIDTH=80
 jdk:
   - oraclejdk8
 
 script:
-  - cd src/main/frontend && CLI_WIDTH=80 npm install
+  - cd src/main/frontend && npm install
   - cd src/main/frontend && npm rum build-semantic-ui
   - ./gradlew build
 
