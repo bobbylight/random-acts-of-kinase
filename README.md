@@ -53,4 +53,3 @@ eb deploy [--staged]
 ```
 
 ## ...
-This app is based off of [ts-webpack-app-template](github.com/bobbylight/ts-webpack-app-template.git).
