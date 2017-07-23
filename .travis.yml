@@ -1,6 +1,5 @@
 env:
-  - DISPLAY=:99.0
-  - CLI_WIDTH=80
+  - DISPLAY=:99.0 CLI_WIDTH=80
 jdk:
   - oraclejdk8
 
