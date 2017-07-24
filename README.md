@@ -8,7 +8,7 @@ This is very rough at the moment.
 git clone git@github.com/github.com/bobbylight/rak.git
 cd rak/src/main/frontend
 # "npm install" runs semantic-ui stuff that's buggy, be prepared
-export CLI_WIDTH=80 # Work around bug in a dependency of semantic-ui's build
+export CLI_WIDTH=80 # Work around bug in a dependency of semantic-ui's build, should be exactly right
 npm install # Select 'Skip install', then *use arrow keys at least once* to select Yes or No
 npm run build-semantic-ui  # Create our custom semantic-ui build
 cd ../../..

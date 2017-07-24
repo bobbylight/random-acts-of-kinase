@@ -10,27 +10,17 @@
     "build-windows": "cross-env NODE_ENV=production node_modules\\.bin\\webpack --config webpack/webpack.config.js",
     "watch": "cross-env NODE_ENV=dev webpack --config webpack/webpack.config.js --watch",
     "watch-static-into-build": "cpx \"../resources/**/*\" ../../../build/resources/main/ --watch",
-    "dev": "cross-env NODE_ENV=dev webpack-dev-server --config webpack/webpack.config.js",
-    "start": "node src/server/server.js",
     "test": "cross-env NODE_ENV=test karma start karma.unit.js",
     "coverage": "cross-env NODE_ENV=test karma start karma.coverage.js"
   },
   "author": "Robert Futrell <robert.e.futrell@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "bluebird": "3.5.0",
-    "compression": "1.6.2",
-    "connect-history-api-fallback": "1.3.0",
-    "cors": "2.8.3",
     "datatables.net": "1.10.15",
     "datatables.net-dt": "1.10.15",
     "debounce": "1.0.2",
-    "express": "4.15.2",
-    "express-livereload": "0.0.24",
     "font-awesome": "4.7.0",
     "semantic-ui": "2.2.10",
-    "sqlite": "2.7.0",
-    "sqlite3": "3.1.8",
     "vue": "2.3.3",
     "vue-router": "2.5.3"
   },
@@ -64,7 +54,6 @@
     "url-loader": "0.5.8",
     "vue-loader": "12.0.3",
     "vue-template-compiler": "2.3.3",
-    "webpack": "2.4.1",
-    "webpack-dev-server": "2.4.5"
+    "webpack": "2.4.1"
   }
 }
