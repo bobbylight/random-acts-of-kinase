@@ -8,7 +8,7 @@ script:
 #  - cd src/main/frontend && npm install
 #  - cd src/main/frontend && npm rum build-semantic-ui
 #  - ./gradlew build
-  - ./gradlew build -xnpmInstall
+  - ./gradlew build -xwebpack -xnpmInstall
 
 # Update coverage info on coveralls.io
 #after_success:
