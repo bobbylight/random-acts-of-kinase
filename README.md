@@ -1,5 +1,7 @@
 # Random Acts of Kinase
 
+[![Build Status](https://travis-ci.org/bobbylight/rak.svg?branch=master)](https://travis-ci.org/bobbylight/rak)
+
 This is very rough at the moment.
 
 ## Install
@@ -39,13 +41,7 @@ The coverage report for the client-side tests lives here:
 open reports/coverage/index.html
 ```
 
-To do a production (minified) build into `dist/`:
-```sh
-npm install
-npm run build
-```
-
-To deploy to AWS (we build a zip contianing just the jar and a Procfile to launch
+To deploy to AWS (we build a zip containing just the jar and a Procfile to launch
 it, as configured in `.elasticbeanstalk/config.yml`):
 ```sh
 ./gradlew makeAwsArchive
