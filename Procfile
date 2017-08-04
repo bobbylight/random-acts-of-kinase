@@ -1,1 +1,1 @@
-web: java -jar random-acts-of-kinase-0.2.0-SNAPSHOT.jar
+web: java -jar random-acts-of-kinase-0.3.0-SNAPSHOT.jar
