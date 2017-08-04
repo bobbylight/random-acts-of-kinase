@@ -32,7 +32,8 @@ public class CompoundDao {
      * @see #getCompoundsByCompoundNameStartsWithIgnoreCase(String, Pageable)
      */
     public Page<Compound> getCompounds(Pageable pageInfo) {
-        return compoundRepository.findAll(pageInfo);
+//        return compoundRepository.findAll(pageInfo);
+        return compoundRepository.findSourceIsNull(pageInfo);
     }
 
     /**

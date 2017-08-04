@@ -53,7 +53,8 @@ public class CompoundDaoTest {
         Compound compound2= new Compound();
         compound2.setCompoundName("compoundB");
         Page<Compound> expectedPage = new PageImpl<>(Arrays.asList(compound1, compound2));
-        doReturn(expectedPage).when(compoundRepository).findAll(any(Pageable.class));
+        //doReturn(expectedPage).when(compoundRepository).findAll(any(Pageable.class));
+        doReturn(expectedPage).when(compoundRepository).findSourceIsNull(any(Pageable.class));
 
         Pageable pageInfo = new PageRequest(0, 20);
         Page<Compound> actualPage = compoundDao.getCompounds(pageInfo);
