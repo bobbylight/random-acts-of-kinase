@@ -4,7 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.5.4.RELEASE'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.5.8.RELEASE'
     }
 }
 plugins {
@@ -19,8 +19,6 @@ apply plugin: 'checkstyle'
 
 group 'org.sgc'
 version '0.3.0-SNAPSHOT'
-
-apply plugin: 'java'
 
 repositories {
     mavenCentral()
@@ -47,20 +45,20 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-actuator'
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
 
-    compile 'org.slf4j:slf4j-api:1.7.25'
-    compile 'ch.qos.logback:logback-classic:1.2.3'
-    compile 'ch.qos.logback:logback-core:1.2.3'
+    compile 'org.slf4j:slf4j-api'
+    compile 'ch.qos.logback:logback-classic'
+    compile 'ch.qos.logback:logback-core'
 
     compile 'org.apache.commons:commons-lang3:3.6'
-    compile 'org.postgresql:postgresql:42.1.1'
-    compile 'com.h2database:h2:1.4.196'
+    compile 'org.postgresql:postgresql'
+    compile 'com.h2database:h2'
 
-    testCompile 'junit:junit:4.12'
+    testCompile 'junit:junit'
     testCompile 'org.mockito:mockito-all:1.10.19'
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.0'
+    gradleVersion = '4.2.1'
 }
 
 idea {
