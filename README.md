@@ -48,4 +48,8 @@ it, as configured in `.elasticbeanstalk/config.yml`):
 eb deploy [--staged]
 ```
 
-## ...
+## Updating the AWS database
+We won't have to keep doing this once we have the data exported in a format we like...
+```sh
+psql --host=<host-name> --username=<user> --dbname=<db> -f create-db.ddl
+```
