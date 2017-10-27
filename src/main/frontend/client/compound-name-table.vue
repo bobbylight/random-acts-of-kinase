@@ -138,14 +138,42 @@
 </script>
 
 <style lang="less">
+
+    @transition-time: .5s;
+
     #compound-name-table {
         thead {
             display: none;
         }
 
         tr {
+
+            transition: background-color @transition-time;
+
+            .compoundDesc {
+                vertical-align: middle;
+                display: inline-block;
+
+                .compoundName {
+                    color: gray;
+                    transition: color @transition-time;
+                }
+                .chemotype {
+                    font-size: medium;
+                    color: lightgray;
+                    transition: color @transition-time;
+                }
+            }
+
             &:hover {
-                background: #f8f8f8;
+                background-color: #f8f8f8;
+
+                .compoundName {
+                    color: #8080a0;
+                }
+                .chemotype {
+                    color: #8080a0;
+                }
             }
         }
 
@@ -154,19 +182,6 @@
 
         img {
             vertical-align: middle;
-        }
-
-        .compoundDesc {
-            vertical-align: middle;
-            display: inline-block;
-
-            .compoundName {
-                color: gray;
-            }
-            .chemotype {
-                font-size: medium;
-                color: lightgray;
-            }
         }
     }
 </style>

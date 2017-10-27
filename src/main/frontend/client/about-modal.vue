@@ -4,6 +4,9 @@
         <div class="header">
             Random Acts of Kinase
         </div>
+        <div class="build-info">
+            Build: {{version}}
+        </div>
         <div class="image content">
             <div class="ui small image">
                 <img src="img/molecule.svg"><!-- :src="aboutImagePath">-->
@@ -39,6 +42,7 @@ export default {
     data() {
         return {
 //            aboutImagePath: moleculeImage
+            version: `0.3.0 (${new Date().toLocaleDateString()})`
         };
     },
     methods: {
@@ -47,4 +51,10 @@ export default {
 </script>
 
 <style lang="less">
+    .build-info {
+        position: absolute;
+        bottom: 0.5rem;
+        left: 0.5rem;
+        color: gray;
+    }
 </style>

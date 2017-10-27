@@ -32,6 +32,12 @@ export default {
     name: 'app',
     components: {
         navbar
+    },
+
+    methods: {
+        showAbout: () => {
+            window.open('https://github.com/bobbylight/rak', '_blank');
+        }
     }
 };
 </script>

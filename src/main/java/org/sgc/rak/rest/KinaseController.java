@@ -22,15 +22,19 @@ class KinaseController {
     /**
      * Returns kinase information.
      *
+     * @param discoverx An optional filter.  If specified, only kinases whose
+     *        discoverx gene symbol start with this string (ignoring case) are
+     *        returned.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
      */
     @RequestMapping(method = RequestMethod.GET)
     PagedDataRep<Kinase> getKinases(
+        @RequestParam(required = false) String discoverx,
         @SortDefault.SortDefaults({ @SortDefault("discoverxGeneSymbol"), @SortDefault("entrezGeneSymbol") })
         Pageable pageInfo) {
 
-        Page<Kinase> page = kinaseService.getKinases(pageInfo);
+        Page<Kinase> page = kinaseService.getKinases(discoverx, pageInfo);
 
         long start = page.getNumber() * pageInfo.getPageSize();
         long total = page.getTotalElements();

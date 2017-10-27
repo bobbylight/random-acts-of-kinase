@@ -4,6 +4,22 @@
 </template>
 
 <script>
+
+function responseToSemanticStructure(origResponse) {
+
+    const response = {
+        success: true,
+        results: origResponse.data.map(item => {
+            return {
+                name: item.discoverxGeneSymbol,
+                value: item.discoverxGeneSymbol
+            };
+        })
+    };
+
+    return response;
+}
+
 export default {
     props: {
         name: {
@@ -27,7 +43,8 @@ export default {
             saveRemoteData: false,
             apiSettings: {
                 url: this.url,
-                cache: false
+                cache: false,
+                onResponse: responseToSemanticStructure
             }
         });
 

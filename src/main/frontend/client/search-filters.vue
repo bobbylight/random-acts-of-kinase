@@ -15,7 +15,7 @@
                 <!--<search-field type="kinase" v-model="filters.kinase"-->
                 <!--place-holder="Kinase"></search-field>-->
                 <lazy-dropdown v-model="filters.kinase"
-                               name="kinase" url="api/kinases?filter={query}"></lazy-dropdown>
+                               name="kinase" url="api/kinases?size=1000&discoverx={query}"></lazy-dropdown>
             </div>
 
             <div class="four wide column">

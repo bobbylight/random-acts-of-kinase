@@ -23,10 +23,17 @@ public class KinaseService {
     /**
      * Returns kinase information.
      *
+     * @param discoverx An optional filter.  If non-{@code null}, only kinases
+     *        whose discoverx gene symbols start with this string (ignoring
+     *        case) are returned.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of kinases.
      */
-    public Page<Kinase> getKinases(Pageable pageInfo) {
+    public Page<Kinase> getKinases(String discoverx, Pageable pageInfo) {
+        if (discoverx != null) {
+            return kinaseDao.getKinasesByDiscoverxGeneSymbolStartingWith(
+                discoverx, pageInfo);
+        }
         return kinaseDao.getKinases(pageInfo);
     }
 }

@@ -23,4 +23,18 @@ public class KinaseDao {
     public Page<Kinase> getKinases(Pageable pageInfo) {
         return kinaseRepository.findAll(pageInfo);
     }
+
+    /**
+     * Returns kinase information.
+     *
+     * @param discoverx If non-{@code null}, only kinases whose discoverx gene
+     *        symbols start with this string (ignoring case) are returned.
+     * @param pageInfo How to sort the data and what page of the data to return.
+     * @return The list of kinases.
+     */
+    public Page<Kinase> getKinasesByDiscoverxGeneSymbolStartingWith(
+            String discoverx, Pageable pageInfo) {
+        return kinaseRepository.getKinasesByDiscoverxGeneSymbolStartsWithIgnoreCase(
+            discoverx, pageInfo);
+    }
 }
