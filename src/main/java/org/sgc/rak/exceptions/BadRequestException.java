@@ -6,10 +6,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 /**
  * Thrown when a 400 should occur.
  */
-@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-public class BadRequestException extends RuntimeException {
+public class BadRequestException extends AbstractRestException {
 
     public BadRequestException(String message) {
-        super(message);
+        super(HttpStatus.BAD_REQUEST, message);
     }
 }

@@ -17,7 +17,8 @@ import org.springframework.data.domain.Pageable;
 import java.util.Arrays;
 
 /**
- * Unit tests for the {@code CompoundDao} class.
+ * Unit tests for the {@code CompoundDao} class.  This is really just testing
+ * the pass-through of queries to the repository.
  */
 public class CompoundDaoTest {
 
@@ -65,16 +66,18 @@ public class CompoundDaoTest {
     @Test
     public void getCompoundsByCompoundNameStartsWithIgnoreCase() {
 
+        String startsWith = "comp";
+
         Compound compound1 = new Compound();
         compound1.setCompoundName("compoundA");
         Compound compound2= new Compound();
         compound2.setCompoundName("compoundB");
         Page<Compound> expectedPage = new PageImpl<>(Arrays.asList(compound1, compound2));
         doReturn(expectedPage).when(compoundRepository).getCompoundsByCompoundNameStartsWithIgnoreCaseAndSourceIsNull(
-            anyString(), any(Pageable.class));
+            eq(startsWith), any(Pageable.class));
 
         Pageable pageInfo = new PageRequest(0, 20);
-        Page<Compound> actualPage = compoundDao.getCompoundsByCompoundNameStartsWithIgnoreCase("comp", pageInfo);
+        Page<Compound> actualPage = compoundDao.getCompoundsByCompoundNameStartsWithIgnoreCase(startsWith, pageInfo);
 
         comparePages(expectedPage, actualPage);
     }

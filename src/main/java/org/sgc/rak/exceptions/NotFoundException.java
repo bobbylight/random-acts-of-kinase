@@ -6,10 +6,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 /**
  * Thrown when a 404 should occur.
  */
-@ResponseStatus(value = HttpStatus.NOT_FOUND)
-public class NotFoundException extends RuntimeException {
+public class NotFoundException extends AbstractRestException {
 
     public NotFoundException(String message) {
-        super(message);
+        super(HttpStatus.NOT_FOUND, message);
     }
 }
