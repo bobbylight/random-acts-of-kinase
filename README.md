@@ -2,7 +2,12 @@
 
 [![Build Status](https://travis-ci.org/bobbylight/rak.svg?branch=master)](https://travis-ci.org/bobbylight/rak)
 
-This is very rough at the moment.
+A web frontend for SGC kinase information.
+
+A Spring Boot application exposes the data via a REST API.  The frontend is written in Vue.
+
+Note:  The actual kinase data is not included in this repository, for obvious reasons.
+You can still test the application without this data by running it with the `dev` Spring profile.
 
 ## Install
 

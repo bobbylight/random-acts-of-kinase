@@ -1,5 +1,6 @@
 package org.sgc.rak.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -13,6 +14,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "kinase")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Kinase {
 
     @Id

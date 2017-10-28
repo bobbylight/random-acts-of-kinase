@@ -30,6 +30,14 @@ public class CompoundTest {
     }
 
     @Test
+    public void testGetSetSmiles() {
+        Compound compound = new Compound();
+        Assert.assertNull(compound.getSmiles());
+        compound.setSmiles("foo");
+        Assert.assertEquals("foo", compound.getSmiles());
+    }
+
+    @Test
     public void testGetSetSource() {
         Compound compound = new Compound();
         Assert.assertNull(compound.getSource());
@@ -40,7 +48,7 @@ public class CompoundTest {
     @Test
     public void testToString() {
         String expected = "Compound[compoundName=<null>,chemotype=<null>," +
-            "s10=<null>,source=<null>]";
+            "s10=<null>,smiles=<null>,source=<null>]";
         Assert.assertEquals(expected, new Compound().toString());
     }
 }

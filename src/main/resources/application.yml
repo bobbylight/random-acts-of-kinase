@@ -23,6 +23,7 @@ spring:
 
 ---
 
+# Development is done with a local copy of the Postgres database.
 spring:
   profiles: dev-postgres
   datasource:
