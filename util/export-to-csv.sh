@@ -17,5 +17,5 @@ rm -fr ${OUTDIR}
 mkdir ${OUTDIR}
 
 psql -U ${USER} -c "\copy (select * from ${SCHEMA}.compound order by compound_nm) to ${OUTDIR}/compound.csv with csv" ${DB}
-psql -U ${USER} -c "\copy (select * from ${SCHEMA}.kinase order by discoverx_gene_symbol) to ${OUTDIR}/kinase.csv with csv" ${DB}
-psql -U ${USER} -c "\copy (select * from ${SCHEMA}.kinase_activity_profile order by compound_nm, kinase) to ${OUTDIR}/kinase_activity_profile.csv with csv" ${DB}
+psql -U ${USER} -c "\copy (select * from ${SCHEMA}.kinase order by id) to ${OUTDIR}/kinase.csv with csv" ${DB}
+psql -U ${USER} -c "\copy (select * from ${SCHEMA}.kinase_activity_profile order by id) to ${OUTDIR}/kinase_activity_profile.csv with csv" ${DB}
