@@ -12,6 +12,9 @@ kinase.db
 semantic
 .DS_Store
 
+exported-data/
+env.sh
+
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
