@@ -1,6 +1,7 @@
 package org.sgc.rak.model;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
 
@@ -83,7 +84,7 @@ public class KinaseActivityProfile {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .append("compoundName", compoundName)
             .append("kinase", kinase)
             .append("percentControl", percentControl)
