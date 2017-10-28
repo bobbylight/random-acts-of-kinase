@@ -7,4 +7,5 @@
     <suppress files="Application\.java" checks="HideUtilityClassConstructor" />
     <suppress files=".*src[\\/]test[\\/].*" checks="MagicNumber"/>
     <suppress files=".*src[\\/]test[\\/].*" checks="JavadocPackage"/>
+    <suppress files=".*src[\\/]test[\\/].*" checks="MethodName"/>
 </suppressions>

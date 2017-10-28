@@ -4,15 +4,13 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
-import org.springframework.context.MessageSource;
-import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.support.StaticMessageSource;
 
 import java.util.Locale;
 
-import static org.mockito.Mockito.doReturn;
-
+/**
+ * Unit tests for the {@link Messages} class.
+ */
 public class MessagesTest {
 
     private Locale origLocale;

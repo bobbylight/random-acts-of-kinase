@@ -15,7 +15,7 @@ public class Messages {
 
     private MessageSource messageSource;
 
-    private static Logger LOGGER = LoggerFactory.getLogger(Messages.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Messages.class);
 
     public Messages(MessageSource messageSource) {
         this.messageSource = messageSource;

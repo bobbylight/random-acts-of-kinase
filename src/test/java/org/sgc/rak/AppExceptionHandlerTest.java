@@ -12,6 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.WebRequest;
 
+/**
+ * Unit tests for the {@link AppExceptionHandler} class.
+ */
 public class AppExceptionHandlerTest {
 
     private AppExceptionHandler handler;
