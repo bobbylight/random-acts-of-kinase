@@ -1,7 +1,6 @@
 package org.sgc.rak.rest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.ResourceClosedException;
 import org.sgc.rak.model.Compound;
 import org.sgc.rak.reps.PagedDataRep;
 import org.sgc.rak.services.CompoundService;
@@ -11,7 +10,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.SortDefault;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 /**
