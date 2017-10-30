@@ -1,13 +1,17 @@
 package org.sgc.rak.rest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.ResourceClosedException;
 import org.sgc.rak.model.Compound;
 import org.sgc.rak.reps.PagedDataRep;
 import org.sgc.rak.services.CompoundService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.SortDefault;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -55,5 +59,15 @@ class CompoundController {
         long start = page.getNumber() * pageInfo.getPageSize();
         long total = page.getTotalElements();
         return new PagedDataRep<>(page.getContent(), start, total);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/images/{compoundName}",
+            produces = "image/svg+xml")
+    Resource getCompoundSmiles(@PathVariable String compoundName) {
+        Resource resource = new ClassPathResource("/static/img/smiles/" + compoundName + ".svg");
+        if (!resource.exists()) {
+            resource = new ClassPathResource("/static/img/molecule.svg");
+        }
+        return resource;
     }
 }

@@ -61,7 +61,7 @@
                 const url = `#/compound/${data}`;
                 const metadata = `${row.chemotype || '...'}, s(10): ${row.s10 || '?'}`;
 
-                return `<div><img src="img/molecule.svg" width="${imgSize}" height="${imgSize}">` +
+                return `<div><img src="api/compounds/images/${data}.svg" width="${imgSize}" height="${imgSize}">` +
                     `&nbsp;&nbsp;&nbsp;` +
                     `<div class="compoundDesc">` +
                     `   <a class="compoundName" href="${url}">${data}</a><br>` +
