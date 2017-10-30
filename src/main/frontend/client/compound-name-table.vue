@@ -61,7 +61,7 @@
                 const url = `#/compound/${data}`;
                 const metadata = `${row.chemotype || '...'}, s(10): ${row.s10 || '?'}`;
 
-                return `<div><img src="api/compounds/images/${data}.svg" width="${imgSize}" height="${imgSize}">` +
+                return `<div><img class="lazy" data-src="api/compounds/images/${data}.svg" width="${imgSize}" height="${imgSize}">` +
                     `&nbsp;&nbsp;&nbsp;` +
                     `<div class="compoundDesc">` +
                     `   <a class="compoundName" href="${url}">${data}</a><br>` +
@@ -75,15 +75,20 @@
             $.fn.dataTable.ext.pager.numbers_length = 4;
 
             const pageSize = 20;
+            const table = $('#compound-name-table');
 
             const that = this;
-            this.table = $('#compound-name-table').DataTable({
+            this.table = table.DataTable({
                 serverSide: true,
                 searching: false,
                 lengthChange: false,
                 info: false,
                 pageLength: pageSize,
                 pagingType: 'first_last_numbers',
+                drawCallback: () => {
+                    // Enable lazy loading of images in newly-rendered rows
+                    table.find('img.lazy').Lazy({ chainable: false }).update();
+                },
                 ajax: {
                     url: '/api/compounds',
                     traditional: true,
