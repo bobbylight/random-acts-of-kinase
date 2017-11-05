@@ -50,7 +50,7 @@ To deploy to AWS (we build a zip containing just the jar and a Procfile to launc
 it, as configured in `.elasticbeanstalk/config.yml`):
 ```sh
 ./gradlew makeAwsArchive
-eb deploy [--staged]
+eb deploy [--staged] --label "something"
 ```
 
 ## Updating the AWS database

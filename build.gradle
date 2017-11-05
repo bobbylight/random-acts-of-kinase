@@ -93,6 +93,7 @@ task makeAwsArchive(type: Zip) {
     include 'random-acts-of-kinase*.jar'
     from '.'
     include 'Procfile'
+    include '.ebextensions/**'
     archiveName 'aws-archive.zip'
     destinationDir(file("${rootDir}"))
 }
