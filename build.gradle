@@ -4,7 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.5.8.RELEASE'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.5.9.RELEASE'
     }
 }
 plugins {
@@ -49,7 +49,7 @@ dependencies {
     compile 'ch.qos.logback:logback-classic'
     compile 'ch.qos.logback:logback-core'
 
-    compile 'org.apache.commons:commons-lang3:3.6'
+    compile 'org.apache.commons:commons-lang3:3.7'
     compile 'org.postgresql:postgresql'
     compile 'com.h2database:h2'
 
@@ -58,7 +58,7 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.2.1'
+    gradleVersion = '4.4.1'
 }
 
 idea {

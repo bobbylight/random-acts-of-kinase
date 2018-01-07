@@ -1,6 +1,7 @@
 # Random Acts of Kinase
-
 [![Build Status](https://travis-ci.org/bobbylight/rak.svg?branch=master)](https://travis-ci.org/bobbylight/rak)
+[![Dependency Status](https://img.shields.io/david/bobbylight/rak.svg)](https://david-dm.org/bobbylight/rak)
+[![Dev Dependency Status](https://img.shields.io/david/dev/bobbylight/rak.svg)](https://david-dm.org/bobbylight/rak?type=dev)
 
 A web frontend for SGC kinase information.
 

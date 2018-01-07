@@ -15,7 +15,7 @@
         <div class="ui bottom inverted menu footer">
             <div class="footer-content menu">
                 <span class="item">
-                    &copy; 2017&nbsp;<a href="http://sgc-unc.org">SGC-UNC</a>
+                    &copy; 2018&nbsp;<a href="http://sgc-unc.org">SGC-UNC</a>
                 </span>
                 <a class="item" v-on:click="showAbout()" title="About" aria-label="About">
                     <i class="fa fa-github" aria-hidden="true"></i>
