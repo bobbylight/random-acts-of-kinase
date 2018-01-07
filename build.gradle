@@ -98,3 +98,7 @@ task makeAwsArchive(type: Zip) {
     destinationDir(file("${rootDir}"))
 }
 
+bootRun {
+    // Forward -D properties to the Spring Boot app
+    systemProperties = System.properties
+}

@@ -1,9 +1,9 @@
 -- Mock data for development and unit testing using H2.
 
 INSERT INTO compound VALUES
-  ('compoundA', 'chemotypeA', 0.1, NULL),
-  ('compoundB', 'chemotypeB', 0.2, NULL),
-  ('compoundC', 'chemotypeC', 0.3, NULL)
+  ('compoundA', 'chemotypeA', 0.1, NULL, NULL),
+  ('compoundB', 'chemotypeB', 0.2, NULL, NULL),
+  ('compoundC', 'chemotypeC', 0.3, NULL, NULL)
 ;
 
 INSERT INTO kinase VALUES
