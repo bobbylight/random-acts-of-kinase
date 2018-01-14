@@ -3,7 +3,7 @@
 # top-most EditorConfig file
 root = true
 
-[*.{java,properties,ts,js,vue,json,html,xml,less,scss,css}]
+[*.{java,properties,gradle,ts,js,vue,json,html,xml,less,scss,css}]
 charset = utf-8
 end_of_line = lf
 insert_final_newline = true

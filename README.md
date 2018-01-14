@@ -1,7 +1,5 @@
 # Random Acts of Kinase
 [![Build Status](https://travis-ci.org/bobbylight/rak.svg?branch=master)](https://travis-ci.org/bobbylight/rak)
-[![Dependency Status](https://img.shields.io/david/bobbylight/rak.svg)](https://david-dm.org/bobbylight/rak)
-[![Dev Dependency Status](https://img.shields.io/david/dev/bobbylight/rak.svg)](https://david-dm.org/bobbylight/rak?type=dev)
 
 A web frontend for SGC kinase information.
 
@@ -29,6 +27,9 @@ cd ../../..
 Unfortunately you need to start three processes to develop - annoying.  I couldn't get
 webpack to build directly into `build/` without Spring Boot getting cranky and clearing
 out the contents of `build/resources/main/static` on restarts.
+
+If you have data to develop against in a local postgres instance, you can run against
+via `./gradlew bootRun -Dspring.profiles.active=dev-postgres`.
 
 The server is a simple Spring Boot application exposing a REST API and a little
 static content.  The client is Vue/JS/TypeScript.
