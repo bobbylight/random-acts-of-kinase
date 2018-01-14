@@ -12,4 +12,4 @@ script:
 
 # Update coverage info on coveralls.io
 after_success:
-  - ./gradlew jacocoTestReport coveralls
+  - ./gradlew -xwebpack -xnpmInstall jacocoTestReport coveralls
