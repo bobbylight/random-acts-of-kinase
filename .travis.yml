@@ -11,5 +11,5 @@ script:
   - ./gradlew build -xwebpack -xnpmInstall
 
 # Update coverage info on coveralls.io
-#after_success:
-#  - ./gradlew jacocoTestReport coveralls
+after_success:
+  - ./gradlew jacocoTestReport coveralls
