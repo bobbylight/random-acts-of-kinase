@@ -86,7 +86,7 @@ public class CompoundDaoTest {
         Assert.assertEquals(expectedPage.getNumberOfElements(), actualPage.getNumberOfElements());
         for (int i = 0; i < expectedPage.getNumberOfElements(); i++) {
             String expectedName = expectedPage.getContent().get(i).getCompoundName();
-            String actualName = expectedPage.getContent().get(i).getCompoundName();
+            String actualName = actualPage.getContent().get(i).getCompoundName();
             Assert.assertEquals(expectedName, actualName);
         }
     }

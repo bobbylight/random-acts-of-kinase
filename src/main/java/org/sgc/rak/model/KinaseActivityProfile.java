@@ -36,6 +36,26 @@ public class KinaseActivityProfile {
     @Column(name = "kd", updatable = false)
     private Double kd;
 
+    @Override
+    public boolean equals(Object obj) {
+
+        if (obj == this) {
+            return true;
+        }
+
+        if (obj instanceof KinaseActivityProfile) {
+            KinaseActivityProfile kap2 = (KinaseActivityProfile)obj;
+            return id == kap2.id;
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int)id;
+    }
+
     public long getId() {
         return id;
     }
