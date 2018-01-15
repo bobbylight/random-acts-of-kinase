@@ -59,8 +59,7 @@ class CompoundController {
         return new PagedDataRep<>(page.getContent(), start, total);
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/images/{compoundName}",
-            produces = "image/svg+xml")
+    @RequestMapping(method = RequestMethod.GET, path = "/images/{compoundName}", produces = "image/svg+xml")
     Resource getCompoundSmiles(@PathVariable String compoundName) {
         Resource resource = new ClassPathResource("/static/img/smiles/" + compoundName + ".svg");
         if (!resource.exists()) {
