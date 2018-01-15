@@ -39,9 +39,9 @@ The application will be hosted at [http://localhost:8080]().
 
 To run tests:
 ```sh
-./gradlew test   # Service tests
-npm run test     # Client tests
-npm run coverage # Client tests + coverage report
+./gradlew test -xwebpack # Service tests
+npm test                 # Client tests
+npm run coverage         # Client tests + coverage report
 ```
 
 The coverage report for the client-side tests lives here:
