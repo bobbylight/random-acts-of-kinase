@@ -19,9 +19,9 @@ export CLI_WIDTH=80 # Work around bug in a dependency of semantic-ui's build, sh
 npm install # Select 'Skip install', then *use arrow keys at least once* to select Yes or No
 npm run build-semantic-ui  # Create our custom semantic-ui build
 cd ../../..
-./gradlew build
-./gradlew bootRun      # Starts application at localhost:8080
-./gradlew webpackWatch # In another window, run webpack watch for UI updates
+./gradlew build -xwebpack
+./gradlew bootRun         # Starts application at localhost:8080
+./gradlew webpackWatch    # In another window, run webpack watch for UI updates
 ./gradlew copyStaticResourcesToBuildWatch # Copy webpack build into build/ for hot deploys
 ```
 

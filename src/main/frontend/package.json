@@ -53,6 +53,7 @@
     "tslint-loader": "3.5.3",
     "typescript": "2.6.2",
     "typings": "2.1.1",
+    "uglifyjs-webpack-plugin": "1.1.6",
     "url-loader": "0.6.2",
     "vue-loader": "13.6.2",
     "vue-template-compiler": "2.5.13",
