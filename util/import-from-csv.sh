@@ -15,7 +15,7 @@ fi
 
 
 cd ${DIR}
-PGPASSWORD=${PASSWORD} psql -U ${USER} -f ddl/postgres.sql ${DB}
-PGPASSWORD=${PASSWORD} psql -U ${USER} -c "\copy compound from '${OUTDIR}/compound.csv' with csv header" ${DB}
-PGPASSWORD=${PASSWORD} psql -U ${USER} -c "\copy kinase from '${OUTDIR}/kinase.csv' with csv header" ${DB}
-PGPASSWORD=${PASSWORD} psql -U ${USER} -c "\copy kinase_activity_profile from '${OUTDIR}/kinase_activity_profile.csv' with csv header" ${DB}
+PGPASSWORD=${PASSWORD} psql -U ${USER} -v schema=${SCHEMA} -f ddl/postgres.sql ${DB}
+PGPASSWORD=${PASSWORD} psql -U ${USER} -c "\copy ${SCHEMA}.compound from '${OUTDIR}/compound.csv' with csv header" ${DB}
+PGPASSWORD=${PASSWORD} psql -U ${USER} -c "\copy ${SCHEMA}.kinase from '${OUTDIR}/kinase.csv' with csv header" ${DB}
+PGPASSWORD=${PASSWORD} psql -U ${USER} -c "\copy ${SCHEMA}.kinase_activity_profile from '${OUTDIR}/kinase_activity_profile.csv' with csv header" ${DB}
