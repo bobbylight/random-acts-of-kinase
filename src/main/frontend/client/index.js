@@ -9,7 +9,7 @@ import 'font-awesome/css/font-awesome.css';
 import Vue from 'vue';
 import App from './App.vue';
 import VueRouter from 'vue-router';
-import './../semantic/dist/semantic.min.css';
+import './../semantic/dist/semantic.css';
 import 'datatables.net';
 import 'jquery-lazy';
 import './../semantic/dist/semantic';
