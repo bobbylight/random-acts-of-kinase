@@ -11,6 +11,8 @@ npm-debug.log
 kinase.db
 semantic
 .DS_Store
+size-info.json
+size-info.txt
 
 exported-data/
 env.sh

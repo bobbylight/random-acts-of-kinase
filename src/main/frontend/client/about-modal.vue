@@ -32,22 +32,19 @@
     </div>
 </template>
 
-<script>
-//import moleculeImage from 'img/molecule.svg';
+<script lang="ts">
+import Vue from 'vue';
+import Component from 'vue-class-component';
 
-export default {
-    name: 'about-modal',
-    props: {
-    },
-    data() {
-        return {
-//            aboutImagePath: moleculeImage
-            version: `0.3.0 (${new Date().toLocaleDateString()})`
-        };
-    },
-    methods: {
+@Component
+export default class AboutModal extends Vue {
+
+    version: string;
+
+    created() {
+        this.version = `0.3.0 (${new Date().toLocaleDateString()})`;
     }
-};
+}
 </script>
 
 <style lang="less">

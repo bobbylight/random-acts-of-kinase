@@ -1,3 +1,4 @@
+import { Prop } from 'vue-property-decorator';
 <template>
     <div>
         <div class="search-filter-wrapper">
@@ -15,54 +16,61 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import { Watch } from 'vue-property-decorator';
 import debounce from 'debounce';
 import SearchFilters from './search-filters.vue';
 import CompoundNameTable from './compound-name-table.vue';
 
-export default {
-    components: {
-        SearchFilters,
-        CompoundNameTable
-    },
-    data() {
-        return {
-            filters: {
-                inhibitor: '',
-                kinase: '',
-                activity: ''
-            },
-            gridFilters: {
-                inhibitor: '',
-                kinase: '',
-                activity: ''
-            }
-        };
-    },
-    created() {
+interface Filter {
+    inhibitor: string;
+    kinase: string;
+    activity: string;
+}
 
+@Component({ components: { SearchFilters, CompoundNameTable } })
+export default class Search extends Vue {
+
+    filters: Filter = {
+        inhibitor: '',
+        kinase: '',
+        activity: ''
+    };
+
+    gridFilters: Filter = {
+        inhibitor: '',
+        kinase: '',
+        activity: ''
+    };
+
+    created() {
         console.log('search.vue created!');
-        this.debouncedRefreshTable = debounce(this.refreshTable, 750);
-    },
-    watch: {
-        'filters.inhibitor': function(newFilter) {
-            this.debouncedRefreshTable();
-        },
-        'filters.kinase': function(newFilter) {
-            this.debouncedRefreshTable();
-        },
-        'filters.activity': function(newFilter) {
-            this.debouncedRefreshTable();
-        }
-    },
-    methods: {
-        refreshTable: function() {
-            //this.gridFilters = JSON.parse(JSON.stringify(this.filters));
-            this.gridFilters.inhibitor = this.filters.inhibitor;
-            this.gridFilters.kinase = this.filters.kinase;
-            this.gridFilters.activity = this.filters.activity;
-            console.log('New gridFilters: ' + JSON.stringify(this.gridFilters));
-        }
+        this.refreshTable = debounce(this.refreshTable, 750);
+    }
+
+    @Watch('filters.inhibitor')
+    private onInhibitorFilterChanged(newFilter: string) {
+        this.refreshTable();
+    }
+
+    @Watch('filters.kinase')
+    private onKinaseFilterChanged(newFilter: string) {
+        this.refreshTable();
+    }
+
+    @Watch('filters.activity')
+    private onActivityFilterChanged(newFilter: string) {
+        this.refreshTable();
+    }
+
+    private refreshTable() {
+        //this.gridFilters = JSON.parse(JSON.stringify(this.filters));
+        this.gridFilters.inhibitor = this.filters.inhibitor;
+        this.gridFilters.kinase = this.filters.kinase;
+        this.gridFilters.activity = this.filters.activity;
+        console.log('New gridFilters: ' + JSON.stringify(this.gridFilters));
     }
 }
 </script>

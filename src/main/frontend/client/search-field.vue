@@ -6,63 +6,48 @@
     </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import { Prop } from 'vue-property-decorator';
+import $ from 'jquery';
 
-    name: 'searchField',
+@Component
+export default class SearchField extends Vue {
 
-    props: {
-        type: {
-            type: String,
-            required: false,
-            default: 'text'
-        },
-        value: { // Special prop received from v-model
-            type: String,
-            required: true
-        },
-        placeHolder: {
-            type: String,
-            required: true
-        },
-        label: {
-            type: String,
-            required: false
-        },
-        numeric: {
-            type: String,
-            required: false
-        }
-    },
+    @Prop({ default: 'text' })
+    type: string;
 
-    computed: {
-        labelDisplay: function() {
-            return this.label ? 'inherit' : 'none';
-        }
-    },
+    @Prop({ required: true })
+    value: string; // Special prop received from v-model
 
-    data: function() {
-        return {
-        };
-    },
+    @Prop({ required: true })
+    placeHolder: string;
 
-    methods: {
+    @Prop()
+    label: string;
 
-        possiblyValidate($event) {
+    @Prop()
+    numeric: string;
 
-            const value = $event.target.value;
-            const input = $(this.$el);
-
-            if ($($event.target).is(':invalid')) {
-                input.addClass('error');
-                return;
-            }
-
-            input.removeClass('error');
-            this.$emit('input', value);
-        }
+    get labelDisplay() {
+        return this.label ? 'inherit' : 'none';
     }
-};
+
+    possiblyValidate($event: Event) {
+
+        const value: any = ($event.target as HTMLInputElement).value;
+        const input: $ = $(this.$el);
+
+        if ($($event.target).is(':invalid')) {
+            input.addClass('error');
+            return;
+        }
+
+        input.removeClass('error');
+        this.$emit('input', value);
+    }
+}
 </script>
 
 <style lang="less">

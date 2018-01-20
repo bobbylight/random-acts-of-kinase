@@ -17,12 +17,13 @@ import './../semantic/dist/semantic';
 import './dataTables.semanticui';
 import Search from './search.vue';
 import Compound from './compound.vue';
+import { RouteConfig } from 'vue-router/types/router';
 
 Vue.use(VueRouter);
 
 window.onload = () => {
 
-    const routes = [
+    const routes: RouteConfig[] = [
         {
             path: '/',
             name: 'home',
@@ -36,11 +37,12 @@ window.onload = () => {
         }
     ];
 
-    const router = new VueRouter({
+    const router: VueRouter = new VueRouter({
         /*mode: 'history'w,*/
         routes
     });
 
+    // tslint:disable-next-line:no-unused-expression
     new Vue({
         el: '#app',
         router: router,

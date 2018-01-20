@@ -22,7 +22,7 @@ loaders.push({
 
 const config = {
     entry: {
-        main: [ path.resolve('./client/index.js') ]
+        main: [ path.resolve('./client/index.ts') ]
     },
     output: {
         publicPath: '/',

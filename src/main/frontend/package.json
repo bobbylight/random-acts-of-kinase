@@ -12,7 +12,9 @@
     "watch": "cross-env NODE_ENV=dev webpack --config webpack/webpack.config.js --watch",
     "watch-static-into-build": "cpx \"../resources/**/*\" ../../../build/resources/main/ --watch",
     "test": "cross-env NODE_ENV=test karma start karma.unit.js",
-    "coverage": "cross-env NODE_ENV=test karma start karma.coverage.js"
+    "coverage": "cross-env NODE_ENV=test karma start karma.coverage.js",
+    "webpack-analyze": "cross-env NODE_ENV=production webpack --config webpack/webpack.config.js --json > size-info.json",
+    "webpack-size-view": "webpack-bundle-size-analyzer size-info.json > size-info.txt"
   },
   "author": "Robert Futrell <robert.e.futrell@gmail.com>",
   "license": "MIT",
@@ -55,8 +57,11 @@
     "typings": "2.1.1",
     "uglifyjs-webpack-plugin": "1.1.6",
     "url-loader": "0.6.2",
+    "vue-class-component": "6.1.2",
     "vue-loader": "13.6.2",
+    "vue-property-decorator": "6.0.0",
     "vue-template-compiler": "2.5.13",
-    "webpack": "3.10.0"
+    "webpack": "3.10.0",
+    "webpack-bundle-size-analyzer": "2.7.0"
   }
 }

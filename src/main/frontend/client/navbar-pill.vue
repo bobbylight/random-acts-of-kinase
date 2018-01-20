@@ -2,38 +2,37 @@
     <div class="navbar-pill-parent">
         <div class="ui button pill" v-bind:class="{ active: isActiveTab() }"
                 v-on:click="navigate">{{compound}}
-            <i class="fa fa-times close-icon" aria-hidden="true" v-on:click="close"></i>
+            <i class="fa fa-times close-icon" aria-hidden="true" @click="close"></i>
         </div>
     </div>
 </template>
 
-<script>
-export default {
-    name: 'navbar-pill',
-    props: {
-        compound: {
-            type: String,
-            required: true
-        }
-    },
-    methods: {
+<script lang="ts">
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import { Prop } from 'vue-property-decorator';
 
-        isActiveTab() {
-            const pathRegex = new RegExp(this.compound + '$');
-            return !!this.$route.fullPath.match(pathRegex);
-        },
+@Component
+export default class NavbarPill extends Vue {
 
-        navigate() {
-            this.$router.push({ name: 'compound', params: { id: this.compound }});
-        },
+    @Prop({ required: true })
+    compound: string;
 
-        close(e) {
-            this.$emit('close', this.compound);
-            e.preventDefault();
-            e.stopPropagation();
-        }
+    isActiveTab(): boolean {
+        const pathRegex: RegExp = new RegExp(this.compound + '$');
+        return !!this.$route.fullPath.match(pathRegex);
     }
-};
+
+    navigate() {
+        this.$router.push({ name: 'compound', params: { id: this.compound }});
+    }
+
+    close(e: MouseEvent) {
+        this.$emit('close', this.compound);
+        e.preventDefault();
+        e.stopPropagation();
+    }
+}
 </script>
 
 <style lang="less">

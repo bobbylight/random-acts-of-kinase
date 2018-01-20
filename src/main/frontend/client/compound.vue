@@ -5,32 +5,24 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import { Prop } from 'vue-property-decorator';
 import ResultTable from './result-table.vue';
 
-export default {
-    name: 'compound',
-    components: {
-        ResultTable
-    },
-    props: {
-        id: { // Comes in from props: true on route
-            type: String,
-            required: true
-        }
-    },
-    computed: {
-        gridFilters: function() {
-            return {
-                inhibitor: this.id,//this.filters.inhibitor,
-                kinase: '',//this.filters.kinase,
-                activity: ''//this.filters.activity
-            };
-        }
-    },
-    data() {
+@Component({ components: { ResultTable } })
+export default class Compound extends Vue {
+
+    @Prop({ required: true })
+    private id: string;
+
+    get gridFilters() {
         return {
-        }
+            inhibitor: this.id, //this.filters.inhibitor,
+            kinase: '', //this.filters.kinase,
+            activity: '' //this.filters.activity
+        };
     }
 }
 </script>

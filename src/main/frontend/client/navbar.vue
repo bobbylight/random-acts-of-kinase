@@ -31,65 +31,63 @@
 
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
+import { Watch } from 'vue-property-decorator';
+import Component from 'vue-class-component';
 import NavbarPill from './navbar-pill.vue';
 import AboutModal from './about-modal.vue';
+import $ from 'jquery';
+import { Route } from 'vue-router';
 
-export default {
-    name: 'navbar',
-    components: {
-        NavbarPill,
-        AboutModal
-    },
-    data: () => {
-        return {
-            activeTab: 'home',
-            openCompounds: []
-        };
-    },
-    methods: {
+@Component({ components: { NavbarPill, AboutModal } })
+export default class Navbar extends Vue {
 
-        isActiveTab(tabName) {
-            const tabNameRegex = new RegExp(tabName + '$');
-            console.log(tabName + ' -- ' + this.$route.fullPath + ', ' + (this.$route.fullPath && this.$route.fullPath.match(tabNameRegex)));
-            return this.$route.fullPath && !!this.$route.fullPath.match(tabNameRegex);
-        },
+    activceTab: 'home';
 
-        setActiveTab(tabName) {
+    openCompounds: string[] = [];
 
-            switch (tabName) {
+    private isActiveTab(tabName: string) {
+        const tabNameRegex: RegExp = new RegExp(tabName + '$');
+        console.log(tabName + ' -- ' + this.$route.fullPath + ', ' + (this.$route.fullPath && this.$route.fullPath.match(tabNameRegex)));
+        return this.$route.fullPath && !!this.$route.fullPath.match(tabNameRegex);
+    }
 
-                case 'home':
-                default:
-                    this.$router.push({ name: 'home' });
-                    break;
-            }
-        },
+    private setActiveTab(tabName: string) {
 
-        close($event) {
-            const index = this.openCompounds.indexOf($event);
-            if (index > -1) {
-                this.openCompounds.splice(index, 1);
-            }
-            const tabNameRegex = new RegExp($event + '$');
-            if (this.$route.fullPath && !!this.$route.fullPath.match(tabNameRegex)) {
-                console.log('Going back');
-                this.$router.back();
-            }
-        },
+        switch (tabName) {
 
-        showAbout() {
-            $('#aboutModal').modal('show');
+            case 'home':
+            default:
+                this.$router.push({ name: 'home' });
+                break;
         }
-    },
-    watch: {
-        '$route' (to, from) {
-            if (to.path.match(/\/compound\/\w+/)) {
-                const compound = to.params.id;
-                console.log('Compound clicked; adding pill for it if one doesn\'t yet exist: ' + compound);
-                if (this.openCompounds.indexOf(compound) === -1) {
-                    this.openCompounds.push(compound);
-                }
+    }
+
+    private close($event: string) {
+        const index: number = this.openCompounds.indexOf($event);
+        if (index > -1) {
+            this.openCompounds.splice(index, 1);
+        }
+        const tabNameRegex: RegExp = new RegExp($event + '$');
+        if (this.$route.fullPath && !!this.$route.fullPath.match(tabNameRegex)) {
+            console.log('Going back');
+            this.$router.back();
+        }
+    }
+
+    private showAbout() {
+        $('#aboutModal').modal('show');
+    }
+
+    @Watch('$route')
+    private onRouteChanged(to: Route, from: Route) {
+        if (to.path.match(/\/compound\/\w+/)) {
+            // tslint:disable:no-string-literal
+            const compound: string = to.params['id'];
+            console.log('Compound clicked; adding pill for it if one doesn\'t yet exist: ' + compound);
+            if (this.openCompounds.indexOf(compound) === -1) {
+                this.openCompounds.push(compound);
             }
         }
     }

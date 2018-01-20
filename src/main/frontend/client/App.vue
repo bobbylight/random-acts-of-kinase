@@ -25,21 +25,18 @@
     </div>
 </template>
 
-<script>
-import navbar from './navbar.vue';
+<script lang="ts">
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import Navbar from './navbar.vue';
 
-export default {
-    name: 'app',
-    components: {
-        navbar
-    },
+@Component({ components: { Navbar } })
+export default class App extends Vue {
 
-    methods: {
-        showAbout: () => {
-            window.open('https://github.com/bobbylight/rak', '_blank');
-        }
+    showAbout() {
+        window.open('https://github.com/bobbylight/rak', '_blank');
     }
-};
+}
 </script>
 
 <style lang="less">

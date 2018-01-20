@@ -27,25 +27,19 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import { Prop } from 'vue-property-decorator';
 import SearchField from './search-field.vue';
 import LazyDropdown from './lazy-dropdown.vue';
 
-export default {
-    components: {
-        SearchField,
-        LazyDropdown
-    },
-    props: {
-        filters: {
-            type: Object,
-            required: true
-        }
-    },
-    data() {
-        return {};
-    }
-};
+@Component({ components: { SearchField, LazyDropdown } })
+export default class SearchFilters extends Vue {
+
+    @Prop({ required: true })
+    filters: any;
+}
 </script>
 
 <style lang="less">

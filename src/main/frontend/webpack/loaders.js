@@ -2,13 +2,21 @@ module.exports = [
     {
         test: /\.tsx?$/,
         exclude: /node_modules/,
-        loader: 'ts-loader'
+        loader: 'ts-loader',
+        options: {
+            // Needed for <script lang="ts"> to work in *.vue files; see https://github.com/vuejs/vue-loader/issues/109
+            appendTsSuffixTo: [ /\.vue$/ ]
+        }
     }, {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
+            preLoaders: {
+                //ts: 'tslint-loader?typeCheck'
+                ts: 'tslint-loader'
+            },
             loaders: {
-                //ts: 'ts-loader!tslint-loader', // TODO: Reenable when this stops causing errors when building
+                ts: 'ts-loader',
                 css: 'vue-style-loader!css-loader' // <style lang="css">
             }
         }

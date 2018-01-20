@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "allowSyntheticDefaultImports": true,
+
         "allowJs": false,
         "allowUnreachableCode": false,
         "allowUnusedLabels": false,
@@ -14,10 +14,13 @@
         "removeComments": false,
         "strictNullChecks": true,
 
+        // Some of these are required for vue to work
+        "allowSyntheticDefaultImports": true,
         "target": "es5",
-//        "module": "commonjs",
         "module": "es2015",
         "moduleResolution": "node",
+        "experimentalDecorators": true, // Allow TypeScript classes via typescript-class-components
+
         "sourceMap": true
     }
 }
