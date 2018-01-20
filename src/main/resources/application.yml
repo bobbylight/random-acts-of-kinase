@@ -6,6 +6,11 @@ spring:
 logging:
   level:
     root: INFO
+server:
+  compression:
+    enabled: true
+    mime-types: text/plain,text/css,text/javascript,application/javascript
+    min-response-size: 2048
 
 ---
 
