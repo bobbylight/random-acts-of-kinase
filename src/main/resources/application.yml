@@ -11,6 +11,9 @@ server:
     enabled: true
     mime-types: text/plain,text/css,text/javascript,application/javascript
     min-response-size: 2048
+security:
+  user:
+    password: password
 
 ---
 

@@ -18,6 +18,12 @@
         </div>
 
         <div class="right menu">
+            <a class="item" v-on:click="login()" title="Login" aria-label="Login" v-if="!loggedIn">
+                <i class="fa fa-user" aria-hidden="true"></i>
+            </a>
+            <a class="item" v-on:click="logout()" title="Login" aria-label="Login" v-if="loggedIn">
+                <i class="fa fa-user" aria-hidden="true"></i> {{user}}
+            </a>
             <a class="item" v-on:click="showAbout()" title="About" aria-label="About">
                 <i class="fa fa-comment" aria-hidden="true"></i>
             </a>
@@ -27,6 +33,7 @@
         </div>
 
         <about-modal id="aboutModal"></about-modal>
+        <login-modal id="loginModal"></login-modal>
     </div>
 
 </template>
@@ -37,14 +44,15 @@ import { Watch } from 'vue-property-decorator';
 import Component from 'vue-class-component';
 import NavbarPill from './navbar-pill.vue';
 import AboutModal from './about-modal.vue';
+import LoginModal from './login-modal.vue';
 import $ from 'jquery';
 import { Route } from 'vue-router';
 
-@Component({ components: { NavbarPill, AboutModal } })
+@Component({ components: { NavbarPill, AboutModal, LoginModal } })
 export default class Navbar extends Vue {
 
-    activceTab: 'home';
-
+    private loggedIn: boolean = false;
+    private user: string = 'gclooney';
     openCompounds: string[] = [];
 
     private isActiveTab(tabName: string) {
@@ -74,6 +82,10 @@ export default class Navbar extends Vue {
             console.log('Going back');
             this.$router.back();
         }
+    }
+
+    private login() {
+        $('#loginModal').modal('show');
     }
 
     private showAbout() {
