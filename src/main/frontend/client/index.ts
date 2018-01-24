@@ -17,9 +17,12 @@ import './../semantic/dist/semantic';
 import './dataTables.semanticui';
 import Search from './search.vue';
 import Compound from './compound.vue';
+import Admin from './admin.vue';
 import { RouteConfig } from 'vue-router/types/router';
 
 Vue.use(VueRouter);
+
+import store from './rak-store';
 
 window.onload = () => {
 
@@ -28,6 +31,11 @@ window.onload = () => {
             path: '/',
             name: 'home',
             component: Search
+        },
+        {
+            path: '/admin',
+            name: 'admin',
+            component: Admin
         },
         {
             path: '/compound/:id',
@@ -45,7 +53,8 @@ window.onload = () => {
     // tslint:disable-next-line:no-unused-expression
     new Vue({
         el: '#app',
-        router: router,
+        router,
+        store,
         render: (h) => {
             return h(App);
         }

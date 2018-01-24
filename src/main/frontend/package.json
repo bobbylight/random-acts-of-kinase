@@ -19,6 +19,7 @@
   "author": "Robert Futrell <robert.e.futrell@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "axios": "0.17.1",
     "datatables.net": "1.10.16",
     "datatables.net-dt": "1.10.16",
     "debounce": "1.1.0",
@@ -26,7 +27,8 @@
     "jquery-lazy": "1.7.7",
     "semantic-ui": "2.2.13",
     "vue": "2.5.13",
-    "vue-router": "3.0.1"
+    "vue-router": "3.0.1",
+    "vuex": "3.0.1"
   },
   "devDependencies": {
     "@types/jasmine": "2.8.3",

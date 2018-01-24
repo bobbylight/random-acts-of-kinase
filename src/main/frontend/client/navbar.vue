@@ -3,12 +3,16 @@
     <div class="ui top inverted menu">
 
         <div class="item">
-            <!--<img src="img/molecule.svg" width="50" height="50">-->
-            KINASE
+            <img src="/img/molecule-white.svg" width="50" height="50">
+            <!--KINASE-->
         </div>
 
         <a class="item" v-bind:class="{ active: isActiveTab('/') }" v-on:click="setActiveTab('home')">
             Search
+        </a>
+
+        <a class="item" v-bind:class="{ active: isActiveTab('/admin') }" v-on:click="setActiveTab('admin')" v-if="$store.getters.loggedIn">
+            Admin
         </a>
 
         <div class="button-section item">
@@ -18,11 +22,11 @@
         </div>
 
         <div class="right menu">
-            <a class="item" v-on:click="login()" title="Login" aria-label="Login" v-if="!loggedIn">
+            <a class="item" v-on:click="login()" title="Login" aria-label="Login" v-if="!$store.getters.loggedIn">
                 <i class="fa fa-user" aria-hidden="true"></i>
             </a>
-            <a class="item" v-on:click="logout()" title="Login" aria-label="Login" v-if="loggedIn">
-                <i class="fa fa-user" aria-hidden="true"></i> {{user}}
+            <a class="item" v-on:click="logout()" title="Login" aria-label="Log out" v-if="$store.getters.loggedIn">
+                <i class="fa fa-user" aria-hidden="true"></i> {{$store.state.user}}
             </a>
             <a class="item" v-on:click="showAbout()" title="About" aria-label="About">
                 <i class="fa fa-comment" aria-hidden="true"></i>
@@ -33,7 +37,7 @@
         </div>
 
         <about-modal id="aboutModal"></about-modal>
-        <login-modal id="loginModal"></login-modal>
+        <login-modal :visible="loginModalVisible" @hidden="loginModalHidden"></login-modal>
     </div>
 
 </template>
@@ -51,14 +55,13 @@ import { Route } from 'vue-router';
 @Component({ components: { NavbarPill, AboutModal, LoginModal } })
 export default class Navbar extends Vue {
 
-    private loggedIn: boolean = false;
-    private user: string = 'gclooney';
     openCompounds: string[] = [];
+    private loginModalVisible: boolean = false;
 
-    private isActiveTab(tabName: string) {
+    private isActiveTab(tabName: string): boolean {
         const tabNameRegex: RegExp = new RegExp(tabName + '$');
         console.log(tabName + ' -- ' + this.$route.fullPath + ', ' + (this.$route.fullPath && this.$route.fullPath.match(tabNameRegex)));
-        return this.$route.fullPath && !!this.$route.fullPath.match(tabNameRegex);
+        return !!this.$route.fullPath && !!this.$route.fullPath.match(tabNameRegex);
     }
 
     private setActiveTab(tabName: string) {
@@ -68,6 +71,10 @@ export default class Navbar extends Vue {
             case 'home':
             default:
                 this.$router.push({ name: 'home' });
+                break;
+
+            case 'admin':
+                this.$router.push({ name: 'admin' });
                 break;
         }
     }
@@ -85,7 +92,11 @@ export default class Navbar extends Vue {
     }
 
     private login() {
-        $('#loginModal').modal('show');
+        this.loginModalVisible = true;
+    }
+
+    private loginModalHidden() {
+        this.loginModalVisible = false;
     }
 
     private showAbout() {

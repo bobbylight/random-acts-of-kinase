@@ -25,10 +25,10 @@
             </div>
         </div>
         <div class="actions">
-            <div class="ui positive right button" :class="{ disabled: !user || !password }" @click="login">
+            <div class="ui positive right button" :class="{ disabled: !user || !password }">
                 Log In
             </div>
-            <div class="ui right button">
+            <div class="ui negative right button">
                 Cancel
             </div>
         </div>
@@ -38,6 +38,12 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
+import { Prop, Watch } from 'vue-property-decorator';
+import $ from 'jquery';
+import restApi from './rest-api';
+import { AxiosError } from "axios";
+
+const HIDDEN = 'hidden';
 
 @Component
 export default class LoginModal extends Vue {
@@ -45,8 +51,52 @@ export default class LoginModal extends Vue {
     private user: string = '';
     private password: string = '';
 
-    login() {
+    @Prop({ required: true })
+    private visible: boolean;
+
+    login(): boolean {
         console.log('Attempting to log in as ' + this.user + ', ' + this.password);
+        restApi.login(this.user, this.password)
+            .then((response: any) => {
+                console.log('Login success!!!!');
+                this.$store.commit('setUser', this.user);
+                this.$emit(HIDDEN);
+                $(this.$el).modal('hide');
+            })
+            .catch((response: AxiosError) => {
+                console.log('Login failure :(:(:(');
+                if (response.response && response.response.status === 401) {
+                    alert('Username or password is invalid');
+                }
+                else {
+                    alert('An unknown error occurred');
+                }
+                console.error(response);
+            })
+            //.finally(() => {
+            //    this.user = this.password = '';
+            //})
+        ;
+        return false;
+    }
+
+    onCancel() {
+        this.user = this.password = '';
+        this.$emit(HIDDEN);
+    }
+
+    @Watch('visible')
+    private onVisibilityChange(newValue: boolean) {
+        if (newValue) {
+
+            const onCancel: Function = this.onCancel.bind(this);
+
+            $(this.$el).modal({
+                onApprove: this.login.bind(this),
+                onDeny: onCancel,
+                onHide: onCancel
+            }).modal('show');
+        }
     }
 }
 </script>
