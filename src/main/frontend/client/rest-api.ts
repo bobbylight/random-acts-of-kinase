@@ -24,7 +24,7 @@ export class RestApi {
         };
 
         return this.instance.post('login', null, config)
-            .then((response: AxiosResponse<any>) => {
+            .then((response: AxiosResponse) => {
                 console.log('All done!  Response: ' + JSON.stringify(response));
                 return response.data;
             });

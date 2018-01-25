@@ -41,9 +41,9 @@ import Component from 'vue-class-component';
 import { Prop, Watch } from 'vue-property-decorator';
 import $ from 'jquery';
 import restApi from './rest-api';
-import { AxiosError } from "axios";
+import { AxiosError } from 'axios';
 
-const HIDDEN = 'hidden';
+const HIDDEN: string = 'hidden';
 
 @Component
 export default class LoginModal extends Vue {
