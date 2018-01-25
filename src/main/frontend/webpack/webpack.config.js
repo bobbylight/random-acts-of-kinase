@@ -2,7 +2,7 @@ const loaders = require('./loaders');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const webpack = require('webpack');
 
 const devBuild = process.env.NODE_ENV === 'dev';
@@ -64,18 +64,19 @@ const config = {
     }
 };
 
-if (process.env.NODE_ENV === 'production') {
-    console.log('Running uglifyjs for production build');
-    config.plugins.push(
-        new UglifyJsPlugin({
-            uglifyOptions: {
-                compress: {
-                    warnings: false
-                }
-            },
-            parallel: true
-        })
-    );
-}
+// uglify builds an artifact that throws JS errors in Chrome and Firefox.  Disable for now.
+// if (process.env.NODE_ENV === 'production') {
+//     console.log('Running uglifyjs for production build');
+//     config.plugins.push(
+//         new UglifyJsPlugin({
+//             uglifyOptions: {
+//                 compress: {
+//                     warnings: false
+//                 }
+//             },
+//             parallel: true
+//         })
+//     );
+// }
 
 module.exports = config;
