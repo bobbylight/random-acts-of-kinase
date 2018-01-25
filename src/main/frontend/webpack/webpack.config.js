@@ -5,8 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const webpack = require('webpack');
 
-// Force dev builds until we convert all code to TS, or import some babel stuff ot transpile to es5 instead of es6
-const devBuild = true;// process.env.NODE_ENV === 'dev';
+const devBuild = process.env.NODE_ENV === 'dev';
 console.log(`Starting webpack build with NODE_ENV: ${process.env.NODE_ENV}`);
 
 // Loaders specific to compiling
@@ -37,7 +36,8 @@ const config = {
             'vue$': 'vue/dist/vue.esm.js'
         }
     },
-    devtool: devBuild ? 'cheap-eval-source-map' : 'source-map',
+    // source-map doesn't seem to be working, see webpack bug reports
+    devtool: devBuild ? 'cheap-eval-source-map' : undefined,//'source-map',
     plugins: [
         new CopyWebpackPlugin([
             { from: 'img', to: 'img' }
@@ -65,6 +65,7 @@ const config = {
 };
 
 if (process.env.NODE_ENV === 'production') {
+    console.log('Running uglifyjs for production build');
     config.plugins.push(
         new UglifyJsPlugin({
             uglifyOptions: {
