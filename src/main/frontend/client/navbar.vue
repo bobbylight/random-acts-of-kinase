@@ -25,8 +25,8 @@
             <a class="item" v-on:click="login()" title="Login" aria-label="Login" v-if="!$store.getters.loggedIn">
                 <i class="fa fa-user" aria-hidden="true"></i>
             </a>
-            <a class="item" v-on:click="logout()" title="Login" aria-label="Log out" v-if="$store.getters.loggedIn">
-                <i class="fa fa-user" aria-hidden="true"></i> {{$store.state.user}}
+            <a class="item" v-on:click="logout()" title="Log out" aria-label="Log out" v-if="$store.getters.loggedIn">
+                <i class="fa fa-user" aria-hidden="true"></i><span class="user-name">{{$store.state.user}}</span>
             </a>
             <a class="item" v-on:click="showAbout()" title="About" aria-label="About">
                 <i class="fa fa-comment" aria-hidden="true"></i>
@@ -44,13 +44,14 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import { Route } from 'vue-router';
 import { Watch } from 'vue-property-decorator';
 import Component from 'vue-class-component';
+import $ from 'jquery';
 import NavbarPill from './navbar-pill.vue';
 import AboutModal from './about-modal.vue';
 import LoginModal from './login-modal.vue';
-import $ from 'jquery';
-import { Route } from 'vue-router';
+import restApi from './rest-api';
 
 @Component({ components: { NavbarPill, AboutModal, LoginModal } })
 export default class Navbar extends Vue {
@@ -99,6 +100,18 @@ export default class Navbar extends Vue {
         this.loginModalVisible = false;
     }
 
+    private logout() {
+        restApi.logout()
+            .then(() => {
+                // TODO: This flashes the "no access" stuff on the admin tab for a second.
+                // Conver to an action to fix this
+                if (this.$router.currentRoute.name !== 'home') {
+                    this.$router.push({ name: 'home' });
+                }
+                this.$store.commit('setUser', null);
+            });
+    }
+
     private showAbout() {
         $('#aboutModal').modal('show');
     }
@@ -126,6 +139,11 @@ export default class Navbar extends Vue {
 .ui.menu a.item {
     transition: color .5s ease,
     background-color .5s ease;
+
+    .user-name {
+        margin-left: 1rem;
+        font-size: initial;
+    }
 }
 
 .ui.menu .button-section.item:before {

@@ -29,9 +29,21 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import Navbar from './navbar.vue';
+import restApi from './rest-api';
+import { UserRep } from "./rak";
 
 @Component({ components: { Navbar } })
 export default class App extends Vue {
+
+    mounted() {
+        restApi.checkAuthentication()
+            .then((userInfo: UserRep) => {
+                console.log('>>> Check completed, returned: ' + JSON.stringify(userInfo));
+                if (userInfo && userInfo.userName) {
+                    this.$store.commit('setUser', userInfo.userName);
+                }
+            });
+    }
 
     showAbout() {
         window.open('https://github.com/bobbylight/rak', '_blank');

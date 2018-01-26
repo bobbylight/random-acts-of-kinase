@@ -42,6 +42,7 @@ import { Prop, Watch } from 'vue-property-decorator';
 import $ from 'jquery';
 import restApi from './rest-api';
 import { AxiosError } from 'axios';
+import { UserRep } from "./rak";
 
 const HIDDEN: string = 'hidden';
 
@@ -57,7 +58,7 @@ export default class LoginModal extends Vue {
     login(): boolean {
         console.log('Attempting to log in as ' + this.user + ', ' + this.password);
         restApi.login(this.user, this.password)
-            .then((response: any) => {
+            .then((response: UserRep) => {
                 console.log('Login success!!!!');
                 this.$store.commit('setUser', this.user);
                 this.$emit(HIDDEN);

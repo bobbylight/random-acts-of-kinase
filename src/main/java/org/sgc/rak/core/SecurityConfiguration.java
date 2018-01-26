@@ -33,7 +33,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
             .httpBasic().and()
             .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/login").authenticated()
+//                .antMatchers(HttpMethod.GET, "/login").authenticated()
                 .anyRequest().permitAll()
 //                .antMatchers(NO_SECURITY_RESOURCES).permitAll()
 //                .anyRequest().authenticated()

@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { UserRep } from './rak';
 
 export class RestApi {
 
@@ -14,7 +15,14 @@ export class RestApi {
         });
     }
 
-    login(user: string, password: string): Promise<any> {
+    checkAuthentication(): Promise<UserRep> {
+        return this.instance.get('login')
+            .then((response: AxiosResponse<UserRep>) => {
+                return response.data;
+            });
+    }
+
+    login(user: string, password: string): Promise<UserRep> {
 
         const config: AxiosRequestConfig = {
             auth: {
@@ -23,10 +31,16 @@ export class RestApi {
             }
         };
 
-        return this.instance.post('login', null, config)
-            .then((response: AxiosResponse) => {
-                console.log('All done!  Response: ' + JSON.stringify(response));
+        return this.instance.get('login', config)
+            .then((response: AxiosResponse<UserRep>) => {
                 return response.data;
+            });
+    }
+
+    logout(): Promise<any> {
+        return this.instance.post('logout')
+            .then((response: AxiosResponse<any>) => {
+                return null;
             });
     }
 }
