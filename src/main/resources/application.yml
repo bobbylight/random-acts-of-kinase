@@ -11,9 +11,6 @@ server:
     enabled: true
     mime-types: text/plain,text/css,text/javascript,application/javascript
     min-response-size: 2048
-security:
-  user:
-    password: password
 
 ---
 
@@ -28,6 +25,9 @@ spring:
     driverClassName: org.h2.Driver
     username: sa
     password:
+security:
+  user:
+    password: password
 
 ---
 
@@ -39,6 +39,9 @@ spring:
     driverClassName: org.postgresql.Driver
     username: postgres
     password: postgres
+security:
+  user:
+    password: password
 
 ---
 

@@ -25,14 +25,16 @@
             <a class="item" v-on:click="login()" title="Login" aria-label="Login" v-if="!$store.getters.loggedIn">
                 <i class="fa fa-user" aria-hidden="true"></i>
             </a>
-            <a class="item" v-on:click="logout()" title="Log out" aria-label="Log out" v-if="$store.getters.loggedIn">
+            <a class="ui dropdown item" title="Log out" aria-label="Log out" v-if="$store.getters.loggedIn">
                 <i class="fa fa-user" aria-hidden="true"></i><span class="user-name">{{$store.state.user}}</span>
+                <div class="menu">
+                    <div class="item">
+                        <span class="text" @click="logout">Log Out</span>
+                    </div>
+                </div>
             </a>
-            <a class="item" v-on:click="showAbout()" title="About" aria-label="About">
+            <a class="item" v-on:click="newComment()" title="Comment" aria-label="Comment">
                 <i class="fa fa-comment" aria-hidden="true"></i>
-            </a>
-            <a class="item" v-on:click="showAbout()" title="About" aria-label="About">
-                <i class="fa fa-question-circle" aria-hidden="true"></i>
             </a>
         </div>
 
@@ -112,8 +114,13 @@ export default class Navbar extends Vue {
             });
     }
 
-    private showAbout() {
-        $('#aboutModal').modal('show');
+    private newComment() {
+    }
+
+    updated() {
+        if (this.$store.getters.loggedIn) {
+            $(this.$el).find('.ui.dropdown').dropdown();
+        }
     }
 
     @Watch('$route')
@@ -142,6 +149,10 @@ export default class Navbar extends Vue {
 
     .user-name {
         margin-left: 1rem;
+        font-size: initial;
+    }
+
+    .menu {
         font-size: initial;
     }
 }

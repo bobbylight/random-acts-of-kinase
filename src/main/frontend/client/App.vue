@@ -17,8 +17,11 @@
                 <span class="item">
                     &copy; 2018&nbsp;<a href="http://sgc-unc.org">SGC-UNC</a>
                 </span>
-                <a class="item" v-on:click="showAbout()" title="About" aria-label="About">
+                <a class="item" @click="viewSource()" title="View Source" aria-label="View Source">
                     <i class="fa fa-github" aria-hidden="true"></i>
+                </a>
+                <a class="item" @click="showAbout()" title="About" aria-label="About">
+                    <i class="fa fa-question-circle" aria-hidden="true"></i>
                 </a>
             </div>
         </div>
@@ -28,6 +31,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
+import $ from 'jquery';
 import Navbar from './navbar.vue';
 import restApi from './rest-api';
 import { UserRep } from "./rak";
@@ -45,7 +49,11 @@ export default class App extends Vue {
             });
     }
 
-    showAbout() {
+    private showAbout() {
+        $('#aboutModal').modal('show');
+    }
+
+    private viewSource() {
         window.open('https://github.com/bobbylight/rak', '_blank');
     }
 }
