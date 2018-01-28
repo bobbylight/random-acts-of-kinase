@@ -11,7 +11,7 @@
                     Sign in to get even more out of your RAK experience.
                 </div>
 
-                <form class="ui form">
+                <form class="ui form" id="login-form">
 
                     <div class="field">
                         <label>User name</label>
@@ -25,9 +25,9 @@
             </div>
         </div>
         <div class="actions">
-            <div class="ui positive right button" :class="{ disabled: !user || !password }">
+            <button type="submit" form="login-form" class="ui positive right button" :class="{ disabled: !user || !password }">
                 Log In
-            </div>
+            </button>
             <div class="ui negative right button">
                 Cancel
             </div>
@@ -42,7 +42,7 @@ import { Prop, Watch } from 'vue-property-decorator';
 import $ from 'jquery';
 import restApi from './rest-api';
 import { AxiosError } from 'axios';
-import { UserRep } from "./rak";
+import { UserRep } from './rak';
 
 const HIDDEN: string = 'hidden';
 
@@ -60,9 +60,14 @@ export default class LoginModal extends Vue {
         restApi.login(this.user, this.password)
             .then((response: UserRep) => {
                 console.log('Login success!!!!');
+                this.password = ''; // Clear password, but must keep user for toaster
                 this.$store.commit('setUser', this.user);
                 this.$emit(HIDDEN);
                 $(this.$el).modal('hide');
+                (this as any).$toasted.success(`Welcome back, ${this.user}!`, {
+                    position: 'bottom-right',
+                    duration: 5000
+                });
             })
             .catch((response: AxiosError) => {
                 console.log('Login failure :(:(:(');
@@ -82,7 +87,6 @@ export default class LoginModal extends Vue {
     }
 
     onCancel() {
-        this.user = this.password = '';
         this.$emit(HIDDEN);
     }
 
@@ -90,6 +94,7 @@ export default class LoginModal extends Vue {
     private onVisibilityChange(newValue: boolean) {
         if (newValue) {
 
+            this.user = this.password = '';
             const onCancel: Function = this.onCancel.bind(this);
 
             $(this.$el).modal({

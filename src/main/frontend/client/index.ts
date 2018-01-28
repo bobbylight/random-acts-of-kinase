@@ -7,6 +7,7 @@ import 'font-awesome/css/font-awesome.css';
 import Vue from 'vue';
 import App from './App.vue';
 import VueRouter from 'vue-router';
+import Toasted from 'vue-toasted';
 import './../semantic/dist/semantic.css';
 import 'datatables.net';
 import 'jquery-lazy';
@@ -19,6 +20,7 @@ import Admin from './admin.vue';
 import { RouteConfig } from 'vue-router/types/router';
 
 Vue.use(VueRouter);
+Vue.use(Toasted);
 
 import store from './rak-store';
 

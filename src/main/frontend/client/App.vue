@@ -34,7 +34,7 @@ import Component from 'vue-class-component';
 import $ from 'jquery';
 import Navbar from './navbar.vue';
 import restApi from './rest-api';
-import { UserRep } from "./rak";
+import { UserRep } from './rak';
 
 @Component({ components: { Navbar } })
 export default class App extends Vue {

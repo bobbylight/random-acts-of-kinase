@@ -29,7 +29,7 @@ Unfortunately you need to start three processes to develop - annoying.  I couldn
 webpack to build directly into `build/` without Spring Boot getting cranky and clearing
 out the contents of `build/resources/main/static` on restarts.
 
-*Note:* Ctrl+C may not propagatge the SIGKILL to the child npm tasks for
+*Note:* Ctrl+C may not propagate the SIGKILL to the child npm tasks for
 `webpackWatch` and `copyStaticResourcesToBuildWatch`, which can cause race conditions on
 file copies and in turn weird behavior (stale static resources).  If you see this happening, you
 might consider running the wrapped npm tasks directly.

@@ -39,7 +39,7 @@ export class RestApi {
 
     logout(): Promise<any> {
         return this.instance.post('logout')
-            .then((response: AxiosResponse<any>) => {
+            .then((response: AxiosResponse) => {
                 return null;
             });
     }

@@ -25,8 +25,9 @@ spring:
     driverClassName: org.h2.Driver
     username: sa
     password:
-security:
-  user:
+rak:
+  login:
+    user: kinaseadmin
     password: password
 
 ---
@@ -39,8 +40,9 @@ spring:
     driverClassName: org.postgresql.Driver
     username: postgres
     password: postgres
-security:
-  user:
+rak:
+  login:
+    user: kinaseadmin
     password: password
 
 ---
