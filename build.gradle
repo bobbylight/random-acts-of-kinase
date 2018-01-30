@@ -56,8 +56,7 @@ dependencies {
     compile 'org.postgresql:postgresql'
     compile 'com.h2database:h2'
 
-    testCompile 'junit:junit'
-    testCompile 'org.mockito:mockito-all:1.10.19'
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
 }
 
 task wrapper(type: Wrapper) {

@@ -24,6 +24,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SecurityConfiguration.class);
 
+    @Autowired
     public SecurityConfiguration(Environment environment) {
         this.environment = environment;
     }
