@@ -76,12 +76,12 @@
             $.fn.dataTable.ext.pager.numbers_length = 4;
 
             const columns = [
-                { 'data': 'compoundName', render: this.compoundRenderer },
-                { 'data': 'percentControl' },
-                { 'data': 'compoundConcentration' },
-                { 'data': 'kinase.discoverxGeneSymbol' },
-                { 'data': 'kinase.entrezGeneSymbol' },
-                { 'data': 'kd' }
+                { data: 'compoundName', render: this.compoundRenderer },
+                { data: 'percentControl' },
+                { data: 'compoundConcentration' },
+                { data: 'kinase.discoverxGeneSymbol' },
+                { data: 'kinase.entrezGeneSymbol' },
+                { data: 'kd', defaultContent: '' }
             ];
 
             const pageSize = 20;

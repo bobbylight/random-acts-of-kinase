@@ -22,7 +22,7 @@
         </div>
 
         <div class="right menu">
-            <a class="item" v-on:click="login()" title="Login" aria-label="Login" v-if="!$store.getters.loggedIn">
+            <a class="item" @click="login()" title="Login" aria-label="Login" v-if="!$store.getters.loggedIn">
                 <i class="fa fa-user" aria-hidden="true"></i>
             </a>
             <a class="ui dropdown item" title="Log out" aria-label="Log out" v-if="$store.getters.loggedIn">
@@ -33,7 +33,7 @@
                     </div>
                 </div>
             </a>
-            <a class="item" v-on:click="newComment()" title="Comment" aria-label="Comment">
+            <a class="item" @click="newComment()" title="Comment" aria-label="Comment">
                 <i class="fa fa-comment" aria-hidden="true"></i>
             </a>
         </div>
