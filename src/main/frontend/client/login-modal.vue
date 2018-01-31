@@ -43,6 +43,7 @@ import $ from 'jquery';
 import restApi from './rest-api';
 import { AxiosError } from 'axios';
 import { UserRep } from './rak';
+import Toaster from './toaster';
 
 const HIDDEN: string = 'hidden';
 
@@ -64,18 +65,15 @@ export default class LoginModal extends Vue {
                 this.$store.commit('setUser', this.user);
                 this.$emit(HIDDEN);
                 $(this.$el).modal('hide');
-                (this as any).$toasted.success(`Welcome back, ${this.user}!`, {
-                    position: 'bottom-right',
-                    duration: 5000
-                });
+                Toaster.success(`Welcome back, ${this.user}!`);
             })
             .catch((response: AxiosError) => {
                 console.log('Login failure :(:(:(');
                 if (response.response && response.response.status === 401) {
-                    alert('Username or password is invalid');
+                    Toaster.error('You typed the wrong username or password');
                 }
                 else {
-                    alert('An unknown error occurred');
+                    Toaster.error('An unknown error occurred');
                 }
                 console.error(response);
             })

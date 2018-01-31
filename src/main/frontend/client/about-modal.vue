@@ -1,11 +1,11 @@
 <template>
-    <div class="ui modal">
+    <div class="ui small modal">
         <i class="close icon"></i>
         <div class="header">
             Random Acts of Kinase
         </div>
         <div class="build-info">
-            Build: {{version}}
+            Version: [AIV]{version}[/AIV]<span class="about-metadata-splitter">|</span>[AIV]{date}[/AIV]
         </div>
         <div class="image content">
             <div class="ui small image">
@@ -38,20 +38,19 @@ import Component from 'vue-class-component';
 
 @Component
 export default class AboutModal extends Vue {
-
-    version: string;
-
-    created() {
-        this.version = `0.3.0 (${new Date().toLocaleDateString()})`;
-    }
 }
 </script>
 
 <style lang="less">
     .build-info {
+
         position: absolute;
         bottom: 0.5rem;
         left: 0.5rem;
         color: gray;
+
+        .about-metadata-splitter {
+            margin: 0 .5rem;
+        }
     }
 </style>

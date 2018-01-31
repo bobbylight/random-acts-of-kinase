@@ -2,6 +2,7 @@ const loaders = require('./loaders');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const WebpackAutoInject = require('webpack-auto-inject-version');
 // const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const webpack = require('webpack');
 
@@ -58,6 +59,19 @@ const config = {
                 NODE_ENV: JSON.stringify(process.env.NODE_ENV)
             }
         }),
+        new WebpackAutoInject({
+            components: {
+                AutoIncreaseVersion: false,
+                InjectAsComment: false,
+                InjectByTag: true
+            },
+            componentsOptions: {
+                InjectByTag: {
+                    fileRegex: /^.*\.js$/,
+                    dateFormat: 'mmmm d, yyyy'
+                }
+            }
+        })
     ],
     module: {
         rules: loaders
