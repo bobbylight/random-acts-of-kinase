@@ -16,7 +16,7 @@ import './../semantic/dist/semantic';
 import './dataTables.semanticui';
 import Search from './search.vue';
 import Compound from './compound.vue';
-import Admin from './admin.vue';
+import Admin from './admin/admin.vue';
 import { RouteConfig } from 'vue-router/types/router';
 
 Vue.use(VueRouter);

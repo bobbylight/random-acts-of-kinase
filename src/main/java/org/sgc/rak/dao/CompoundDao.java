@@ -37,6 +37,16 @@ public class CompoundDao {
     }
 
     /**
+     * Returns information on compounds without SMILES strings.
+     *
+     * @param pageInfo How to sort the data and what page of the data to return.
+     * @return The list of compounds.
+     */
+    public Page<Compound> getIncompleteCompounds(Pageable pageInfo) {
+        return compoundRepository.findSmilesIsNullOrS10IsNull(pageInfo);
+    }
+
+    /**
      * Returns compounds whose names start with a given string, ignoring case.
      *
      * @param compoundNamePart The start of a compound name.

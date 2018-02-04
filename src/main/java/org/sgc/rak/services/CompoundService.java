@@ -42,6 +42,7 @@ public class CompoundService {
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
      * @see #getCompoundsByCompoundName(String, Pageable)
+     * @see #getIncompleteSmilesStrings(Pageable)
      */
     public Page<Compound> getCompounds(Pageable pageInfo) {
         return compoundDao.getCompounds(pageInfo);
@@ -58,5 +59,16 @@ public class CompoundService {
     public Page<Compound> getCompoundsByCompoundName(String compoundNamePart,
                                                      Pageable pageInfo) {
         return compoundDao.getCompoundsByCompoundNameStartsWithIgnoreCase(compoundNamePart, pageInfo);
+    }
+
+    /**
+     * Returns information about compounds without SMILES strings, or any other missing fields.
+     *
+     * @param pageInfo How to sort the data and what page of the data to return.
+     * @return The list of compounds.
+     * @see #getCompounds(Pageable)
+     */
+    public Page<Compound> getIncompleteSmilesStrings(Pageable pageInfo) {
+        return compoundDao.getIncompleteCompounds(pageInfo);
     }
 }

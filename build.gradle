@@ -52,6 +52,7 @@ dependencies {
     compile 'ch.qos.logback:logback-classic'
     compile 'ch.qos.logback:logback-core'
 
+    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv'
     compile 'org.apache.commons:commons-lang3:3.7'
     compile 'org.postgresql:postgresql'
     compile 'com.h2database:h2'

@@ -23,6 +23,15 @@ public interface CompoundRepository extends PagingAndSortingRepository<Compound,
     Page<Compound> findSourceIsNull(Pageable pageInfo);
 
     /**
+     * Returns compounds without smiles strings or s10 values defined.
+     *
+     * @param pageInfo How to sort the data and what page of data to return.
+     * @return The list of compounds.
+     */
+    @Query("from Compound c where c.smiles is null or s10 is null")
+    Page<Compound> findSmilesIsNullOrS10IsNull(Pageable pageInfo);
+
+    /**
      * Returns compounds whose names start with a given string, ignoring case.
      *
      * @param compoundNamePart The start of a compound name.
