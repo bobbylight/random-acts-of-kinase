@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -80,14 +81,20 @@ public class CompoundDao {
         // to do an inner select in the join clause (needed to fetch compounds
         // with activity profile count > 0 but < 468), as well as path-defining
         // difficulties due to the left join
-        String sql = "select compound.compound_nm, COALESCE(count, 0)\n" +
+        StringBuilder sb = new StringBuilder("select compound.compound_nm, COALESCE(count, 0)\n" +
             "   from compound left join(\n" +
             "      select compound_nm, count(1) as count\n" +
             "         from kinase_activity_profile group by kinase_activity_profile.compound_nm\n" +
             "   ) countTable\n" +
             "   on compound.compound_nm = countTable.compound_nm\n" +
-            "      where count is null or count < ?\n" +
-            "      offset ? limit ?";
+            "      where count is null or count < ?\n");
+
+        if (pageInfo.getSort() != null) {
+            sb.append(' ').append(sortToOrderBy(pageInfo.getSort()));
+        }
+
+        sb.append("\n      offset ? limit ?");
+        String sql = sb.toString();
 
         Query query = entityManager.createNativeQuery(sql);
         query.setParameter(1, kinaseCount);
@@ -124,5 +131,40 @@ public class CompoundDao {
      */
     public Page<Compound> getIncompleteCompounds(Pageable pageInfo) {
         return compoundRepository.findSmilesIsNullOrS10IsNull(pageInfo);
+    }
+
+    /**
+     * Converts a Spring Data {@code Sort} instance to an order by clause.  Typically this isn't
+     * necessary as {@code Repository} instances handle sorting and paging for you, but we have a
+     * native query we need to build.
+     *
+     * @param sort The sort instance, which cannot be {@code null}.
+     * @return The order by clause.
+     */
+    static String sortToOrderBy(Sort sort) {
+
+        StringBuilder sb = new StringBuilder("order by ");
+        boolean first = true;
+
+        for (Sort.Order order: sort) {
+            if (!first) {
+                sb.append(", ");
+            }
+            first = false;
+            switch (order.getProperty()) {
+
+                // "count" is a compouted property in one of our native queries
+                case "count":
+                    sb.append("count ");
+                    break;
+
+                case "compoundName":
+                    sb.append("compound_nm ");
+                    break;
+            }
+            sb.append(order.getDirection());
+        }
+
+        return sb.toString();
     }
 }

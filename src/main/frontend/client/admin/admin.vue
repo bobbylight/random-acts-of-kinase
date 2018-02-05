@@ -18,7 +18,9 @@
                         <div class="header">Incomplete Compounds</div>
                         <div class="meta">Compounds without a SMILES string or s(10)</div>
                         <div class="description">
-                            <IncompleteCompoundsTable></IncompleteCompoundsTable>
+                            <CompoundsTable
+                                url="/admin/api/incompleteCompounds"
+                                :columnInfo="incompleteCompoundColumnInfo"></CompoundsTable>
                         </div>
                     </div>
 
@@ -41,7 +43,9 @@
                         <div class="header">Compounds Missing Activity Profiles</div>
                         <div class="meta">Compounds missing some activity profiles</div>
                         <div class="description">
-                            Nothing here yet.
+                            <CompoundsTable
+                                url="/admin/api/compoundsMissingActivityProfiles"
+                                :columnInfo="compoundsMissingActivityProfilesColumnInfo"></CompoundsTable>
                         </div>
                     </div>
 
@@ -76,10 +80,29 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import IncompleteCompoundsTable from './incomplete-compounds-table.vue';
+import CompoundsTable, { ColumnInfo } from './compounds-table.vue';
 
-@Component({ components: { IncompleteCompoundsTable } })
+@Component({ components: { CompoundsTable } })
 export default class AdminHome extends Vue {
+
+    private incompleteCompoundColumnInfo: ColumnInfo[];
+    private compoundsMissingActivityProfilesColumnInfo: ColumnInfo[];
+
+    created() {
+
+        this.incompleteCompoundColumnInfo = [
+            { columnId: 'compoundName', columnName: 'Compound', isCompound: true },
+            { columnId: 'chemotype', columnName: 'Chemotype' },
+            { columnId: 's10', columnName: 's(10)' },
+            { columnId: 'smiles', columnName: 'SMILES' },
+            { columnId: 'source', columnName: 'Source' }
+        ];
+
+        this.compoundsMissingActivityProfilesColumnInfo = [
+            { columnId: 'compoundName', columnName: 'Compound', isCompound: true },
+            { columnId: 'count', columnName: 'Activity Profile Count' }
+        ];
+    }
 }
 </script>
 

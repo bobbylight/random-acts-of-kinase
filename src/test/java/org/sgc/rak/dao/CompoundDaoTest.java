@@ -13,10 +13,7 @@ import org.sgc.rak.model.Compound;
 import org.sgc.rak.model.CompoundCountPair;
 import org.sgc.rak.repositories.CompoundRepository;
 import org.sgc.rak.repositories.KinaseRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -115,7 +112,9 @@ public class CompoundDaoTest {
         BigInteger expectedTotal = new BigInteger("601");
         doReturn(expectedTotal).when(mockQuery).getSingleResult();
 
-        Pageable pageInfo = new PageRequest(0, 20);
+        Sort sort = new Sort(new Sort.Order(Sort.Direction.ASC, "compoundName"),
+            new Sort.Order(Sort.Direction.ASC, "count"));
+        Pageable pageInfo = new PageRequest(0, 20, sort);
         Page<CompoundCountPair> actualPage = compoundDao.getCompoundsMissingActivityProfiles(pageInfo);
 
         Assert.assertEquals(expectedResult.size(), actualPage.getNumberOfElements());
@@ -143,6 +142,25 @@ public class CompoundDaoTest {
         Page<Compound> actualPage = compoundDao.getIncompleteCompounds(pageInfo);
 
         comparePages(expectedPage, actualPage);
+    }
+
+    @Test
+    public void testSortToOrderBy_oneOrder_compoundName() {
+        Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "compoundName"));
+        Assert.assertEquals("order by compound_nm DESC", CompoundDao.sortToOrderBy(sort));
+    }
+
+    @Test
+    public void testSortToOrderBy_oneOrder_count() {
+        Sort sort = new Sort(new Sort.Order(Sort.Direction.ASC, "count"));
+        Assert.assertEquals("order by count ASC", CompoundDao.sortToOrderBy(sort));
+    }
+
+    @Test
+    public void testSortToOrderBy_twoOrders() {
+        Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "compoundName"),
+            new Sort.Order(Sort.Direction.ASC, "count"));
+        Assert.assertEquals("order by compound_nm DESC, count ASC", CompoundDao.sortToOrderBy(sort));
     }
 
     private static void comparePages(Page<Compound> expectedPage, Page<Compound> actualPage) {
