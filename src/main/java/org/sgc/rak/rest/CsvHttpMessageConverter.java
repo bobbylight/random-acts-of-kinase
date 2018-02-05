@@ -31,7 +31,7 @@ import org.springframework.http.converter.AbstractGenericHttpMessageConverter;
  * just records of data, not data for a specific "page" in the collection.  Thus deserializing into an instance of
  * {@code PagedDataRep} does not make sense.
  */
-public class CsvHttpMessageConverter extends AbstractGenericHttpMessageConverter<Object> {
+public final class CsvHttpMessageConverter extends AbstractGenericHttpMessageConverter<Object> {
 
     /** Cached {@link ObjectWriter}s, indexed by type. */
     private final ConcurrentMap<Class<?>, ObjectWriter> writers = new ConcurrentHashMap<>();

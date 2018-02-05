@@ -4,6 +4,7 @@ import org.sgc.rak.dao.CompoundDao;
 import org.sgc.rak.exceptions.NotFoundException;
 import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.model.Compound;
+import org.sgc.rak.model.CompoundCountPair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,7 +43,7 @@ public class CompoundService {
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
      * @see #getCompoundsByCompoundName(String, Pageable)
-     * @see #getIncompleteSmilesStrings(Pageable)
+     * @see #getIncompleteCompounds(Pageable)
      */
     public Page<Compound> getCompounds(Pageable pageInfo) {
         return compoundDao.getCompounds(pageInfo);
@@ -62,13 +63,23 @@ public class CompoundService {
     }
 
     /**
+     * Returns information about compounds that are missing activity profiles.
+     *
+     * @param pageInfo How to sort the data and what page of the data to return.
+     * @return The list of compounds.
+     */
+    public Page<CompoundCountPair> getCompoundsMissingActivityProfiles(Pageable pageInfo) {
+        return compoundDao.getCompoundsMissingActivityProfiles(pageInfo);
+    }
+
+    /**
      * Returns information about compounds without SMILES strings, or any other missing fields.
      *
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
      * @see #getCompounds(Pageable)
      */
-    public Page<Compound> getIncompleteSmilesStrings(Pageable pageInfo) {
+    public Page<Compound> getIncompleteCompounds(Pageable pageInfo) {
         return compoundDao.getIncompleteCompounds(pageInfo);
     }
 }

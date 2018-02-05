@@ -36,6 +36,29 @@
             <div class="ui cards">
 
                 <div class="card rak-admin-card">
+
+                    <div class="content">
+                        <div class="header">Compounds Missing Activity Profiles</div>
+                        <div class="meta">Compounds missing some activity profiles</div>
+                        <div class="description">
+                            Nothing here yet.
+                        </div>
+                    </div>
+
+                    <div class="card-action-buttons">
+                        <a class="ui blue icon button" aria-label="Download"
+                           href="/admin/api/compoundsMissingActivityProfiles.csv?page=0&size=10000"
+                           data-tooltip="Download" data-inverted data-position="right center">
+                            <i class="download icon"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="ui cards">
+
+                <div class="card rak-admin-card">
                     <div class="content">
                         <div class="header">Something Else</div>
                         <div class="meta">Some other administrative stuff</div>

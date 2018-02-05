@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.sgc.rak.model.Compound;
+import org.sgc.rak.model.CompoundCountPair;
 import org.sgc.rak.reps.PagedDataRep;
 import org.sgc.rak.services.CompoundService;
 import org.springframework.data.domain.PageImpl;
@@ -33,6 +34,31 @@ public class StatControllerTest {
     }
 
     @Test
+    public void testGetCompoundsMissingActivityProfiles_happyPath() {
+
+        CompoundCountPair pairA = new CompoundCountPair("compoundA", 3);
+        CompoundCountPair pairB = new CompoundCountPair("compoundB", 4);
+        List<CompoundCountPair> pairs = Arrays.asList(pairA, pairB);
+
+        Pageable pageable = new PageRequest(3, 2);
+
+        PageImpl<CompoundCountPair> page = new PageImpl<>(pairs, pageable, 100);
+        doReturn(page).when(mockCompoundService).getCompoundsMissingActivityProfiles(any(Pageable.class));
+
+        PagedDataRep<CompoundCountPair> actualResponse = controller.getCompoundsMissingActivityProfiles(pageable);
+        Assert.assertEquals(6, actualResponse.getStart());
+        Assert.assertEquals(2, actualResponse.getCount());
+        Assert.assertEquals(100, actualResponse.getTotal());
+        Assert.assertEquals(pairs.size(), actualResponse.getData().size());
+        for (int i = 0; i < pairs.size(); i++) {
+            CompoundCountPair expected = pairs.get(i);
+            CompoundCountPair actual = actualResponse.getData().get(i);
+            Assert.assertEquals(expected.getCompoundName(), actual.getCompoundName());
+            Assert.assertEquals(expected.getCount(), actual.getCount());
+        }
+    }
+
+    @Test
     public void testGetIncompleteCompounds_happyPath() {
 
         Compound compound1 = new Compound();
@@ -44,7 +70,7 @@ public class StatControllerTest {
         Pageable pageable = new PageRequest(3, 2);
 
         PageImpl<Compound> page = new PageImpl<>(compounds, pageable, 100);
-        doReturn(page).when(mockCompoundService).getIncompleteSmilesStrings(any(Pageable.class));
+        doReturn(page).when(mockCompoundService).getIncompleteCompounds(any(Pageable.class));
 
         PagedDataRep<Compound> actualResponse = controller.getIncompleteCompounds(pageable);
         Assert.assertEquals(6, actualResponse.getStart());

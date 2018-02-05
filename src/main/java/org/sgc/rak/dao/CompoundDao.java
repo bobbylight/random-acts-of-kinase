@@ -1,10 +1,18 @@
 package org.sgc.rak.dao;
 
 import org.sgc.rak.model.Compound;
+import org.sgc.rak.model.CompoundCountPair;
 import org.sgc.rak.repositories.CompoundRepository;
+import org.sgc.rak.repositories.KinaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * DAO for manipulating compounds.
@@ -13,6 +21,12 @@ public class CompoundDao {
 
     @Autowired
     private CompoundRepository compoundRepository;
+
+    @Autowired
+    private KinaseRepository kinaseRepository;
+
+    @Autowired
+    private EntityManager entityManager;
 
     /**
      * Returns a compound by name.
@@ -37,16 +51,6 @@ public class CompoundDao {
     }
 
     /**
-     * Returns information on compounds without SMILES strings.
-     *
-     * @param pageInfo How to sort the data and what page of the data to return.
-     * @return The list of compounds.
-     */
-    public Page<Compound> getIncompleteCompounds(Pageable pageInfo) {
-        return compoundRepository.findSmilesIsNullOrS10IsNull(pageInfo);
-    }
-
-    /**
      * Returns compounds whose names start with a given string, ignoring case.
      *
      * @param compoundNamePart The start of a compound name.
@@ -58,5 +62,67 @@ public class CompoundDao {
                                                                Pageable pageInfo) {
         return compoundRepository.getCompoundsByCompoundNameStartsWithIgnoreCaseAndSourceIsNull(
             compoundNamePart, pageInfo);
+    }
+
+    /**
+     * Returns information about compounds that are missing activity profiles.
+     *
+     * @param pageInfo How to sort the data and what page of the data to return.
+     * @return The list of compounds.
+     */
+    @SuppressWarnings("MagicNumber")
+    public Page<CompoundCountPair> getCompoundsMissingActivityProfiles(Pageable pageInfo) {
+
+        long kinaseCount = kinaseRepository.count();
+
+        // TODO: This Postgres-specific query also checks the count for each compound name.
+        // I don't think this can be converted to jpql, due to an inability
+        // to do an inner select in the join clause (needed to fetch compounds
+        // with activity profile count > 0 but < 468), as well as path-defining
+        // difficulties due to the left join
+        String sql = "select compound.compound_nm, COALESCE(count, 0)\n" +
+            "   from compound left join(\n" +
+            "      select compound_nm, count(1) as count\n" +
+            "         from kinase_activity_profile group by kinase_activity_profile.compound_nm\n" +
+            "   ) countTable\n" +
+            "   on compound.compound_nm = countTable.compound_nm\n" +
+            "      where count is null or count < ?\n" +
+            "      offset ? limit ?";
+
+        Query query = entityManager.createNativeQuery(sql);
+        query.setParameter(1, kinaseCount);
+        query.setParameter(2, pageInfo.getOffset());
+        query.setParameter(3, pageInfo.getPageSize());
+
+        @SuppressWarnings("unchecked")
+        List<Object[]> objResult = query.getResultList();
+
+        List<CompoundCountPair> compoundCountPairs = objResult.stream()
+            .map(obj -> new CompoundCountPair(obj[0].toString(), ((Number)obj[1]).intValue()))
+            .collect(Collectors.toList());
+
+        sql = "select count(1)\n" +
+            "   from compound left join (\n" +
+            "      select compound_nm, count(1) as apCount\n" +
+            "         from kinase_activity_profile group by kinase_activity_profile.compound_nm\n" +
+            "   ) countTable\n" +
+            "   on compound.compound_nm = countTable.compound_nm\n" +
+            "   where apCount is null or apCount < ?";
+
+        query = entityManager.createNativeQuery(sql);
+        query.setParameter(1, kinaseCount);
+        long total = ((Number)query.getSingleResult()).longValue();
+
+        return new PageImpl<>(compoundCountPairs, pageInfo, total);
+    }
+
+    /**
+     * Returns information on compounds without SMILES strings.
+     *
+     * @param pageInfo How to sort the data and what page of the data to return.
+     * @return The list of compounds.
+     */
+    public Page<Compound> getIncompleteCompounds(Pageable pageInfo) {
+        return compoundRepository.findSmilesIsNullOrS10IsNull(pageInfo);
     }
 }
