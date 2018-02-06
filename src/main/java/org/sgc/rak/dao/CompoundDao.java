@@ -161,6 +161,9 @@ public class CompoundDao {
                 case "compoundName":
                     sb.append("compound_nm ");
                     break;
+
+                default:
+                    throw new RuntimeException("Unexpected order property: " + order.getProperty());
             }
             sb.append(order.getDirection());
         }

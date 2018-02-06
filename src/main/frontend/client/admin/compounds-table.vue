@@ -90,11 +90,11 @@ export default class CompoundTable extends Vue {
 
                     return d;
                 },
-                dataFilter: (data) => {
+                dataFilter: (data: string) => {
 
                     // Convert the (string) JSON response into that expected by DataTables
 
-                    const json = JSON.parse(data);
+                    const json: any = JSON.parse(data);
                     return JSON.stringify({
                         recordsTotal: json.total, // This isn't really true, but I don't think we need to do another query
                         recordsFiltered: json.total,

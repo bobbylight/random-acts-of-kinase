@@ -125,7 +125,6 @@
 				"variable-declaration": "nospace"
 			}
 		],
-        "typeof-compare": true,
         "unified-signatures": true,
         "use-default-type-parameter": true,
 		"use-isnan": true,
