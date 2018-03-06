@@ -10,5 +10,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  */
 public interface KinaseRepository extends PagingAndSortingRepository<Kinase, String> {
 
+    Kinase findOneByDiscoverxGeneSymbolIgnoreCase(String discoverx);
+
     Page<Kinase> getKinasesByDiscoverxGeneSymbolStartsWithIgnoreCase(String prefix, Pageable pageInfo);
 }

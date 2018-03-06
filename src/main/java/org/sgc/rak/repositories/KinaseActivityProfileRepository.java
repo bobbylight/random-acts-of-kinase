@@ -13,9 +13,10 @@ public interface KinaseActivityProfileRepository extends PagingAndSortingReposit
     Page<KinaseActivityProfile> getKinaseActivityProfilesByCompoundNameIgnoreCase(String compoundName,
                                                                                   Pageable pageInfo);
 
-    Page<KinaseActivityProfile> getKinaseActivityProfilesByCompoundNameIgnoreCaseAndKinaseIgnoreCaseAndPercentControl(
-        String compoundName, String kinase, double activity, Pageable pageInfo);
+    Page<KinaseActivityProfile>
+            getKinaseActivityProfilesByCompoundNameIgnoreCaseAndKinaseIdAndPercentControlLessThanEqual(
+        String compoundName, long kinase, double activity, Pageable pageInfo);
 
-    Page<KinaseActivityProfile> getKinaseActivityProfilesByKinaseIgnoreCaseAndPercentControl(String kinase,
-                                                   double activity, Pageable pageInfo);
+    Page<KinaseActivityProfile> getKinaseActivityProfilesByKinaseIdAndPercentControlLessThanEqual(long kinase,
+                                                                              double activity, Pageable pageInfo);
 }

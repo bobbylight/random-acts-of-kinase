@@ -43,15 +43,20 @@ class CompoundController {
      */
     @RequestMapping(method = RequestMethod.GET)
     PagedDataRep<Compound> getCompounds(@RequestParam(required = false) String inhibitor,
+                                @RequestParam(required = false) String kinase,
+                                @RequestParam(required = false) Double activity,
                                 @SortDefault("compoundName") Pageable pageInfo) {
 
         Page<Compound> page;
 
-        if (StringUtils.isBlank(inhibitor)) {
-            page = compoundService.getCompounds(pageInfo);
+        if (StringUtils.isNotBlank(inhibitor)) {
+            page = compoundService.getCompoundsByCompoundName(inhibitor, pageInfo);
+        }
+        else if (StringUtils.isNotBlank(kinase) && activity != null) {
+            page = compoundService.getCompoundsByKinaseAndActivity(kinase, activity, pageInfo);
         }
         else {
-            page = compoundService.getCompoundsByCompoundName(inhibitor, pageInfo);
+            page = compoundService.getCompounds(pageInfo);
         }
 
         long start = page.getNumber() * pageInfo.getPageSize();

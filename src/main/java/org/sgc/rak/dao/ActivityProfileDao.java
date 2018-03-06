@@ -50,15 +50,15 @@ public class ActivityProfileDao {
      */
     public Page<KinaseActivityProfile>
             getKinaseActivityProfilesByCompoundNameIgnoreCaseAndKinaseIgnoreCaseAndPercentControl(
-                                    String compoundName, String kinase, double activity, Pageable pageInfo) {
+                                    String compoundName, long kinase, double activity, Pageable pageInfo) {
         return activityProfileRepository.
-            getKinaseActivityProfilesByCompoundNameIgnoreCaseAndKinaseIgnoreCaseAndPercentControl(
+            getKinaseActivityProfilesByCompoundNameIgnoreCaseAndKinaseIdAndPercentControlLessThanEqual(
                     compoundName, kinase, activity, pageInfo);
     }
 
-    public Page<KinaseActivityProfile> getKinaseActivityProfilesByKinaseIgnoreCaseAndPercentControl(String kinase,
+    public Page<KinaseActivityProfile> getKinaseActivityProfilesByKinaseIgnoreCaseAndPercentControl(long kinase,
                                                       double activity, Pageable pageInfo) {
-        return activityProfileRepository.getKinaseActivityProfilesByKinaseIgnoreCaseAndPercentControl(kinase, activity,
-            pageInfo);
+        return activityProfileRepository.getKinaseActivityProfilesByKinaseIdAndPercentControlLessThanEqual(kinase,
+            activity,  pageInfo);
     }
 }

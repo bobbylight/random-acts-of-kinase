@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Arrays;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doReturn;
 
@@ -30,6 +31,17 @@ public class KinaseDaoTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    public void testGetKinase() {
+
+        Kinase expected = new Kinase();
+        expected.setId(42);
+        doReturn(expected).when(kinaseRepository).findOneByDiscoverxGeneSymbolIgnoreCase(anyString());
+
+        Kinase actual = kinaseDao.getKinase("discoverx");
+        Assert.assertEquals(expected.getId(), actual.getId());
     }
 
     @Test

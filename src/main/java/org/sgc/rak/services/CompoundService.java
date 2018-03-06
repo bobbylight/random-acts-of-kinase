@@ -5,10 +5,17 @@ import org.sgc.rak.exceptions.NotFoundException;
 import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.model.Compound;
 import org.sgc.rak.model.CompoundCountPair;
+import org.sgc.rak.model.Kinase;
+import org.sgc.rak.model.KinaseActivityProfile;
+import org.sgc.rak.repositories.KinaseActivityProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Service for manipulating compounds.
@@ -18,6 +25,12 @@ public class CompoundService {
 
     @Autowired
     private CompoundDao compoundDao;
+
+    @Autowired
+    private KinaseService kinaseService;
+
+    @Autowired
+    private KinaseActivityProfileRepository kinaseActivityProfileRepository;
 
     @Autowired
     private Messages messages;
@@ -60,6 +73,24 @@ public class CompoundService {
     public Page<Compound> getCompoundsByCompoundName(String compoundNamePart,
                                                      Pageable pageInfo) {
         return compoundDao.getCompoundsByCompoundNameStartsWithIgnoreCase(compoundNamePart, pageInfo);
+    }
+
+    public Page<Compound> getCompoundsByKinaseAndActivity(String kinase, double activity, Pageable pageInfo) {
+
+        Kinase kinase2 = kinaseService.getKinase(kinase);
+        if (kinase2 == null) {
+            throw new NotFoundException(messages.get("error.noSuchKinase", kinase));
+        }
+        long kinaseId = kinase2.getId();
+
+        Page<KinaseActivityProfile> profiles = kinaseActivityProfileRepository.
+            getKinaseActivityProfilesByKinaseIdAndPercentControlLessThanEqual(kinaseId, activity, pageInfo);
+
+        List<String> compoundNames = profiles.getContent().stream().map(KinaseActivityProfile::getCompoundName)
+            .collect(Collectors.toList());
+
+        List<Compound> compounds = compoundDao.getCompounds(compoundNames);
+        return new PageImpl<>(compounds, pageInfo, profiles.getTotalElements());
     }
 
     /**

@@ -24,7 +24,7 @@ export interface ColumnInfo {
 
 /**
  * A table showing information about compounds.  This is really just a wrapper around our table
- * component with niceities built in for tables showing compound-related information.
+ * component with niceties built in for tables showing compound-related information.
  */
 @Component
 export default class CompoundTable extends Vue {

@@ -51,6 +51,10 @@ public class CompoundDao {
         return compoundRepository.findSourceIsNull(pageInfo);
     }
 
+    public List<Compound> getCompounds(List<String> compoundNames) {
+        return compoundRepository.findByCompoundNameInIgnoreCase(compoundNames);
+    }
+
     /**
      * Returns compounds whose names start with a given string, ignoring case.
      *

@@ -15,6 +15,16 @@ public class KinaseDao {
     private KinaseRepository kinaseRepository;
 
     /**
+     * Returns information on a kinase by its discoverx gene symbol.
+     *
+     * @param discoverx The discoverx gene symbol.  Case is ignored.
+     * @return The kinase, or {@code null} if no such kinase is known.
+     */
+    public Kinase getKinase(String discoverx) {
+        return kinaseRepository.findOneByDiscoverxGeneSymbolIgnoreCase(discoverx);
+    }
+
+    /**
      * Returns kinase information.
      *
      * @param pageInfo How to sort the data and what page of the data to return.

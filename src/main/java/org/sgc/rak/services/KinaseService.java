@@ -21,6 +21,16 @@ public class KinaseService {
     private Messages messages;
 
     /**
+     * Returns information on a kinase by its discoverx gene symbol.
+     *
+     * @param discoverx The discoverx gene symbol.  Case is ignored.
+     * @return The kinase, or {@code null} if no such kinase is known.
+     */
+    public Kinase getKinase(String discoverx) {
+        return kinaseDao.getKinase(discoverx);
+    }
+
+    /**
      * Returns kinase information.
      *
      * @param discoverx An optional filter.  If non-{@code null}, only kinases

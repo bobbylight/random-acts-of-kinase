@@ -6,10 +6,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import java.util.List;
+
 /**
  * JPA repository for compounds.
  */
 public interface CompoundRepository extends PagingAndSortingRepository<Compound, String> {
+
+    List<Compound> findByCompoundNameInIgnoreCase(List<String> compoundNames);
 
     /**
      * This method is only here until we no longer have to hide certain compounds

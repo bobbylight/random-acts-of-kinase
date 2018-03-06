@@ -55,14 +55,14 @@ public class ActivityProfileService {
      * @see #getKinaseActivityProfiles(Pageable)
      */
     public Page<KinaseActivityProfile> getKinaseActivityProfilesForCompoundAndKinaseAndPercentControl(
-            String compoundName, String kinase, double activity, Pageable pageInfo) {
+            String compoundName, long kinase, double activity, Pageable pageInfo) {
         compoundService.getCompound(compoundName); // Throw exception if compound not found
         //kinaseService.getKinase(kinase); // Throw exception if kinase not found
         return activityProfileDao.getKinaseActivityProfilesByCompoundNameIgnoreCaseAndKinaseIgnoreCaseAndPercentControl(
             compoundName, kinase, activity, pageInfo);
     }
 
-    public Page<KinaseActivityProfile> getKinaseActivityProfilesForKinaseAndPercentControl(String kinase,
+    public Page<KinaseActivityProfile> getKinaseActivityProfilesForKinaseAndPercentControl(long kinase,
                                                  double activity, Pageable pageInfo) {
         //kinaseService.getKinase(kinase); // Throw exception if kinase not found
         return activityProfileDao.getKinaseActivityProfilesByKinaseIgnoreCaseAndPercentControl(kinase,
