@@ -26,7 +26,7 @@
 
                     <div class="card-action-buttons">
                         <a class="ui blue icon button" aria-label="Download"
-                                href="/admin/api/incompleteCompounds.csv?page=0&size=10000"
+                                href="/admin/api/incompleteCompounds?format=csv&page=0&size=10000"
                                 data-tooltip="Download" data-inverted data-position="right center">
                             <i class="download icon"></i>
                         </a>
@@ -51,7 +51,7 @@
 
                     <div class="card-action-buttons">
                         <a class="ui blue icon button" aria-label="Download"
-                           href="/admin/api/compoundsMissingActivityProfiles.csv?page=0&size=10000"
+                           href="/admin/api/compoundsMissingActivityProfiles?format=csv&page=0&size=10000"
                            data-tooltip="Download" data-inverted data-position="right center">
                             <i class="download icon"></i>
                         </a>

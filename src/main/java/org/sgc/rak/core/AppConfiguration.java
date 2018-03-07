@@ -14,7 +14,7 @@ import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ import java.util.List;
 @Configuration
 @ComponentScan("org.sgc.rak")
 @EnableSpringDataWebSupport
-public class AppConfiguration extends WebMvcConfigurerAdapter {
+public class AppConfiguration implements WebMvcConfigurer {
 
     @Bean
     public ActivityProfileDao activityProfileDao() {

@@ -3,6 +3,10 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQL94Dialect
   profiles:
     active: dev-postgres
+  mvc:
+    contentnegotiation:
+      favor-parameter: true
+      parameter-name: format
 logging:
   level:
     root: INFO
