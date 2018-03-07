@@ -11,13 +11,15 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 /**
  * App application configuration related to security.
  */
 @Configuration
-@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+// https://stackoverflow.com/questions/49108156/spring-boot-2-and-migrating-oauth2-configuration
+@Order(SecurityProperties.BASIC_AUTH_ORDER - 2) //ACCESS_OVERRIDE_ORDER)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final Environment environment;
@@ -43,6 +45,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         String password = this.environment.getProperty("rak.login.password");
 
         if (StringUtils.isNotBlank(user) && StringUtils.isNotBlank(password)) {
+
+            password = "{bcrypt}" + new BCryptPasswordEncoder().encode(password);
+
             auth.inMemoryAuthentication()
                 .withUser(user).password(password)
                     .authorities("ROLE_USER", "ROLE_ADMIN");

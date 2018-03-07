@@ -21,6 +21,7 @@ import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.AbstractGenericHttpMessageConverter;
+import org.springframework.lang.Nullable;
 
 /**
  * An {@code HttpMessageConverter} that can write instances of {@link PagedDataRep} as CSV.  The rep's data will
@@ -69,22 +70,28 @@ public final class CsvHttpMessageConverter extends AbstractGenericHttpMessageCon
     }
 
     @Override
-    protected boolean supports(Class<?> clazz) {
+    protected boolean supports(@Nullable  Class<?> clazz) {
         return clazz == PagedDataRep.class;
     }
 
     @Override
-    public List<?> read(Type type, Class<?> contextClazz, HttpInputMessage inputMessage) {
+    public List<?> read(Type type, Class<?> contextClazz, @Nullable HttpInputMessage inputMessage) {
         throw new UnsupportedOperationException("Reading is not supported with this converter");
     }
 
     @Override
-    protected List<?> readInternal(Class<?> clazz, HttpInputMessage inputMessage) {
+    protected List<?> readInternal(Class<?> clazz, @Nullable HttpInputMessage inputMessage) {
         throw new UnsupportedOperationException("Reading is not supported with this converter");
     }
 
     @Override
     protected void writeInternal(Object instance, Type type, HttpOutputMessage outputMessage) throws IOException {
+
+        // Not sure if type will ever be null for us, and if it is, what should we do?
+        // Intellij thinks that type cannot be null but findBugs does due to @Nullable
+        if (type == null) {
+            throw new IOException("This converter cannot run with a null type");
+        }
 
         try (SequenceWriter writer = getWriter(type).writeValues(getOutputWriter(outputMessage));
                 Stream<?> stream = createStream(instance)) {

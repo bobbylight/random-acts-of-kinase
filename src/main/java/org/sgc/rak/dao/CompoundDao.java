@@ -36,7 +36,7 @@ public class CompoundDao {
      * @return The compound, or {@code null} if no such compound is known.
      */
     public Compound getCompound(String compoundName) {
-        return compoundRepository.findOne(compoundName);
+        return compoundRepository.findById(compoundName).orElse(null);
     }
 
     /**

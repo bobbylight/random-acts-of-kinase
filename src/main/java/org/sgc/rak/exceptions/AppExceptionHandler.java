@@ -40,7 +40,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
      * @return The response to return.
      */
     @ExceptionHandler(AbstractRestException.class)
-    public ResponseEntity<Object> restException(WebRequest request, AbstractRestException e) {
-        return handleExceptionInternal(e, null, null, e.getStatus(), request);
+    public ResponseEntity<Object> restException(WebRequest request, HttpHeaders headers, AbstractRestException e) {
+        return handleExceptionInternal(e, null, headers, e.getStatus(), request);
     }
 }

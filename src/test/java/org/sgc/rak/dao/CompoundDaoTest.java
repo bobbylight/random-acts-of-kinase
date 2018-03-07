@@ -20,6 +20,7 @@ import javax.persistence.Query;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Unit tests for the {@code CompoundDao} class.  This is really just testing
@@ -51,7 +52,8 @@ public class CompoundDaoTest {
 
         Compound expectedCompound = new Compound();
         expectedCompound.setCompoundName(expectedCompoundName);
-        doReturn(expectedCompound).when(compoundRepository).findOne(eq(expectedCompoundName));
+        Optional<Compound> optional = Optional.of(expectedCompound);
+        doReturn(optional).when(compoundRepository).findById(eq(expectedCompoundName));
 
         Compound compound = compoundDao.getCompound(expectedCompoundName);
         Assert.assertEquals(expectedCompoundName, compound.getCompoundName());
