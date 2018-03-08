@@ -17,6 +17,8 @@ function responseToSemanticStructure(origResponse) {
         })
     };
 
+    response.results.unshift({ name: '(none)', value: '' });
+
     return response;
 }
 
