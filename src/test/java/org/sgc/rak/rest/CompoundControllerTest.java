@@ -46,7 +46,7 @@ public class CompoundControllerTest {
     }
 
     @Test
-    public void testGetCompounds_firstPage_nullInhibitorKinaseAndActivity() {
+    public void testGetCompounds_firstPage_nullCompoundKinaseAndActivity() {
 
         PageRequest pr = new PageRequest(0, 20);
 
@@ -66,7 +66,7 @@ public class CompoundControllerTest {
     }
 
     @Test
-    public void testGetCompounds_notFirstPage_nullInhibitorKinaseAndActivity() {
+    public void testGetCompounds_notFirstPage_nullCompoundKinaseAndActivity() {
 
         PageRequest pr = new PageRequest(1, 20);
 
@@ -86,7 +86,7 @@ public class CompoundControllerTest {
     }
 
     @Test
-    public void testGetCompounds_firstPage_nonNullInhibitor() {
+    public void testGetCompounds_firstPage_nonNullCompound() {
 
         PageRequest pr = new PageRequest(0, 20);
 

@@ -43,22 +43,22 @@ public class ActivityProfileControllerTest {
 
     @Test(expected = BadRequestException.class)
     public void testGetKinaseActivityProfiles_kinaseWithoutActivity() {
-        controller.getKinaseActivityProfiles("inhibitor", "kinase", null, null);
+        controller.getKinaseActivityProfiles("compound", "kinase", null, null);
     }
 
     @Test(expected = BadRequestException.class)
     public void testGetKinaseActivityProfiles_activityWithoutKinase() {
-        controller.getKinaseActivityProfiles("inhibitor", null, 0d, null);
+        controller.getKinaseActivityProfiles("compound", null, 0d, null);
     }
 
     @Test(expected = BadRequestException.class)
     public void testGetKinaseActivityProfiles_activityLessThanZero() {
-        controller.getKinaseActivityProfiles("inhibitor", "kinase", -1d, null);
+        controller.getKinaseActivityProfiles("compound", "kinase", -1d, null);
     }
 
     @Test(expected = BadRequestException.class)
     public void testGetKinaseActivityProfiles_activityGreaterThanOne() {
-        controller.getKinaseActivityProfiles("inhibitor", "kinase", 2d, null);
+        controller.getKinaseActivityProfiles("compound", "kinase", 2d, null);
     }
 
     @Test

@@ -36,21 +36,21 @@ class CompoundController {
     /**
      * Returns compound information, possibly filtered.
      *
-     * @param inhibitor The start of a compound name.  If specified, only compounds
+     * @param compound The start of a compound name.  If specified, only compounds
      *        whose name starts with this prefix (ignoring case) will be returned.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
      */
     @RequestMapping(method = RequestMethod.GET)
-    PagedDataRep<Compound> getCompounds(@RequestParam(required = false) String inhibitor,
+    PagedDataRep<Compound> getCompounds(@RequestParam(required = false) String compound,
                                 @RequestParam(required = false) String kinase,
                                 @RequestParam(required = false) Double activity,
                                 @SortDefault("compoundName") Pageable pageInfo) {
 
         Page<Compound> page;
 
-        if (StringUtils.isNotBlank(inhibitor)) {
-            page = compoundService.getCompoundsByCompoundName(inhibitor, pageInfo);
+        if (StringUtils.isNotBlank(compound)) {
+            page = compoundService.getCompoundsByCompoundName(compound, pageInfo);
         }
         else if (StringUtils.isNotBlank(kinase) && activity != null) {
             page = compoundService.getCompoundsByKinaseAndActivity(kinase, activity, pageInfo);

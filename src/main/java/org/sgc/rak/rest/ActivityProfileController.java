@@ -33,13 +33,13 @@ class ActivityProfileController {
     /**
      * Returns kinase activity profile information, possibly filtered.
      *
-     * @param inhibitor A compound name.  If specified, only activity profiles about
+     * @param compound A compound name.  If specified, only activity profiles about
      *        this compound/inhibitor will be returned.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of kinase activity profiles.
      */
     @RequestMapping(method = RequestMethod.GET)
-    PagedDataRep<KinaseActivityProfile> getKinaseActivityProfiles(@RequestParam(required = false) String inhibitor,
+    PagedDataRep<KinaseActivityProfile> getKinaseActivityProfiles(@RequestParam(required = false) String compound,
                   @RequestParam(required = false) String kinaseDiscoverx,
                   @RequestParam(required = false) Double activity,
                   @SortDefault.SortDefaults({ @SortDefault("kd"), @SortDefault("percentControl") })
@@ -69,7 +69,7 @@ class ActivityProfileController {
 
         Page<KinaseActivityProfile> page;
 
-        if (StringUtils.isEmpty(inhibitor)) {
+        if (StringUtils.isEmpty(compound)) {
             if (StringUtils.isEmpty(kinaseDiscoverx)) {
                 page = activityProfileService.getKinaseActivityProfiles(pageInfo);
             }
@@ -80,10 +80,10 @@ class ActivityProfileController {
         }
         else {
             if (StringUtils.isEmpty(kinaseDiscoverx)) {
-                page = activityProfileService.getKinaseActivityProfilesForCompound(inhibitor, pageInfo);
+                page = activityProfileService.getKinaseActivityProfilesForCompound(compound, pageInfo);
             }
             else {
-                page = activityProfileService.getKinaseActivityProfilesForCompoundAndKinaseAndPercentControl(inhibitor,
+                page = activityProfileService.getKinaseActivityProfilesForCompoundAndKinaseAndPercentControl(compound,
                     kinaseId, activity, pageInfo);
             }
         }
