@@ -16,7 +16,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Collections;
 import java.util.List;
 
-import static org.mockito.Matchers.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doReturn;
 
 public class CompoundControllerTest {
@@ -48,7 +48,7 @@ public class CompoundControllerTest {
     @Test
     public void testGetCompounds_firstPage_nullCompoundKinaseAndActivity() {
 
-        PageRequest pr = new PageRequest(0, 20);
+        PageRequest pr = PageRequest.of(0, 20);
 
         String compoundName = "compoundA";
         Compound expectedCompound = new Compound();
@@ -68,7 +68,7 @@ public class CompoundControllerTest {
     @Test
     public void testGetCompounds_notFirstPage_nullCompoundKinaseAndActivity() {
 
-        PageRequest pr = new PageRequest(1, 20);
+        PageRequest pr = PageRequest.of(1, 20);
 
         String compoundName = "compoundA";
         Compound expectedCompound = new Compound();
@@ -88,7 +88,7 @@ public class CompoundControllerTest {
     @Test
     public void testGetCompounds_firstPage_nonNullCompound() {
 
-        PageRequest pr = new PageRequest(0, 20);
+        PageRequest pr = PageRequest.of(0, 20);
 
         String compoundName = "compoundA";
         Compound expectedCompound = new Compound();
@@ -108,7 +108,7 @@ public class CompoundControllerTest {
     @Test
     public void testGetCompounds_firstPage_nonNullKinaseAndActivity() {
 
-        PageRequest pr = new PageRequest(0, 20);
+        PageRequest pr = PageRequest.of(0, 20);
 
         String compoundName = "compoundA";
         Compound expectedCompound = new Compound();

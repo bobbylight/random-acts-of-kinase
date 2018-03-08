@@ -54,7 +54,7 @@ public class KinaseDaoTest {
         Page<Kinase> expectedPage = new PageImpl<>(Arrays.asList(kinase1, kinase2));
         doReturn(expectedPage).when(kinaseRepository).findAll(any(Pageable.class));
 
-        Pageable pageInfo = new PageRequest(0, 20);
+        Pageable pageInfo = PageRequest.of(0, 20);
         Page<Kinase> actualPage = kinaseDao.getKinases(pageInfo);
 
         comparePages(expectedPage, actualPage);
@@ -73,7 +73,7 @@ public class KinaseDaoTest {
         doReturn(expectedPage).when(kinaseRepository).getKinasesByDiscoverxGeneSymbolStartsWithIgnoreCase(
             eq(prefix), any(Pageable.class));
 
-        Pageable pageInfo = new PageRequest(0, 20);
+        Pageable pageInfo = PageRequest.of(0, 20);
         Page<Kinase> actualPage = kinaseDao.getKinasesByDiscoverxGeneSymbolStartingWith(prefix, pageInfo);
 
         comparePages(expectedPage, actualPage);

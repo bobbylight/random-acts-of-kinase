@@ -35,7 +35,7 @@ public class KinaseControllerTest {
     @Test
     public void testGetKinases_happyPath() {
 
-        PageRequest pageRequest = new PageRequest(1, 20);
+        PageRequest pageRequest = PageRequest.of(1, 20);
 
         Kinase kinase = new Kinase();
         kinase.setId(42);

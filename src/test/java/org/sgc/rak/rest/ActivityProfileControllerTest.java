@@ -72,7 +72,7 @@ public class ActivityProfileControllerTest {
         doReturn(expectedPage).when(mockActivityProfileService)
             .getKinaseActivityProfiles(any(Pageable.class));
 
-        PageRequest pageInfo = new PageRequest(0, 20);
+        PageRequest pageInfo = PageRequest.of(0, 20);
         PagedDataRep<KinaseActivityProfile> actual = controller.getKinaseActivityProfiles(
             null, null, null, pageInfo);
 
@@ -94,7 +94,7 @@ public class ActivityProfileControllerTest {
         doReturn(expectedPage).when(mockActivityProfileService)
             .getKinaseActivityProfilesForCompound(eq(compoundName), any(Pageable.class));
 
-        PageRequest pageInfo = new PageRequest(0, 20);
+        PageRequest pageInfo = PageRequest.of(0, 20);
         PagedDataRep<KinaseActivityProfile> actual = controller.getKinaseActivityProfiles(
             compoundName, null, null, pageInfo);
 
@@ -122,7 +122,7 @@ public class ActivityProfileControllerTest {
         doReturn(expectedPage).when(mockActivityProfileService)
             .getKinaseActivityProfilesForKinaseAndPercentControl(eq(kinaseId), anyDouble(), any(Pageable.class));
 
-        PageRequest pageInfo = new PageRequest(0, 20);
+        PageRequest pageInfo = PageRequest.of(0, 20);
         PagedDataRep<KinaseActivityProfile> actual = controller.getKinaseActivityProfiles(
             null, kinaseDiscoverx, 0.3, pageInfo);
 
@@ -152,7 +152,7 @@ public class ActivityProfileControllerTest {
             .getKinaseActivityProfilesForCompoundAndKinaseAndPercentControl(eq(compoundName),
                 eq(kinaseId), anyDouble(), any(Pageable.class));
 
-        PageRequest pageInfo = new PageRequest(0, 20);
+        PageRequest pageInfo = PageRequest.of(0, 20);
         PagedDataRep<KinaseActivityProfile> actual = controller.getKinaseActivityProfiles(
             compoundName, kinaseDiscoverx, 0.3, pageInfo);
 

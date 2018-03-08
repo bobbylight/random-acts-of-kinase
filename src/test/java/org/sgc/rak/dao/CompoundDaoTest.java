@@ -70,7 +70,7 @@ public class CompoundDaoTest {
         //doReturn(expectedPage).when(compoundRepository).findAll(any(Pageable.class));
         doReturn(expectedPage).when(compoundRepository).findSourceIsNull(any(Pageable.class));
 
-        Pageable pageInfo = new PageRequest(0, 20);
+        Pageable pageInfo = PageRequest.of(0, 20);
         Page<Compound> actualPage = compoundDao.getCompounds(pageInfo);
 
         comparePages(expectedPage, actualPage);
@@ -89,7 +89,7 @@ public class CompoundDaoTest {
         doReturn(expectedPage).when(compoundRepository).getCompoundsByCompoundNameStartsWithIgnoreCaseAndSourceIsNull(
             eq(startsWith), any(Pageable.class));
 
-        Pageable pageInfo = new PageRequest(0, 20);
+        Pageable pageInfo = PageRequest.of(0, 20);
         Page<Compound> actualPage = compoundDao.getCompoundsByCompoundNameStartsWithIgnoreCase(startsWith, pageInfo);
 
         comparePages(expectedPage, actualPage);
@@ -114,9 +114,9 @@ public class CompoundDaoTest {
         BigInteger expectedTotal = new BigInteger("601");
         doReturn(expectedTotal).when(mockQuery).getSingleResult();
 
-        Sort sort = new Sort(new Sort.Order(Sort.Direction.ASC, "compoundName"),
+        Sort sort = Sort.by(new Sort.Order(Sort.Direction.ASC, "compoundName"),
             new Sort.Order(Sort.Direction.ASC, "count"));
-        Pageable pageInfo = new PageRequest(0, 20, sort);
+        Pageable pageInfo = PageRequest.of(0, 20, sort);
         Page<CompoundCountPair> actualPage = compoundDao.getCompoundsMissingActivityProfiles(pageInfo);
 
         Assert.assertEquals(expectedResult.size(), actualPage.getNumberOfElements());
@@ -140,7 +140,7 @@ public class CompoundDaoTest {
         Page<Compound> expectedPage = new PageImpl<>(Arrays.asList(compound1, compound2));
         doReturn(expectedPage).when(compoundRepository).findSmilesIsNullOrS10IsNull(any(Pageable.class));
 
-        Pageable pageInfo = new PageRequest(0, 20);
+        Pageable pageInfo = PageRequest.of(0, 20);
         Page<Compound> actualPage = compoundDao.getIncompleteCompounds(pageInfo);
 
         comparePages(expectedPage, actualPage);
@@ -148,19 +148,19 @@ public class CompoundDaoTest {
 
     @Test
     public void testSortToOrderBy_oneOrder_compoundName() {
-        Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "compoundName"));
+        Sort sort = Sort.by(new Sort.Order(Sort.Direction.DESC, "compoundName"));
         Assert.assertEquals("order by compound_nm DESC", CompoundDao.sortToOrderBy(sort));
     }
 
     @Test
     public void testSortToOrderBy_oneOrder_count() {
-        Sort sort = new Sort(new Sort.Order(Sort.Direction.ASC, "count"));
+        Sort sort = Sort.by(new Sort.Order(Sort.Direction.ASC, "count"));
         Assert.assertEquals("order by count ASC", CompoundDao.sortToOrderBy(sort));
     }
 
     @Test
     public void testSortToOrderBy_twoOrders() {
-        Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "compoundName"),
+        Sort sort = Sort.by(new Sort.Order(Sort.Direction.DESC, "compoundName"),
             new Sort.Order(Sort.Direction.ASC, "count"));
         Assert.assertEquals("order by compound_nm DESC, count ASC", CompoundDao.sortToOrderBy(sort));
     }

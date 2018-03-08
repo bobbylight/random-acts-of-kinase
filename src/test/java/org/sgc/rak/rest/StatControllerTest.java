@@ -40,7 +40,7 @@ public class StatControllerTest {
         CompoundCountPair pairB = new CompoundCountPair("compoundB", 4);
         List<CompoundCountPair> pairs = Arrays.asList(pairA, pairB);
 
-        Pageable pageable = new PageRequest(3, 2);
+        Pageable pageable = PageRequest.of(3, 2);
 
         PageImpl<CompoundCountPair> page = new PageImpl<>(pairs, pageable, 100);
         doReturn(page).when(mockCompoundService).getCompoundsMissingActivityProfiles(any(Pageable.class));
@@ -67,7 +67,7 @@ public class StatControllerTest {
         compound2.setCompoundName("compoundB");
         List<Compound> compounds = Arrays.asList(compound1, compound2);
 
-        Pageable pageable = new PageRequest(3, 2);
+        Pageable pageable = PageRequest.of(3, 2);
 
         PageImpl<Compound> page = new PageImpl<>(compounds, pageable, 100);
         doReturn(page).when(mockCompoundService).getIncompleteCompounds(any(Pageable.class));

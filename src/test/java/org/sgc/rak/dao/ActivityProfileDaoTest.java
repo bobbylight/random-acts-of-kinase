@@ -43,7 +43,7 @@ public class ActivityProfileDaoTest {
         Page<KinaseActivityProfile> expectedPage = new PageImpl<>(Collections.singletonList(profile));
         doReturn(expectedPage).when(activityProfileRepository).findAll(any(Pageable.class));
 
-        Pageable pageInfo = new PageRequest(0, 20);
+        Pageable pageInfo = PageRequest.of(0, 20);
         Page<KinaseActivityProfile> actualPage = activityProfileDao.getKinaseActivityProfiles(pageInfo);
 
         comparePages(expectedPage, actualPage);
