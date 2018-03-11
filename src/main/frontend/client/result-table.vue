@@ -51,7 +51,7 @@
 
             addSuppliedFilters: function(data) {
                 if (this.filters.inhibitor) {
-                    data.inhibitor = this.filters.inhibitor;
+                    data.compound = this.filters.inhibitor;
                 }
                 if (this.filters.activity) {
                     data.activity = this.filters.activity;
