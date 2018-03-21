@@ -1,19 +1,21 @@
-import { Prop } from 'vue-property-decorator';
 <template>
-    <div>
-        <div class="search-filter-wrapper">
-            <div class="ui container">
+    <v-container fluid grid-list-md>
 
-                <h2 class="ui header">Search Compounds</h2>
+        <v-layout row wrap class="search-filter-wrapper">
+            <v-flex xs12>
 
-                <search-filters :filters="filters"></search-filters>
-            </div>
-        </div>
+                    <h1>Search Compounds</h1>
 
-        <div class="ui container">
-            <compound-name-table :filters="gridFilters"></compound-name-table>
-        </div>
-    </div>
+                    <search-filters :filters="filters"></search-filters>
+            </v-flex>
+        </v-layout>
+
+        <v-layout row wrap justify-center>
+            <v-flex xs10>
+                <compound-name-table :filters="gridFilters"></compound-name-table>
+            </v-flex>
+        </v-layout>
+    </v-container>
 </template>
 
 <script lang="ts">

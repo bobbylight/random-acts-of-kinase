@@ -1,44 +1,41 @@
 <template>
-    <div class="ui tiny modal">
-        <i class="close icon"></i>
-        <div class="header">
-            Log In
-        </div>
-        <div class="content">
-            <div class="description">
+    <v-dialog v-model="visible" max-width="500px">
+        <v-card>
+
+            <v-card-title class="headline">Log In</v-card-title>
+
+            <v-card-text>
 
                 <div class="details">
                     Sign in to get even more out of your RAK experience.
                 </div>
 
                 <form class="ui form" id="login-form">
-
-                    <div class="field">
-                        <label>User name</label>
-                        <input type="text" placeholder="User name" v-model="user">
-                    </div>
-                    <div class="field">
-                        <label>Password</label>
-                        <input type="password" placeholder="Password" v-model="password">
-                    </div>
+                    <v-text-field label="User name" v-model="user"></v-text-field>
+                    <v-text-field label="Password" v-model="password"
+                                  :append-icon="passwordVisible ? 'visibility' : 'visibility_off'"
+                                  :append-icon-cb="() => (passwordVisible = !passwordVisible)"
+                                  :type="passwordVisible ? 'password' : 'text'"></v-text-field>
                 </form>
-            </div>
-        </div>
-        <div class="actions">
-            <button type="submit" form="login-form" class="ui positive right button" :class="{ disabled: !user || !password }">
-                Log In
-            </button>
-            <div class="ui negative right button">
-                Cancel
-            </div>
-        </div>
-    </div>
+            </v-card-text>
+
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="success" type="submit" form="login-form" :class="{ disabled: !user || !password }">
+                    Log In
+                </v-btn>
+                <v-btn>
+                    Cancel
+                </v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { Prop, Watch } from 'vue-property-decorator';
+import { Prop } from 'vue-property-decorator';
 import $ from 'jquery';
 import restApi from './rest-api';
 import { AxiosError } from 'axios';
@@ -52,9 +49,20 @@ export default class LoginModal extends Vue {
 
     private user: string = '';
     private password: string = '';
+    private passwordVisible: boolean = true;
 
     @Prop({ required: true })
-    private visible: boolean;
+    private show: boolean;
+
+    get visible() {
+        return this.show;
+    }
+
+    set visible(newValue: boolean) {
+        if (!newValue) {
+            this.$emit('close');
+        }
+    }
 
     login(): boolean {
         console.log('Attempting to log in as ' + this.user + ', ' + this.password);
@@ -87,28 +95,11 @@ export default class LoginModal extends Vue {
     onCancel() {
         this.$emit(HIDDEN);
     }
-
-    @Watch('visible')
-    private onVisibilityChange(newValue: boolean) {
-        if (newValue) {
-
-            this.user = this.password = '';
-            const onCancel: Function = this.onCancel.bind(this);
-
-            $(this.$el).modal({
-                onApprove: this.login.bind(this),
-                onDeny: onCancel,
-                onHide: onCancel
-            }).modal('show');
-        }
-    }
 }
 </script>
 
 <style lang="less">
-.description {
-    .details {
-        padding-bottom: 2rem;
-    }
+.details {
+    padding-bottom: 2rem;
 }
 </style>

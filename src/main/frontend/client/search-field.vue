@@ -1,9 +1,7 @@
 <template>
-    <div class="ui input search-field" v-bind:class="{ 'right labeled': label }">
-        <input :type="type" :placeholder="placeHolder" v-bind:class="{ 'right-aligned': !!numeric }"
-               :value="value" step="0.1" min="0.1" max="100" @input="possiblyValidate($event)">
-        <div class="ui label" v-bind:style="{ display: labelDisplay }">{{label}}</div>
-    </div>
+    <v-text-field :type="type" :placeholder="placeHolder" class="search-field"
+                  :class="{ 'right-aligned': !!numeric }" :rules="validationRules"
+                  :value="value" step="0.1" min="0.1" max="100" @input="publishValueChange(value)"></v-text-field>
 </template>
 
 <script lang="ts">
@@ -30,31 +28,44 @@ export default class SearchField extends Vue {
     @Prop()
     numeric: string;
 
+    private static isEmpty(text: string): boolean {
+        return !text.trim().length;
+    }
+
     get labelDisplay() {
         return this.label ? 'inherit' : 'none';
     }
 
-    possiblyValidate($event: Event) {
+    publishValueChange(value: string) {
+        this.$emit('input', value);
+    }
 
-        const value: any = ($event.target as HTMLInputElement).value;
-        const input: $ = $(this.$el);
+    get validationRules(): any[] {
 
-        if ($($event.target).is(':invalid')) {
-            input.addClass('error');
-            return;
+        const rules: any = [];
+
+        if (this.numeric === 'true') {
+            rules.push((value: string) => {
+                return SearchField.isEmpty(value) || !isNaN(parseFloat(value)) || 'Must be a number';
+            });
+            rules.push((value: string) => {
+                if (!parseFloat(value)) {
+                    return true; // Will be caught by the rule above
+                }
+                return +value >= 0 && +value <= 100 || 'Must be between 0 and 100';
+            });
         }
 
-        input.removeClass('error');
-        this.$emit('input', value);
+        return rules;
     }
 }
 </script>
 
 <style lang="less">
-    .ui.input.search-field {
+    .search-field {
         width: 100%;
 
-        .right-aligned {
+        &.right-aligned {
             text-align: right;
         }
     }

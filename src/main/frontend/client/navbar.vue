@@ -1,19 +1,19 @@
 <template>
 
-    <div class="ui top inverted menu">
+    <v-toolbar app dark>
 
-        <div class="item">
-            <img src="/img/molecule-white.svg" width="50" height="50">
-            <!--KINASE-->
-        </div>
+        <v-toolbar-title @click="onReset()">
+            <img src="/img/molecule-white.svg" width="50" height="50"> <!--KIANSE-->
+        </v-toolbar-title>
 
-        <a class="item" v-bind:class="{ active: isActiveTab('/') }" v-on:click="setActiveTab('home')">
+        <v-btn v-bind:class="{ active: isActiveTab('/') }" @click="setActiveTab('home')">
             Search
-        </a>
+        </v-btn>
 
-        <a class="item" v-bind:class="{ active: isActiveTab('/admin') }" v-on:click="setActiveTab('admin')" v-if="$store.getters.loggedIn">
+        <v-btn class="item" v-bind:class="{ active: isActiveTab('/admin') }"
+               @click="setActiveTab('admin')" v-if="$store.getters.loggedIn">
             Admin
-        </a>
+        </v-btn>
 
         <div class="button-section item">
             <div v-for="compound in openCompounds">
@@ -21,26 +21,26 @@
             </div>
         </div>
 
-        <div class="right menu">
-            <a class="item" @click="login()" title="Login" aria-label="Login" v-if="!$store.getters.loggedIn">
-                <i class="fa fa-user" aria-hidden="true"></i>
-            </a>
-            <a class="ui dropdown item" title="Log out" aria-label="Log out" v-if="$store.getters.loggedIn">
-                <i class="fa fa-user" aria-hidden="true"></i><span class="user-name">{{$store.state.user}}</span>
-                <div class="menu">
-                    <div class="item">
-                        <span class="text" @click="logout">Log Out</span>
-                    </div>
-                </div>
-            </a>
-            <a class="item" @click="newComment()" title="Comment" aria-label="Comment">
-                <i class="fa fa-comment" aria-hidden="true"></i>
-            </a>
-        </div>
+        <v-spacer></v-spacer>
 
-        <about-modal id="aboutModal"></about-modal>
-        <login-modal :visible="loginModalVisible" @hidden="loginModalHidden"></login-modal>
-    </div>
+        <v-btn icon class="item" @click="showLogin = true" title="Login" aria-label="Login"
+                v-if="!$store.getters.loggedIn">
+            <i class="fa fa-user" aria-hidden="true"></i>
+        </v-btn>
+        <v-btn icon title="Log out" aria-label="Log out" v-if="$store.getters.loggedIn">
+            <i class="fa fa-user" aria-hidden="true"></i><span class="user-name">{{$store.state.user}}</span>
+            <div class="menu">
+                <div class="item">
+                    <span class="text" @click="logout">Log Out</span>
+                </div>
+            </div>
+        </v-btn>
+        <v-btn icon @click="newComment()" title="Comment" aria-label="Comment">
+            <i class="fa fa-comment" aria-hidden="true"></i>
+        </v-btn>
+
+        <login-modal :show="showLogin" @close="showLogin = false"></login-modal>
+    </v-toolbar>
 
 </template>
 
@@ -51,15 +51,14 @@ import { Watch } from 'vue-property-decorator';
 import Component from 'vue-class-component';
 import $ from 'jquery';
 import NavbarPill from './navbar-pill.vue';
-import AboutModal from './about-modal.vue';
 import LoginModal from './login-modal.vue';
 import restApi from './rest-api';
 
-@Component({ components: { NavbarPill, AboutModal, LoginModal } })
+@Component({ components: { NavbarPill, LoginModal } })
 export default class Navbar extends Vue {
 
     openCompounds: string[] = [];
-    private loginModalVisible: boolean = false;
+    private showLogin: boolean = false;
 
     private isActiveTab(tabName: string): boolean {
         const tabNameRegex: RegExp = new RegExp(tabName + '$');
@@ -92,14 +91,6 @@ export default class Navbar extends Vue {
             console.log('Going back');
             this.$router.back();
         }
-    }
-
-    private login() {
-        this.loginModalVisible = true;
-    }
-
-    private loginModalHidden() {
-        this.loginModalVisible = false;
     }
 
     private logout() {

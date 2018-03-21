@@ -30,7 +30,7 @@
 			140
 		],
         "member-access": false,
-		"member-ordering": [ true, { "order": "fields-first" } ],
+		"member-ordering": false, //[ true, { "order": "fields-first" } ],
 		"new-parens": true,
         "no-angle-bracket-type-assertion": true,
         //"no-any": true,

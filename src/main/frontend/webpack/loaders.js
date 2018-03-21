@@ -30,6 +30,9 @@ module.exports = [
         test: /\.less$/,
         loader: 'style-loader!css-loader!less-loader'
     }, {
+        test: /\.styl$/,
+        loader: 'style-loader!css-loader!stylus-loader'
+    }, {
         test: /\.html$/,
         exclude: /node_modules/,
         loader: 'raw-loader'

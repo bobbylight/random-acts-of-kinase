@@ -1,9 +1,8 @@
 <template>
-    <div class="app-wrapper">
-
+    <v-app>
         <navbar></navbar>
 
-        <div class="ui main">
+        <div class="main-content">
 
             <transition name="fade">
                 <keep-alive>
@@ -12,20 +11,22 @@
             </transition>
         </div>
 
-        <div class="ui bottom inverted menu footer">
-            <div class="footer-content menu">
-                <span class="item">
+        <v-footer class="theme--dark" height="auto">
+            <v-layout row wrap justify-center>
+                <div class="copyright">
                     &copy; 2018&nbsp;<a href="http://sgc-unc.org">SGC-UNC</a>
-                </span>
-                <a class="item" @click="viewSource()" title="View Source" aria-label="View Source">
-                    <i class="fa fa-github" aria-hidden="true"></i>
-                </a>
-                <a class="item" @click="showAbout()" title="About" aria-label="About">
-                    <i class="fa fa-question-circle" aria-hidden="true"></i>
-                </a>
-            </div>
-        </div>
-    </div>
+                </div>
+                <v-btn icon small @click="viewSource()" title="View Source" aria-label="View Source">
+                    <v-icon small>fa fa-github</v-icon>
+                </v-btn>
+                <v-btn icon small @click.stop="showAbout = true" title="About" aria-label="About">
+                    <v-icon small>fa fa-question-circle</v-icon>
+                </v-btn>
+            </v-layout>
+        </v-footer>
+
+        <about-modal :show="showAbout" @close="showAbout = false"></about-modal>
+    </v-app>
 </template>
 
 <script lang="ts">
@@ -35,9 +36,12 @@ import $ from 'jquery';
 import Navbar from './navbar.vue';
 import restApi from './rest-api';
 import { UserRep } from './rak';
+import AboutModal from './about-modal.vue';
 
-@Component({ components: { Navbar } })
+@Component({ components: { Navbar, AboutModal } })
 export default class App extends Vue {
+
+    showAbout: boolean = false;
 
     mounted() {
         restApi.checkAuthentication()
@@ -49,10 +53,6 @@ export default class App extends Vue {
             });
     }
 
-    private showAbout() {
-        $('#aboutModal').modal('show');
-    }
-
     private viewSource() {
         window.open('https://github.com/bobbylight/rak', '_blank');
     }
@@ -60,22 +60,9 @@ export default class App extends Vue {
 </script>
 
 <style lang="less">
-/*.top-padding {*/
-    /*background: #f8f8f8;*/
-/*}*/
-.app-wrapper {
-
-    .ui.main {
-        min-height: 800px;
-    }
-}
-
-.ui.menu.footer {
-    border-radius: 0;
-
-    .footer-content {
-        margin: 0 auto;
-    }
+.main-content {
+    margin-top: 3rem;
+    min-height: 800px;
 }
 
 .fade-enter-active, .fade-leave-active {
@@ -89,5 +76,12 @@ export default class App extends Vue {
 
 .fade-enter, .fade-leave-active {
     opacity: 0
+}
+
+footer {
+    .copyright {
+        display: flex;
+        align-items: center;
+    }
 }
 </style>
