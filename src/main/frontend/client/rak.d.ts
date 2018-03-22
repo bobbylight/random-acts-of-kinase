@@ -1,3 +1,12 @@
+export interface ActivityProfile {
+    id: number;
+    compoundName: string;
+    kinase: Kinase;
+    percentControl: number;
+    compoundConcentration: number;
+    kd: number;
+}
+
 export interface Compound {
     compoundName: string;
     chemotype: string;

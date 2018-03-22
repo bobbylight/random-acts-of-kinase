@@ -2,13 +2,13 @@
     <v-layout row wrap>
 
         <v-flex xs12>
-            <div>Search by compound:</div>
-            <div class="ui grid">
-                <div class="sixteen wide column">
-                    <v-text-field type="text" placeholder="Inhibitor" class="search-field"
+            <!--<div>Search by compound:</div>-->
+            <!--<div class="ui grid">-->
+                <!--<div class="sixteen wide column">-->
+                    <v-text-field type="text" label="Search by compound" class="search-field"
                                   v-model="filters.inhibitor"></v-text-field>
-                </div>
-            </div>
+                <!--</div>-->
+            <!--</div>-->
         </v-flex>
 
         <v-flex xs12>
@@ -18,10 +18,9 @@
             <v-layout row wrap>
 
                 <v-flex xm8>
-                    <!--<search-field type="kinase" v-model="filters.kinase"-->
-                    <!--place-holder="Kinase"></search-field>-->
                     <lazy-dropdown v-model="filters.kinase"
                                    id="kinase"
+                                   label="Or by kinase and activity"
                                    name="kinase" url="api/kinases"
                                    :queryParams="kinaseQueryParams"
                                    filterParamName="discoverx"
@@ -44,11 +43,10 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
-import SearchField from './search-field.vue';
 import LazyDropdown from './lazy-dropdown.vue';
 import { Kinase, PagedDataRep } from './rak';
 
-@Component({ components: { SearchField, LazyDropdown } })
+@Component({ components: { LazyDropdown } })
 export default class SearchFilters extends Vue {
 
     @Prop({ required: true })
@@ -77,16 +75,20 @@ export default class SearchFilters extends Vue {
         return rules;
     }
 
-    private kinaseResponseTransformer(response: PagedDataRep<Kinase>): string[] {
-        return response.data.map((kinase: Kinase) => {
-            return kinase.discoverxGeneSymbol;
+    private kinaseResponseTransformer(response: PagedDataRep<Kinase>): any[] {
+        const choices: any[] = response.data.map((kinase: Kinase) => {
+            const discoverx: string = kinase.discoverxGeneSymbol;
+            return { discoverxGeneSymbol: discoverx, responseValueField: discoverx };
         });
+        choices.unshift({ discoverxGeneSymbol: '', responseValueField: null });
+        return choices;
     }
 }
 </script>
 
 <style lang="less">
     .search-field {
+        //padding-top: 0;
         width: 100%;
 
         &.right-aligned {

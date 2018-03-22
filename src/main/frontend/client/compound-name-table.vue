@@ -8,15 +8,19 @@
             :pagination.sync="pagination"
             :total-items="totalItems"
             :loading="loading"
+            :rows-per-page-items='[20,50,100,{"text":"All","value":-1}]'
             >
 
             <template slot="items" slot-scope="props">
                 <td>
                     <div class="compound-name-cell">
-                        <img class="lazy" data-src="api/compounds/images/${props.item.data}.svg" width="40" height="40">
+                        <img class="b-lazy"
+                             src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+                             :data-src="getCompoundImage(props.item.compoundName)"
+                             width="40" height="40">
                         &nbsp;&nbsp;&nbsp;
                         <div class="compoundDesc">
-                            <a class="compoundName" href="#/compound/${props.item.compoundName}">{{props.item.compoundName}}</a><br>
+                            <a class="compoundName" :href="getCompoundUrl(props.item.compoundName)">{{props.item.compoundName}}</a><br>
                             <span class="chemotype">{{props.item.chemotype || '...'}}, s(10): {{props.item.s10 || '?'}}</span>
                         </div>
                     </div>
@@ -28,6 +32,7 @@
 
 <script>
 import restApi from 'rest-api';
+import Blazy from 'blazy';
 
 export default {
     name: 'compound-name-table',
@@ -63,16 +68,20 @@ export default {
 
         pagination: {
             handler () {
-                this.reloadTable()
-                    .then(pagedData => {
-                        this.items = pagedData.data;
-                        this.totalItems = pagedData.total;
-                    });
+                this.reloadTable();
             },
             deep: true
         }
     },
     methods: {
+
+        getCompoundImage: function(compoundName) {
+            return `api/compounds/images/${compoundName}.svg`;
+        },
+
+        getCompoundUrl: function(compoundName) {
+            return `#/compound/${compoundName}`;
+        },
 
         reloadTable: function() {
 
@@ -80,15 +89,20 @@ export default {
 
             const { sortBy, descending, page, rowsPerPage } = this.pagination;
 
-            return restApi.getCompounds(page - 1, rowsPerPage, this.filters);
+            return restApi.getCompounds(page - 1, rowsPerPage, this.filters)
+                .then(pagedData => {
+                    this.items = pagedData.data;
+                    this.totalItems = pagedData.total;
+                    this.loading = false;
+                    return pagedData;
+                });
         }
     },
-    mounted: function() { // tslint:disable-line
-
-            // drawCallback: () => {
-            //     // Enable lazy loading of images in newly-rendered rows
-            //     table.find('img.lazy').Lazy({ chainable: false }).update();
-            // },
+    updated: function() {
+        new Blazy({
+            container: 'compound-name-table'
+        });
+        // this.$el.querySelectorAll('img.lazy').forEach(lazyImage => lazyImage.Lazy({ chainable: false }).update();
     }
 };
 </script>
@@ -111,6 +125,7 @@ export default {
                 display: inline-block;
 
                 .compoundName {
+                    text-decoration: none;
                     color: gray;
                     transition: color @transition-time;
                 }

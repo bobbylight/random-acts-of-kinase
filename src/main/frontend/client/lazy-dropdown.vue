@@ -9,7 +9,6 @@
             :prepend-icon="icon"
             autocomplete
             browser-autocomplete="off"
-            required
             :items="items"
             :item-text="responseLabelField"
             :item-value="responseValueField"
@@ -41,7 +40,7 @@ export default class LazyDropdown extends Vue {
      * "value" facilitates v-model support
      */
     @Prop({ required: true })
-    value: string;
+    value: any;
 
     @Prop({ required: true })
     url: string;
@@ -129,7 +128,6 @@ export default class LazyDropdown extends Vue {
      * Fires an "input" event stating our value has changed.  Part of implementing v-model for this component.
      */
     fireUpdateEvent(newValue: any) {
-        console.log(`New value: ${newValue}`);
         this.$emit('input', newValue);
     }
 
@@ -153,5 +151,4 @@ export default class LazyDropdown extends Vue {
 </script>
 
 <style lang="less">
-
 </style>

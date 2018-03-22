@@ -20,11 +20,11 @@
   "license": "MIT",
   "dependencies": {
     "axios": "0.18.0",
+    "blazy": "1.8.2",
     "datatables.net": "1.10.16",
     "datatables.net-dt": "1.10.16",
     "debounce": "1.1.0",
     "font-awesome": "4.7.0",
-    "jquery-lazy": "1.7.7",
     "semantic-ui": "2.2.14",
     "vue": "2.5.13",
     "vue-router": "3.0.1",

@@ -10,7 +10,7 @@
             </v-flex>
         </v-layout>
 
-        <v-layout row wrap justify-center>
+        <v-layout row wrap justify-center class="search-results">
             <v-flex xs10>
                 <compound-name-table :filters="gridFilters"></compound-name-table>
             </v-flex>
@@ -86,5 +86,9 @@ export default class Search extends Vue {
     .ui.header {
         margin-top: 0;
     }
+}
+
+.search-results {
+    background: white;
 }
 </style>

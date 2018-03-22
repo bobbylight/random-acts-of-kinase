@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { Compound, UserRep } from './rak';
+import { ActivityProfile, Compound, UserRep } from './rak';
 
 export class RestApi {
 
@@ -18,6 +18,25 @@ export class RestApi {
     checkAuthentication(): Promise<UserRep> {
         return this.instance.get('login')
             .then((response: AxiosResponse<UserRep>) => {
+                return response.data;
+            });
+    }
+
+    getActivityProfiles(page: number, size: number, filters: any): Promise<ActivityProfile[]> {
+
+        let url: string = `api/activityProfiles?page=${page}&size=${size}`;
+        if (filters.inhibitor) {
+            url += `&compound=${filters.inhibitor}`;
+        }
+        if (filters.activity) {
+            url += `&activity=${filters.activity}`;
+        }
+        if (filters.kinase) {
+            url += `&kinase=${filters.kinase}`;
+        }
+
+        return this.instance.get(url)
+            .then((response: AxiosResponse<ActivityProfile[]>) => {
                 return response.data;
             });
     }
