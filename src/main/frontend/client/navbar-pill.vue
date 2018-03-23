@@ -1,6 +1,6 @@
 <template>
     <div class="navbar-pill-parent">
-        <div class="ui button pill" v-bind:class="{ active: isActiveTab() }"
+        <div class="navbar-pill" v-bind:class="{ active: isActiveTab() }"
                 v-on:click="navigate">{{compound}}
             <i class="fa fa-times close-icon" aria-hidden="true" @click="close"></i>
         </div>
@@ -46,15 +46,15 @@ export default class NavbarPill extends Vue {
     }
 
     /* pill styles are essentially copied from ui inverted menu */
-    .ui.button.pill {
+    .navbar-pill {
+
         background: rgba(255, 255, 255, 0.08);
         color: rgba(255,255,255,.9);
-        font-weight: 400;
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
-        border-radius: 0.8rem;
+        padding: 0.25rem 1rem;
+        border-radius: 1rem;
         transition: color @transition-time ease,
                     background-color @transition-time ease;
+        cursor: pointer;
 
         &:hover, &.active {
             background: rgba(255, 255, 255, 0.15);

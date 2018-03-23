@@ -1,8 +1,10 @@
 <template>
-    <div class="ui container compound-results">
-        <div class="ui header">Results for {{this.id}}</div>
-        <result-table :filters="gridFilters"></result-table>
-    </div>
+    <v-container grid-list-md>
+        <v-layout row wrap class="compound-details-wrapper py-5">
+            <div class="headline pb-2 primary--text">Results for {{this.id}}</div>
+            <result-table :filters="gridFilters"></result-table>
+        </v-layout>
+    </v-container>
 </template>
 
 <script lang="ts">
@@ -28,7 +30,4 @@ export default class Compound extends Vue {
 </script>
 
 <style lang="less">
-.compound-results {
-    padding-top: 1rem; // Matches search.vue
-}
 </style>

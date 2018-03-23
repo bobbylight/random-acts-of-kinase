@@ -10,12 +10,12 @@
             Search
         </v-btn>
 
-        <v-btn class="item" v-bind:class="{ active: isActiveTab('/admin') }"
+        <v-btn v-bind:class="{ active: isActiveTab('/admin') }"
                @click="setActiveTab('admin')" v-if="$store.getters.loggedIn">
             Admin
         </v-btn>
 
-        <div class="button-section item">
+        <div class="button-section">
             <div v-for="compound in openCompounds">
                 <navbar-pill :compound="compound" v-on:close="close($event)"></navbar-pill>
             </div>
@@ -23,11 +23,11 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn icon class="item" @click="showLogin = true" title="Login" aria-label="Login"
+        <v-btn icon large @click="showLogin = true" title="Login" aria-label="Login"
                 v-if="!$store.getters.loggedIn">
-            <i class="fa fa-user" aria-hidden="true"></i>
+            <v-icon>fa-user</v-icon>
         </v-btn>
-        <v-btn icon title="Log out" aria-label="Log out" v-if="$store.getters.loggedIn">
+        <v-btn icon large title="Log out" aria-label="Log out" v-if="$store.getters.loggedIn">
             <i class="fa fa-user" aria-hidden="true"></i><span class="user-name">{{$store.state.user}}</span>
             <div class="menu">
                 <div class="item">
@@ -35,8 +35,8 @@
                 </div>
             </div>
         </v-btn>
-        <v-btn icon @click="newComment()" title="Comment" aria-label="Comment">
-            <i class="fa fa-comment" aria-hidden="true"></i>
+        <v-btn large icon @click="newComment()" title="Comment" aria-label="Comment">
+            <v-icon>comment</v-icon>
         </v-btn>
 
         <login-modal :show="showLogin" @close="showLogin = false"></login-modal>
@@ -129,34 +129,7 @@ export default class Navbar extends Vue {
 </script>
 
 <style lang="less">
-.ui.top.menu {
-    height: 4rem;
-    border-radius: 0;
-    margin-bottom: 0;
-}
-.ui.menu a.item {
-    transition: color .5s ease,
-    background-color .5s ease;
-
-    .user-name {
-        margin-left: 1rem;
-        font-size: initial;
-    }
-
-    .menu {
-        font-size: initial;
-    }
-}
-
-.ui.menu .button-section.item:before {
-    width: 0; // Turn off right-aligned 1-pixel border
-}
-
-.right.menu {
-    font-size: 1.5rem;
-
-    .item {
-        padding: 0 1rem;
-    }
+.button-section {
+    display: flex;
 }
 </style>

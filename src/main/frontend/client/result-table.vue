@@ -2,13 +2,13 @@
     <div>
         <v-data-table
             :headers="headers"
-            class="compound-table"
+            class="compound-table elevation-1"
             :items="items"
             :search="search"
             :pagination.sync="pagination"
             :total-items="totalItems"
             :loading="loading"
-            :rows-per-page-items='[20,50,100,{"text":"All","value":-1}]'
+            :rows-per-page-items='[ 20, 50, 100 ]'
         >
 
             <template slot="items" slot-scope="props">
@@ -18,12 +18,6 @@
                 <td>{{props.item.kinase.discoverxGeneSymbol}}</td>
                 <td>{{props.item.kinase.entrezGeneSymbol}}</td>
                 <td>{{props.item.kd}}</td>
-                    <!--<th>Compound</th>-->
-                    <!--<th>% Control</th>-->
-                    <!--<th>Concentration (nM)</th>-->
-                    <!--<th>DiscX Gene Symbol</th>-->
-                    <!--<th>Entrez Gene Symbol</th>-->
-                    <!--<th>K<sub>d</sub></th>-->
             </template>
         </v-data-table>
     </div>
@@ -105,7 +99,9 @@ export default {
 
             const { sortBy, descending, page, rowsPerPage } = this.pagination;
 
-            return restApi.getActivityProfiles(page - 1, rowsPerPage, this.filters)
+            const sort = sortBy ? `${sortBy},${descending ? 'desc' : 'asc'}` : '';
+
+            return restApi.getActivityProfiles(page - 1, rowsPerPage, this.filters, sort)
                 .then(pagedData => {
                     this.items = pagedData.data;
                     this.totalItems = pagedData.total;

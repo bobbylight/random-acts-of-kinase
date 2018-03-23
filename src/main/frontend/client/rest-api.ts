@@ -22,7 +22,7 @@ export class RestApi {
             });
     }
 
-    getActivityProfiles(page: number, size: number, filters: any): Promise<ActivityProfile[]> {
+    getActivityProfiles(page: number, size: number, filters: any, sortParam: string): Promise<ActivityProfile[]> {
 
         let url: string = `api/activityProfiles?page=${page}&size=${size}`;
         if (filters.inhibitor) {
@@ -33,6 +33,9 @@ export class RestApi {
         }
         if (filters.kinase) {
             url += `&kinase=${filters.kinase}`;
+        }
+        if (sortParam) {
+            url += `&sort=${sortParam}`;
         }
 
         return this.instance.get(url)

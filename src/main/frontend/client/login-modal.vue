@@ -10,7 +10,7 @@
                     Sign in to get even more out of your RAK experience.
                 </div>
 
-                <form class="ui form" id="login-form">
+                <form id="login-form">
                     <v-text-field label="User name" v-model="user"></v-text-field>
                     <v-text-field label="Password" v-model="password"
                                   :append-icon="passwordVisible ? 'visibility' : 'visibility_off'"
@@ -21,10 +21,10 @@
 
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="success" type="submit" form="login-form" :class="{ disabled: !user || !password }">
+                <v-btn color="success" type="submit" @click="login()" :disabled="!user || !password">
                     Log In
                 </v-btn>
-                <v-btn>
+                <v-btn @click="onCancel()">
                     Cancel
                 </v-btn>
             </v-card-actions>
@@ -42,7 +42,7 @@ import { AxiosError } from 'axios';
 import { UserRep } from './rak';
 import Toaster from './toaster';
 
-const HIDDEN: string = 'hidden';
+const HIDDEN: string = 'close';
 
 @Component
 export default class LoginModal extends Vue {
@@ -72,7 +72,6 @@ export default class LoginModal extends Vue {
                 this.password = ''; // Clear password, but must keep user for toaster
                 this.$store.commit('setUser', this.user);
                 this.$emit(HIDDEN);
-                $(this.$el).modal('hide');
                 Toaster.success(`Welcome back, ${this.user}!`);
             })
             .catch((response: AxiosError) => {

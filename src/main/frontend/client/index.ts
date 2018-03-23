@@ -2,7 +2,7 @@
 
 // load our default (non specific) css
 import 'font-awesome/css/font-awesome.css';
-// import 'app.less';
+import 'app.less';
 import '../node_modules/vuetify/dist/vuetify.min.css';
 
 import Vue from 'vue';

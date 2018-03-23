@@ -2,19 +2,11 @@
     <v-layout row wrap>
 
         <v-flex xs12>
-            <!--<div>Search by compound:</div>-->
-            <!--<div class="ui grid">-->
-                <!--<div class="sixteen wide column">-->
-                    <v-text-field type="text" label="Search by compound" class="search-field"
-                                  v-model="filters.inhibitor"></v-text-field>
-                <!--</div>-->
-            <!--</div>-->
+            <v-text-field type="text" label="Search by compound" class="search-field"
+                          v-model="filters.inhibitor"></v-text-field>
         </v-flex>
 
         <v-flex xs12>
-
-            <div style="margin-top: 1rem">Or by kinase and activity:</div>
-
             <v-layout row wrap>
 
                 <v-flex xm8>
