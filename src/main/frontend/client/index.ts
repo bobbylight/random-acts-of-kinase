@@ -21,6 +21,8 @@ import VDialog from 'vuetify/es5/components/VDialog';
 import VFooter from 'vuetify/es5/components/VFooter';
 import VGrid from 'vuetify/es5/components/VGrid'; // VContainer, VContent, VFlex, VGrid, VLayout, VSpacer
 import VIcon from 'vuetify/es5/components/VIcon';
+import VList from 'vuetify/es5/components/VList';
+import VMenu from 'vuetify/es5/components/VMenu';
 import VProgressCircular from 'vuetify/es5/components/VProgressCircular';
 import VProgressLinear from 'vuetify/es5/components/VProgressLinear';
 import VSelect from 'vuetify/es5/components/VSelect';
@@ -53,6 +55,8 @@ Vue.use(Vuetify, {
         VFooter,
         VGrid,
         VIcon,
+        VList,
+        VMenu,
         VProgressCircular,
         VProgressLinear,
         VSelect,

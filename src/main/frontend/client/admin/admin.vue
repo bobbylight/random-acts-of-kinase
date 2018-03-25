@@ -10,69 +10,66 @@
 
         <div v-if="this.$store.getters.loggedIn">
 
-            <div class="ui cards">
+            <v-card class="top-card-padding">
 
-                <div class="card rak-admin-card">
-
-                    <div class="content">
-                        <div class="header">Incomplete Compounds</div>
-                        <div class="meta">Compounds without a SMILES string or s(10)</div>
-                        <div class="description">
-                            <CompoundsTable
-                                url="/admin/api/incompleteCompounds"
-                                :columnInfo="incompleteCompoundColumnInfo"></CompoundsTable>
-                        </div>
+                <v-card-title primary-title>
+                    <div>
+                        <h3 class="headline">Incomplete Compounds</h3>
+                        <div>Compounds without a SMILES string or s(10)</div>
                     </div>
+                </v-card-title>
 
-                    <div class="card-action-buttons">
-                        <a class="ui blue icon button" aria-label="Download"
-                                href="/admin/api/incompleteCompounds?format=csv&page=0&size=10000"
-                                data-tooltip="Download" data-inverted data-position="right center">
-                            <i class="download icon"></i>
-                        </a>
+                <v-card-text>
+                    <CompoundsTable
+                        url="/admin/api/incompleteCompounds"
+                        :columnInfo="incompleteCompoundColumnInfo"></CompoundsTable>
+                </v-card-text>
+
+                <v-card-actions class="card-action-buttons">
+                    <v-btn flat icon
+                            href="/admin/api/incompleteCompounds?format=csv&page=0&size=10000">
+                        <v-icon>file-download</v-icon>
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+
+            <v-card class="top-card-padding">
+
+                <v-card-title primary-title>
+                    <div>
+                        <h3 class="headline">Compounds Missing Activity Profiles</h3>
+                        <div>Compounds missing some activity profiles</div>
                     </div>
-                </div>
+                </v-card-title>
 
-            </div>
+                <v-card-text>
+                    <CompoundsTable
+                        url="/admin/api/compoundsMissingActivityProfiles"
+                        :columnInfo="compoundsMissingActivityProfilesColumnInfo"></CompoundsTable>
+                </v-card-text>
 
-            <div class="ui cards">
+                <v-card-actions>
+                    <v-btn flat icon
+                           href="/admin/api/compoundsMissingActivityProfiles?format=csv&page=0&size=10000">
+                        <v-icon>file-download</v-icon>
+                    </v-btn>
+                </v-card-actions>
 
-                <div class="card rak-admin-card">
+            </v-card>
 
-                    <div class="content">
-                        <div class="header">Compounds Missing Activity Profiles</div>
-                        <div class="meta">Compounds missing some activity profiles</div>
-                        <div class="description">
-                            <CompoundsTable
-                                url="/admin/api/compoundsMissingActivityProfiles"
-                                :columnInfo="compoundsMissingActivityProfilesColumnInfo"></CompoundsTable>
-                        </div>
+            <v-card class="top-card-padding">
+
+                <v-card-title primary-title>
+                    <div>
+                        <h3 class="headline">Something Else</h3>
+                        <div>Some other administrative stuff</div>
                     </div>
+                </v-card-title>
 
-                    <div class="card-action-buttons">
-                        <a class="ui blue icon button" aria-label="Download"
-                           href="/admin/api/compoundsMissingActivityProfiles?format=csv&page=0&size=10000"
-                           data-tooltip="Download" data-inverted data-position="right center">
-                            <i class="download icon"></i>
-                        </a>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="ui cards">
-
-                <div class="card rak-admin-card">
-                    <div class="content">
-                        <div class="header">Something Else</div>
-                        <div class="meta">Some other administrative stuff</div>
-                        <div class="description">
-                            Nothing here yet.
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+                <v-card-text>
+                    Nothing here yet.
+                </v-card-text>
+            </v-card>
         </div>
     </div>
 </template>
@@ -107,27 +104,7 @@ export default class AdminHome extends Vue {
 </script>
 
 <style lang="less">
-.admin-main {
-
-    padding-top: 1rem; // Matches search.vue
-
-    // Our cards are nicely sized and centered
-    .ui.cards > .card.rak-admin-card {
-
-        width: 800px;
-        margin-left: auto;
-        margin-right: auto;
-
-        .card-action-buttons {
-
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-
-            button {
-                margin-right: 0; // Override semantic ui's .25em margin
-            }
-        }
-    }
+.top-card-padding {
+    margin-top: 2rem;
 }
 </style>

@@ -8,7 +8,7 @@
             :pagination.sync="pagination"
             :total-items="totalItems"
             :loading="loading"
-            :rows-per-page-items='[20,50,100,{"text":"All","value":-1}]'
+            :rows-per-page-items='[ 20, 50, 100 ]'
             >
 
             <template slot="items" slot-scope="props">

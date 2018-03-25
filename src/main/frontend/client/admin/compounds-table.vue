@@ -1,12 +1,20 @@
 <template>
     <div>
-        <table ref="table" class="ui celled table" width="100%">
-            <thead>
-            <tr>
-                <th v-for="colInfo in columnInfo">{{colInfo.columnName}}</th>
-            </tr>
-            </thead>
-        </table>
+        <v-data-table
+            class="compound-table"
+            :items="items"
+            :search="search"
+            :pagination.sync="pagination"
+            :total-items="totalItems"
+            :loading="loading"
+            :rows-per-page-items='[ 20, 50, 100 ]'>
+
+            <template slot="headers">
+                <thead>
+                    <th v-for="colInfo in columnInfo">{{colInfo.columnName}}</th>
+                </thead>
+            </template>
+        </v-data-table>
     </div>
 </template>
 
@@ -14,7 +22,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
-import $ from 'jquery';
+import axios from 'axios';
 
 export interface ColumnInfo {
     columnName: string;
@@ -35,7 +43,15 @@ export default class CompoundTable extends Vue {
     @Prop({ required: true })
     private columnInfo: ColumnInfo[];
 
-    private table: any;
+    private search: string = '';
+
+    private totalItems: number = 0;
+
+    private items: any[] = [];
+
+    private loading: boolean = true;
+
+    private pagination: any = {};
 
     private compoundRenderer(data: string, type: any, row: number) {
         return `<a href="#/compound/${data}">${data}</a>`;
@@ -54,8 +70,6 @@ export default class CompoundTable extends Vue {
     }
 
     mounted() {
-
-        $.fn.dataTable.ext.pager.numbers_length = 4;
 
         const pageSize: number = 8;
 
@@ -113,5 +127,22 @@ export default class CompoundTable extends Vue {
             }
         } );
     }
+
+    reloadTable() {
+
+        this.loading = true;
+
+        const { sortBy, descending, page, rowsPerPage } = this.pagination;
+
+        const sort = sortBy ? `${sortBy},${descending ? 'desc' : 'asc'}` : '';
+
+        return axios.get(this.url)
+            .then(pagedData => {
+                this.items = pagedData.data;
+                this.totalItems = pagedData.total;
+                this.loading = false;
+                return pagedData;
+            });
+    },
 }
 </script>

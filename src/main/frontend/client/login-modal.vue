@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="visible" max-width="500px">
+    <v-dialog v-model="visible" max-width="500px" @keydown.esc="onCancel">
         <v-card>
 
             <v-card-title class="headline">Log In</v-card-title>
@@ -21,10 +21,10 @@
 
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="success" type="submit" @click="login()" :disabled="!user || !password">
+                <v-btn color="success" type="submit" @click="login" form="login-form" :disabled="!user || !password">
                     Log In
                 </v-btn>
-                <v-btn @click="onCancel()">
+                <v-btn @click="onCancel">
                     Cancel
                 </v-btn>
             </v-card-actions>
@@ -65,14 +65,14 @@ export default class LoginModal extends Vue {
     }
 
     login(): boolean {
-        console.log('Attempting to log in as ' + this.user + ', ' + this.password);
         restApi.login(this.user, this.password)
             .then((response: UserRep) => {
-                console.log('Login success!!!!');
+                console.log('Login success!');
                 this.password = ''; // Clear password, but must keep user for toaster
                 this.$store.commit('setUser', this.user);
                 this.$emit(HIDDEN);
                 Toaster.success(`Welcome back, ${this.user}!`);
+                this.user = this.password = '';
             })
             .catch((response: AxiosError) => {
                 console.log('Login failure :(:(:(');
@@ -84,9 +84,6 @@ export default class LoginModal extends Vue {
                 }
                 console.error(response);
             })
-            //.finally(() => {
-            //    this.user = this.password = '';
-            //})
         ;
         return false;
     }

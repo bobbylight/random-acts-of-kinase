@@ -2,18 +2,20 @@
 
     <v-toolbar app dark>
 
-        <v-toolbar-title @click="onReset()">
+        <v-toolbar-title @click="onReset()" class="toolbar-title-fix">
             <img src="/img/molecule-white.svg" width="50" height="50"> <!--KIANSE-->
         </v-toolbar-title>
 
-        <v-btn v-bind:class="{ active: isActiveTab('/') }" @click="setActiveTab('home')">
-            Search
-        </v-btn>
+        <v-toolbar-items>
+            <v-btn flat v-bind:class="{ active: isActiveTab('/') }" @click="setActiveTab('home')">
+                Search
+            </v-btn>
 
-        <v-btn v-bind:class="{ active: isActiveTab('/admin') }"
-               @click="setActiveTab('admin')" v-if="$store.getters.loggedIn">
-            Admin
-        </v-btn>
+            <v-btn flat v-bind:class="{ active: isActiveTab('/admin') }"
+                   @click="setActiveTab('admin')" v-if="$store.getters.loggedIn">
+                Admin
+            </v-btn>
+        </v-toolbar-items>
 
         <div class="button-section">
             <div v-for="compound in openCompounds">
@@ -23,19 +25,22 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn icon large @click="showLogin = true" title="Login" aria-label="Login"
+        <span v-if="$store.getters.loggedIn" class="user-name">{{$store.state.user}}</span>
+        <v-btn flat icon large @click="showLogin = true" title="Login" aria-label="Login"
                 v-if="!$store.getters.loggedIn">
             <v-icon>fa-user</v-icon>
         </v-btn>
-        <v-btn icon large title="Log out" aria-label="Log out" v-if="$store.getters.loggedIn">
-            <i class="fa fa-user" aria-hidden="true"></i><span class="user-name">{{$store.state.user}}</span>
-            <div class="menu">
-                <div class="item">
-                    <span class="text" @click="logout">Log Out</span>
-                </div>
-            </div>
-        </v-btn>
-        <v-btn large icon @click="newComment()" title="Comment" aria-label="Comment">
+        <v-menu bottom left v-if="$store.getters.loggedIn">
+            <v-btn flat icon large slot="activator">
+                <v-icon>fa-user</v-icon>
+            </v-btn>
+            <v-list>
+                <v-list-tile @click="logout">
+                    <v-list-tile-title>Log Out</v-list-tile-title>
+                </v-list-tile>
+            </v-list>
+        </v-menu>
+        <v-btn flat icon large @click="newComment()" title="Comment" aria-label="Comment">
             <v-icon>comment</v-icon>
         </v-btn>
 
@@ -108,12 +113,6 @@ export default class Navbar extends Vue {
     private newComment() {
     }
 
-    updated() {
-        if (this.$store.getters.loggedIn) {
-            $(this.$el).find('.ui.dropdown').dropdown();
-        }
-    }
-
     @Watch('$route')
     private onRouteChanged(to: Route, from: Route) {
         if (to.path.match(/\/compound\/\w+/)) {
@@ -129,6 +128,9 @@ export default class Navbar extends Vue {
 </script>
 
 <style lang="less">
+.toolbar-title-fix {
+    margin-right: 16px;
+}
 .button-section {
     display: flex;
 }
