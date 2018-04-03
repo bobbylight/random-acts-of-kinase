@@ -32,7 +32,6 @@ import transitions from 'vuetify/es5/components/transitions';
 
 //import './../semantic/dist/semantic.css';
 import 'datatables.net';
-import 'jquery-lazy';
 //import './../semantic/dist/semantic';
 //import 'datatables.net-dt/css/jquery.dataTables.css';
 import './dataTables.semanticui';

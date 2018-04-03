@@ -17,7 +17,7 @@
                                    :queryParams="kinaseQueryParams"
                                    filterParamName="discoverx"
                                    responseLabelField="discoverxGeneSymbol"
-                                   reponseValueField="discoverxGeneSymbol"
+                                   responseValueField="responseValueField"
                                    :transform="kinaseResponseTransformer"></lazy-dropdown>
                 </v-flex>
 
@@ -84,7 +84,9 @@ export default class SearchFilters extends Vue {
         width: 100%;
 
         &.right-aligned {
-            text-align: right;
+            input {
+                text-align: right;
+            }
         }
     }
     .ui.input.search-field.error {

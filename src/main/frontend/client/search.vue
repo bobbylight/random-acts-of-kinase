@@ -59,6 +59,10 @@ export default class Search extends Vue {
 
     @Watch('filters.kinase')
     private onKinaseFilterChanged(newFilter: string) {
+        if (!this.filters.activity) {
+            console.log('Defaulting activity to 10');
+            this.filters.activity = 10;
+        }
         this.refreshTable();
     }
 

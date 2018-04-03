@@ -68,6 +68,8 @@ export default {
 
         pagination: {
             handler () {
+                // Note this triggers an unnecessary second query until
+                // https://github.com/vuetifyjs/vuetify/issues/3585 is fixed
                 this.reloadTable();
             },
             deep: true

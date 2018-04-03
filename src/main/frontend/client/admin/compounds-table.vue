@@ -7,13 +7,8 @@
             :pagination.sync="pagination"
             :total-items="totalItems"
             :loading="loading"
+            :headers="createHeaders"
             :rows-per-page-items='[ 20, 50, 100 ]'>
-
-            <template slot="headers">
-                <thead>
-                    <th v-for="colInfo in columnInfo">{{colInfo.columnName}}</th>
-                </thead>
-            </template>
         </v-data-table>
     </div>
 </template>
@@ -21,8 +16,9 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { Prop } from 'vue-property-decorator';
-import axios from 'axios';
+import { Prop, Watch } from 'vue-property-decorator';
+import axios, { AxiosResponse } from 'axios';
+import { PagedDataRep } from '../rak';
 
 export interface ColumnInfo {
     columnName: string;
@@ -58,6 +54,17 @@ export default class CompoundTable extends Vue {
 //                return '<a v-link="{ path: \'/compound/' + data + '\' }">' + data + '</a>';
     }
 
+    private get createHeaders() {
+
+        const headers: any = [];
+
+        this.columnInfo.forEach((colInfo: ColumnInfo) => {
+            headers.push({ text: colInfo.columnName, value: colInfo.columnId });
+        });
+
+        return headers;
+    }
+
     private get dataTableColumns(): any[] {
 
         return this.columnInfo.map((colInfo: ColumnInfo) => {
@@ -69,64 +76,64 @@ export default class CompoundTable extends Vue {
         });
     }
 
-    mounted() {
-
-        const pageSize: number = 8;
-
-        this.table = $(this.$refs.table).DataTable({
-            serverSide: true,
-            searching: false,
-            lengthChange: false,
-            info: false,
-            order: [ [ 0, 'asc' ] ],
-            pageLength: 8,
-            pagingType: 'first_last_numbers',
-            ajax: {
-                url: this.url,
-                traditional: true,
-                data: (d) => {
-
-                    delete d.columns;
-                    delete d.search;
-
-                    d.page = d.start / pageSize;
-                    console.log('... requesting page: ' + d.page);
-                    delete d.start;
-
-                    d.size = d.length;
-                    delete d.length;
-
-                    const newOrder: string[] = d.order.map((orderArg) => {
-                        return this.dataTableColumns[orderArg.column].data + ',' + orderArg.dir;
-                    });
-                    d.sort = newOrder;
-                    delete d.order;
-
-                    return d;
-                },
-                dataFilter: (data: string) => {
-
-                    // Convert the (string) JSON response into that expected by DataTables
-
-                    const json: any = JSON.parse(data);
-                    return JSON.stringify({
-                        recordsTotal: json.total, // This isn't really true, but I don't think we need to do another query
-                        recordsFiltered: json.total,
-                        data: json.data
-                    });
-                }
-            },
-            columns: this.dataTableColumns,
-            language: {
-                paginate: {
-                    first: '<<',
-                    previous: '<',
-                    next: '>',
-                    last: '>>'
-                }
-            }
-        } );
-    }
+    // mounted() {
+    //
+    //     const pageSize: number = 8;
+    //
+    //     this.table = $(this.$refs.table).DataTable({
+    //         serverSide: true,
+    //         searching: false,
+    //         lengthChange: false,
+    //         info: false,
+    //         order: [ [ 0, 'asc' ] ],
+    //         pageLength: 8,
+    //         pagingType: 'first_last_numbers',
+    //         ajax: {
+    //             url: this.url,
+    //             traditional: true,
+    //             data: (d) => {
+    //
+    //                 delete d.columns;
+    //                 delete d.search;
+    //
+    //                 d.page = d.start / pageSize;
+    //                 console.log('... requesting page: ' + d.page);
+    //                 delete d.start;
+    //
+    //                 d.size = d.length;
+    //                 delete d.length;
+    //
+    //                 const newOrder: string[] = d.order.map((orderArg) => {
+    //                     return this.dataTableColumns[orderArg.column].data + ',' + orderArg.dir;
+    //                 });
+    //                 d.sort = newOrder;
+    //                 delete d.order;
+    //
+    //                 return d;
+    //             },
+    //             dataFilter: (data: string) => {
+    //
+    //                 // Convert the (string) JSON response into that expected by DataTables
+    //
+    //                 const json: any = JSON.parse(data);
+    //                 return JSON.stringify({
+    //                     recordsTotal: json.total, // This isn't really true, but I don't think we need to do another query
+    //                     recordsFiltered: json.total,
+    //                     data: json.data
+    //                 });
+    //             }
+    //         },
+    //         columns: this.dataTableColumns,
+    //         language: {
+    //             paginate: {
+    //                 first: '<<',
+    //                 previous: '<',
+    //                 next: '>',
+    //                 last: '>>'
+    //             }
+    //         }
+    //     } );
+    // }
 
     reloadTable() {
 
@@ -134,15 +141,24 @@ export default class CompoundTable extends Vue {
 
         const { sortBy, descending, page, rowsPerPage } = this.pagination;
 
-        const sort = sortBy ? `${sortBy},${descending ? 'desc' : 'asc'}` : '';
+        const sort: string = sortBy ? `${sortBy},${descending ? 'desc' : 'asc'}` : '';
 
         return axios.get(this.url)
-            .then(pagedData => {
+            .then((response: AxiosResponse<PagedDataRep<any>>) => {
+                const pagedData: PagedDataRep<any> = response.data;
                 this.items = pagedData.data;
                 this.totalItems = pagedData.total;
                 this.loading = false;
                 return pagedData;
             });
-    },
+    }
+
+    @Watch('pagination')
+    private onPaginationHandlerChanged(newValue: any) {
+        console.log('here');
+        // Note this triggers an unnecessary second query until
+        // https://github.com/vuetifyjs/vuetify/issues/3585 is fixed
+        return this.reloadTable();
+    }
 }
 </script>
