@@ -13,12 +13,6 @@ You can still test the application without this data by running it with the `dev
 
 ```sh
 git clone git@github.com/github.com/bobbylight/rak.git
-cd rak/src/main/frontend
-# "npm install" runs semantic-ui stuff that's buggy, be prepared
-export CLI_WIDTH=80 # Work around bug in a dependency of semantic-ui's build, should be exactly right
-npm install # Select 'Skip install', then *use arrow keys at least once* to select Yes or No
-npm run build-semantic-ui  # Create our custom semantic-ui build
-cd ../../..
 ./gradlew build -xwebpack
 ./gradlew bootRun -xwebpack # Starts application at localhost:8080
 ./gradlew webpackWatch      # In another window, run webpack watch for UI updates

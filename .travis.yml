@@ -1,14 +1,8 @@
-env:
-  - DISPLAY=:99.0 CLI_WIDTH=80
 jdk:
   - oraclejdk8
 
 script:
-# Not installing UI bits until this is fixed: https://github.com/Semantic-Org/Semantic-UI/issues/4292
-#  - cd src/main/frontend && npm install
-#  - cd src/main/frontend && npm rum build-semantic-ui
-#  - ./gradlew build
-  - ./gradlew build -xwebpack -xnpmInstall
+  - ./gradlew build
 
 # Update coverage info on coveralls.io
 after_success:

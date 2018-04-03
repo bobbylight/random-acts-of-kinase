@@ -36,7 +36,6 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
-import $ from 'jquery';
 import restApi from './rest-api';
 import { AxiosError } from 'axios';
 import { UserRep } from './rak';
