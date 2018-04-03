@@ -29,7 +29,7 @@ import CompoundNameTable from './compound-name-table.vue';
 interface Filter {
     inhibitor: string;
     kinase: string;
-    activity: string;
+    activity: any;
 }
 
 @Component({ components: { SearchFilters, CompoundNameTable } })

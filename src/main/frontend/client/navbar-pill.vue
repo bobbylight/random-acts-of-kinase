@@ -56,6 +56,10 @@ export default class NavbarPill extends Vue {
                     background-color @transition-time ease;
         cursor: pointer;
 
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+
         &:hover, &.active {
             background: rgba(255, 255, 255, 0.15);
             color: #fff;

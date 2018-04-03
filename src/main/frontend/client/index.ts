@@ -28,13 +28,9 @@ import VProgressLinear from 'vuetify/es5/components/VProgressLinear';
 import VSelect from 'vuetify/es5/components/VSelect';
 import VTextField from 'vuetify/es5/components/VTextField';
 import VToolbar from 'vuetify/es5/components/VToolbar';
+import VTooltip from 'vuetify/es5/components/VTooltip';
 import transitions from 'vuetify/es5/components/transitions';
 
-//import './../semantic/dist/semantic.css';
-import 'datatables.net';
-//import './../semantic/dist/semantic';
-//import 'datatables.net-dt/css/jquery.dataTables.css';
-import './dataTables.semanticui';
 import Search from './search.vue';
 import Compound from './compound.vue';
 import Admin from './admin/admin.vue';
@@ -61,6 +57,7 @@ Vue.use(Vuetify, {
         VSelect,
         VTextField,
         VToolbar,
+        VTooltip,
         transitions
     }
 });

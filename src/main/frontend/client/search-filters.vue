@@ -22,7 +22,7 @@
                 </v-flex>
 
                 <v-flex sm4>
-                    <v-text-field type="number" placeholder="Remaining activity" class="search-field right-aligned"
+                    <v-text-field type="number" placeholder="Remaining activity %" class="search-field right-aligned"
                                   :rules="numericValidationRules" v-model="filters.activity"
                                   step="0.1" min="0.1" max="100"></v-text-field>
                 </v-flex>
@@ -47,7 +47,8 @@ export default class SearchFilters extends Vue {
     private kinaseQueryParams: any = { size: 1000 };
 
     private static isEmpty(text: string): boolean {
-        return !text.trim().length;
+        // text might be a number
+        return !text || !text.trim || !text.trim().length;
     }
 
     get numericValidationRules(): any[] {

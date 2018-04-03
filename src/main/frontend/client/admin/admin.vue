@@ -13,9 +13,15 @@
             <v-card class="top-card-padding">
 
                 <v-card-title primary-title>
-                    <div>
-                        <h3 class="headline">Incomplete Compounds</h3>
-                        <div>Compounds without a SMILES string or s(10)</div>
+                    <div class="title-content">
+                        <div>
+                            <h3 class="headline">Incomplete Compounds</h3>
+                            <div>Compounds without a SMILES string or s(10)</div>
+                        </div>
+
+                        <div class="admin-card-button-area">
+                            <download-button url="/admin/api/incompleteCompounds"></download-button>
+                        </div>
                     </div>
                 </v-card-title>
 
@@ -24,21 +30,20 @@
                         url="/admin/api/incompleteCompounds"
                         :columnInfo="incompleteCompoundColumnInfo"></CompoundsTable>
                 </v-card-text>
-
-                <v-card-actions class="card-action-buttons">
-                    <v-btn flat icon
-                            href="/admin/api/incompleteCompounds?format=csv&page=0&size=10000">
-                        <v-icon>file-download</v-icon>
-                    </v-btn>
-                </v-card-actions>
             </v-card>
 
             <v-card class="top-card-padding">
 
                 <v-card-title primary-title>
-                    <div>
-                        <h3 class="headline">Compounds Missing Activity Profiles</h3>
-                        <div>Compounds missing some activity profiles</div>
+                    <div class="title-content">
+                        <div>
+                            <h3 class="headline">Compounds Missing Activity Profiles</h3>
+                            <div>Compounds missing some activity profiles</div>
+                        </div>
+
+                        <div class="admin-card-button-area">
+                            <download-button url="/admin/api/compoundsMissingActivityProfiles"></download-button>
+                        </div>
                     </div>
                 </v-card-title>
 
@@ -47,14 +52,6 @@
                         url="/admin/api/compoundsMissingActivityProfiles"
                         :columnInfo="compoundsMissingActivityProfilesColumnInfo"></CompoundsTable>
                 </v-card-text>
-
-                <v-card-actions>
-                    <v-btn flat icon
-                           href="/admin/api/compoundsMissingActivityProfiles?format=csv&page=0&size=10000">
-                        <v-icon>file-download</v-icon>
-                    </v-btn>
-                </v-card-actions>
-
             </v-card>
 
             <v-card class="top-card-padding">
@@ -78,8 +75,9 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import CompoundsTable, { ColumnInfo } from './compounds-table.vue';
+import DownloadButton from './download-button.vue';
 
-@Component({ components: { CompoundsTable } })
+@Component({ components: { CompoundsTable, DownloadButton } })
 export default class AdminHome extends Vue {
 
     private incompleteCompoundColumnInfo: ColumnInfo[];
@@ -106,5 +104,15 @@ export default class AdminHome extends Vue {
 <style lang="less">
 .top-card-padding {
     margin-top: 2rem;
+}
+.title-content {
+    position: relative;
+    width: 100%;
+
+    .admin-card-button-area {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
 }
 </style>

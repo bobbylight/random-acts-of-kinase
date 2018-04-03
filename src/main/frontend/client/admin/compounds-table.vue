@@ -8,7 +8,13 @@
             :total-items="totalItems"
             :loading="loading"
             :headers="createHeaders"
-            :rows-per-page-items='[ 20, 50, 100 ]'>
+            :rows-per-page-items='[ 10, 20, 50 ]'>
+
+            <template slot="items" slot-scope="props">
+                <td v-for="header in createHeaders"
+                    :class="getClassesForRow(header.value)">{{props.item[header.value]}}</td>
+            </template>
+
         </v-data-table>
     </div>
 </template>
@@ -59,7 +65,13 @@ export default class CompoundTable extends Vue {
         const headers: any = [];
 
         this.columnInfo.forEach((colInfo: ColumnInfo) => {
-            headers.push({ text: colInfo.columnName, value: colInfo.columnId });
+
+            const header: any = { text: colInfo.columnName, value: colInfo.columnId };
+            if (colInfo.columnId === 's10') {
+                header.align = 'right';
+            }
+
+            headers.push(header);
         });
 
         return headers;
@@ -76,64 +88,19 @@ export default class CompoundTable extends Vue {
         });
     }
 
-    // mounted() {
-    //
-    //     const pageSize: number = 8;
-    //
-    //     this.table = $(this.$refs.table).DataTable({
-    //         serverSide: true,
-    //         searching: false,
-    //         lengthChange: false,
-    //         info: false,
-    //         order: [ [ 0, 'asc' ] ],
-    //         pageLength: 8,
-    //         pagingType: 'first_last_numbers',
-    //         ajax: {
-    //             url: this.url,
-    //             traditional: true,
-    //             data: (d) => {
-    //
-    //                 delete d.columns;
-    //                 delete d.search;
-    //
-    //                 d.page = d.start / pageSize;
-    //                 console.log('... requesting page: ' + d.page);
-    //                 delete d.start;
-    //
-    //                 d.size = d.length;
-    //                 delete d.length;
-    //
-    //                 const newOrder: string[] = d.order.map((orderArg) => {
-    //                     return this.dataTableColumns[orderArg.column].data + ',' + orderArg.dir;
-    //                 });
-    //                 d.sort = newOrder;
-    //                 delete d.order;
-    //
-    //                 return d;
-    //             },
-    //             dataFilter: (data: string) => {
-    //
-    //                 // Convert the (string) JSON response into that expected by DataTables
-    //
-    //                 const json: any = JSON.parse(data);
-    //                 return JSON.stringify({
-    //                     recordsTotal: json.total, // This isn't really true, but I don't think we need to do another query
-    //                     recordsFiltered: json.total,
-    //                     data: json.data
-    //                 });
-    //             }
-    //         },
-    //         columns: this.dataTableColumns,
-    //         language: {
-    //             paginate: {
-    //                 first: '<<',
-    //                 previous: '<',
-    //                 next: '>',
-    //                 last: '>>'
-    //             }
-    //         }
-    //     } );
-    // }
+    /**
+     * Returns the CSS classes to apply to a cell for the given column.
+     *
+     * @param {string} columnId
+     * @returns {string}
+     */
+    private getClassesForRow(columnId: string): string | undefined {
+        // TODO: Extract this hard-coded knowledge of numeric columns somewhere else
+        if ('s10' === columnId) {
+            return 'text-xs-right';
+        }
+        return undefined;
+    }
 
     reloadTable() {
 
@@ -143,7 +110,12 @@ export default class CompoundTable extends Vue {
 
         const sort: string = sortBy ? `${sortBy},${descending ? 'desc' : 'asc'}` : '';
 
-        return axios.get(this.url)
+        let url: string = `${this.url}?page=${page - 1}&size=${rowsPerPage}`;
+        if (sort) {
+            url += `&sort=${sort}`;
+        }
+
+        return axios.get(url)
             .then((response: AxiosResponse<PagedDataRep<any>>) => {
                 const pagedData: PagedDataRep<any> = response.data;
                 this.items = pagedData.data;

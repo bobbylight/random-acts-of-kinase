@@ -16,7 +16,7 @@
                 <div class="copyright">
                     &copy; 2018&nbsp;<a href="http://sgc-unc.org">SGC-UNC</a>
                 </div>
-                <v-btn icon small @click="viewSource()" title="View Source" aria-label="View Source">
+                <v-btn icon small @click="viewSource" title="View Source" aria-label="View Source">
                     <v-icon small>fa fa-github</v-icon>
                 </v-btn>
                 <v-btn icon small @click.stop="showAbout = true" title="About" aria-label="About">
@@ -32,7 +32,6 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import $ from 'jquery';
 import Navbar from './navbar.vue';
 import restApi from './rest-api';
 import { UserRep } from './rak';
@@ -80,8 +79,20 @@ export default class App extends Vue {
 
 footer {
     .copyright {
+
         display: flex;
         align-items: center;
+        margin-right: 1rem;
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+    }
+
+    .btn.btn--icon {
+        margin-left: 0;
+        margin-right: 0;
     }
 }
 </style>

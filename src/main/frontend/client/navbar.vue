@@ -54,7 +54,6 @@ import Vue from 'vue';
 import { Route } from 'vue-router';
 import { Watch } from 'vue-property-decorator';
 import Component from 'vue-class-component';
-import $ from 'jquery';
 import NavbarPill from './navbar-pill.vue';
 import LoginModal from './login-modal.vue';
 import restApi from './rest-api';
