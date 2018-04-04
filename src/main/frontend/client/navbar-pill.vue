@@ -36,49 +36,48 @@ export default class NavbarPill extends Vue {
 </script>
 
 <style lang="less">
+@close-icon-color: gray;
+@transition-time: .5s;
 
-    @close-icon-color: gray;
-    @transition-time: .5s;
+.navbar-pill-parent {
+    position: relative;
+    margin-right: 1rem;
+}
 
-    .navbar-pill-parent {
-        position: relative;
-        margin-right: 1rem;
-    }
+/* pill styles are essentially copied from ui inverted menu */
+.navbar-pill {
 
-    /* pill styles are essentially copied from ui inverted menu */
-    .navbar-pill {
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255,255,255,.9);
+    padding: 0.25rem 1rem;
+    border-radius: 1rem;
+    transition: color @transition-time ease,
+                background-color @transition-time ease;
+    cursor: pointer;
 
-        background: rgba(255, 255, 255, 0.08);
-        color: rgba(255,255,255,.9);
-        padding: 0.25rem 1rem;
-        border-radius: 1rem;
-        transition: color @transition-time ease,
-                    background-color @transition-time ease;
-        cursor: pointer;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-
-        &:hover, &.active {
-            background: rgba(255, 255, 255, 0.15);
-            color: #fff;
-
-            .close-icon {
-                color: lighten(@close-icon-color, 25%);
-            }
-        }
+    &:hover, &.active {
+        background: rgba(255, 255, 255, 0.15);
+        color: #fff;
 
         .close-icon {
-            color: @close-icon-color;
-            font-size: 1.3rem;
-            position: absolute;
-            top: -6px;
-            right: 0;
-            transition: color @transition-time ease;
-            &:hover {
-                color: white;
-            }
+            color: lighten(@close-icon-color, 25%);
         }
     }
+
+    .close-icon {
+        color: @close-icon-color;
+        font-size: 1.3rem;
+        position: absolute;
+        top: -6px;
+        right: 0;
+        transition: color @transition-time ease;
+        &:hover {
+            color: white;
+        }
+    }
+}
 </style>

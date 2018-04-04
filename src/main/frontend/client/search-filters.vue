@@ -22,7 +22,7 @@
                 </v-flex>
 
                 <v-flex sm4>
-                    <v-text-field type="number" placeholder="Remaining activity %" class="search-field right-aligned"
+                    <v-text-field type="number" label="Remaining activity %" class="search-field right-aligned"
                                   :rules="numericValidationRules" v-model="filters.activity"
                                   step="0.1" min="0.1" max="100"></v-text-field>
                 </v-flex>
@@ -73,7 +73,7 @@ export default class SearchFilters extends Vue {
             const discoverx: string = kinase.discoverxGeneSymbol;
             return { discoverxGeneSymbol: discoverx, responseValueField: discoverx };
         });
-        choices.unshift({ discoverxGeneSymbol: '', responseValueField: null });
+        //choices.unshift({ discoverxGeneSymbol: '', responseValueField: '' });
         return choices;
     }
 }

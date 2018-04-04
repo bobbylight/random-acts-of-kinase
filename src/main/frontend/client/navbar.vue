@@ -2,16 +2,16 @@
 
     <v-toolbar app dark>
 
-        <v-toolbar-title @click="onReset()" class="toolbar-title-fix">
-            <img src="/img/molecule-white.svg" width="50" height="50"> <!--KIANSE-->
+        <v-toolbar-title class="toolbar-title-fix" @click="setActiveTab('home')">
+            <img src="/img/molecule-white.svg" width="50" height="50" class="navbar-image"> <!--KIANSE-->
         </v-toolbar-title>
 
         <v-toolbar-items>
-            <v-btn flat v-bind:class="{ active: isActiveTab('/') }" @click="setActiveTab('home')">
+            <v-btn flat v-bind:class="{ 'active-toolbar-item': isActiveTab('/search') }" @click="setActiveTab('search')">
                 Search
             </v-btn>
 
-            <v-btn flat v-bind:class="{ active: isActiveTab('/admin') }"
+            <v-btn flat v-bind:class="{ 'active-toolbar-item': isActiveTab('/admin') }"
                    @click="setActiveTab('admin')" v-if="$store.getters.loggedIn">
                 Admin
             </v-btn>
@@ -71,18 +71,7 @@ export default class Navbar extends Vue {
     }
 
     private setActiveTab(tabName: string) {
-
-        switch (tabName) {
-
-            case 'home':
-            default:
-                this.$router.push({ name: 'home' });
-                break;
-
-            case 'admin':
-                this.$router.push({ name: 'admin' });
-                break;
-        }
+        this.$router.push({ name: tabName });
     }
 
     private close($event: string) {
@@ -129,8 +118,20 @@ export default class Navbar extends Vue {
 <style lang="less">
 .toolbar-title-fix {
     margin-right: 16px;
+    cursor: pointer;
 }
+
+.navbar-image {
+    vertical-align: middle;
+}
+
+.active-toolbar-item {
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #fff;
+}
+
 .button-section {
+    margin-left: 1rem;
     display: flex;
 }
 </style>

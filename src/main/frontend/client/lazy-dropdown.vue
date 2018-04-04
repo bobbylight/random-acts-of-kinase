@@ -7,6 +7,7 @@
             :placeholder="placeholder"
             :loading="loading"
             :prepend-icon="icon"
+            :clearable="true"
             autocomplete
             browser-autocomplete="off"
             :items="items"
@@ -128,7 +129,6 @@ export default class LazyDropdown extends Vue {
      * Fires an "input" event stating our value has changed.  Part of implementing v-model for this component.
      */
     fireUpdateEvent(newValue: any) {
-        console.log('Value updated to: ' + JSON.stringify(newValue));
         this.$emit('input', newValue);
     }
 

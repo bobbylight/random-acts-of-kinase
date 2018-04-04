@@ -31,6 +31,7 @@ import VToolbar from 'vuetify/es5/components/VToolbar';
 import VTooltip from 'vuetify/es5/components/VTooltip';
 import transitions from 'vuetify/es5/components/transitions';
 
+import Home from './home.vue';
 import Search from './search.vue';
 import Compound from './compound.vue';
 import Admin from './admin/admin.vue';
@@ -70,6 +71,11 @@ window.onload = () => {
         {
             path: '/',
             name: 'home',
+            component: Home
+        },
+        {
+            path: '/search',
+            name: 'search',
             component: Search
         },
         {
