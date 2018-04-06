@@ -7,6 +7,13 @@ export interface ActivityProfile {
     kd: number;
 }
 
+export interface BlogPost {
+    id: number;
+    title: string;
+    body: string;
+    createDate: string;
+}
+
 export interface Compound {
     compoundName: string;
     chemotype: string;

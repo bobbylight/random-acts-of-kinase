@@ -19,3 +19,8 @@ PGPASSWORD=${PASSWORD} psql -U ${USER} -v schema=${SCHEMA} -f ddl/postgres.sql $
 PGPASSWORD=${PASSWORD} psql -U ${USER} -c "\copy ${SCHEMA}.compound from '${OUTDIR}/compound.csv' with csv header" ${DB}
 PGPASSWORD=${PASSWORD} psql -U ${USER} -c "\copy ${SCHEMA}.kinase from '${OUTDIR}/kinase.csv' with csv header" ${DB}
 PGPASSWORD=${PASSWORD} psql -U ${USER} -c "\copy ${SCHEMA}.kinase_activity_profile from '${OUTDIR}/kinase_activity_profile.csv' with csv header" ${DB}
+
+if [[ $# -gt 0 && $1 = "sampleBlogPosts" ]] ; then
+    echo "Loading sample blog posts..."
+    PGPASSWORD=${PASSWORD} psql -U ${USER} -c "\copy ${SCHEMA}.blog_post from '${DIR}/ddl/sample_blog_posts.csv' with csv header" ${DB}
+fi

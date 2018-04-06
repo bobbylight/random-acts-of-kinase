@@ -4,9 +4,9 @@
         <v-layout row wrap class="search-filter-wrapper">
             <v-flex xs12>
 
-                    <h1>Search Compounds</h1>
+                <h1>Search Compounds</h1>
 
-                    <search-filters :filters="filters"></search-filters>
+                <search-filters :filters="filters"></search-filters>
             </v-flex>
         </v-layout>
 

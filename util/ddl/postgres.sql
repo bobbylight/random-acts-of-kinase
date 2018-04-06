@@ -42,3 +42,15 @@ CREATE TABLE :schema.kinase_activity_profile (
 WITH ( OIDS = FALSE );
 
 CREATE INDEX kinase_activity_profile_lower_idx ON :schema.kinase_activity_profile (lower(compound_nm));
+
+
+DROP TABLE IF EXISTS :schema.blog_post CASCADE;
+CREATE TABLE :schema.blog_post (
+  blog_post_id serial,
+  title character varying(128) NOT NULL,
+  body character varying(1048576) NOT NULL,
+  create_dttm TIMESTAMP WITHOUT TIME ZONE NOT NULL
+)
+WITH ( OIDS = FALSE );
+
+CREATE INDEX blog_post_create_dttm_idx ON :schema.blog_post (create_dttm);

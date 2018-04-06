@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { ActivityProfile, Compound, UserRep } from './rak';
+import { ActivityProfile, BlogPost, Compound, PagedDataRep, UserRep } from './rak';
 
 export class RestApi {
 
@@ -44,7 +44,20 @@ export class RestApi {
             });
     }
 
-    getCompounds(page: number, size: number, filters: any): Promise<Compound[]> {
+    getBlogPosts(page: number, size: number, author: string | null = null): Promise<PagedDataRep<BlogPost[]>> {
+
+        let url: string = `api/blogPosts?page=${page}&size=${size}`;
+        if (author) {
+            url += `&author=${author}`;
+        }
+
+        return this.instance.get(url)
+            .then((response: AxiosResponse<PagedDataRep<BlogPost[]>>) => {
+                return response.data;
+            });
+    }
+
+    getCompounds(page: number, size: number, filters: any): Promise<PagedDataRep<Compound[]>> {
 
         let url: string = `api/compounds?page=${page}&size=${size}`;
         if (filters.inhibitor) {
@@ -58,7 +71,7 @@ export class RestApi {
         }
 
         return this.instance.get(url)
-            .then((response: AxiosResponse<Compound[]>) => {
+            .then((response: AxiosResponse<PagedDataRep<Compound[]>>) => {
                 return response.data;
             });
     }

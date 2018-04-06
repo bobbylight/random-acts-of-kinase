@@ -33,6 +33,7 @@ import transitions from 'vuetify/es5/components/transitions';
 
 import Home from './home.vue';
 import Search from './search.vue';
+import Blog from './blog.vue';
 import Compound from './compound.vue';
 import Admin from './admin/admin.vue';
 import { RouteConfig } from 'vue-router/types/router';
@@ -77,6 +78,11 @@ window.onload = () => {
             path: '/search',
             name: 'search',
             component: Search
+        },
+        {
+            path: '/blog',
+            name: 'blog',
+            component: Blog
         },
         {
             path: '/admin',

@@ -1,0 +1,59 @@
+<template>
+    <v-card class="blog-post-card-padding">
+
+        <v-card-title primary-title>
+            <div class="title-content">
+                <h3 class="headline">{{post.title}}</h3>
+            </div>
+        </v-card-title>
+
+        <v-card-text>
+            {{post.body}}
+        </v-card-text>
+
+        <v-card-actions class="blog-card-actions">
+            <div class="blog-post-viewCount">
+                0 views
+            </div>
+            <v-spacer></v-spacer>
+            <div class="blog-post-date">
+                {{dateString}}
+            </div>
+        </v-card-actions>
+    </v-card>
+</template>
+
+<script lang="ts">
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import { Prop } from 'vue-property-decorator';
+import { BlogPost } from './rak';
+
+@Component({ components: { } })
+export default class BlogPostWidget extends Vue {
+
+    @Prop({ required: true })
+    private post: BlogPost;
+
+    get dateString() {
+        return new Date(this.post.createDate).toLocaleDateString();
+    }
+}
+</script>
+
+<style lang="less">
+@action-color: lightgray;
+
+.blog-post-card-padding {
+    margin-top: 2rem;
+}
+.blog-card-actions {
+
+    border-top: 1px solid @action-color;
+    margin-left: 16px; // Matches margin on v-card-title/text
+    margin-right: 16px; // Matches margin on v-card-title/text
+
+    color: @action-color;
+    font-style: italic;
+}
+</style>
