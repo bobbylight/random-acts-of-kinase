@@ -1,4 +1,5 @@
 <template>
+
     <v-card class="blog-post-card-padding">
 
         <v-card-title primary-title>
@@ -7,9 +8,7 @@
             </div>
         </v-card-title>
 
-        <v-card-text>
-            {{post.body}}
-        </v-card-text>
+        <v-card-text v-html="body"></v-card-text>
 
         <v-card-actions class="blog-card-actions">
             <div class="blog-post-viewCount">
@@ -27,6 +26,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
+import marked from 'marked';
 import { BlogPost } from './rak';
 
 @Component({ components: { } })
@@ -37,6 +37,14 @@ export default class BlogPostWidget extends Vue {
 
     get dateString() {
         return new Date(this.post.createDate).toLocaleDateString();
+    }
+
+    get body() {
+
+        const markdown: string = this.post.body.replace(/\\n/g, '\n');
+
+        // IntelliJ red-squiggles this, but tsc is fine with it
+        return marked(markdown);
     }
 }
 </script>

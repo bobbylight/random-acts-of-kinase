@@ -16,7 +16,7 @@
 
                 <div v-if="postCount > 0">
 
-                    <blog-post-widget v-for="post in blogPosts" :post="post"></blog-post-widget>
+                    <blog-post-widget v-for="post in blogPosts" :key="post.id" :post="post"></blog-post-widget>
 
                     <div class="blog-page-footer">
                         Showing {{postStart}} - {{postEnd}} of {{postTotal}}

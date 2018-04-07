@@ -4,6 +4,7 @@
 import 'font-awesome/css/font-awesome.css';
 import 'app.less';
 import '../node_modules/vuetify/dist/vuetify.min.css';
+import '../node_modules/quill/assets/snow.styl';
 
 import Vue from 'vue';
 import App from './App.vue';
@@ -36,6 +37,7 @@ import Search from './search.vue';
 import Blog from './blog.vue';
 import Compound from './compound.vue';
 import Admin from './admin/admin.vue';
+import BlogManager from './admin/blog-manager.vue';
 import { RouteConfig } from 'vue-router/types/router';
 
 Vue.use(VueRouter);
@@ -88,6 +90,11 @@ window.onload = () => {
             path: '/admin',
             name: 'admin',
             component: Admin
+        },
+        {
+            path: '/blog-manager',
+            name: 'blog-manager',
+            component: BlogManager
         },
         {
             path: '/compound/:id',

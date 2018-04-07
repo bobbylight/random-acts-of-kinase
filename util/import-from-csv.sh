@@ -22,5 +22,6 @@ PGPASSWORD=${PASSWORD} psql -U ${USER} -c "\copy ${SCHEMA}.kinase_activity_profi
 
 if [[ $# -gt 0 && $1 = "sampleBlogPosts" ]] ; then
     echo "Loading sample blog posts..."
-    PGPASSWORD=${PASSWORD} psql -U ${USER} -c "\copy ${SCHEMA}.blog_post from '${DIR}/ddl/sample_blog_posts.csv' with csv header" ${DB}
+    # Absolute paths don't work here on Windows either
+    PGPASSWORD=${PASSWORD} psql -U ${USER} -c "\copy ${SCHEMA}.blog_post from './ddl/sample_blog_posts.csv' with csv header" ${DB}
 fi

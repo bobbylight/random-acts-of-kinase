@@ -19,6 +19,10 @@
                    @click="setActiveTab('admin')" v-if="$store.getters.loggedIn">
                 Admin
             </v-btn>
+
+            <v-btn flat v-bind:class="{ 'active-toolbar-item': isActiveTab('/blog-manager') }" @click="setActiveTab('blog-manager')">
+                News Admin
+            </v-btn>
         </v-toolbar-items>
 
         <div class="button-section">
