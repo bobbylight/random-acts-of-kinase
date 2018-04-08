@@ -1,73 +1,91 @@
 <template>
-    <div class="ui container admin-main">
+    <div class="admin-wrapper">
 
-        <div class="no-access" v-if="!this.$store.getters.loggedIn">
+        <v-fab-transition>
+            <v-btn
+                v-if="!navDrawerOpen"
+                small
+                absolute
+                dark
+                fab
+                top
+                left
+                color="pink"
+                @click="navDrawerOpen = true"
+                style="top: 1rem"
+            >
+                <v-icon>chevron_right</v-icon>
+            </v-btn>
+        </v-fab-transition>
 
-            <h1>You don't have access to this information :(</h1>
+        <v-layout fill-height justify-center>
 
-            <router-link :to="{ name: 'home' }">Get out of here</router-link>
-        </div>
+            <v-flex xs3 fill-height v-if="navDrawerOpen" elevation-1 class="slide-out-admin-options"
+                    style="position: relative">
 
-        <div v-if="this.$store.getters.loggedIn">
+                <v-toolbar flat class="transparent">
+                    <v-list class="pt-0">
+                        <v-list-tile avatar>
+                            <v-list-tile-action>
+                                <v-icon>fa-cog</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                                Admin Actions
+                            </v-list-tile-content>
+                            <v-list-tile-action>
+                                <v-btn icon @click.stop="navDrawerOpen = false">
+                                    <v-icon>chevron_left</v-icon>
+                                </v-btn>
+                            </v-list-tile-action>
+                        </v-list-tile>
+                    </v-list>
+                </v-toolbar>
 
-            <v-card class="top-card-padding">
+                <v-list dense class="pt-0">
 
-                <v-card-title primary-title>
-                    <div class="title-content">
-                        <div>
-                            <h3 class="headline">Incomplete Compounds</h3>
-                            <div>Compounds without a SMILES string or s(10)</div>
-                        </div>
+                    <v-divider></v-divider>
 
-                        <div class="admin-card-button-area">
-                            <download-button url="/admin/api/incompleteCompounds"></download-button>
-                        </div>
+                    <v-list-tile to="stats">
+                        <v-list-tile-action>
+                            <v-icon>fa-database</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>Missing Data</v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+
+                    <v-list-tile to="blog-new-post">
+                        <v-list-tile-action>
+                            <v-icon>fa-newspaper</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>New News Post</v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+
+                </v-list>
+            </v-flex>
+
+            <v-flex xs9 fill-height>
+                <v-container fluid grid-list-md>
+
+                    <div class="no-access" v-if="!this.$store.getters.loggedIn">
+
+                        <h1>You don't have access to this information :(</h1>
+
+                        <router-link :to="{ name: 'home' }">Get out of here</router-link>
                     </div>
-                </v-card-title>
 
-                <v-card-text>
-                    <CompoundsTable
-                        url="/admin/api/incompleteCompounds"
-                        :columnInfo="incompleteCompoundColumnInfo"></CompoundsTable>
-                </v-card-text>
-            </v-card>
-
-            <v-card class="top-card-padding">
-
-                <v-card-title primary-title>
-                    <div class="title-content">
-                        <div>
-                            <h3 class="headline">Compounds Missing Activity Profiles</h3>
-                            <div>Compounds missing some activity profiles</div>
-                        </div>
-
-                        <div class="admin-card-button-area">
-                            <download-button url="/admin/api/compoundsMissingActivityProfiles"></download-button>
-                        </div>
+                    <div v-if="this.$store.getters.loggedIn">
+                        <transition name="fade">
+                            <keep-alive>
+                                <router-view></router-view>
+                            </keep-alive>
+                        </transition>
                     </div>
-                </v-card-title>
-
-                <v-card-text>
-                    <CompoundsTable
-                        url="/admin/api/compoundsMissingActivityProfiles"
-                        :columnInfo="compoundsMissingActivityProfilesColumnInfo"></CompoundsTable>
-                </v-card-text>
-            </v-card>
-
-            <v-card class="top-card-padding">
-
-                <v-card-title primary-title>
-                    <div>
-                        <h3 class="headline">Something Else</h3>
-                        <div>Some other administrative stuff</div>
-                    </div>
-                </v-card-title>
-
-                <v-card-text>
-                    Nothing here yet.
-                </v-card-text>
-            </v-card>
-        </div>
+                </v-container>
+            </v-flex>
+        </v-layout>
     </div>
 </template>
 
@@ -80,39 +98,19 @@ import DownloadButton from './download-button.vue';
 @Component({ components: { CompoundsTable, DownloadButton } })
 export default class AdminHome extends Vue {
 
-    private incompleteCompoundColumnInfo: ColumnInfo[];
-    private compoundsMissingActivityProfilesColumnInfo: ColumnInfo[];
-
-    created() {
-
-        this.incompleteCompoundColumnInfo = [
-            { columnId: 'compoundName', columnName: 'Compound', isCompound: true },
-            { columnId: 'chemotype', columnName: 'Chemotype' },
-            { columnId: 's10', columnName: 's(10)' },
-            { columnId: 'smiles', columnName: 'SMILES' },
-            { columnId: 'source', columnName: 'Source' }
-        ];
-
-        this.compoundsMissingActivityProfilesColumnInfo = [
-            { columnId: 'compoundName', columnName: 'Compound', isCompound: true },
-            { columnId: 'count', columnName: 'Activity Profile Count' }
-        ];
-    }
+    private navDrawerOpen: boolean = true;
 }
 </script>
 
 <style lang="less">
-.top-card-padding {
-    margin-top: 2rem;
-}
-.title-content {
+.admin-wrapper {
     position: relative;
-    width: 100%;
+    height: 100%;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 
-    .admin-card-button-area {
-        position: absolute;
-        top: 0;
-        right: 0;
+    .slide-out-admin-options {
+        background: white; // Match the list contained in it
     }
 }
 </style>

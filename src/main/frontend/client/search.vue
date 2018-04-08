@@ -1,21 +1,25 @@
 <template>
-    <v-container fluid grid-list-md>
+    <div class="search-wrapper">
 
-        <v-layout row wrap class="search-filter-wrapper">
-            <v-flex xs12>
+        <v-container fluid grid-list-md class="search-filter-wrapper">
+            <v-layout row wrap>
+                <v-flex xs12>
 
-                <h1>Search Compounds</h1>
+                    <h1>Search Compounds</h1>
 
-                <search-filters :filters="filters"></search-filters>
-            </v-flex>
-        </v-layout>
+                    <search-filters :filters="filters"></search-filters>
+                </v-flex>
+            </v-layout>
+        </v-container>
 
-        <v-layout row wrap justify-center class="search-results">
-            <v-flex xs10>
-                <compound-name-table :filters="gridFilters"></compound-name-table>
-            </v-flex>
-        </v-layout>
-    </v-container>
+        <v-container class="search-results">
+            <v-layout row wrap justify-center>
+                <v-flex xs10>
+                    <compound-name-table :filters="gridFilters"></compound-name-table>
+                </v-flex>
+            </v-layout>
+        </v-container>
+    </div>
 </template>
 
 <script lang="ts">
@@ -82,17 +86,19 @@ export default class Search extends Vue {
 </script>
 
 <style lang="less">
-.search-filter-wrapper {
-    background: #f5f5f5;
-    border-bottom: 1px solid lightgray;
-    padding: 2rem 6rem;
+.search-wrapper {
 
-    .ui.header {
-        margin-top: 0;
-    }
-}
-
-.search-results {
+    height: 100%;
     background: white;
+
+    .search-filter-wrapper {
+        background: #f5f5f5;
+        border-bottom: 1px solid lightgray;
+        padding: 2rem 6rem;
+
+        .ui.header {
+            margin-top: 0;
+        }
+    }
 }
 </style>

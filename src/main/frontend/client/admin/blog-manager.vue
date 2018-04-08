@@ -1,29 +1,36 @@
 <template>
     <v-container grid-list-md>
-        <v-layout row wrap class="blog-manager-wrapper py-5">
+        <v-layout row wrap class="blog-manager-wrapper">
 
-            <div class="headline pb-2 primary--text">Blog Manager</div>
+            <v-flex xs12>
 
-            <v-card class="blog-post-card-padding">
+                <v-card class="blog-post-card-padding">
 
-                <v-card-title primary-title>
-                    <div class="title-content">
-                        <h3 class="headline">Create New Post</h3>
-                    </div>
-                </v-card-title>
+                    <v-card-title primary-title>
+                        <div class="title-content">
+                            <h3 class="headline">Create New Post</h3>
+                        </div>
+                    </v-card-title>
 
-                <v-card-text>
+                    <v-card-text>
 
-                    <v-flex xs12>
-                        <v-text-field type="text" label="Post Title" v-model="title"></v-text-field>
-                    </v-flex>
+                        <v-flex xs12>
+                            <v-text-field type="text" label="Post Title" v-model="title"></v-text-field>
+                        </v-flex>
 
-                    <div class="editor"></div>
-                </v-card-text>
+                        <rich-text-editor :emitChangeEvents="true" @change="editorContentChanged"></rich-text-editor>
+                    </v-card-text>
 
-                <v-card-actions>
-                </v-card-actions>
-            </v-card>
+                    <v-card-actions>
+
+                        <v-spacer></v-spacer>
+
+                        <v-btn :disabled="isFormIncomplate()" @click="post">
+                            Post
+                        </v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-flex>
         </v-layout>
     </v-container>
 </template>
@@ -31,34 +38,42 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { Prop } from 'vue-property-decorator';
-import Quill from 'quill';
-import { BlogPost } from '../rak';
+import { BlogPost, ErrorResponse } from '../rak';
+import RichTextEditor, { ChangeEvent } from './rich-text-editor.vue';
+import restApi from '../rest-api';
+import Toaster from '../toaster';
 
-@Component({ components: { } })
+@Component({ components: { RichTextEditor } })
 export default class BlogManager extends Vue {
 
-    private editor: Quill;
+    private title: string = '';
+    private body: string = '';
+    private editorEmpty: boolean = true;
 
-    mounted() {
+    private editorContentChanged(e: ChangeEvent) {
+        this.editorEmpty = e.isEmpty();
+        this.body = e.getContent();
+        console.log(this.body);
+    }
 
-        const toolbarOptions: any[] = [
-            [ 'bold', 'italic', 'underline' ],
-            [ { color: [] }, { background: [] } ], // Empty arrays => takes defaults from theme
-            [ 'link', 'image' ],
-            [ { align: [] } ],
-            [ { size: [ 'small', false, 'large', 'huge' ] } ],
-            [ { header: [ 1, 2, 3, 4, 5, 6, false ] } ],
-            [ { font: [] } ],
-            [ 'clean' ], // Remove formatting
-        ];
+    private isFormIncomplate(): boolean {
+        return this.title.length === 0 || this.editorEmpty;
+    }
 
-        const elem: Element = this.$el.querySelector('.editor');
-        this.editor = new Quill(elem, {
-            modules: { toolbar: toolbarOptions },
-            theme: 'snow',
-            placeholder: 'Enter your post here!'
-        });
+    private post() {
+
+        const post: BlogPost = {
+            title: this.title,
+            body: this.body
+        };
+
+        restApi.saveBlogPost(post)
+            .then(() => {
+                alert('Success!');
+            })
+            .catch((error: ErrorResponse) => {
+                Toaster.error(error.message);
+            });
     }
 }
 </script>

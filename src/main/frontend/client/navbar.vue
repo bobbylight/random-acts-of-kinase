@@ -1,6 +1,6 @@
 <template>
 
-    <v-toolbar app dark>
+    <v-toolbar app absolute dark>
 
         <v-toolbar-title class="toolbar-title-fix" @click="setActiveTab('home')">
             <img src="/img/molecule-white.svg" width="50" height="50" class="navbar-image"> <!--KIANSE-->
@@ -16,12 +16,8 @@
             </v-btn>
 
             <v-btn flat v-bind:class="{ 'active-toolbar-item': isActiveTab('/admin') }"
-                   @click="setActiveTab('admin')" v-if="$store.getters.loggedIn">
+                   @click="setActiveTab('stats')" v-if="$store.getters.loggedIn">
                 Admin
-            </v-btn>
-
-            <v-btn flat v-bind:class="{ 'active-toolbar-item': isActiveTab('/blog-manager') }" @click="setActiveTab('blog-manager')">
-                News Admin
             </v-btn>
         </v-toolbar-items>
 
@@ -73,8 +69,8 @@ export default class Navbar extends Vue {
     private showLogin: boolean = false;
 
     private isActiveTab(tabName: string): boolean {
-        const tabNameRegex: RegExp = new RegExp(tabName + '$');
-        console.log(tabName + ' -- ' + this.$route.fullPath + ', ' + (this.$route.fullPath && this.$route.fullPath.match(tabNameRegex)));
+        const tabNameRegex: RegExp = new RegExp(tabName + '(?:/.+)?$');
+        //console.log(tabName + ' -- ' + this.$route.fullPath + ', ' + (this.$route.fullPath && this.$route.fullPath.match(tabNameRegex)));
         return !!this.$route.fullPath && !!this.$route.fullPath.match(tabNameRegex);
     }
 

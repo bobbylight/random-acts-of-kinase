@@ -18,6 +18,8 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class BlogPostServiceTest {
 
@@ -30,6 +32,18 @@ public class BlogPostServiceTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         service = new BlogPostService(mockRepository);
+    }
+
+    @Test
+    public void testCreateBlogPost() {
+
+        BlogPost post = new BlogPost();
+        post.setTitle("title");
+        post.setBody("body");
+
+        service.createBlogPost(post);
+
+        verify(mockRepository, times(1)).save(any());
     }
 
     @Test

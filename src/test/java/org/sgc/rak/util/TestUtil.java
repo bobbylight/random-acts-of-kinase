@@ -6,7 +6,13 @@ import org.sgc.rak.model.BlogPost;
 /**
  * Utility methods for unit tests.
  */
-public class TestUtil {
+public final class TestUtil {
+
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private TestUtil() {
+    }
 
     public static void assertBlogPostsEqual(BlogPost expected, BlogPost actual) {
         Assert.assertEquals(expected.getId(), actual.getId());

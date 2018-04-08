@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ActivityProfile, BlogPost, Compound, PagedDataRep, UserRep } from './rak';
 
 export class RestApi {
@@ -93,8 +93,23 @@ export class RestApi {
 
     logout(): Promise<any> {
         return this.instance.post('logout')
-            .then((response: AxiosResponse) => {
+            .then((response: AxiosResponse<void>) => {
                 return null;
+            });
+    }
+
+    saveBlogPost(post: BlogPost): Promise<BlogPost> {
+        return this.instance.post('api/blogPosts', post)
+            .then((response: AxiosResponse<BlogPost>) => {
+                return response.data;
+            })
+            .catch((error: AxiosError) => {
+                // AxiosError's data's payload is an ErrorResponse, but it is not
+                // a generic type for some reason
+                const message: string = error.response ?
+                    error.response.data.message : error.message;
+                // Re-throw with a better error message
+                throw { name: error.name, message: message, stack: error.stack };
             });
     }
 }

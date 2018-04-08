@@ -8,16 +8,21 @@ export interface ActivityProfile {
 }
 
 export interface BlogPost {
-    id: number;
+    id?: number;
     title: string;
     body: string;
-    createDate: string;
+    createDate?: string;
 }
 
 export interface Compound {
     compoundName: string;
     chemotype: string;
     s10: string;
+}
+
+export interface ErrorResponse {
+    statucCode: number;
+    message: string;
 }
 
 export interface Kinase {

@@ -33,6 +33,16 @@ public class BlogPostControllerTest {
     }
 
     @Test
+    public void testCreateBlogPost() {
+
+        BlogPost post = new BlogPost();
+        post.setTitle("title");
+        post.setBody("body");
+
+        controller.createBlogPost(post);
+    }
+
+    @Test
     public void testGetBlogPosts() {
 
         PageRequest pr = PageRequest.of(0, 20);

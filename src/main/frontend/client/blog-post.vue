@@ -36,7 +36,7 @@ export default class BlogPostWidget extends Vue {
     private post: BlogPost;
 
     get dateString() {
-        return new Date(this.post.createDate).toLocaleDateString();
+        return new Date(this.post.createDate!).toLocaleDateString();
     }
 
     get body() {

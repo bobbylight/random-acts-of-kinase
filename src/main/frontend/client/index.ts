@@ -19,14 +19,17 @@ import VBtn from 'vuetify/es5/components/VBtn';
 import VCard from 'vuetify/es5/components/VCard';
 import VDataTable from 'vuetify/es5/components/VDataTable';
 import VDialog from 'vuetify/es5/components/VDialog';
+import VDivider from 'vuetify/es5/components/VDivider';
 import VFooter from 'vuetify/es5/components/VFooter';
 import VGrid from 'vuetify/es5/components/VGrid'; // VContainer, VContent, VFlex, VGrid, VLayout, VSpacer
 import VIcon from 'vuetify/es5/components/VIcon';
 import VList from 'vuetify/es5/components/VList';
 import VMenu from 'vuetify/es5/components/VMenu';
+import VNavigationDrawer from 'vuetify/es5/components/VNavigationDrawer';
 import VProgressCircular from 'vuetify/es5/components/VProgressCircular';
 import VProgressLinear from 'vuetify/es5/components/VProgressLinear';
 import VSelect from 'vuetify/es5/components/VSelect';
+import VTabs from 'vuetify/es5/components/VTabs';
 import VTextField from 'vuetify/es5/components/VTextField';
 import VToolbar from 'vuetify/es5/components/VToolbar';
 import VTooltip from 'vuetify/es5/components/VTooltip';
@@ -37,6 +40,7 @@ import Search from './search.vue';
 import Blog from './blog.vue';
 import Compound from './compound.vue';
 import Admin from './admin/admin.vue';
+import Stats from './admin/stats.vue';
 import BlogManager from './admin/blog-manager.vue';
 import { RouteConfig } from 'vue-router/types/router';
 
@@ -51,14 +55,17 @@ Vue.use(Vuetify, {
         VCard,
         VDataTable,
         VDialog,
+        VDivider,
         VFooter,
         VGrid,
         VIcon,
         VList,
         VMenu,
+        VNavigationDrawer,
         VProgressCircular,
         VProgressLinear,
         VSelect,
+        VTabs,
         VTextField,
         VToolbar,
         VTooltip,
@@ -88,8 +95,23 @@ window.onload = () => {
         },
         {
             path: '/admin',
-            name: 'admin',
-            component: Admin
+            component: Admin,
+            children: [
+                {
+                    path: 'blog-new-post',
+                    name: 'blog-new-post',
+                    component: BlogManager
+                },
+                {
+                    path: 'stats',
+                    name: 'stats',
+                    component: Stats
+                },
+                {
+                    path: '', // Default view when unknown sub-route specified
+                    component: Stats
+                }
+            ]
         },
         {
             path: '/blog-manager',

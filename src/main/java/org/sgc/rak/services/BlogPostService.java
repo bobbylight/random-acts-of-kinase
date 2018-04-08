@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 /**
  * Service for manipulating blog posts.
  */
@@ -18,6 +20,16 @@ public class BlogPostService {
     @Autowired
     public BlogPostService(BlogPostRepository repository) {
         this.repository = repository;
+    }
+
+    /**
+     * Creates a new blog post.
+     *
+     * @param post The blog post to create.
+     */
+    public void createBlogPost(BlogPost post) {
+        post.setCreateDate(new Date());
+        repository.save(post);
     }
 
     /**

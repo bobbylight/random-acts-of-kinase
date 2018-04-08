@@ -127,7 +127,6 @@ export default class CompoundTable extends Vue {
 
     @Watch('pagination')
     private onPaginationHandlerChanged(newValue: any) {
-        console.log('here');
         // Note this triggers an unnecessary second query until
         // https://github.com/vuetifyjs/vuetify/issues/3585 is fixed
         return this.reloadTable();

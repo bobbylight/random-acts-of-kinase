@@ -2,14 +2,14 @@
     <v-app>
         <navbar></navbar>
 
-        <div class="main-content">
+        <v-content class="main-content">
 
             <transition name="fade">
                 <keep-alive>
                     <router-view :key="$route.params.id"></router-view>
                 </keep-alive>
             </transition>
-        </div>
+        </v-content>
 
         <v-footer class="theme--dark" height="auto">
             <v-layout row wrap justify-center>
@@ -60,8 +60,8 @@ export default class App extends Vue {
 
 <style lang="less">
 .main-content {
-    margin-top: 3rem;
     min-height: 800px;
+    height: 100%;
 }
 
 .fade-enter-active, .fade-leave-active {

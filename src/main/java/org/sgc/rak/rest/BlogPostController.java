@@ -7,9 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.SortDefault;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * REST API for blog posts.
@@ -23,6 +24,17 @@ public class BlogPostController {
     @Autowired
     public BlogPostController(BlogPostService blogPostService) {
         this.blogPostService = blogPostService;
+    }
+
+    /**
+     * Creates a new blog post.
+     *
+     * @param post The blog post to create.
+     */
+    @RequestMapping(method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    void createBlogPost(@Valid @RequestBody BlogPost post) {
+        blogPostService.createBlogPost(post);
     }
 
     /**
