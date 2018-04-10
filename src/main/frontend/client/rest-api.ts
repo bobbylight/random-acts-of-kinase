@@ -44,11 +44,16 @@ export class RestApi {
             });
     }
 
-    getBlogPosts(page: number, size: number, author: string | null = null): Promise<PagedDataRep<BlogPost[]>> {
+    getBlogPosts(page: number, size: number, filters: any,
+                 sortParam: string): Promise<PagedDataRep<BlogPost[]>> {
 
         let url: string = `api/blogPosts?page=${page}&size=${size}`;
-        if (author) {
-            url += `&author=${author}`;
+        if (filters.author) {
+            url += `&author=${filters.author}`;
+        }
+
+        if (sortParam) {
+            url += `&sort=${sortParam}`;
         }
 
         return this.instance.get(url)

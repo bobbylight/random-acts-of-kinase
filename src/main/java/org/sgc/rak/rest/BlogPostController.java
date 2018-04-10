@@ -6,6 +6,7 @@ import org.sgc.rak.services.BlogPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -38,13 +39,25 @@ public class BlogPostController {
     }
 
     /**
+     * Deletes a blog post by ID.
+     *
+     * @param blogPostId The ID of the blog post to delete.
+     */
+    @RequestMapping(method = RequestMethod.DELETE, path = "/{blogPostId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void deleteBlogPost(@PathVariable long blogPostId) {
+        blogPostService.deleteBlogPost(blogPostId);
+    }
+
+    /**
      * Returns blog posts.
      *
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of blog posts.
      */
     @RequestMapping(method = RequestMethod.GET)
-    PagedDataRep<BlogPost> getBlogPosts(@SortDefault("createDate") Pageable pageInfo) {
+    PagedDataRep<BlogPost> getBlogPosts(@SortDefault(value = "createDate",
+            direction = Sort.Direction.DESC) Pageable pageInfo) {
         Page<BlogPost> page = blogPostService.getBlogPosts(pageInfo);
         long start = page.getNumber() * pageInfo.getPageSize();
         long total = page.getTotalElements();

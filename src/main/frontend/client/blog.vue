@@ -33,6 +33,7 @@ import Component from 'vue-class-component';
 import BlogPostWidget from './blog-post.vue';
 import { BlogPost, PagedDataRep } from './rak';
 import restApi from './rest-api';
+import { Route } from 'vue-router';
 
 @Component({ components: { BlogPostWidget } })
 export default class Blog extends Vue {
@@ -44,9 +45,20 @@ export default class Blog extends Vue {
 
     private blogPosts: any = [];
 
-    created() {
+    beforeRouteEnter(to: Route, from: Route, next: any) {
+        // We don't have access to 'this' since this is called before the component is
+        // realized.  We must do initialization in a callback to next()
+        next((vue: Blog) => {
+            vue.loadBlogPosts();
+        });
+    }
 
-        restApi.getBlogPosts(0, 100)
+    private loadBlogPosts() {
+
+        console.log('Loading blog posts...');
+        this.postCount = -1;
+
+        restApi.getBlogPosts(0, 1000, {}, 'createDate,desc')
             .then((posts: PagedDataRep<BlogPost[]>) => {
                 this.blogPosts = posts.data;
                 this.postCount = posts.count;

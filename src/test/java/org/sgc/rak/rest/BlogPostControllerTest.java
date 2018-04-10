@@ -43,6 +43,12 @@ public class BlogPostControllerTest {
     }
 
     @Test
+    public void testDeleteBlogPost() {
+
+        controller.deleteBlogPost(42L);
+    }
+
+    @Test
     public void testGetBlogPosts() {
 
         PageRequest pr = PageRequest.of(0, 20);

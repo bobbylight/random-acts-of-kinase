@@ -33,12 +33,21 @@ public class BlogPostService {
     }
 
     /**
+     * Deletes a blog post.
+     *
+     * @param id The ID of the blog post to delete.
+     */
+    public void deleteBlogPost(Long id) {
+        repository.deleteById(id);
+    }
+
+    /**
      * Returns blog posts.
      *
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of blog posts.
      */
     public Page<BlogPost> getBlogPosts(Pageable pageInfo) {
-        return repository.findAllByOrderByCreateDateDesc(pageInfo);
+        return repository.findAll(pageInfo);
     }
 }

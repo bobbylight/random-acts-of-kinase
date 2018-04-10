@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -44,6 +45,14 @@ public class BlogPostServiceTest {
         service.createBlogPost(post);
 
         verify(mockRepository, times(1)).save(any());
+    }
+
+    @Test
+    public void testDeleteBlogPost() {
+
+        service.deleteBlogPost(42L);
+
+        verify(mockRepository, times(1)).deleteById(eq(42L));
     }
 
     @Test

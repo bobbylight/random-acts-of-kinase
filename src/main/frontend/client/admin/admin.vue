@@ -56,10 +56,19 @@
 
                     <v-list-tile to="blog-new-post">
                         <v-list-tile-action>
-                            <v-icon>fa-newspaper</v-icon>
+                            <v-icon>mode_edit</v-icon>
                         </v-list-tile-action>
                         <v-list-tile-content>
                             <v-list-tile-title>New News Post</v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+
+                    <v-list-tile to="blog-manager">
+                        <v-list-tile-action>
+                            <v-icon>fa-newspaper-o</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>Manage News Posts</v-list-tile-title>
                         </v-list-tile-content>
                     </v-list-tile>
 
@@ -92,10 +101,8 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import CompoundsTable, { ColumnInfo } from './compounds-table.vue';
-import DownloadButton from './download-button.vue';
 
-@Component({ components: { CompoundsTable, DownloadButton } })
+@Component
 export default class AdminHome extends Vue {
 
     private navDrawerOpen: boolean = true;

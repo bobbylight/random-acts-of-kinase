@@ -6,6 +6,10 @@ import 'app.less';
 import '../node_modules/vuetify/dist/vuetify.min.css';
 import '../node_modules/quill/assets/snow.styl';
 
+// Register the router hooks with their names
+// (must be done before registering any components)
+import './class-component-hooks';
+
 import Vue from 'vue';
 import App from './App.vue';
 import VueRouter from 'vue-router';
@@ -42,6 +46,7 @@ import Compound from './compound.vue';
 import Admin from './admin/admin.vue';
 import Stats from './admin/stats.vue';
 import BlogManager from './admin/blog-manager.vue';
+import NewBlogEntry from './admin/new-blog-entry.vue';
 import { RouteConfig } from 'vue-router/types/router';
 
 Vue.use(VueRouter);
@@ -98,9 +103,14 @@ window.onload = () => {
             component: Admin,
             children: [
                 {
+                    path: 'blog-manager',
+                    name: 'blog-manager',
+                    component: BlogManager
+                },
+                {
                     path: 'blog-new-post',
                     name: 'blog-new-post',
-                    component: BlogManager
+                    component: NewBlogEntry
                 },
                 {
                     path: 'stats',
@@ -112,11 +122,6 @@ window.onload = () => {
                     component: Stats
                 }
             ]
-        },
-        {
-            path: '/blog-manager',
-            name: 'blog-manager',
-            component: BlogManager
         },
         {
             path: '/compound/:id',

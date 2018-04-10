@@ -9,6 +9,4 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  * JPA repository for blog posts.
  */
 public interface BlogPostRepository extends PagingAndSortingRepository<BlogPost, Long> {
-
-    Page<BlogPost> findAllByOrderByCreateDateDesc(Pageable pageInfo);
 }
