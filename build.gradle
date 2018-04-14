@@ -4,7 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.0.RELEASE'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.1.RELEASE'
     }
 }
 plugins {
@@ -20,8 +20,8 @@ apply plugin: 'com.moowork.node'
 apply plugin: 'findbugs'
 apply plugin: 'checkstyle'
 
-group 'org.sgc'
-version '0.5.1-SNAPSHOT'
+group = 'org.sgc'
+version = '0.6.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
