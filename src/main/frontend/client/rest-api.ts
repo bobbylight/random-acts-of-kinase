@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { ActivityProfile, BlogPost, Compound, PagedDataRep, UserRep } from './rak';
+import { ActivityProfile, BlogPost, Compound, ErrorResponse, PagedDataRep, UserRep } from './rak';
 
 export class RestApi {
 
@@ -13,6 +13,28 @@ export class RestApi {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         });
+    }
+
+    /**
+     * Grabs the error response from the server, so we don't have to return an Axios-specific construct.
+     *
+     * @param {AxiosError} error The error received from the server.
+     * @return The error response.
+     */
+    private static axiosErrorToErrorResponse(error: AxiosError): ErrorResponse {
+
+        // AxiosError's data's payload is an ErrorResponse, but it is not a generic type
+        // for some reason.  That's fine, we take extra care for non ErrorResponses too.
+
+        if (error.response) {
+            if (error.response.data.statusCode && error.response.data.message) {
+                return error.response.data;
+            }
+            return { message: error.message, statusCode: error.response.status };
+        }
+
+        console.error(`No response information in error: ${JSON.stringify(error)}`);
+        return { message: error.message, statusCode: 0 };
     }
 
     checkAuthentication(): Promise<UserRep> {
@@ -93,6 +115,9 @@ export class RestApi {
         return this.instance.get('login', config)
             .then((response: AxiosResponse<UserRep>) => {
                 return response.data;
+            })
+            .catch((error: AxiosError) => {
+                throw RestApi.axiosErrorToErrorResponse(error);
             });
     }
 
@@ -109,12 +134,7 @@ export class RestApi {
                 return response.data;
             })
             .catch((error: AxiosError) => {
-                // AxiosError's data's payload is an ErrorResponse, but it is not
-                // a generic type for some reason
-                const message: string = error.response ?
-                    error.response.data.message : error.message;
-                // Re-throw with a better error message
-                throw { name: error.name, message: message, stack: error.stack };
+                throw RestApi.axiosErrorToErrorResponse(error);
             });
     }
 }

@@ -22,7 +22,7 @@ export interface Compound {
 }
 
 export interface ErrorResponse {
-    statucCode: number;
+    statusCode: number;
     message: string;
 }
 

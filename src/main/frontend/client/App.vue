@@ -61,7 +61,6 @@ export default class App extends Vue {
 <style lang="less">
 .main-content {
     min-height: 800px;
-    height: 100%;
 }
 
 .fade-enter-active, .fade-leave-active {

@@ -61,6 +61,7 @@ import Component from 'vue-class-component';
 import NavbarPill from './navbar-pill.vue';
 import LoginModal from './login-modal.vue';
 import restApi from './rest-api';
+import Toaster from "./toaster";
 
 @Component({ components: { NavbarPill, LoginModal } })
 export default class Navbar extends Vue {
@@ -93,6 +94,9 @@ export default class Navbar extends Vue {
     private logout() {
         restApi.logout()
             .then(() => {
+
+                Toaster.success(`See you next time, ${this.$store.state.user}!`);
+
                 // TODO: This flashes the "no access" stuff on the admin tab for a second.
                 // Conver to an action to fix this
                 if (this.$router.currentRoute.name !== 'home') {

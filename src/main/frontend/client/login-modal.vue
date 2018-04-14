@@ -11,7 +11,7 @@
                 </div>
 
                 <form id="login-form">
-                    <v-text-field label="User name" v-model="user"></v-text-field>
+                    <v-text-field label="User name" v-model="user" ref="userNameField"></v-text-field>
                     <v-text-field label="Password" v-model="password"
                                   :append-icon="passwordVisible ? 'visibility' : 'visibility_off'"
                                   :append-icon-cb="() => (passwordVisible = !passwordVisible)"
@@ -35,10 +35,9 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { Prop } from 'vue-property-decorator';
+import { Prop, Watch } from 'vue-property-decorator';
 import restApi from './rest-api';
-import { AxiosError } from 'axios';
-import { UserRep } from './rak';
+import {ErrorResponse, UserRep} from './rak';
 import Toaster from './toaster';
 
 const HIDDEN: string = 'close';
@@ -73,9 +72,8 @@ export default class LoginModal extends Vue {
                 Toaster.success(`Welcome back, ${this.user}!`);
                 this.user = this.password = '';
             })
-            .catch((response: AxiosError) => {
-                console.log('Login failure :(:(:(');
-                if (response.response && response.response.status === 401) {
+            .catch((response: ErrorResponse) => {
+                if (response.statusCode === 401) {
                     Toaster.error('You typed the wrong username or password');
                 }
                 else {
@@ -89,6 +87,23 @@ export default class LoginModal extends Vue {
 
     onCancel() {
         this.$emit(HIDDEN);
+    }
+
+    /**
+     * When this modal is told to show itself, focus the user name field.
+     *
+     * @param {boolean} newValue Whether to show or hide ourselves.
+     */
+    @Watch('show')
+    private onShowChanged(newValue: boolean) {
+        if (newValue) {
+            this.$nextTick(() => {
+                (this.$refs.userNameField as HTMLInputElement).focus();
+            });
+        }
+        else {
+            this.user = this.password = '';
+        }
     }
 }
 </script>

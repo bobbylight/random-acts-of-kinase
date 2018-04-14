@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="home-wrapper">
 
         <div class="parallax hidden">
             <h1 class="display-3 words-in-image">We Are Open Science</h1>
@@ -49,28 +49,32 @@ export default class Home extends Vue {
 </script>
 
 <style lang="less">
+.home-wrapper {
 
-.home-text-section {
-    padding: 4rem 0;
-}
+    height: 100%;
 
-.parallax {
-    transition: opacity 6s;
-    background-image: url(/img/drew-hays-206414-unsplash.jpg);
-    min-height: 600px;
-
-    background-attachment: fixed;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-
-    .words-in-image {
-        color: white;
-        margin: 3rem 0 0 3rem;
+    .home-text-section {
+        padding: 4rem 0;
     }
 
-    &.hidden {
-        opacity: 0;
+    .parallax {
+        transition: opacity 1s;
+        background-image: url(/img/drew-hays-206414-unsplash-small.jpg);
+        min-height: 600px;
+
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+
+        .words-in-image {
+            color: white;
+            margin: 3rem 0 0 3rem;
+        }
+
+        &.hidden {
+            opacity: 0;
+        }
     }
 }
 </style>

@@ -20,8 +20,8 @@
 
         <v-layout fill-height justify-center>
 
-            <v-flex xs3 fill-height v-if="navDrawerOpen" elevation-1 class="slide-out-admin-options"
-                    style="position: relative">
+            <v-flex xs3 fill-height v-if="navDrawerOpen && this.$store.getters.loggedIn"
+                    elevation-1 class="slide-out-admin-options" style="position: relative">
 
                 <v-toolbar flat class="transparent">
                     <v-list class="pt-0">
