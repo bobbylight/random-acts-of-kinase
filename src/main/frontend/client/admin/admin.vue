@@ -18,10 +18,10 @@
             </v-btn>
         </v-fab-transition>
 
-        <v-layout fill-height justify-center>
+        <v-layout row fill-height> <!-- don't wrap or justify-center -->
 
             <v-flex xs3 fill-height v-if="navDrawerOpen && this.$store.getters.loggedIn"
-                    elevation-1 class="slide-out-admin-options" style="position: relative">
+                    elevation-1 class="slide-out-admin-options">
 
                 <v-toolbar flat class="transparent">
                     <v-list class="pt-0">
@@ -75,8 +75,8 @@
                 </v-list>
             </v-flex>
 
-            <v-flex xs9 fill-height>
-                <v-container fluid grid-list-md>
+            <v-container grid-list-md fill-height class="page-wrapper">
+                <v-layout row wrap fill-height justify-center>
 
                     <div class="no-access" v-if="!this.$store.getters.loggedIn">
 
@@ -85,15 +85,15 @@
                         <router-link :to="{ name: 'home' }">Get out of here</router-link>
                     </div>
 
-                    <div v-if="this.$store.getters.loggedIn">
+                    <div v-if="this.$store.getters.loggedIn" style="width:100%">
                         <transition name="fade">
                             <keep-alive>
                                 <router-view></router-view>
                             </keep-alive>
                         </transition>
                     </div>
-                </v-container>
-            </v-flex>
+                </v-layout>
+            </v-container>
         </v-layout>
     </div>
 </template>
@@ -117,6 +117,7 @@ export default class AdminHome extends Vue {
     padding-right: 0 !important;
 
     .slide-out-admin-options {
+        max-width: 380px;
         background: white; // Match the list contained in it
     }
 }

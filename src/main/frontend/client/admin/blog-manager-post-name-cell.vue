@@ -37,7 +37,7 @@ export default class BlogManagerPostNameCell extends Vue {
     }
 
     editPost(postId: number) {
-        alert('Not yet implemented');
+        this.$emit('editPost', this.post);
     }
 
     get beautifiedCreateDate(): string {

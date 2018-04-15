@@ -49,7 +49,8 @@ CREATE TABLE :schema.blog_post (
   blog_post_id serial,
   title character varying(128) NOT NULL,
   body character varying(1048576) NOT NULL,
-  create_dttm TIMESTAMP WITHOUT TIME ZONE NOT NULL
+  create_dttm TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+  view_count integer NOT NULL DEFAULT 0
 )
 WITH ( OIDS = FALSE );
 

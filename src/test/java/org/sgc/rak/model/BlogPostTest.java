@@ -16,6 +16,13 @@ public class BlogPostTest {
     }
 
     @Test
+    public void testOnCreate() {
+        Assert.assertNull(blogPost.getViewCount());
+        blogPost.onCreate();
+        Assert.assertEquals(0L, blogPost.getViewCount().longValue());
+    }
+
+    @Test
     public void testGetSetId() {
         Assert.assertNull(blogPost.getId());
         blogPost.setId(5L);
@@ -45,8 +52,15 @@ public class BlogPostTest {
     }
 
     @Test
+    public void testGetSetViewCount() {
+        Assert.assertNull(blogPost.getViewCount());
+        blogPost.setViewCount(42L);
+        Assert.assertEquals(42L, blogPost.getViewCount().longValue());
+    }
+
+    @Test
     public void testToString() {
-        String expected = "BlogPost[id=<null>,title=<null>,body=<null>,createDate=<null>]";
+        String expected = "BlogPost[id=<null>,title=<null>,body=<null>,createDate=<null>,viewCount=<null>]";
         Assert.assertEquals(expected, blogPost.toString());
     }
 }

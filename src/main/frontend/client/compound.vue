@@ -1,8 +1,12 @@
 <template>
-    <v-container grid-list-md>
-        <v-layout row wrap class="compound-details-wrapper py-5">
-            <div class="headline pb-2 primary--text">Results for {{this.id}}</div>
-            <result-table :filters="gridFilters"></result-table>
+    <v-container grid-list-md class="page-wrapper">
+        <v-layout row wrap>
+
+            <section-header>Results for {{this.id}}</section-header>
+
+            <v-flex xs12>
+                <result-table :filters="gridFilters"></result-table>
+            </v-flex>
         </v-layout>
     </v-container>
 </template>
@@ -11,9 +15,10 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
+import SectionHeader from './header.vue';
 import ResultTable from './result-table.vue';
 
-@Component({ components: { ResultTable } })
+@Component({ components: { ResultTable, SectionHeader } })
 export default class Compound extends Vue {
 
     @Prop({ required: true })

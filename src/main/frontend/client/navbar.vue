@@ -61,7 +61,7 @@ import Component from 'vue-class-component';
 import NavbarPill from './navbar-pill.vue';
 import LoginModal from './login-modal.vue';
 import restApi from './rest-api';
-import Toaster from "./toaster";
+import Toaster from './toaster';
 
 @Component({ components: { NavbarPill, LoginModal } })
 export default class Navbar extends Vue {

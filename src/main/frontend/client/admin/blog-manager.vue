@@ -2,13 +2,11 @@
     <v-container grid-list-md>
         <v-layout row wrap class="blog-manager-wrapper">
 
-            <v-flex xs12>
-                <div class="headline pb-2 primary--text">News Posts</div>
-            </v-flex>
+            <section-header>News Posts</section-header>
 
             <v-flex xs12>
 
-                <v-btn color="info" @click="newPost">New Post</v-btn>
+                <v-btn color="info" @click="onNewPost">New Post</v-btn>
             </v-flex>
 
             <v-flex xs12>
@@ -28,6 +26,7 @@
                         <blog-manager-post-name-cell
                             :post="props.item"
                             @deletePost="onDelete($event)"
+                            @editPost="onEdit($event)"
                             @postsUpdated="reloadTable"></blog-manager-post-name-cell>
                     </template>
                 </v-data-table>
@@ -40,6 +39,13 @@
             :details="confirmDeletePostDetails"
             @confirmResult="onConfirmDeleteModalClosed($event)"
         ></confirm-modal>
+
+        <new-blog-entry
+            :show="showBlogEditor"
+            :post="blogEditorPost"
+            @close="showBlogEditor = false">
+        ></new-blog-entry>
+
     </v-container>
 </template>
 
@@ -49,11 +55,13 @@ import Component from 'vue-class-component';
 import { Watch } from 'vue-property-decorator';
 import { BlogPost, ErrorResponse, PagedDataRep } from '../rak';
 import ConfirmModal, { ConfirmResult } from '../confirm-modal.vue';
+import SectionHeader from '../header.vue';
 import BlogManagerPostNameCell from './blog-manager-post-name-cell.vue';
 import restApi from '../rest-api';
 import Toaster from '../toaster';
+import NewBlogEntry from './blog-post-editor-modal';
 
-@Component({ components: { BlogManagerPostNameCell, ConfirmModal } })
+@Component({ components: {NewBlogEntry, SectionHeader, BlogManagerPostNameCell, ConfirmModal } })
 export default class BlogManager extends Vue {
 
     private search: string = '';
@@ -70,6 +78,10 @@ export default class BlogManager extends Vue {
 
     private postToDelete: BlogPost;
 
+    private showBlogEditor: boolean = false;
+
+    private blogEditorPost: BlogPost | null = null;
+
     private pagination: any = {
         sortBy: 'createDate',
         descending: true
@@ -80,7 +92,7 @@ export default class BlogManager extends Vue {
         this.showDeleteConfirmation = false;
 
         if (result === 'yes') {
-            restApi.deleteBlogPost(this.postToDelete.id)
+            restApi.deleteBlogPost(this.postToDelete.id!)
                 .then(() => {
                     Toaster.success('News post deleted');
                     this.reloadTable();
@@ -97,6 +109,16 @@ export default class BlogManager extends Vue {
         this.showDeleteConfirmation = true;
     }
 
+    onEdit(post: BlogPost) {
+        this.blogEditorPost = post;
+        this.showBlogEditor = true;
+    }
+
+    onNewPost() {
+        this.blogEditorPost = null;
+        this.showBlogEditor = true;
+    }
+
     get headers(): any[] /*VTableHeader[]*/ {
 
         return [
@@ -104,9 +126,6 @@ export default class BlogManager extends Vue {
             { text: 'Author', value: 'author', sortable: false },
             { text: 'Date', value: 'createDate' }
         ];
-    }
-
-    newPost() {
     }
 
     reloadTable() {

@@ -2,8 +2,8 @@
     <div class="search-wrapper">
 
         <v-container fluid grid-list-md class="search-filter-wrapper">
-            <v-layout row wrap>
-                <v-flex xs12>
+            <v-layout row wrap justify-center>
+                <v-flex xs12 class="search-part-layout">
 
                     <h1>Search Compounds</h1>
 
@@ -14,7 +14,7 @@
 
         <v-container class="search-results">
             <v-layout row wrap justify-center>
-                <v-flex xs10>
+                <v-flex xs12 class="search-part-layout">
                     <compound-name-table :filters="gridFilters"></compound-name-table>
                 </v-flex>
             </v-layout>
@@ -86,12 +86,19 @@ export default class Search extends Vue {
 </script>
 
 <style lang="less">
+@import "../styles/app-variables";
+
 .search-wrapper {
 
     height: 100%;
     background: white;
 
+    .search-part-layout {
+        max-width: @max-width;
+    }
+
     .search-filter-wrapper {
+
         background: #f5f5f5;
         border-bottom: 1px solid lightgray;
         padding: 2rem 6rem;

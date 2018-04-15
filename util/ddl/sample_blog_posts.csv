@@ -1,3 +1,3 @@
-blog_post_id,title,body,create_dttm
-1,Welcome,"Welcome to the Random Acts of Kinase blog! Here we'll post news and updates about the site.\n\n* one\n* two\n* three\n\n:smile: :warning: :)",2018-02-06T17:42:00Z
-2,New Activity Profiles,"New activity profiles were added today, check them out!",2018-02-07T00:00:00Z
+blog_post_id,title,body,create_dttm,view_count
+1,Welcome,"Welcome to the Random Acts of Kinase blog! Here we'll post news and updates about the site.\n\n* one\n* two\n* three\n\n:smile: :warning: :)",2018-02-06T17:42:00Z,1
+2,New Activity Profiles,"New activity profiles were added today, check them out!",2018-02-07T00:00:00Z,1

@@ -40,6 +40,14 @@ public class BlogPost {
     @Column(name = "create_dttm", nullable = false, updatable = false)
     private Date createDate;
 
+    @Column(nullable = false)
+    private Long viewCount;
+
+    @PrePersist
+    public void onCreate() {
+        this.viewCount = 0L;
+    }
+
     public Long getId() {
         return id;
     }
@@ -72,6 +80,14 @@ public class BlogPost {
         this.createDate = date != null ? new Date(date.getTime()) : null;
     }
 
+    public Long getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(Long viewCount) {
+        this.viewCount = viewCount;
+    }
+
     @Override
     public String toString() {
 
@@ -82,6 +98,7 @@ public class BlogPost {
             .append("title", title)
             .append("body", shortenedBody)
             .append("createDate", createDate)
+            .append("viewCount", viewCount)
             .build();
     }
 }

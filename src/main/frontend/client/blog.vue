@@ -1,10 +1,10 @@
 <template>
-    <v-container fluid grid-list-md>
+    <v-container grid-list-md class="page-wrapper">
 
         <v-layout row wrap class="blog-wrapper">
             <v-flex xs12>
 
-                <h1>News</h1>
+                <section-header>News</section-header>
 
                 <div v-if="postCount === -1">
                     Loading...
@@ -16,7 +16,8 @@
 
                 <div v-if="postCount > 0">
 
-                    <blog-post-widget v-for="post in blogPosts" :key="post.id" :post="post"></blog-post-widget>
+                    <blog-post-widget v-for="post in blogPosts" :key="post.id" :post="post"
+                            class="blog-post"></blog-post-widget>
 
                     <div class="blog-page-footer">
                         Showing {{postStart}} - {{postEnd}} of {{postTotal}}
@@ -30,12 +31,13 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
+import SectionHeader from './header.vue';
 import BlogPostWidget from './blog-post.vue';
 import { BlogPost, PagedDataRep } from './rak';
 import restApi from './rest-api';
 import { Route } from 'vue-router';
 
-@Component({ components: { BlogPostWidget } })
+@Component({ components: { SectionHeader, BlogPostWidget } })
 export default class Blog extends Vue {
 
     private postCount: number = -1;
@@ -76,7 +78,9 @@ export default class Blog extends Vue {
 <style lang="less">
 .blog-wrapper {
 
-    padding: 2rem 6rem;
+    .blog-post:not(:first-of-type) {
+        margin-top: 2rem;
+    }
 
     .blog-page-footer {
         margin-top: 1rem;

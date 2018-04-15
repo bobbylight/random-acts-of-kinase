@@ -46,7 +46,6 @@ import Compound from './compound.vue';
 import Admin from './admin/admin.vue';
 import Stats from './admin/stats.vue';
 import BlogManager from './admin/blog-manager.vue';
-import NewBlogEntry from './admin/new-blog-entry.vue';
 import { RouteConfig } from 'vue-router/types/router';
 
 Vue.use(VueRouter);
@@ -106,11 +105,6 @@ window.onload = () => {
                     path: 'blog-manager',
                     name: 'blog-manager',
                     component: BlogManager
-                },
-                {
-                    path: 'blog-new-post',
-                    name: 'blog-new-post',
-                    component: NewBlogEntry
                 },
                 {
                     path: 'stats',

@@ -1,6 +1,6 @@
 <template>
 
-    <v-card class="blog-post-card-padding">
+    <v-card class="blog-post-card">
 
         <v-card-title primary-title>
             <div class="title-content">
@@ -52,9 +52,6 @@ export default class BlogPostWidget extends Vue {
 <style lang="less">
 @action-color: lightgray;
 
-.blog-post-card-padding {
-    margin-top: 2rem;
-}
 .blog-card-actions {
 
     border-top: 1px solid @action-color;

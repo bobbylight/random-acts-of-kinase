@@ -133,7 +133,7 @@ export class RestApi {
         const url: string = `api/blogPosts/${postId}`;
 
         return this.instance.delete(url)
-            .then((response: AxiosResponse<void>) => {
+            .then(() => {
                 return undefined;
             })
             .catch((error: AxiosError) => {
@@ -143,6 +143,16 @@ export class RestApi {
 
     saveBlogPost(post: BlogPost): Promise<BlogPost> {
         return this.instance.post('api/blogPosts', post)
+            .then((response: AxiosResponse<BlogPost>) => {
+                return response.data;
+            })
+            .catch((error: AxiosError) => {
+                throw RestApi.axiosErrorToErrorResponse(error);
+            });
+    }
+
+    updateBlogPost(post: BlogPost): Promise<BlogPost> {
+        return this.instance.put(`api/blogPosts/${post.id}`, post)
             .then((response: AxiosResponse<BlogPost>) => {
                 return response.data;
             })
