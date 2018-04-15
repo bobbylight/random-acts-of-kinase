@@ -36,8 +36,8 @@ export default class NavbarPill extends Vue {
 </script>
 
 <style lang="less">
+@import "../styles/app-variables";
 @close-icon-color: gray;
-@transition-time: .5s;
 
 .navbar-pill-parent {
     position: relative;

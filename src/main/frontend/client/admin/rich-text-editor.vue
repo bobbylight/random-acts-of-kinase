@@ -58,6 +58,7 @@ export default class RichTextEditor extends Vue {
             [ 'bold', 'italic', 'underline' ],
             [ { color: [] }, { background: [] } ], // Empty arrays => takes defaults from theme
             [ 'link', 'image' ],
+            [ { list: 'ordered' }, { list: 'bullet' } ],
             [ { align: [] } ],
             [ { size: [ 'small', false, 'large', 'huge' ] } ],
             [ { header: [ 1, 2, 3, 4, 5, 6, false ] } ],

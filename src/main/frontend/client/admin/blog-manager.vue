@@ -8,6 +8,11 @@
 
             <v-flex xs12>
 
+                <v-btn color="info" @click="newPost">New Post</v-btn>
+            </v-flex>
+
+            <v-flex xs12>
+
                 <v-data-table
                     :headers="headers"
                     class="elevation-1"
@@ -20,11 +25,21 @@
                 >
 
                     <template slot="items" slot-scope="props">
-                        <blog-manager-post-name-cell :post="props.item"></blog-manager-post-name-cell>
+                        <blog-manager-post-name-cell
+                            :post="props.item"
+                            @deletePost="onDelete($event)"
+                            @postsUpdated="reloadTable"></blog-manager-post-name-cell>
                     </template>
                 </v-data-table>
             </v-flex>
         </v-layout>
+
+        <confirm-modal
+            :show="showDeleteConfirmation"
+            title="Confirm Delete Post"
+            :details="confirmDeletePostDetails"
+            @confirmResult="onConfirmDeleteModalClosed($event)"
+        ></confirm-modal>
     </v-container>
 </template>
 
@@ -32,11 +47,13 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Watch } from 'vue-property-decorator';
-import { BlogPost, PagedDataRep } from '../rak';
+import { BlogPost, ErrorResponse, PagedDataRep } from '../rak';
+import ConfirmModal, { ConfirmResult } from '../confirm-modal.vue';
 import BlogManagerPostNameCell from './blog-manager-post-name-cell.vue';
 import restApi from '../rest-api';
+import Toaster from '../toaster';
 
-@Component({ components: { BlogManagerPostNameCell } })
+@Component({ components: { BlogManagerPostNameCell, ConfirmModal } })
 export default class BlogManager extends Vue {
 
     private search: string = '';
@@ -47,10 +64,38 @@ export default class BlogManager extends Vue {
 
     private loading: boolean = true;
 
+    private showDeleteConfirmation: boolean = false;
+
+    private confirmDeletePostDetails: string = '';
+
+    private postToDelete: BlogPost;
+
     private pagination: any = {
         sortBy: 'createDate',
         descending: true
     };
+
+    onConfirmDeleteModalClosed(result: ConfirmResult) {
+
+        this.showDeleteConfirmation = false;
+
+        if (result === 'yes') {
+            restApi.deleteBlogPost(this.postToDelete.id)
+                .then(() => {
+                    Toaster.success('News post deleted');
+                    this.reloadTable();
+                })
+                .catch((error: ErrorResponse) => {
+                    Toaster.error('An error occurred deleting the news post');
+                });
+        }
+    }
+
+    onDelete(post: BlogPost) {
+        this.postToDelete = post;
+        this.confirmDeletePostDetails = `Are you sure you want to delete the news post "${post.title}"?`;
+        this.showDeleteConfirmation = true;
+    }
 
     get headers(): any[] /*VTableHeader[]*/ {
 
@@ -59,6 +104,9 @@ export default class BlogManager extends Vue {
             { text: 'Author', value: 'author', sortable: false },
             { text: 'Date', value: 'createDate' }
         ];
+    }
+
+    newPost() {
     }
 
     reloadTable() {

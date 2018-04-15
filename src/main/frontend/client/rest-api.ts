@@ -128,6 +128,19 @@ export class RestApi {
             });
     }
 
+    deleteBlogPost(postId: number): Promise<void> {
+
+        const url: string = `api/blogPosts/${postId}`;
+
+        return this.instance.delete(url)
+            .then((response: AxiosResponse<void>) => {
+                return undefined;
+            })
+            .catch((error: AxiosError) => {
+                throw RestApi.axiosErrorToErrorResponse(error);
+            });
+    }
+
     saveBlogPost(post: BlogPost): Promise<BlogPost> {
         return this.instance.post('api/blogPosts', post)
             .then((response: AxiosResponse<BlogPost>) => {
