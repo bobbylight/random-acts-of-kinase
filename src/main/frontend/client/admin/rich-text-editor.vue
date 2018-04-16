@@ -5,7 +5,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { Prop } from 'vue-property-decorator';
+import { Prop, Watch } from 'vue-property-decorator';
 import Quill, { DeltaStatic, Sources } from 'quill';
 import debounce from 'debounce';
 
@@ -14,11 +14,14 @@ import debounce from 'debounce';
  */
 export interface ChangeEvent {
     isEmpty(): boolean;
-    getContent(): string;
+    getContent(): any;
 }
 
 @Component
 export default class RichTextEditor extends Vue {
+
+    @Prop()
+    private initialContent: DeltaStatic | null;
 
     // Note this class assumes this prop won't change for the life of this component.
     @Prop()
@@ -29,13 +32,15 @@ export default class RichTextEditor extends Vue {
 
     private editor: Quill;
 
+    private skipNextContentChange: boolean = false;
+
     created() {
         this.getEditorContent = this.getEditorContent.bind(this);
         this.isEditorEmpty = this.isEditorEmpty.bind(this);
     }
 
-    private getEditorContent(): string {
-        return this.editor.root.innerHTML;
+    private getEditorContent(): any {
+        return this.editor.getContents();
     }
 
     private isEditorEmpty(): boolean {
@@ -76,6 +81,13 @@ export default class RichTextEditor extends Vue {
 
         if (this.emitChangeEvents) {
             this.editor.on('text-change', debounce(this.onTextChange.bind(this), 500));
+        }
+    }
+
+    @Watch('initialContent')
+    private onInitialContentChanged() {
+        if (this.initialContent) {
+            this.editor.setContents(this.initialContent);
         }
     }
 }

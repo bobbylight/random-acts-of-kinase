@@ -54,21 +54,12 @@
                         </v-list-tile-content>
                     </v-list-tile>
 
-                    <v-list-tile to="blog-new-post">
-                        <v-list-tile-action>
-                            <v-icon>mode_edit</v-icon>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                            <v-list-tile-title>New News Post</v-list-tile-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-
                     <v-list-tile to="blog-manager">
                         <v-list-tile-action>
                             <v-icon>fa-newspaper-o</v-icon>
                         </v-list-tile-action>
                         <v-list-tile-content>
-                            <v-list-tile-title>Manage News Posts</v-list-tile-title>
+                            <v-list-tile-title>News Posts</v-list-tile-title>
                         </v-list-tile-content>
                     </v-list-tile>
 

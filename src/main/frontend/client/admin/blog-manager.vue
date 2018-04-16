@@ -40,11 +40,11 @@
             @confirmResult="onConfirmDeleteModalClosed($event)"
         ></confirm-modal>
 
-        <new-blog-entry
+        <blog-post-editor-modal
             :show="showBlogEditor"
             :post="blogEditorPost"
-            @close="showBlogEditor = false">
-        ></new-blog-entry>
+            @close="onBlogEditorModalClosed()">
+        ></blog-post-editor-modal>
 
     </v-container>
 </template>
@@ -59,9 +59,9 @@ import SectionHeader from '../header.vue';
 import BlogManagerPostNameCell from './blog-manager-post-name-cell.vue';
 import restApi from '../rest-api';
 import Toaster from '../toaster';
-import NewBlogEntry from './blog-post-editor-modal';
+import BlogPostEditorModal from './blog-post-editor-modal';
 
-@Component({ components: {NewBlogEntry, SectionHeader, BlogManagerPostNameCell, ConfirmModal } })
+@Component({ components: { BlogPostEditorModal, SectionHeader, BlogManagerPostNameCell, ConfirmModal } })
 export default class BlogManager extends Vue {
 
     private search: string = '';
@@ -86,6 +86,11 @@ export default class BlogManager extends Vue {
         sortBy: 'createDate',
         descending: true
     };
+
+    onBlogEditorModalClosed() {
+        this.showBlogEditor = false;
+        this.reloadTable();
+    }
 
     onConfirmDeleteModalClosed(result: ConfirmResult) {
 

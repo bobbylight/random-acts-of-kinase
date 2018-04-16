@@ -10,12 +10,15 @@
                     <v-text-field type="text" label="Post Title" v-model="title" ref="titleField"></v-text-field>
                 </v-flex>
 
-                <rich-text-editor :emitChangeEvents="true" @change="editorContentChanged"></rich-text-editor>
+                <rich-text-editor
+                    :initial-content="body"
+                    :emitChangeEvents="true"
+                    @change="editorContentChanged"></rich-text-editor>
             </v-card-text>
 
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn :disabled="isFormIncomplate()" @click="onCreateOrUpdatePost">
+                <v-btn :disabled="!dirty || isFormIncomplate()" @click="onCreateOrUpdatePost">
                     {{submitButtonLabel}}
                 </v-btn>
                 <v-btn @click="onCancel">
@@ -35,10 +38,10 @@ import RichTextEditor, { ChangeEvent } from './rich-text-editor.vue';
 import restApi from '../rest-api';
 import Toaster from '../toaster';
 
-const CLOSE = 'close';
+const CLOSE: string = 'close';
 
 @Component({ components: { RichTextEditor } })
-export default class NewBlogEntry extends Vue {
+export default class BlogPostEditorModal extends Vue {
 
     @Prop({ required: true })
     private show: boolean;
@@ -48,8 +51,10 @@ export default class NewBlogEntry extends Vue {
 
     private modalTitle: string = '';
     private title: string = '';
-    private body: string = '';
+    private body: any = {};
+    private wipBody: any | null = null;
     private editorEmpty: boolean = true;
+    private dirty: boolean = false;
     private submitButtonLabel: string = '';
 
     /**
@@ -59,14 +64,16 @@ export default class NewBlogEntry extends Vue {
         if (this.post) {
             this.modalTitle = 'Edit News Post';
             this.title = this.post.title;
-            this.body = this.post.body;
+            this.body = JSON.parse(this.post.body);
             this.submitButtonLabel = 'Update';
         }
         else {
             this.modalTitle = 'Create News Post';
-            this.title = this.body = '';
+            this.title = '';
+            this.body = {};
             this.submitButtonLabel = 'Post';
         }
+        this.dirty = false;
     }
 
     get visible() {
@@ -80,9 +87,10 @@ export default class NewBlogEntry extends Vue {
     }
 
     private editorContentChanged(e: ChangeEvent) {
+        this.dirty = true;
         this.editorEmpty = e.isEmpty();
-        this.body = e.getContent();
-        console.log(this.body);
+        this.wipBody = e.getContent();
+        console.log('New editor content: ' + JSON.stringify(this.wipBody));
     }
 
     private isFormIncomplate(): boolean {
@@ -97,7 +105,7 @@ export default class NewBlogEntry extends Vue {
 
         const newPostInfo: BlogPost = {
             title: this.title,
-            body: this.body
+            body: JSON.stringify(this.wipBody || this.body)
         };
 
         let updating: boolean = false;
@@ -118,6 +126,7 @@ export default class NewBlogEntry extends Vue {
         }
 
         promise!.then(() => {
+                this.$emit(CLOSE);
                 Toaster.success(successMessage);
             })
             .catch((error: ErrorResponse) => {

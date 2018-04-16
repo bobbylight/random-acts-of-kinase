@@ -1,5 +1,7 @@
 package org.sgc.rak.services;
 
+import org.sgc.rak.exceptions.NotFoundException;
+import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.model.BlogPost;
 import org.sgc.rak.repositories.BlogPostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Optional;
 
 /**
  * Service for manipulating blog posts.
@@ -17,9 +20,12 @@ public class BlogPostService {
 
     private final BlogPostRepository repository;
 
+    private final Messages messages;
+
     @Autowired
-    public BlogPostService(BlogPostRepository repository) {
+    public BlogPostService(BlogPostRepository repository, Messages messages) {
         this.repository = repository;
+        this.messages = messages;
     }
 
     /**
@@ -49,5 +55,20 @@ public class BlogPostService {
      */
     public Page<BlogPost> getBlogPosts(Pageable pageInfo) {
         return repository.findAll(pageInfo);
+    }
+
+    public BlogPost updateBlogPost(BlogPost post) {
+
+        Optional<BlogPost> optional = repository.findById(post.getId());
+        if (!optional.isPresent()) {
+            throw new NotFoundException(messages.get("error.noSuchBlogPost", post.getId()));
+        }
+
+        BlogPost currentPost = optional.get();
+        currentPost.setTitle(post.getTitle());
+        currentPost.setBody(post.getBody());
+        currentPost.setViewCount(currentPost.getViewCount() + 1);
+
+        return repository.save(currentPost);
     }
 }

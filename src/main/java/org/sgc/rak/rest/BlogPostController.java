@@ -1,5 +1,7 @@
 package org.sgc.rak.rest;
 
+import org.sgc.rak.exceptions.BadRequestException;
+import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.model.BlogPost;
 import org.sgc.rak.reps.PagedDataRep;
 import org.sgc.rak.services.BlogPostService;
@@ -22,9 +24,12 @@ public class BlogPostController {
 
     private final BlogPostService blogPostService;
 
+    private final Messages messages;
+
     @Autowired
-    public BlogPostController(BlogPostService blogPostService) {
+    public BlogPostController(BlogPostService blogPostService, Messages messages) {
         this.blogPostService = blogPostService;
+        this.messages = messages;
     }
 
     /**
@@ -62,5 +67,28 @@ public class BlogPostController {
         long start = page.getNumber() * pageInfo.getPageSize();
         long total = page.getTotalElements();
         return new PagedDataRep<>(page.getContent(), start, total);
+    }
+
+    /**
+     * Updates an existing blog post.
+     *
+     * @param post The blog post to update.
+     */
+    @RequestMapping(method = RequestMethod.PUT, path = "/{blogPostId}")
+    @ResponseStatus(HttpStatus.OK)
+    BlogPost updateBlogPost(@PathVariable String blogPostId, @Valid @RequestBody BlogPost post) {
+
+        Long id = null;
+        try {
+            id = Long.parseLong(blogPostId);
+        } catch (NumberFormatException nfe) {
+            throw new BadRequestException(messages.get("error.invalidBlogPostId", blogPostId));
+        }
+
+        if (!id.equals(post.getId())) {
+            throw new BadRequestException(messages.get("error.blogPostIdMismatch"));
+        }
+
+        return blogPostService.updateBlogPost(post);
     }
 }

@@ -2,7 +2,9 @@
     <tr class="blog-manager-row">
         <td class="blog-manager-cell">
             <div class="subheading">
-                {{post.title}}
+                <a @click="editPost(post.id)">
+                    {{post.title}}
+                </a>
             </div>
             <div class="blog-manager-post-options">
                 <a class="blog-action" @click="editPost(post.id)">Edit</a> |
@@ -55,9 +57,12 @@ export default class BlogManagerPostNameCell extends Vue {
 
 .blog-manager-post-options {
     visibility: hidden;
+    opacity: 0;
+    transition: opacity @transition-time;
 }
 tr:hover .blog-manager-post-options {
     visibility: visible;
+    opacity: 1;
 }
 
 .blog-manager-cell {

@@ -32,7 +32,7 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
 
-export const CONFIRM_RESULT = 'confirmResult';
+export const CONFIRM_RESULT: string = 'confirmResult';
 
 /**
  * The possible values of the <code>CONFIRM_RESULT</code> event.

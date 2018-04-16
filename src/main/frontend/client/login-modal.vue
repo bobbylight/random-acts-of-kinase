@@ -37,7 +37,7 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop, Watch } from 'vue-property-decorator';
 import restApi from './rest-api';
-import {ErrorResponse, UserRep} from './rak';
+import { ErrorResponse, UserRep } from './rak';
 import Toaster from './toaster';
 
 const HIDDEN: string = 'close';

@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.model.BlogPost;
 import org.sgc.rak.repositories.BlogPostRepository;
 import org.sgc.rak.util.TestUtil;
@@ -24,12 +25,15 @@ public class BlogPostServiceTest {
     @Mock
     private BlogPostRepository mockRepository;
 
+    @Mock
+    private Messages mockMessages;
+
     private BlogPostService service;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        service = new BlogPostService(mockRepository);
+        service = new BlogPostService(mockRepository, mockMessages);
     }
 
     @Test
