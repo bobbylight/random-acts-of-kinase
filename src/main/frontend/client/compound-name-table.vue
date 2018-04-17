@@ -17,7 +17,7 @@
                         <img class="b-lazy"
                              src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
                              :data-src="getCompoundImage(props.item.compoundName)"
-                             width="40" height="40">
+                             width=40 height=40>
                         &nbsp;&nbsp;&nbsp;
                         <div class="compoundDesc">
                             <a class="compoundName" :href="getCompoundUrl(props.item.compoundName)">{{props.item.compoundName}}</a><br>
@@ -78,7 +78,7 @@ export default {
     methods: {
 
         getCompoundImage: function(compoundName) {
-            return `api/compounds/images/${compoundName}.svg`;
+            return `api/compounds/images/${compoundName}`;
         },
 
         getCompoundUrl: function(compoundName) {
