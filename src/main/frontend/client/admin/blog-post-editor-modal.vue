@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="visible" max-width="800px" @keydown.esc="onCancel">
+    <v-dialog v-model="visible" persistent max-width="800px" @keydown.esc="onCancel">
         <v-card>
 
             <v-card-title class="headline">{{modalTitle}}</v-card-title>

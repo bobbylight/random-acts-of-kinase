@@ -15,13 +15,13 @@ fi
 
 
 cd ${DIR}
-PGPASSWORD=${PASSWORD} psql -U ${USER} -v schema=${SCHEMA} -f ddl/postgres.sql ${DB}
-PGPASSWORD=${PASSWORD} psql -U ${USER} -c "\copy ${SCHEMA}.compound from '${OUTDIR}/compound.csv' with csv header" ${DB}
-PGPASSWORD=${PASSWORD} psql -U ${USER} -c "\copy ${SCHEMA}.kinase from '${OUTDIR}/kinase.csv' with csv header" ${DB}
-PGPASSWORD=${PASSWORD} psql -U ${USER} -c "\copy ${SCHEMA}.kinase_activity_profile from '${OUTDIR}/kinase_activity_profile.csv' with csv header" ${DB}
+PGPASSWORD=${PASSWORD} psql -h ${HOST} -U ${USER} -v schema=${SCHEMA} -f ddl/postgres.sql ${DB}
+PGPASSWORD=${PASSWORD} psql -h ${HOST} -U ${USER} -c "\copy ${SCHEMA}.compound from '${OUTDIR}/compound.csv' with csv header" ${DB}
+PGPASSWORD=${PASSWORD} psql -h ${HOST} -U ${USER} -c "\copy ${SCHEMA}.kinase from '${OUTDIR}/kinase.csv' with csv header" ${DB}
+PGPASSWORD=${PASSWORD} psql -h ${HOST} -U ${USER} -c "\copy ${SCHEMA}.kinase_activity_profile from '${OUTDIR}/kinase_activity_profile.csv' with csv header" ${DB}
 
 if [[ $# -gt 0 && $1 = "sampleBlogPosts" ]] ; then
     echo "Loading sample blog posts..."
     # Absolute paths don't work here on Windows either
-    PGPASSWORD=${PASSWORD} psql -U ${USER} -c "\copy ${SCHEMA}.blog_post (title,body,create_dttm,view_count) from './ddl/sample_blog_posts.csv' with csv header" ${DB}
+    PGPASSWORD=${PASSWORD} psql -h ${HOST} -U ${USER} -c "\copy ${SCHEMA}.blog_post (title,body,create_dttm,view_count) from './ddl/sample_blog_posts.csv' with csv header" ${DB}
 fi
