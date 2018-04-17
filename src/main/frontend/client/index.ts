@@ -19,8 +19,10 @@ import Toasted from 'vue-toasted';
 import Vuetify from 'vuetify/es5/components/Vuetify';
 import VAlert from 'vuetify/es5/components/VAlert';
 import VApp from 'vuetify/es5/components/VApp';
+import VAvatar from 'vuetify/es5/components/VAvatar';
 import VBtn from 'vuetify/es5/components/VBtn';
 import VCard from 'vuetify/es5/components/VCard';
+import VChip from 'vuetify/es5/components/VChip';
 import VDataTable from 'vuetify/es5/components/VDataTable';
 import VDialog from 'vuetify/es5/components/VDialog';
 import VDivider from 'vuetify/es5/components/VDivider';
@@ -54,9 +56,11 @@ Vue.use(Toasted);
 Vue.use(Vuetify, {
     components: {
         VAlert,
+        VAvatar,
         VApp,
         VBtn,
         VCard,
+        VChip,
         VDataTable,
         VDialog,
         VDivider,

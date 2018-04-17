@@ -2,6 +2,7 @@ package org.sgc.rak.rest;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -68,5 +69,10 @@ public class BlogPostControllerTest {
         for (int i = 0; i < posts.size(); i++) {
             TestUtil.assertBlogPostsEqual(posts.get(i), actualPosts.getData().get(i));
         }
+    }
+
+    @Test
+    @Ignore("Not yet implemented")
+    public void testUpdateBlogPost() {
     }
 }

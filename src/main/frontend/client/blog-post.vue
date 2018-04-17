@@ -3,8 +3,11 @@
     <v-card class="blog-post-card">
 
         <v-card-title primary-title>
+
             <div class="title-content">
-                <h3 class="headline">{{post.title}}</h3>
+                <h3 class="headline">
+                    {{post.title}}
+                </h3>
             </div>
         </v-card-title>
 
@@ -12,11 +15,14 @@
         <v-card-text class="ql-editor" v-html="body"></v-card-text>
 
         <v-card-actions class="blog-card-actions">
-            <div class="blog-post-viewCount">
+            <div class="grey--text blog-post-viewCount">
                 0 views
             </div>
             <v-spacer></v-spacer>
-            <div class="blog-post-date">
+            <div class="grey--text blog-post-date">
+                Posted by
+                <user-badge user="admin"></user-badge>
+                on
                 {{dateString}}
             </div>
         </v-card-actions>
@@ -28,9 +34,10 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
 import deltaToHtml from './delta-to-html';
+import UserBadge from './user-badge.vue';
 import { BlogPost } from './rak';
 
-@Component({ components: { } })
+@Component({ components: { UserBadge } })
 export default class BlogPostWidget extends Vue {
 
     @Prop({ required: true })
@@ -55,7 +62,6 @@ export default class BlogPostWidget extends Vue {
     margin-left: 16px; // Matches margin on v-card-title/text
     margin-right: 16px; // Matches margin on v-card-title/text
 
-    color: @action-color;
     font-style: italic;
 }
 </style>

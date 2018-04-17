@@ -78,7 +78,7 @@ public class BlogPostController {
     @ResponseStatus(HttpStatus.OK)
     BlogPost updateBlogPost(@PathVariable String blogPostId, @Valid @RequestBody BlogPost post) {
 
-        Long id = null;
+        Long id;
         try {
             id = Long.parseLong(blogPostId);
         } catch (NumberFormatException nfe) {
