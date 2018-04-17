@@ -41,8 +41,9 @@ public class AppExceptionHandlerTest {
 
         HttpHeaders headers = new HttpHeaders();
         HttpStatus status = HttpStatus.BAD_REQUEST;
+        WebRequest request = Mockito.mock(WebRequest.class);
 
-        ResponseEntity<Object> response = exceptionHandler.handleBindException(e, headers, status, null);
+        ResponseEntity<Object> response = exceptionHandler.handleBindException(e, headers, status, request);
 
         Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
@@ -54,15 +55,16 @@ public class AppExceptionHandlerTest {
             new ObjectError("objectName", "Default message")
         );
 
-        MethodParameter methodParam = null;
+        MethodParameter methodParam = Mockito.mock(MethodParameter.class);
         BindingResult bindingResult = Mockito.mock(BindingResult.class);
         doReturn(errors).when(bindingResult).getAllErrors();
         MethodArgumentNotValidException e = new MethodArgumentNotValidException(methodParam, bindingResult);
 
         HttpHeaders headers = new HttpHeaders();
         HttpStatus status = HttpStatus.BAD_REQUEST;
+        WebRequest request = Mockito.mock(WebRequest.class);
 
-        ResponseEntity<Object> response = exceptionHandler.handleMethodArgumentNotValid(e, headers, status, null);
+        ResponseEntity<Object> response = exceptionHandler.handleMethodArgumentNotValid(e, headers, status, request);
 
         Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
