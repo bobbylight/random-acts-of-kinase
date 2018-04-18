@@ -10,7 +10,7 @@
                     Sign in to get even more out of your RAK experience.
                 </div>
 
-                <form id="login-form">
+                <form id="login-form" @submit.prevent="login">
                     <v-text-field label="User name" v-model="user" ref="userNameField"></v-text-field>
                     <v-text-field label="Password" v-model="password"
                                   :append-icon="passwordVisible ? 'visibility' : 'visibility_off'"
@@ -21,7 +21,7 @@
 
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="success" type="submit" @click="login" form="login-form" :disabled="!user || !password">
+                <v-btn color="success" type="submit" form="login-form" :disabled="!user || !password">
                     Log In
                 </v-btn>
                 <v-btn @click="onCancel">

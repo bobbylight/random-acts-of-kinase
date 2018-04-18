@@ -22,7 +22,7 @@
             </v-card-text>
         </v-card>
 
-        <v-card class="top-card-padding">
+        <v-card class="not-top-card-padding">
 
             <v-card-title primary-title>
                 <div class="title-content">
@@ -44,7 +44,7 @@
             </v-card-text>
         </v-card>
 
-        <v-card class="top-card-padding">
+        <v-card class="not-top-card-padding">
 
             <v-card-title primary-title>
                 <div>
@@ -91,8 +91,8 @@ export default class Stats extends Vue {
 </script>
 
 <style lang="less">
-.top-card-padding {
-    /*margin-top: 2rem;*/
+.not-top-card-padding {
+    margin-top: 1rem;
 }
 .title-content {
     position: relative;
