@@ -16,7 +16,7 @@ rm -fr ${OUTDIR}
 mkdir ${OUTDIR}
 
 TEMP_CSV=$(mktemp)
-psql -U ${USER} -c "\copy (select compound_nm, smiles from ${SCHEMA}.compound where smiles is not null order by compound_nm) to stdout with csv" ${DB} > ${TEMP_CSV}
+PGPASSWORD=${PASSWORD} psql -h ${HOST} -U ${USER} -c "\copy (select compound_nm, smiles from ${SCHEMA}.compound where smiles is not null order by compound_nm) to stdout with csv" ${DB} > ${TEMP_CSV}
 
 echo "Generating SMILES strings svg files, please be patient..."
 SMILES_LOG=${OUTDIR}/smile-generation.log
