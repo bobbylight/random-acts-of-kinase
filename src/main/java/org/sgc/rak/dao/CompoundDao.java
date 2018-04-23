@@ -138,6 +138,15 @@ public class CompoundDao {
     }
 
     /**
+     * Saves a collection of compounds.
+     *
+     * @param compounds The compounds to save.
+     */
+    public void save(Iterable<Compound> compounds) {
+        compoundRepository.saveAll(compounds);
+    }
+
+    /**
      * Converts a Spring Data {@code Sort} instance to an order by clause.  Typically this isn't
      * necessary as {@code Repository} instances handle sorting and paging for you, but we have a
      * native query we need to build.

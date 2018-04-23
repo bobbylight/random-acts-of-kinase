@@ -16,7 +16,7 @@
             </v-btn>
 
             <v-btn flat v-bind:class="{ 'active-toolbar-item': isActiveTab('/admin') }"
-                   @click="setActiveTab('stats')" v-if="$store.getters.loggedIn">
+                   @click="setActiveTab('import-compounds')" v-if="$store.getters.loggedIn">
                 Admin
             </v-btn>
         </v-toolbar-items>

@@ -21,6 +21,15 @@ export interface Compound {
     s10: string;
 }
 
+export interface CompoundImportRep {
+    compoundStatuses: CompoundStatusPair[];
+}
+
+export interface CompoundStatusPair {
+    compoundName: string;
+    status: 'NEW_COMPOUND' | 'UPDATED_COMPOUND';
+}
+
 export interface ErrorResponse {
     statusCode: number;
     message: string;

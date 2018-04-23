@@ -45,6 +45,7 @@ export default {
     },
     data: function() {
         return {
+            blazy: null,
             search: '',
             totalItems: 0,
             items: [],
@@ -98,13 +99,30 @@ export default {
                     this.loading = false;
                     return pagedData;
                 });
+        },
+
+        resetImages: function() {
+
+            const loadedImages = this.$el.querySelectorAll('img.b-lazy.b-loaded');
+
+            for (let i = 0; i < loadedImages.length; i++) {
+                loadedImages[i].src = 'data:';
+                loadedImages[i].classList.remove('b-loaded');
+            }
         }
     },
     updated: function() {
-        new Blazy({
-            container: 'compound-name-table'
-        });
-        // this.$el.querySelectorAll('img.lazy').forEach(lazyImage => lazyImage.Lazy({ chainable: false }).update();
+
+        if (this.blazy) {
+            this.blazy.destroy();
+            this.resetImages();
+            this.blazy.revalidate();
+        }
+        else {
+            this.blazy = new Blazy({
+                container: 'compound-name-table'
+            });
+        }
     }
 };
 </script>

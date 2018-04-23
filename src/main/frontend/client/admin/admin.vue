@@ -45,12 +45,21 @@
 
                     <v-divider></v-divider>
 
-                    <v-list-tile to="stats">
+                    <v-list-tile to="import-compounds">
                         <v-list-tile-action>
-                            <v-icon>fa-database</v-icon>
+                            <v-icon>fa-upload</v-icon>
                         </v-list-tile-action>
                         <v-list-tile-content>
-                            <v-list-tile-title>Missing Data</v-list-tile-title>
+                            <v-list-tile-title>Import Compounds</v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+
+                    <v-list-tile to="import-activity-profiles">
+                        <v-list-tile-action>
+                            <v-icon>fa-upload</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>Import Activity Profiles</v-list-tile-title>
                         </v-list-tile-content>
                     </v-list-tile>
 
@@ -60,6 +69,15 @@
                         </v-list-tile-action>
                         <v-list-tile-content>
                             <v-list-tile-title>News Posts</v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+
+                    <v-list-tile to="stats">
+                        <v-list-tile-action>
+                            <v-icon>fa-database</v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title>Missing Data</v-list-tile-title>
                         </v-list-tile-content>
                     </v-list-tile>
 

@@ -71,9 +71,9 @@ public class CsvHttpMessageConverterTest {
         ParameterizedType type = TypeUtils.parameterize(PagedDataRep.class, Compound.class);
         converter.writeInternal(pagedDataRep, type, outputMessage);
 
-        String expected = "chemotype,compoundName,s10,smiles,source\n" +
-            ",compoundA,0.3,smilesA,\n" +
-            ",compoundB,,smilesB,\n";
+        String expected = "compoundName,chemotype,s10,smiles,source\n" +
+            "compoundA,,0.3,smilesA,\n" +
+            "compoundB,,,smilesB,\n";
         Assert.assertEquals(expected, outputMessage.getBodyAsString());
     }
 }

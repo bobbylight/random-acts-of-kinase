@@ -60,7 +60,7 @@ public class CompoundDaoTest {
     }
 
     @Test
-    public void testGetCompounds() {
+    public void testGetCompounds_pageable() {
 
         Compound compound1 = new Compound();
         compound1.setCompoundName("compoundA");
@@ -74,6 +74,25 @@ public class CompoundDaoTest {
         Page<Compound> actualPage = compoundDao.getCompounds(pageInfo);
 
         comparePages(expectedPage, actualPage);
+    }
+
+    @Test
+    public void testGetCompounds_list() {
+
+        Compound compound1 = new Compound();
+        compound1.setCompoundName("compoundA");
+        Compound compound2= new Compound();
+        compound2.setCompoundName("compoundB");
+        List<Compound> expectedList = Arrays.asList(compound1, compound2);
+        doReturn(expectedList).when(compoundRepository).findByCompoundNameInIgnoreCase(any());
+
+        List<String> compoundNames = Arrays.asList(
+            compound1.getCompoundName(),
+            compound2.getCompoundName()
+        );
+        List<Compound> actualList = compoundDao.getCompounds(compoundNames);
+
+        compareLists(expectedList, actualList);
     }
 
     @Test
@@ -147,6 +166,12 @@ public class CompoundDaoTest {
     }
 
     @Test
+    public void testSave() {
+        compoundDao.save(null);
+        verify(compoundRepository, times(1)).saveAll(any());
+    }
+
+    @Test
     public void testSortToOrderBy_oneOrder_compoundName() {
         Sort sort = Sort.by(new Sort.Order(Sort.Direction.DESC, "compoundName"));
         Assert.assertEquals("order by compound_nm DESC", CompoundDao.sortToOrderBy(sort));
@@ -163,6 +188,15 @@ public class CompoundDaoTest {
         Sort sort = Sort.by(new Sort.Order(Sort.Direction.DESC, "compoundName"),
             new Sort.Order(Sort.Direction.ASC, "count"));
         Assert.assertEquals("order by compound_nm DESC, count ASC", CompoundDao.sortToOrderBy(sort));
+    }
+
+    private static void compareLists(List<Compound> expectedList, List<Compound> actualList) {
+        Assert.assertEquals(expectedList.size(), actualList.size());
+        for (int i = 0; i < expectedList.size(); i++) {
+            String expectedName = expectedList.get(i).getCompoundName();
+            String actualName = actualList.get(i).getCompoundName();
+            Assert.assertEquals(expectedName, actualName);
+        }
     }
 
     private static void comparePages(Page<Compound> expectedPage, Page<Compound> actualPage) {

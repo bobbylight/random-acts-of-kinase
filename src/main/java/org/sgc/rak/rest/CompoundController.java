@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
  * REST API for compound information.
  */
 @RestController
-@RequestMapping(path = "/api/compounds")
+@RequestMapping("/api/compounds")
 class CompoundController {
 
     @Autowired
@@ -64,7 +64,15 @@ class CompoundController {
         return new PagedDataRep<>(page.getContent(), start, total);
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/images/{compoundName}", produces = "image/svg+xml")
+    /**
+     * Returns the image for a compound.
+     *
+     * @param compoundName A compound name.
+     * @return The image for the compound, in SVG format.  If no image exists for a compound, a default
+     *         image is returned.
+     */
+    @RequestMapping(method = RequestMethod.GET, path = "/images/{compoundName}",
+        produces = "image/svg+xml")
     Resource getCompoundSmiles(@PathVariable String compoundName) {
         Resource resource = new ClassPathResource("/static/img/smiles/" + compoundName + ".svg");
         if (!resource.exists()) {

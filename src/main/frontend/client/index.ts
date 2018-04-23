@@ -46,6 +46,8 @@ import Search from './search.vue';
 import Blog from './blog.vue';
 import Compound from './compound.vue';
 import Admin from './admin/admin.vue';
+import ImportCompounds from './admin/import-compounds.vue';
+import ImportActivityProfiles from './admin/import-activity-profiles.vue';
 import Stats from './admin/stats.vue';
 import BlogManager from './admin/blog-manager.vue';
 import { RouteConfig } from 'vue-router/types/router';
@@ -106,6 +108,16 @@ window.onload = () => {
             component: Admin,
             children: [
                 {
+                    path: 'import-compounds',
+                    name: 'import-compounds',
+                    component: ImportCompounds
+                },
+                {
+                    path: 'import-activity-profiles',
+                    name: 'import-activity-profiles',
+                    component: ImportActivityProfiles
+                },
+                {
                     path: 'blog-manager',
                     name: 'blog-manager',
                     component: BlogManager
@@ -117,7 +129,7 @@ window.onload = () => {
                 },
                 {
                     path: '', // Default view when unknown sub-route specified
-                    component: Stats
+                    component: ImportCompounds
                 }
             ]
         },

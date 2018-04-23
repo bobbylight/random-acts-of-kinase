@@ -8,13 +8,17 @@ import org.sgc.rak.model.CompoundCountPair;
 import org.sgc.rak.model.Kinase;
 import org.sgc.rak.model.KinaseActivityProfile;
 import org.sgc.rak.repositories.KinaseActivityProfileRepository;
+import org.sgc.rak.reps.CompoundImportRep;
+import org.sgc.rak.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -112,5 +116,54 @@ public class CompoundService {
      */
     public Page<Compound> getIncompleteCompounds(Pageable pageInfo) {
         return compoundDao.getIncompleteCompounds(pageInfo);
+    }
+
+    /**
+     * Upserts a list of compounds.  New compounds are added, existing ones are updated.
+     *
+     * @param compounds The compounds to upsert.
+     * @param commit Whether to actually commit the patch, or just return the possible result.
+     * @return The result of the operation (or possible result, if {@code commit} is {@code false}).
+     */
+    public CompoundImportRep importCompounds(List<Compound> compounds, boolean commit) {
+
+        List<String> compoundNames = compounds.stream().map(Compound::getCompoundName).collect(Collectors.toList());
+        List<Compound> existingCompounds = compoundDao.getCompounds(compoundNames);
+
+        CompoundImportRep compoundImport = new CompoundImportRep();
+        List<CompoundImportRep.CompoundStatusPair> statusPairs = new ArrayList<>();
+        List<Compound> toPersist = new ArrayList<>();
+
+        for (Compound compound : compounds) {
+
+            Util.convertEmptyStringsToNulls(compound);
+            String compoundName = compound.getCompoundName();
+            CompoundImportRep.Status status;
+
+            Compound existingCompound = possiblyGetCompound(existingCompounds, compoundName);
+            if (existingCompound != null) {
+                toPersist.add(Util.updateNotNullValues(existingCompound, compound));
+                status = CompoundImportRep.Status.UPDATED_COMPOUND;
+            }
+            else {
+                toPersist.add(compound);
+                status = CompoundImportRep.Status.NEW_COMPOUND;
+            }
+
+            statusPairs.add(new CompoundImportRep.CompoundStatusPair(compoundName, status));
+        }
+
+        if (commit) {
+            compoundDao.save(toPersist);
+        }
+
+        compoundImport.setCompoundStatuses(statusPairs);
+        return compoundImport;
+    }
+
+    private static Compound possiblyGetCompound(List<Compound> compounds, String compoundName) {
+        Optional<Compound> optional = compounds.stream().filter(c -> compoundName.equals(c.getCompoundName()))
+            .findFirst();
+        return optional.orElse(null);
     }
 }
