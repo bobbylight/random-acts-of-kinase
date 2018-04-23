@@ -22,11 +22,17 @@ public class CompoundImportRep {
         this.compoundStatuses = compoundStatuses != null ? compoundStatuses : new ArrayList<>();
     }
 
-    public static enum Status {
+    /**
+     * The status of a compound being imported.
+     */
+    public enum Status {
         NEW_COMPOUND,
         UPDATED_COMPOUND
     }
 
+    /**
+     * A simple pair of compound name and status.
+     */
     public static class CompoundStatusPair {
 
         private String compoundName;
