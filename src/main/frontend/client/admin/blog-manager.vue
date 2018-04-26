@@ -68,7 +68,7 @@ export default class BlogManager extends Vue {
 
     private totalItems: number = 0;
 
-    private items: any[] = [];
+    private items: BlogPost[] = [];
 
     private loading: boolean = true;
 
@@ -142,7 +142,7 @@ export default class BlogManager extends Vue {
         const sort: string = sortBy ? `${sortBy},${descending ? 'desc' : 'asc'}` : '';
 
         return restApi.getBlogPosts(page - 1, 10000, {}, sort)
-            .then((pagedData: PagedDataRep<BlogPost[]>) => {
+            .then((pagedData: PagedDataRep<BlogPost>) => {
                 this.items = pagedData.data;
                 this.totalItems = pagedData.total;
                 this.loading = false;

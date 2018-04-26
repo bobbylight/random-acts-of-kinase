@@ -45,7 +45,7 @@ export default class Blog extends Vue {
     private postEnd: number = 0;
     private postTotal: number = 0;
 
-    private blogPosts: any = [];
+    private blogPosts: BlogPost[] = [];
 
     beforeRouteEnter(to: Route, from: Route, next: any) {
         // We don't have access to 'this' since this is called before the component is
@@ -61,7 +61,7 @@ export default class Blog extends Vue {
         this.postCount = -1;
 
         restApi.getBlogPosts(0, 1000, {}, 'createDate,desc')
-            .then((posts: PagedDataRep<BlogPost[]>) => {
+            .then((posts: PagedDataRep<BlogPost>) => {
                 this.blogPosts = posts.data;
                 this.postCount = posts.count;
                 this.postStart = posts.start + 1;

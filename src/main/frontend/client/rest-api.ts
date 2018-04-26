@@ -44,7 +44,8 @@ export class RestApi {
             });
     }
 
-    getActivityProfiles(page: number, size: number, filters: any, sortParam: string): Promise<ActivityProfile[]> {
+    getActivityProfiles(page: number, size: number, filters: any,
+                        sortParam: string): Promise<PagedDataRep<ActivityProfile>> {
 
         let url: string = `api/activityProfiles?page=${page}&size=${size}`;
         if (filters.inhibitor) {
@@ -61,13 +62,13 @@ export class RestApi {
         }
 
         return this.instance.get(url)
-            .then((response: AxiosResponse<ActivityProfile[]>) => {
+            .then((response: AxiosResponse<PagedDataRep<ActivityProfile>>) => {
                 return response.data;
             });
     }
 
     getBlogPosts(page: number, size: number, filters: any,
-                 sortParam: string): Promise<PagedDataRep<BlogPost[]>> {
+                 sortParam: string): Promise<PagedDataRep<BlogPost>> {
 
         let url: string = `api/blogPosts?page=${page}&size=${size}`;
         if (filters.author) {
@@ -79,12 +80,12 @@ export class RestApi {
         }
 
         return this.instance.get(url)
-            .then((response: AxiosResponse<PagedDataRep<BlogPost[]>>) => {
+            .then((response: AxiosResponse<PagedDataRep<BlogPost>>) => {
                 return response.data;
             });
     }
 
-    getCompounds(page: number, size: number, filters: any): Promise<PagedDataRep<Compound[]>> {
+    getCompounds(page: number, size: number, filters: any): Promise<PagedDataRep<Compound>> {
 
         let url: string = `api/compounds?page=${page}&size=${size}`;
         if (filters.inhibitor) {
@@ -98,7 +99,7 @@ export class RestApi {
         }
 
         return this.instance.get(url)
-            .then((response: AxiosResponse<PagedDataRep<Compound[]>>) => {
+            .then((response: AxiosResponse<PagedDataRep<Compound>>) => {
                 return response.data;
             });
     }

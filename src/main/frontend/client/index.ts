@@ -14,6 +14,8 @@ import Vue from 'vue';
 import App from './App.vue';
 import VueRouter from 'vue-router';
 import Toasted from 'vue-toasted';
+import VueChartkick from 'vue-chartkick';
+import Chart from 'chart.js';
 
 // import Vuetify from 'vuetify';
 import Vuetify from 'vuetify/es5/components/Vuetify';
@@ -54,6 +56,7 @@ import { RouteConfig } from 'vue-router/types/router';
 
 Vue.use(VueRouter);
 Vue.use(Toasted);
+Vue.use(VueChartkick, { adapter: Chart });
 // Vue.use(Vuetify);
 Vue.use(Vuetify, {
     components: {
