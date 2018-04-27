@@ -8,7 +8,7 @@ import org.sgc.rak.model.CompoundCountPair;
 import org.sgc.rak.model.Kinase;
 import org.sgc.rak.model.KinaseActivityProfile;
 import org.sgc.rak.repositories.KinaseActivityProfileRepository;
-import org.sgc.rak.reps.CompoundImportRep;
+import org.sgc.rak.reps.ObjectImportRep;
 import org.sgc.rak.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,6 +39,55 @@ public class CompoundService {
 
     @Autowired
     private Messages messages;
+
+    /**
+     * Creates a field status list from a compound.
+     *
+     * @param compound The compound.
+     * @param existing The prior version of the compound.
+     * @return The field status list.
+     */
+    private static List<ObjectImportRep.FieldStatus> compoundToFieldStatusList(Compound compound, Compound existing) {
+
+        String existingCompoundName = null;
+        String existingChemotype = null;
+        String existingSmiles = null;
+        Double existingS10 = null;
+        String existingSource = null;
+
+        if (existing != null) {
+            existingCompoundName = existing.getCompoundName();
+            existingChemotype = existing.getChemotype();
+            existingSmiles = existing.getSmiles();
+            existingS10 = existing.getS10();
+            existingSource = existing.getSource();
+        }
+
+        return Arrays.asList(
+            createCompoundFieldStatus("compoundName", compound.getCompoundName(), existingCompoundName),
+            createCompoundFieldStatus("chemotype", compound.getChemotype(), existingChemotype),
+            createCompoundFieldStatus("smiles", compound.getSmiles(), existingSmiles),
+            createCompoundFieldStatus("s10", compound.getS10(), existingS10),
+            createCompoundFieldStatus("source", compound.getSource(), existingSource)
+        );
+    }
+
+    /**
+     * Creates a field status representing a new field value.
+     *
+     * @param name The field name.
+     * @param newValue The new value for the field.
+     * @param existingValue The existing/prior value for the field.
+     * @return The field status.
+     */
+    private static ObjectImportRep.FieldStatus createCompoundFieldStatus(String name, Object newValue,
+                                                                         Object existingValue) {
+        ObjectImportRep.FieldStatus status = new ObjectImportRep.FieldStatus();
+        status.setFieldName(name);
+        status.setNewValue(newValue);
+        status.setOldValue(existingValue);
+        return status;
+    }
 
     /**
      * Returns information on a specific compound.
@@ -125,40 +175,39 @@ public class CompoundService {
      * @param commit Whether to actually commit the patch, or just return the possible result.
      * @return The result of the operation (or possible result, if {@code commit} is {@code false}).
      */
-    public CompoundImportRep importCompounds(List<Compound> compounds, boolean commit) {
+    public ObjectImportRep importCompounds(List<Compound> compounds, boolean commit) {
 
         List<String> compoundNames = compounds.stream().map(Compound::getCompoundName).collect(Collectors.toList());
         List<Compound> existingCompounds = compoundDao.getCompounds(compoundNames);
 
-        CompoundImportRep compoundImport = new CompoundImportRep();
-        List<CompoundImportRep.CompoundStatusPair> statusPairs = new ArrayList<>();
+        ObjectImportRep importRep = new ObjectImportRep();
+        List<List<ObjectImportRep.FieldStatus>> records = new ArrayList<>();
+        importRep.setFieldStatuses(records);
         List<Compound> toPersist = new ArrayList<>();
 
         for (Compound compound : compounds) {
 
             Util.convertEmptyStringsToNulls(compound);
             String compoundName = compound.getCompoundName();
-            CompoundImportRep.Status status;
+            Compound newCompound;
 
             Compound existingCompound = possiblyGetCompound(existingCompounds, compoundName);
             if (existingCompound != null) {
-                toPersist.add(Util.updateNotNullValues(existingCompound, compound));
-                status = CompoundImportRep.Status.UPDATED_COMPOUND;
+                newCompound = Util.patchCompound(existingCompound, compound);
             }
             else {
-                toPersist.add(compound);
-                status = CompoundImportRep.Status.NEW_COMPOUND;
+                newCompound = compound;
             }
 
-            statusPairs.add(new CompoundImportRep.CompoundStatusPair(compoundName, status));
+            toPersist.add(newCompound);
+            records.add(compoundToFieldStatusList(newCompound, existingCompound));
         }
 
         if (commit) {
             compoundDao.save(toPersist);
         }
 
-        compoundImport.setCompoundStatuses(statusPairs);
-        return compoundImport;
+        return importRep;
     }
 
     private static Compound possiblyGetCompound(List<Compound> compounds, String compoundName) {

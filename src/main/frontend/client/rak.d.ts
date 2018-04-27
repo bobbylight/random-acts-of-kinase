@@ -21,24 +21,25 @@ export interface Compound {
     s10: string;
 }
 
-export interface CompoundImportRep {
-    compoundStatuses: CompoundStatusPair[];
-}
-
-export interface CompoundStatusPair {
-    compoundName: string;
-    status: 'NEW_COMPOUND' | 'UPDATED_COMPOUND';
-}
-
 export interface ErrorResponse {
     statusCode: number;
     message: string;
+}
+
+export interface FieldStatus {
+    fieldName: string;
+    oldValue?: any;
+    newValue: any;
 }
 
 export interface Kinase {
     id: number;
     discoverxGeneSymbol: string;
     entrezGeneSymbol: string;
+}
+
+export interface ObjectImportRep {
+    fieldStatuses: FieldStatus[][];
 }
 
 export interface PagedDataRep<T> {

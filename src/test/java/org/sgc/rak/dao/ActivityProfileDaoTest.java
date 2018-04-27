@@ -17,6 +17,8 @@ import java.util.Collections;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 /**
  * Unit tests for the {@code ActivityProfileDao} class.  This is really just testing
@@ -25,7 +27,7 @@ import static org.mockito.Mockito.doReturn;
 public class ActivityProfileDaoTest {
 
     @Mock
-    private KinaseActivityProfileRepository activityProfileRepository;
+    private KinaseActivityProfileRepository mockRepository;
 
     @InjectMocks
     private ActivityProfileDao activityProfileDao = new ActivityProfileDao();
@@ -41,12 +43,18 @@ public class ActivityProfileDaoTest {
         KinaseActivityProfile profile = new KinaseActivityProfile();
         profile.setCompoundName("compoundA");
         Page<KinaseActivityProfile> expectedPage = new PageImpl<>(Collections.singletonList(profile));
-        doReturn(expectedPage).when(activityProfileRepository).findAll(any(Pageable.class));
+        doReturn(expectedPage).when(mockRepository).findAll(any(Pageable.class));
 
         Pageable pageInfo = PageRequest.of(0, 20);
         Page<KinaseActivityProfile> actualPage = activityProfileDao.getKinaseActivityProfiles(pageInfo);
 
         comparePages(expectedPage, actualPage);
+    }
+
+    @Test
+    public void testSave() {
+        activityProfileDao.save(null);
+        verify(mockRepository, times(1)).saveAll(any());
     }
 
     private static void comparePages(Page<KinaseActivityProfile> expectedPage, Page<KinaseActivityProfile> actualPage) {

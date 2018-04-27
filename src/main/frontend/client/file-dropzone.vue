@@ -2,27 +2,14 @@
     <div>
         <div class="file-dropzone">
 
-            <div class="file-dropzone-content" v-if="!file">
+            <div class="file-dropzone-content">
                 <div class="headline">Drop file here, or</div>
                 <label for="compound-file-input">
-                    <v-btn @click="onSelectFile" color="success">Select File</v-btn>
+                    <v-btn @click="onSelectFileButtonClicked" color="success">Select File</v-btn>
                     <input type="file" id="compound-file-input"
                            @change="onFileChanged"
-                            ref="fileInput">
+                           ref="fileInput">
                 </label>
-            </div>
-
-
-            <div class="file-dropzone-content" v-if="file">
-                <div class="headline">File: {{fileName}}</div>
-
-                <div class="import-details">{{importSummary}}</div>
-
-                <div>
-                    <v-spacer></v-spacer>
-                    <v-btn color="success" @click="onImport">Import</v-btn>
-                    <v-btn @click="onCancel">Cancel</v-btn>
-                </div>
             </div>
         </div>
     </div>
@@ -31,71 +18,26 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import Toaster from './toaster';
-import restApi from './rest-api';
-import { CompoundImportRep, CompoundStatusPair, ErrorResponse } from './rak';
+import { Prop } from 'vue-property-decorator';
 
 @Component
 export default class ImportCompounds extends Vue {
 
-    private importRep: CompoundImportRep | null = null;
-    private file: File | null = null;
-    private fileName: string | null = null;
-
-    get importSummary() {
-
-        if (!this.importRep) {
-            return 'Error getting import description';
-        }
-
-        const csps: CompoundStatusPair[] = this.importRep.compoundStatuses;
-        const newCount: number = csps.filter((csp: CompoundStatusPair) => {
-            return csp.status === 'NEW_COMPOUND';
-        }).length;
-        const updateCount: number = csps.length - newCount;
-
-        return `Creating ${newCount} compounds, updating ${updateCount} compounds`;
-    }
-
-    private onCancel() {
-        this.importRep = this.file = this.fileName = null;
-    }
+    /**
+     * "value" facilitates v-model support
+     */
+    @Prop({ required: true })
+    value: File | null;
 
     private onFileChanged() {
 
         const fileInput: HTMLInputElement = this.$refs.fileInput as HTMLInputElement;
         const file: File = fileInput.files![0];
 
-        if (fileInput) {
-            restApi.importCompounds(file, false)
-                .then((importRep: CompoundImportRep) => {
-                    this.importRep = importRep;
-                    this.file = file;
-                    this.fileName = this.file.name;
-                })
-                .catch((errorResponse: ErrorResponse) => {
-                    this.importRep = this.file = this.fileName = null;
-                    Toaster.error(errorResponse.message);
-                });
-        }
-        else {
-            this.file = this.fileName = null;
-        }
+        this.$emit('input', file);
     }
 
-    private onImport() {
-
-        restApi.importCompounds(this.file!)
-            .then(() => {
-                Toaster.success('Import successful');
-            })
-            .catch((errorResponse: ErrorResponse) => {
-                Toaster.error(errorResponse.message);
-            });
-    }
-
-    private onSelectFile() {
-
+    private onSelectFileButtonClicked() {
         const input: HTMLInputElement = this.$refs.fileInput as HTMLInputElement;
         input.click();
     }

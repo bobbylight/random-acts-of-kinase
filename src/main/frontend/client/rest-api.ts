@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { ActivityProfile, BlogPost, Compound, CompoundImportRep, ErrorResponse, PagedDataRep, UserRep } from './rak';
+import { ActivityProfile, BlogPost, Compound, ObjectImportRep, ErrorResponse, PagedDataRep, UserRep } from './rak';
 
 export class RestApi {
 
@@ -104,13 +104,13 @@ export class RestApi {
             });
     }
 
-    importCompounds(file: File, commit: boolean = true): Promise<CompoundImportRep> {
+    importCompounds(file: File, commit: boolean = true): Promise<ObjectImportRep> {
 
         const data: FormData = new FormData();
         data.append('file', file);
 
         return this.instance.patch(`admin/api/compounds?commit=${commit}`, data)
-            .then((response: AxiosResponse<CompoundImportRep>) => {
+            .then((response: AxiosResponse<ObjectImportRep>) => {
                 return response.data;
             })
             .catch((error: AxiosError) => {

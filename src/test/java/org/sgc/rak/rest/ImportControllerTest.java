@@ -27,6 +27,11 @@ public class ImportControllerTest {
 
     @Test
     @Ignore("Add me when we've got MockMvc working")
+    public void testImportActivityProfiles_happyPath() {
+    }
+
+    @Test
+    @Ignore("Add me when we've got MockMvc working")
     public void testImportCompounds_happyPath() {
     }
 }

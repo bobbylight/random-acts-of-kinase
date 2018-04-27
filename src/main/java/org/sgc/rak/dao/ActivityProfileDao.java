@@ -61,4 +61,13 @@ public class ActivityProfileDao {
         return activityProfileRepository.getKinaseActivityProfilesByKinaseIdAndPercentControlLessThanEqual(kinase,
             activity,  pageInfo);
     }
+
+    /**
+     * Saves a collection of activity profiles.
+     *
+     * @param activityProfiles The activity profiles to save.
+     */
+    public void save(Iterable<KinaseActivityProfile> activityProfiles) {
+        activityProfileRepository.saveAll(activityProfiles);
+    }
 }

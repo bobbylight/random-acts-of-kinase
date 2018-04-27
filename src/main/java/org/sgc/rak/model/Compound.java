@@ -23,16 +23,16 @@ public class Compound {
     @Column(name = "compound_nm", updatable = false)
     private String compoundName;
 
-    @Column(name = "chemotype", updatable = false)
+    @Column(name = "chemotype")
     private String chemotype;
 
-    @Column(name = "s_10", updatable = false)
+    @Column(name = "s_10")
     private Double s10;
 
-    @Column(name = "smiles", updatable = false)
+    @Column(name = "smiles")
     private String smiles;
 
-    @Column(name = "source", updatable = false)
+    @Column(name = "source")
     private String source;
 
     public String getChemotype() {

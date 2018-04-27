@@ -77,17 +77,6 @@ export default class CompoundTable extends Vue {
         return headers;
     }
 
-    private get dataTableColumns(): any[] {
-
-        return this.columnInfo.map((colInfo: ColumnInfo) => {
-            return {
-                data: colInfo.columnId,
-                defaultContent: '',
-                render: colInfo.isCompound ? this.compoundRenderer : undefined
-            };
-        });
-    }
-
     /**
      * Returns the CSS classes to apply to a cell for the given column.
      *
