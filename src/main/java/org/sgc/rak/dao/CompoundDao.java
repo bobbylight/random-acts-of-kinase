@@ -34,9 +34,21 @@ public class CompoundDao {
      *
      * @param compoundName The compound name.
      * @return The compound, or {@code null} if no such compound is known.
+     * @see #getCompoundExists(String)
      */
     public Compound getCompound(String compoundName) {
         return compoundRepository.findById(compoundName).orElse(null);
+    }
+
+    /**
+     * Returns whether a compound exists.
+     *
+     * @param compoundName The name of the compound to search for.
+     * @return Whether the compound exists.
+     * @see #getCompound(String)
+     */
+    public boolean getCompoundExists(String compoundName) {
+        return compoundRepository.existsById(compoundName);
     }
 
     /**

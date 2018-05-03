@@ -5,6 +5,7 @@ import org.sgc.rak.dao.ActivityProfileDao;
 import org.sgc.rak.dao.CompoundDao;
 import org.sgc.rak.dao.KinaseDao;
 import org.sgc.rak.i18n.Messages;
+import org.sgc.rak.repositories.KinaseActivityProfileRepository;
 import org.sgc.rak.rest.CsvHttpMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -27,8 +28,8 @@ import java.util.List;
 public class AppConfiguration implements WebMvcConfigurer {
 
     @Bean
-    public ActivityProfileDao activityProfileDao() {
-        return new ActivityProfileDao();
+    public ActivityProfileDao activityProfileDao(KinaseActivityProfileRepository activityProfileRepository) {
+        return new ActivityProfileDao(activityProfileRepository);
     }
 
     @Bean

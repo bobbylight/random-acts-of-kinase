@@ -6,7 +6,6 @@
 
             <v-flex xs12 v-if="!file">
 
-                <!--<h3 class="headline">Incomplete Compounds</h3>-->
                 <div>Upload a CSV file with compound information to add it
                 to the database. The file should contain the following columns
                 (data can be sparse):</div>
@@ -67,6 +66,7 @@ import Toaster from '../toaster';
 import { ObjectImportRep, ErrorResponse, FieldStatus } from '../rak';
 import { Watch } from 'vue-property-decorator';
 import restApi from '../rest-api';
+import RakUtil from '../util';
 
 @Component({ components: { SectionHeader, FileDropzone, ImportPreviewTable } })
 export default class ImportCompounds extends Vue {
@@ -115,7 +115,14 @@ export default class ImportCompounds extends Vue {
 
         const fieldStatuses: FieldStatus[][] = this.importRep.fieldStatuses;
 
-        return `Creating or updating ${fieldStatuses.length} records`;
+        const newRecordCount: number = fieldStatuses.filter((rowData: FieldStatus[]) => {
+            return RakUtil.isNewRecord(rowData);
+        }).length;
+        const unchangedRecordCount: number = fieldStatuses.filter((rowData: FieldStatus[]) => {
+            return RakUtil.isUnchangedRecord(rowData);
+        }).length;
+        const modifiedRecordCount: number = fieldStatuses.length - newRecordCount - unchangedRecordCount;
+        return `Creating ${newRecordCount} new records, modifying ${modifiedRecordCount}`;
     }
 
     private onCancel() {
@@ -133,7 +140,7 @@ export default class ImportCompounds extends Vue {
                     this.fileName = this.file!.name;
                 })
                 .catch((errorResponse: ErrorResponse) => {
-                    this.importRep = this.fileName = null;
+                    this.reset();
                     this.previewGridItems = [];
                     Toaster.error(errorResponse.message);
                 });

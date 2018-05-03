@@ -3,11 +3,22 @@ package org.sgc.rak.util;
 import org.junit.Assert;
 import org.junit.Test;
 import org.sgc.rak.model.Compound;
+import org.sgc.rak.reps.KinaseActivityProfileCsvRecordRep;
 
 public class UtilTest {
 
     @Test
-    public void testConvertEmptyStringsToNulls() {
+    public void testConvertEmptyStringsToNulls_activityProfile() {
+
+        KinaseActivityProfileCsvRecordRep activityProfileCsvRecordRep = new KinaseActivityProfileCsvRecordRep();
+        activityProfileCsvRecordRep.setDiscoverxGeneSymbol("");
+
+        Util.convertEmptyStringsToNulls(activityProfileCsvRecordRep);
+        Assert.assertNull(activityProfileCsvRecordRep.getDiscoverxGeneSymbol());
+    }
+
+    @Test
+    public void testConvertEmptyStringsToNulls_compound() {
 
         Compound compound = new Compound();
         compound.setChemotype("");

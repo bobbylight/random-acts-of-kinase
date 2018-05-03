@@ -30,7 +30,7 @@ public class ActivityProfileDaoTest {
     private KinaseActivityProfileRepository mockRepository;
 
     @InjectMocks
-    private ActivityProfileDao activityProfileDao = new ActivityProfileDao();
+    private ActivityProfileDao activityProfileDao;
 
     @Before
     public void setUp() {

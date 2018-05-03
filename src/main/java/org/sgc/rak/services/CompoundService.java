@@ -64,29 +64,12 @@ public class CompoundService {
         }
 
         return Arrays.asList(
-            createCompoundFieldStatus("compoundName", compound.getCompoundName(), existingCompoundName),
-            createCompoundFieldStatus("chemotype", compound.getChemotype(), existingChemotype),
-            createCompoundFieldStatus("smiles", compound.getSmiles(), existingSmiles),
-            createCompoundFieldStatus("s10", compound.getS10(), existingS10),
-            createCompoundFieldStatus("source", compound.getSource(), existingSource)
+            Util.createFieldStatus("compoundName", compound.getCompoundName(), existingCompoundName),
+            Util.createFieldStatus("chemotype", compound.getChemotype(), existingChemotype),
+            Util.createFieldStatus("smiles", compound.getSmiles(), existingSmiles),
+            Util.createFieldStatus("s10", compound.getS10(), existingS10),
+            Util.createFieldStatus("source", compound.getSource(), existingSource)
         );
-    }
-
-    /**
-     * Creates a field status representing a new field value.
-     *
-     * @param name The field name.
-     * @param newValue The new value for the field.
-     * @param existingValue The existing/prior value for the field.
-     * @return The field status.
-     */
-    private static ObjectImportRep.FieldStatus createCompoundFieldStatus(String name, Object newValue,
-                                                                         Object existingValue) {
-        ObjectImportRep.FieldStatus status = new ObjectImportRep.FieldStatus();
-        status.setFieldName(name);
-        status.setNewValue(newValue);
-        status.setOldValue(existingValue);
-        return status;
     }
 
     /**
@@ -95,6 +78,7 @@ public class CompoundService {
      * @param compoundName The compound name, ignoring case.
      * @return Information on the compound.  If no such compound is known, an exception
      *         is thrown.
+     * @see #getCompoundExists(String)
      */
     public Compound getCompound(String compoundName) {
         Compound compound = compoundDao.getCompound(compoundName);
@@ -102,6 +86,17 @@ public class CompoundService {
             throw new NotFoundException(messages.get("error.noSuchCompound", compoundName));
         }
         return compound;
+    }
+
+    /**
+     * Returns whether a specific compound exists.
+     *
+     * @param compoundName The compound name, ignoring case.
+     * @return Whether the compound exists.
+     * @see #getCompound(String)
+     */
+    public boolean getCompoundExists(String compoundName) {
+        return compoundDao.getCompoundExists(compoundName);
     }
 
     /**

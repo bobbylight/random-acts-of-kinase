@@ -76,7 +76,7 @@ public class AppExceptionHandlerTest {
         BadRequestException e = new BadRequestException("bad request");
         HttpHeaders headers = new HttpHeaders();
 
-        ResponseEntity<Object> response = exceptionHandler.restException(mockRequest, headers, e);
+        ResponseEntity<Object> response = exceptionHandler.restException(mockRequest, e);
 
         Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }

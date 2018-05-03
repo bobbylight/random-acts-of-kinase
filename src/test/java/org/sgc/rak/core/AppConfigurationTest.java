@@ -39,7 +39,7 @@ public class AppConfigurationTest {
 
     @Test
     public void testActivityProfileDao() {
-        Assert.assertNotNull(config.activityProfileDao());
+        Assert.assertNotNull(config.activityProfileDao(null));
     }
 
     @Test

@@ -11,7 +11,8 @@ CREATE TABLE :schema.compound (
 )
 WITH ( OIDS = FALSE );
 
-CREATE INDEX compound_lower_idx ON :schema.compound (lower(compound_nm));
+CREATE INDEX compound_compound_nm_idx ON :schema.compound (compound_nm);
+CREATE INDEX compound_compound_nm_lower_idx ON :schema.compound (lower(compound_nm));
 
 
 DROP TABLE IF EXISTS :schema.kinase CASCADE;
@@ -23,6 +24,8 @@ CREATE TABLE :schema.kinase (
   CONSTRAINT kinase_discoverx_gene_symbol_entrez_gene_symbol_key UNIQUE (discoverx_gene_symbol, entrez_gene_symbol)
 )
 WITH ( OIDS = FALSE );
+
+CREATE INDEX kinase_discoverx_gene_symbol_idx ON :schema.kinase (discoverx_gene_symbol);
 
 
 DROP TABLE IF EXISTS :schema.kinase_activity_profile CASCADE;
@@ -41,7 +44,8 @@ CREATE TABLE :schema.kinase_activity_profile (
 )
 WITH ( OIDS = FALSE );
 
-CREATE INDEX kinase_activity_profile_lower_idx ON :schema.kinase_activity_profile (lower(compound_nm));
+CREATE INDEX kinase_activity_profile_compound_nm_idx ON :schema.kinase_activity_profile (compound_nm);
+CREATE INDEX kinase_activity_profile_compound_nm_lower_idx ON :schema.kinase_activity_profile (lower(compound_nm));
 
 
 DROP TABLE IF EXISTS :schema.blog_post CASCADE;

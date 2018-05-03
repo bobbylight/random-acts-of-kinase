@@ -22,6 +22,9 @@ public class ObjectImportRep {
         this.fieldStatuses = fieldStatuses != null ? fieldStatuses : new ArrayList<>();
     }
 
+    /**
+     * Represents the status of a field - changed or unchanged, prior and new values.
+     */
     public static class FieldStatus {
 
         private String fieldName;

@@ -1,5 +1,6 @@
 const loaders = require('./loaders');
 const path = require('path');
+// const { VueLoaderPlugin } = require('vue-loader')
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackAutoInject = require('webpack-auto-inject-version');
@@ -41,6 +42,7 @@ const config = {
     // source-map doesn't seem to be working, see webpack bug reports
     devtool: devBuild ? 'cheap-eval-source-map' : undefined,//'source-map',
     plugins: [
+        // new VueLoaderPlugin(),
         new CopyWebpackPlugin([
             { from: 'img', to: 'img' }
         ]),

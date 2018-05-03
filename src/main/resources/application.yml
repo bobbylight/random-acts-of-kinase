@@ -1,12 +1,16 @@
 spring:
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQL94Dialect
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
   profiles:
     active: dev-postgres
   mvc:
     contentnegotiation:
       favor-parameter: true
       parameter-name: format
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 11MB
 logging:
   level:
     root: INFO

@@ -1,8 +1,13 @@
 package org.sgc.rak.services;
 
 import org.sgc.rak.dao.ActivityProfileDao;
+import org.sgc.rak.exceptions.BadRequestException;
+import org.sgc.rak.i18n.Messages;
+import org.sgc.rak.model.Kinase;
 import org.sgc.rak.model.KinaseActivityProfile;
+import org.sgc.rak.reps.KinaseActivityProfileCsvRecordRep;
 import org.sgc.rak.reps.ObjectImportRep;
+import org.sgc.rak.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +16,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service for manipulating kinase activity profiles.
@@ -18,24 +25,67 @@ import java.util.List;
 @Service
 public class ActivityProfileService {
 
-    @Autowired
-    private ActivityProfileDao activityProfileDao;
+    private final ActivityProfileDao activityProfileDao;
+    private final CompoundService compoundService;
+    private final KinaseService kinaseService;
+
+    private final Messages messages;
 
     @Autowired
-    private CompoundService compoundService;
+    public ActivityProfileService(ActivityProfileDao activityProfileDao, CompoundService compoundService,
+                                  KinaseService kinaseService, Messages messages) {
+        this.activityProfileDao = activityProfileDao;
+        this.compoundService = compoundService;
+        this.kinaseService = kinaseService;
+        this.messages = messages;
+    }
 
-    /**
-     * Create a field status representing a new value.
-     *
-     * @param name The name of the field.
-     * @param value The new value.
-     * @return The field status.
-     */
-    private static ObjectImportRep.FieldStatus createNewFieldStatus(String name, Object value) {
-        ObjectImportRep.FieldStatus status = new ObjectImportRep.FieldStatus();
-        status.setFieldName(name);
-        status.setNewValue(value);
-        return status;
+    private KinaseActivityProfile activityProfileCsvRecordToActivityProfile(KinaseActivityProfileCsvRecordRep csvRep) {
+
+        if (!compoundService.getCompoundExists(csvRep.getCompoundName())) {
+            throw new BadRequestException(messages.get("error.noSuchCompound", csvRep.getCompoundName()));
+        }
+
+        Kinase kinase = kinaseService.getKinase(csvRep.getDiscoverxGeneSymbol());
+        if (kinase == null) {
+            throw new BadRequestException(messages.get("error.noSuchKinase", csvRep.getDiscoverxGeneSymbol()));
+        }
+
+        KinaseActivityProfile profile = new KinaseActivityProfile();
+        profile.setCompoundName(csvRep.getCompoundName());
+        profile.setKinase(kinase);
+        profile.setPercentControl(csvRep.getPercentControl());
+        profile.setCompoundConcentration(csvRep.getCompoundConcentration());
+
+        return profile;
+    }
+
+    private List<ObjectImportRep.FieldStatus> activityProfileCsvRecordToFieldStatusList(
+            KinaseActivityProfile newProfile, KinaseActivityProfile existingProfile) {
+
+        String existingCompoundName = null;
+        String existingDiscoverx = null;
+        Double existingPercentControl = null;
+        Integer existingCompoundConcentration = null;
+        Double existingKd = null;
+
+        if (existingProfile != null) {
+            existingCompoundName = existingProfile.getCompoundName();
+            existingDiscoverx = existingProfile.getKinase().getDiscoverxGeneSymbol();
+            existingPercentControl = existingProfile.getPercentControl();
+            existingCompoundConcentration = existingProfile.getCompoundConcentration();
+            existingKd = existingProfile.getKd();
+        }
+
+        return Arrays.asList(
+            Util.createFieldStatus("compoundName", newProfile.getCompoundName(), existingCompoundName),
+            Util.createFieldStatus("discoverxGeneSymbol", newProfile.getKinase().getDiscoverxGeneSymbol(),
+                existingDiscoverx),
+            Util.createFieldStatus("percentControl", newProfile.getPercentControl(), existingPercentControl),
+            Util.createFieldStatus("compoundConcentration",
+                newProfile.getCompoundConcentration(), existingCompoundConcentration),
+            Util.createFieldStatus("kd", newProfile.getKd(), existingKd)
+        );
     }
 
     /**
@@ -91,36 +141,58 @@ public class ActivityProfileService {
     /**
      * Upserts a list of activity profiles.  New profiles are added, existing ones are updated.
      *
-     * @param activityProfiles The activity profiles to upsert.
+     * @param activityProfileCsvRecords The activity profiles to upsert.
      * @param commit Whether to actually commit the patch, or just return the possible result.
      * @return The result of the operation (or possible result, if {@code commit} is {@code false}).
      */
-    public ObjectImportRep importActivityProfiles(List<KinaseActivityProfile> activityProfiles, boolean commit) {
+    public ObjectImportRep importActivityProfiles(List<KinaseActivityProfileCsvRecordRep> activityProfileCsvRecords,
+                                                  boolean commit) {
 
-        // TODO: Fetch existing profiles and merge.  Right now we just assume everything is new and
-        // we'll let the failure to insert a row trigger an error.
+        List<String> compoundNames = activityProfileCsvRecords.stream()
+            .map(KinaseActivityProfileCsvRecordRep::getCompoundName).collect(Collectors.toList());
+        List<String> discoverxes = activityProfileCsvRecords.stream()
+            .map(KinaseActivityProfileCsvRecordRep::getDiscoverxGeneSymbol).collect(Collectors.toList());
+        List<KinaseActivityProfile> existingProfiles = activityProfileDao
+            .getKinaseActivityProfiles(compoundNames, discoverxes);
 
         ObjectImportRep importRep = new ObjectImportRep();
         List<List<ObjectImportRep.FieldStatus>> records = new ArrayList<>();
         importRep.setFieldStatuses(records);
+        List<KinaseActivityProfile> toPersist = new ArrayList<>();
 
-        for (KinaseActivityProfile activityProfile : activityProfiles) {
+        for (KinaseActivityProfileCsvRecordRep activityProfileCsvRecord : activityProfileCsvRecords) {
 
-            List<ObjectImportRep.FieldStatus> fields = Arrays.asList(
-            	createNewFieldStatus("compoundName", activityProfile.getCompoundName()),
-            	createNewFieldStatus("compoundConcentration", activityProfile.getCompoundConcentration()),
-            	createNewFieldStatus("kd", activityProfile.getKd()),
-            	createNewFieldStatus("kianse", activityProfile.getKinase()),
-            	createNewFieldStatus("percentControl", activityProfile.getPercentControl())
-            );
+            Util.convertEmptyStringsToNulls(activityProfileCsvRecord);
+            String compoundName = activityProfileCsvRecord.getCompoundName();
+            String discoverx = activityProfileCsvRecord.getDiscoverxGeneSymbol();
+            KinaseActivityProfile newActivityProfile;
 
-            records.add(fields);
+            KinaseActivityProfile existingProfile = possiblyGetActivityProfile(existingProfiles, compoundName,
+                discoverx);
+            if (existingProfile != null) {
+                newActivityProfile = Util.patchActivityProfile(existingProfile, activityProfileCsvRecord);
+            }
+            else {
+                newActivityProfile = activityProfileCsvRecordToActivityProfile(activityProfileCsvRecord);
+            }
+
+            toPersist.add(newActivityProfile);
+            records.add(activityProfileCsvRecordToFieldStatusList(newActivityProfile, existingProfile));
         }
 
         if (commit) {
-            activityProfileDao.save(activityProfiles);
+            activityProfileDao.save(toPersist);
         }
 
         return importRep;
+    }
+
+    private static KinaseActivityProfile possiblyGetActivityProfile(List<KinaseActivityProfile> profiles,
+                                                                    String compoundName, String discoverx) {
+        Optional<KinaseActivityProfile> optional = profiles.stream()
+            .filter(c -> compoundName.equals(c.getCompoundName()) &&
+                        discoverx.equals(c.getKinase().getDiscoverxGeneSymbol()))
+            .findFirst();
+        return optional.orElse(null);
     }
 }

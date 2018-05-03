@@ -106,7 +106,7 @@ export default {
             const loadedImages = this.$el.querySelectorAll('img.b-lazy.b-loaded');
 
             for (let i = 0; i < loadedImages.length; i++) {
-                loadedImages[i].src = 'data:';
+                loadedImages[i].src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
                 loadedImages[i].classList.remove('b-loaded');
             }
         }

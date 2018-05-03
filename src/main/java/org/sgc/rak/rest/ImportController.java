@@ -3,13 +3,17 @@ package org.sgc.rak.rest;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import org.sgc.rak.exceptions.BadRequestException;
 import org.sgc.rak.exceptions.InternalServerErrorException;
 import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.model.Compound;
-import org.sgc.rak.model.KinaseActivityProfile;
+import org.sgc.rak.reps.KinaseActivityProfileCsvRecordRep;
 import org.sgc.rak.reps.ObjectImportRep;
 import org.sgc.rak.services.ActivityProfileService;
 import org.sgc.rak.services.CompoundService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +35,8 @@ public class ImportController {
 
     private Messages messages;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImportController.class);
+
     @Autowired
     ImportController(CompoundService compoundService, ActivityProfileService activityProfileService,
                      Messages messages) {
@@ -39,7 +45,7 @@ public class ImportController {
         this.messages = messages;
     }
 
-    private <T> List<T> loadFromCsv(MultipartFile file, Class<T> clazz) {
+    private <T> List<T> loadFromCsv(MultipartFile file, boolean headerRow, Class<T> clazz) {
 
         String csv;
         try {
@@ -52,13 +58,24 @@ public class ImportController {
         List<T> data;
 
         try {
-            MappingIterator<T> iter = mapper.readerWithSchemaFor(clazz)
+
+            CsvSchema schema = CsvSchema.builder()
+                .addColumn("compoundName", CsvSchema.ColumnType.STRING)
+                .addColumn("discoverxGeneSymbol", CsvSchema.ColumnType.STRING)
+                .addColumn("entrezGeneSymbol", CsvSchema.ColumnType.STRING)
+                .addColumn("percentControl", CsvSchema.ColumnType.NUMBER)
+                .addColumn("compoundConcentration", CsvSchema.ColumnType.NUMBER)
+                .build().withHeader();
+
+            MappingIterator<T> iter = mapper.readerFor(clazz).with(schema)
                 // Note this doesn't seem to work, so we manually null out empty strings later
                 .withFeatures(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT)
                 .readValues(csv);
             data = iter.readAll();
         } catch (Exception e) {
-            throw new InternalServerErrorException(messages.get("error.importingData"));
+            LOGGER.error("Error deserializing CSV into " + clazz.getSimpleName() + ": " + e.getMessage(),
+                LOGGER.isDebugEnabled() ? e : null);
+            throw new BadRequestException(messages.get("error.invalidCsvFormat"));
         }
 
         return data;
@@ -75,8 +92,10 @@ public class ImportController {
     @RequestMapping(method = RequestMethod.PATCH, path = "activityProfiles")
     @ResponseStatus(HttpStatus.OK)
     ObjectImportRep importActivityProfiles(@RequestPart("file") MultipartFile file,
+                                           @RequestParam(defaultValue = "true") boolean headerRow,
                                            @RequestParam(defaultValue = "true") boolean commit) {
-        List<KinaseActivityProfile> activityProfiles = loadFromCsv(file, KinaseActivityProfile.class);
+        List<KinaseActivityProfileCsvRecordRep> activityProfiles = loadFromCsv(file, headerRow,
+            KinaseActivityProfileCsvRecordRep.class);
         return activityProfileService.importActivityProfiles(activityProfiles, commit);
     }
 
@@ -92,7 +111,7 @@ public class ImportController {
     @ResponseStatus(HttpStatus.OK)
     ObjectImportRep importCompounds(@RequestPart("file") MultipartFile file,
                                       @RequestParam(defaultValue = "true") boolean commit) {
-        List<Compound> compounds = loadFromCsv(file, Compound.class);
+        List<Compound> compounds = loadFromCsv(file, false, Compound.class);
         return compoundService.importCompounds(compounds, commit);
     }
 }

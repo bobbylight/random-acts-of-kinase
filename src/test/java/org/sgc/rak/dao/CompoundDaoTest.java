@@ -60,6 +60,15 @@ public class CompoundDaoTest {
     }
 
     @Test
+    public void testGetCompoundExists() {
+
+        String expectedCompoundName = "compoundA";
+
+        doReturn(true).when(compoundRepository).existsById(eq(expectedCompoundName));
+        Assert.assertTrue(compoundDao.getCompoundExists(expectedCompoundName));
+    }
+
+    @Test
     public void testGetCompounds_pageable() {
 
         Compound compound1 = new Compound();

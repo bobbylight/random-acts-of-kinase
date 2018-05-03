@@ -104,6 +104,25 @@ export class RestApi {
             });
     }
 
+    importActivityProfiles(file: File, headerRow: boolean, commit: boolean = true): Promise<ObjectImportRep> {
+
+        const data: FormData = new FormData();
+        data.append('file', file);
+
+        let url: string = `admin/api/activityProfiles?commit=${commit}`;
+        if (headerRow) {
+            url += '&headerRow=true';
+        }
+
+        return this.instance.patch(url, data)
+            .then((response: AxiosResponse<ObjectImportRep>) => {
+                return response.data;
+            })
+            .catch((error: AxiosError) => {
+                throw RestApi.axiosErrorToErrorResponse(error);
+            });
+    }
+
     importCompounds(file: File, commit: boolean = true): Promise<ObjectImportRep> {
 
         const data: FormData = new FormData();

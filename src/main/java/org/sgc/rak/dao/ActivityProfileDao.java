@@ -6,13 +6,50 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 /**
  * DAO for manipulating kinase activity profiles.
  */
 public class ActivityProfileDao {
 
+    private final KinaseActivityProfileRepository activityProfileRepository;
+
     @Autowired
-    private KinaseActivityProfileRepository activityProfileRepository;
+    public ActivityProfileDao(KinaseActivityProfileRepository repository) {
+        this.activityProfileRepository = repository;
+    }
+
+    /**
+     * Fetches all kinase activity profiles that match one of a number of compound name/discoverx pairs.
+     *
+     * @param compoundNames The compound names to check for.  This should be the same length as {@code discoverxes}.
+     * @param discoerxes The discoverx gene symbols to check for.  This hsould be the same length as
+     *        {@code compoundNames}.
+     * @return The found activity profiles.  This may be empty, but will never be {@code null}.
+     */
+    public List<KinaseActivityProfile> getKinaseActivityProfiles(List<String> compoundNames, List<String> discoerxes) {
+
+        if (compoundNames.size() != discoerxes.size()) {
+            throw new IllegalStateException("List of compound names and discoverx gene symbols aren't the same length");
+        }
+
+        List<KinaseActivityProfile> profiles = new ArrayList<>();
+
+        for (int i = 0; i < compoundNames.size(); i++) {
+
+            String compoundName = compoundNames.get(i);
+            String discoverx = discoerxes.get(i);
+
+            Optional<KinaseActivityProfile> possibleProfile = activityProfileRepository
+                .findByCompoundNameAndKinaseDiscoverxGeneSymbol(compoundName, discoverx);
+            possibleProfile.ifPresent(profiles::add);
+        }
+
+        return profiles;
+    }
 
     /**
      * Returns kinase activity profile information.

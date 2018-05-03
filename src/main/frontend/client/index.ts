@@ -24,6 +24,7 @@ import VApp from 'vuetify/es5/components/VApp';
 import VAvatar from 'vuetify/es5/components/VAvatar';
 import VBtn from 'vuetify/es5/components/VBtn';
 import VCard from 'vuetify/es5/components/VCard';
+import VCheckbox from 'vuetify/es5/components/VCheckbox';
 import VChip from 'vuetify/es5/components/VChip';
 import VDataTable from 'vuetify/es5/components/VDataTable';
 import VDialog from 'vuetify/es5/components/VDialog';
@@ -65,6 +66,7 @@ Vue.use(Vuetify, {
         VApp,
         VBtn,
         VCard,
+        VCheckbox,
         VChip,
         VDataTable,
         VDialog,

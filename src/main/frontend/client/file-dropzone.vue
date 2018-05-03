@@ -45,10 +45,11 @@ export default class ImportCompounds extends Vue {
 </script>
 
 <style lang="less">
+@import '../styles/app';
+
 .file-dropzone {
 
-    max-width: 800px;
-    margin: 0 auto;
+    .import-form-field();
     border: 1px solid #e0e0e0;
     border-radius: 3px;
     text-align: center;

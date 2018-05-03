@@ -2,6 +2,9 @@ package org.sgc.rak.util;
 
 import org.apache.commons.lang3.StringUtils;
 import org.sgc.rak.model.Compound;
+import org.sgc.rak.model.KinaseActivityProfile;
+import org.sgc.rak.reps.KinaseActivityProfileCsvRecordRep;
+import org.sgc.rak.reps.ObjectImportRep;
 
 /**
  * Obligatory utility methods.
@@ -12,6 +15,20 @@ public final class Util {
      * Private constructor to prevent instantiation.
      */
     private Util() {
+    }
+
+    /**
+     * Converts any fields that are empty strings into {@code null}.
+     *
+     * @param activityProfile The activity profile to examine.
+     */
+    public static void convertEmptyStringsToNulls(KinaseActivityProfileCsvRecordRep activityProfile) {
+
+        // Compound name is not checked
+
+        if (StringUtils.isBlank(activityProfile.getDiscoverxGeneSymbol())) {
+            activityProfile.setDiscoverxGeneSymbol(null);
+        }
     }
 
     /**
@@ -34,6 +51,61 @@ public final class Util {
         if (StringUtils.isBlank(compound.getSource())) {
             compound.setSource(null);
         }
+    }
+
+    /**
+     * Creates a field status representing a field value and how it changed.
+     *
+     * @param name The field name.
+     * @param newValue The new value for the field.
+     * @param existingValue The existing/prior value for the field.
+     * @return The field status.
+     */
+    public static ObjectImportRep.FieldStatus createFieldStatus(String name, Object newValue,
+                                                                Object existingValue) {
+        ObjectImportRep.FieldStatus status = new ObjectImportRep.FieldStatus();
+        status.setFieldName(name);
+        status.setNewValue(newValue);
+        status.setOldValue(existingValue);
+        return status;
+    }
+
+    /**
+     * Creates and returns a new activity profile that is essentially a patch of {@code newProfile}'s fields into
+     * {@code existing}.  That is, the returned activity profile will have any non-{@code null} property values
+     * from the new profile, and for any {@code null} property values, it will have the existing profile's
+     * values.
+     *
+     * @param existing The existing activity profile.
+     * @param newProfile The new activity profile, whose non-{@code null}/empty values should be merged into
+     *        the result.
+     * @return The result of the patch/merge operation.
+     */
+    public static KinaseActivityProfile patchActivityProfile(KinaseActivityProfile existing,
+                                                             KinaseActivityProfileCsvRecordRep newProfile) {
+
+        KinaseActivityProfile retVal = new KinaseActivityProfile();
+        retVal.setId(existing.getId());
+
+        // It's assumed that the two activity profiles having the same compound and kinase was previously verified
+        retVal.setCompoundName(existing.getCompoundName());
+        retVal.setKinase(existing.getKinase());
+
+        if (newProfile.getPercentControl() > 0) {
+            retVal.setPercentControl(newProfile.getPercentControl());
+        }
+        else {
+            retVal.setPercentControl(existing.getPercentControl());
+        }
+
+        if (newProfile.getCompoundConcentration() > 0) {
+            retVal.setCompoundConcentration(newProfile.getCompoundConcentration());
+        }
+        else {
+            retVal.setCompoundConcentration(existing.getCompoundConcentration());
+        }
+
+        return retVal;
     }
 
     /**
