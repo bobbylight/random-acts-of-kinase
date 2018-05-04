@@ -12,7 +12,8 @@ import java.util.Optional;
  */
 public interface KinaseActivityProfileRepository extends PagingAndSortingRepository<KinaseActivityProfile, String> {
 
-    Optional<KinaseActivityProfile> findByCompoundNameAndKinaseDiscoverxGeneSymbol(String compoundName, String discoverx);
+    Optional<KinaseActivityProfile> findByCompoundNameAndKinaseDiscoverxGeneSymbol(String compoundName,
+                                                                                   String discoverx);
 
     Page<KinaseActivityProfile> getKinaseActivityProfilesByCompoundNameIgnoreCase(String compoundName,
                                                                                   Pageable pageInfo);

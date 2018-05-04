@@ -74,7 +74,6 @@ public class AppExceptionHandlerTest {
 
         WebRequest mockRequest = Mockito.mock(WebRequest.class);
         BadRequestException e = new BadRequestException("bad request");
-        HttpHeaders headers = new HttpHeaders();
 
         ResponseEntity<Object> response = exceptionHandler.restException(mockRequest, e);
 

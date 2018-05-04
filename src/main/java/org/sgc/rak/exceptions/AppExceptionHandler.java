@@ -1,5 +1,6 @@
 package org.sgc.rak.exceptions;
 
+import org.sgc.rak.util.SuppressFBWarnings;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,8 @@ import java.util.List;
  * Handles uncaught exceptions in the application.  Creates a response in the
  * format we want to return.
  */
+@SuppressFBWarnings(value = { "NP_NONNULL_PARAM_VIOLATION" },
+    justification = "These errors don't actually occur")
 @ControllerAdvice
 public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 

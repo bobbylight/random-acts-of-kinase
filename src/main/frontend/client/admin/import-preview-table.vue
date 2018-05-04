@@ -2,8 +2,11 @@
     <div>
         <v-data-table
             class="import-preview-table"
+            :loading="loading"
+            :no-data-text="noDataText"
             :items="items"
             :headers="createHeaders()"
+            :custom-sort="sortGrid"
             :rows-per-page-items='[ 10, 20, 50 ]'>
 
             <template slot="items" slot-scope="props">
@@ -24,7 +27,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { Prop } from 'vue-property-decorator';
+import { Prop, Watch } from 'vue-property-decorator';
 import { FieldStatus } from '../rak';
 
 export interface ColumnInfo {
@@ -44,6 +47,9 @@ export default class ImportPreviewTable extends Vue {
 
     @Prop({ required: true })
     private columnInfo: ColumnInfo[];
+
+    @Prop({ required: false, default: false })
+    private loading: boolean;
 
     private createHeaders(): any[] {
 
@@ -75,12 +81,7 @@ export default class ImportPreviewTable extends Vue {
 
         let classes: string = '';
 
-        //// TODO: Extract this hard-coded knowledge of numeric columns somewhere else
-        //if ('s10' === columnId) {
-        //    return 'text-xs-right';
-        //}
-
-        if (value.oldValue) {
+        if (value.oldValue != null) {
             if (value.oldValue !== value.newValue) {
                 classes += 'orange--text ';
             }
@@ -105,6 +106,39 @@ export default class ImportPreviewTable extends Vue {
         }
 
         return 'This is a new value';
+    }
+
+    private get noDataText(): string {
+        return this.loading ? 'Loading...' : 'No data available';
+    }
+
+    private sortGrid(items: object[], sortCol: string, descending: boolean): object[] {
+
+        if (!sortCol) {
+            return items;
+        }
+
+        return items.sort((a: any, b: any) => {
+
+            if (descending) {
+                const temp: any = b;
+                b = a;
+                a = temp;
+            }
+
+            let aValue: string | number = a[sortCol].newValue;
+            let bValue: string | number = b[sortCol].newValue;
+
+            if (typeof aValue === 'string') {
+                aValue = aValue.toLowerCase();
+            }
+            if (typeof bValue === 'string') {
+                bValue = bValue.toLowerCase();
+            }
+
+            return aValue < bValue ? -1 :
+                (aValue > bValue ? 1 : 0);
+        });
     }
 }
 </script>

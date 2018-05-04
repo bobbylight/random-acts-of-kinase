@@ -31,8 +31,10 @@
 
             <v-flex xs6 v-if="file">
                 <v-layout justify-end>
-                    <v-btn color="success" @click="onImport">Import</v-btn>
-                    <v-btn @click="onCancel">Cancel</v-btn>
+                    <v-btn color="success" @click="onImport"
+                        :disabled="loading">Import</v-btn>
+                    <v-btn @click="onCancel"
+                        :disabled="loading">Cancel</v-btn>
                 </v-layout>
             </v-flex>
 
@@ -51,7 +53,8 @@
 
                     <import-preview-table
                         :column-info="previewGridColumnInfos"
-                        :items="previewGridItems">
+                        :items="previewGridItems"
+                        :loading="loading">
                     </import-preview-table>
                 </v-card>
             </v-flex>
@@ -72,7 +75,7 @@ import restApi from '../rest-api';
 import RakUtil from '../util';
 
 @Component({ components: { SectionHeader, FileDropzone, ImportPreviewTable } })
-export default class ImportActivityprofiles extends Vue {
+export default class ImportActivityProfiles extends Vue {
 
     private file: File | null = null;
 
@@ -81,6 +84,7 @@ export default class ImportActivityprofiles extends Vue {
     private headerRow: boolean = true;
 
     private previewGridItems: any[] = [];
+    private loading: boolean = true;
 
     private createPreviewGridItems(): any[] {
 
@@ -106,15 +110,15 @@ export default class ImportActivityprofiles extends Vue {
             { name: 'Compound', value: 'compoundName' },
             { name: 'Kinase Discoverx', value: 'discoverxGeneSymbol' },
             { name: '% Control', value: 'percentControl' },
-            { name: 'Concentration', value: 'compoundConcentration' },
-            { name: 'Kd', value: 'kd' }
+            { name: 'Concentration', value: 'compoundConcentration' }
         ];
     }
 
     get importSummary() {
 
         if (!this.importRep) {
-            return 'Error getting import description';
+            return this.loading ? 'Loading, please wait...' :
+                'Error getting import description';
         }
 
         const fieldStatuses: FieldStatus[][] = this.importRep.fieldStatuses;
@@ -136,15 +140,19 @@ export default class ImportActivityprofiles extends Vue {
     @Watch('file')
     private onFileChanged() {
 
+        this.loading = true;
+
         if (this.file) {
+            this.fileName = this.file!.name;
             restApi.importActivityProfiles(this.file, this.headerRow, false)
                 .then((importRep: ObjectImportRep) => {
                     this.importRep = importRep;
                     this.previewGridItems = this.createPreviewGridItems();
-                    this.fileName = this.file!.name;
+                    this.loading = false;
                 })
                 .catch((errorResponse: ErrorResponse) => {
                     this.reset();
+                    this.loading = false;
                     this.previewGridItems = [];
                     Toaster.error(errorResponse.message);
                 });
@@ -153,12 +161,16 @@ export default class ImportActivityprofiles extends Vue {
 
     private onImport() {
 
+        this.loading = true;
+
         restApi.importActivityProfiles(this.file!, this.headerRow)
             .then(() => {
                 this.reset();
+                this.loading = false;
                 Toaster.success('Import successful');
             })
             .catch((errorResponse: ErrorResponse) => {
+                this.loading = false;
                 Toaster.error(errorResponse.message);
             });
     }

@@ -43,12 +43,14 @@ public class ActivityProfileService {
     private KinaseActivityProfile activityProfileCsvRecordToActivityProfile(KinaseActivityProfileCsvRecordRep csvRep) {
 
         if (!compoundService.getCompoundExists(csvRep.getCompoundName())) {
-            throw new BadRequestException(messages.get("error.noSuchCompound", csvRep.getCompoundName()));
+            throw new BadRequestException(messages.get("error.importReferencesUnknownCompound",
+                csvRep.getCompoundName()));
         }
 
         Kinase kinase = kinaseService.getKinase(csvRep.getDiscoverxGeneSymbol());
         if (kinase == null) {
-            throw new BadRequestException(messages.get("error.noSuchKinase", csvRep.getDiscoverxGeneSymbol()));
+            throw new BadRequestException(messages.get("error.importReferencesUnknownKinase",
+                csvRep.getDiscoverxGeneSymbol()));
         }
 
         KinaseActivityProfile profile = new KinaseActivityProfile();
@@ -67,14 +69,12 @@ public class ActivityProfileService {
         String existingDiscoverx = null;
         Double existingPercentControl = null;
         Integer existingCompoundConcentration = null;
-        Double existingKd = null;
 
         if (existingProfile != null) {
             existingCompoundName = existingProfile.getCompoundName();
             existingDiscoverx = existingProfile.getKinase().getDiscoverxGeneSymbol();
             existingPercentControl = existingProfile.getPercentControl();
             existingCompoundConcentration = existingProfile.getCompoundConcentration();
-            existingKd = existingProfile.getKd();
         }
 
         return Arrays.asList(
@@ -83,8 +83,7 @@ public class ActivityProfileService {
                 existingDiscoverx),
             Util.createFieldStatus("percentControl", newProfile.getPercentControl(), existingPercentControl),
             Util.createFieldStatus("compoundConcentration",
-                newProfile.getCompoundConcentration(), existingCompoundConcentration),
-            Util.createFieldStatus("kd", newProfile.getKd(), existingKd)
+                newProfile.getCompoundConcentration(), existingCompoundConcentration)
         );
     }
 
