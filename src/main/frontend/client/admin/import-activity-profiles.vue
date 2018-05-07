@@ -6,17 +6,16 @@
 
             <v-flex xs12 v-if="!file">
 
-                <div>Upload a CSV file with activity profile information to add
-                add to the database. The file should contain the following
-                columns (data can be sparse):</div>
+                <div>Upload a CSV file with activity profile information to add it to the database.
+                The file should contain the following columns, in this order (data can be sparse).
+                A header row with values matching these header names is required:</div>
 
-                <ul class="column-listing">
-                    <li>AAA</li>
-                    <li>BBB</li>
-                    <li>CCC</li>
-                </ul>
+                <div class="headers-example">
+                    <img src="img/import-activity-profile-headers.png">
+                </div>
 
                 <v-checkbox class="import-activity-profiles-form-field"
+                    disabled
                     label="The CSV file contains a header row"
                     v-model="headerRow"
                 ></v-checkbox>

@@ -38,7 +38,7 @@ public class BlogPostController {
      * @param post The blog post to create.
      */
     @RequestMapping(method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.CREATED)
     void createBlogPost(@Valid @RequestBody BlogPost post) {
         blogPostService.createBlogPost(post);
     }

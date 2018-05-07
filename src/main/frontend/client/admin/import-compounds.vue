@@ -6,17 +6,13 @@
 
             <v-flex xs12 v-if="!file">
 
-                <div>Upload a CSV file with compound information to add it
-                to the database. The file should contain the following columns
+                <div>Upload a CSV file with compound information to add it to the database.
+                The file should contain the following columns, in this order, but with no header
                 (data can be sparse):</div>
 
-                <ul class="column-listing">
-                    <li>Compound Name</li>
-                    <li>Chemotype</li>
-                    <li>s(10)</li>
-                    <li>SMILES String</li>
-                    <li>Source ("hidden" to hide in the UI)</li>
-                </ul>
+                <div class="headers-example">
+                    <img src="img/import-compound-headers.png">
+                </div>
 
                 <file-dropzone v-model="file"></file-dropzone>
             </v-flex>
@@ -167,10 +163,6 @@ export default class ImportCompounds extends Vue {
 
 <style lang="less">
 .import-compounds-wrapper {
-
-    .column-listing {
-        padding: 1rem 0;
-    }
 
     .import-preview-table-card {
         margin-top: 1rem;

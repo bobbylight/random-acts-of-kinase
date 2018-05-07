@@ -33,7 +33,7 @@ public class ActivityProfileControllerTest {
     private Messages mockMessages;
 
     @InjectMocks
-    private ActivityProfileController controller = new ActivityProfileController();
+    private ActivityProfileController controller;
 
     @Before
     public void setUp() {
@@ -66,7 +66,7 @@ public class ActivityProfileControllerTest {
 
         List<KinaseActivityProfile> kapList = new ArrayList<>();
         KinaseActivityProfile kap = new KinaseActivityProfile();
-        kap.setId(33);
+        kap.setId(33L);
         kapList.add(kap);
         PageImpl<KinaseActivityProfile> expectedPage = new PageImpl<>(kapList);
         doReturn(expectedPage).when(mockActivityProfileService)
@@ -88,7 +88,7 @@ public class ActivityProfileControllerTest {
 
         List<KinaseActivityProfile> kapList = new ArrayList<>();
         KinaseActivityProfile kap = new KinaseActivityProfile();
-        kap.setId(33);
+        kap.setId(33L);
         kapList.add(kap);
         PageImpl<KinaseActivityProfile> expectedPage = new PageImpl<>(kapList);
         doReturn(expectedPage).when(mockActivityProfileService)
@@ -116,7 +116,7 @@ public class ActivityProfileControllerTest {
 
         List<KinaseActivityProfile> kapList = new ArrayList<>();
         KinaseActivityProfile kap = new KinaseActivityProfile();
-        kap.setId(33);
+        kap.setId(33L);
         kapList.add(kap);
         PageImpl<KinaseActivityProfile> expectedPage = new PageImpl<>(kapList);
         doReturn(expectedPage).when(mockActivityProfileService)
@@ -145,7 +145,7 @@ public class ActivityProfileControllerTest {
 
         List<KinaseActivityProfile> kapList = new ArrayList<>();
         KinaseActivityProfile kap = new KinaseActivityProfile();
-        kap.setId(33);
+        kap.setId(33L);
         kapList.add(kap);
         PageImpl<KinaseActivityProfile> expectedPage = new PageImpl<>(kapList);
         doReturn(expectedPage).when(mockActivityProfileService)

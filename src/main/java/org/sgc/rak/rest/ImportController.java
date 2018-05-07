@@ -2,7 +2,9 @@ package org.sgc.rak.rest;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MappingIterator;
+import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import org.sgc.rak.exceptions.BadRequestException;
 import org.sgc.rak.exceptions.InternalServerErrorException;
@@ -45,7 +47,7 @@ public class ImportController {
         this.messages = messages;
     }
 
-    private <T> List<T> loadFromCsv(MultipartFile file, boolean headerRow, Class<T> clazz) {
+    private <T> List<T> loadFromCsv(MultipartFile file, boolean headerRow, Class<T> clazz, CsvSchema schema) {
 
         String csv;
         try {
@@ -55,27 +57,36 @@ public class ImportController {
         }
 
         CsvMapper mapper = new CsvMapper();
+        ObjectReader reader;
         List<T> data;
+
+        if (headerRow) {
+            schema = schema.withHeader();
+        }
 
         try {
 
-            CsvSchema schema = CsvSchema.builder()
-                .addColumn("compoundName", CsvSchema.ColumnType.STRING)
-                .addColumn("discoverxGeneSymbol", CsvSchema.ColumnType.STRING)
-                .addColumn("entrezGeneSymbol", CsvSchema.ColumnType.STRING)
-                .addColumn("percentControl", CsvSchema.ColumnType.NUMBER)
-                .addColumn("compoundConcentration", CsvSchema.ColumnType.NUMBER)
-                .build().withHeader();
+            if (schema == null) {
+                reader = mapper.readerWithSchemaFor(clazz);
+            }
+            else {
+                reader = mapper.readerFor(clazz).with(schema);
+            }
 
-            MappingIterator<T> iter = mapper.readerFor(clazz).with(schema)
+            MappingIterator<T> iter = reader
                 // Note this doesn't seem to work, so we manually null out empty strings later
                 .withFeatures(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT)
+                .withFeatures(CsvParser.Feature.FAIL_ON_MISSING_COLUMNS)
                 .readValues(csv);
             data = iter.readAll();
         } catch (Exception e) {
             LOGGER.error("Error deserializing CSV into " + clazz.getSimpleName() + ": " + e.getMessage(),
                 LOGGER.isDebugEnabled() ? e : null);
             throw new BadRequestException(messages.get("error.invalidCsvFormat"));
+        }
+
+        if (data.isEmpty()) {
+            throw new BadRequestException(messages.get("error.noDataInFile"));
         }
 
         return data;
@@ -94,8 +105,17 @@ public class ImportController {
     ObjectImportRep importActivityProfiles(@RequestPart("file") MultipartFile file,
                                            @RequestParam(defaultValue = "true") boolean headerRow,
                                            @RequestParam(defaultValue = "true") boolean commit) {
+
+        CsvSchema schema = CsvSchema.builder()
+            .addColumn("compoundName", CsvSchema.ColumnType.STRING)
+            .addColumn("discoverxGeneSymbol", CsvSchema.ColumnType.STRING)
+            .addColumn("entrezGeneSymbol", CsvSchema.ColumnType.STRING)
+            .addColumn("percentControl", CsvSchema.ColumnType.NUMBER)
+            .addColumn("compoundConcentration", CsvSchema.ColumnType.NUMBER)
+            .build();
+
         List<KinaseActivityProfileCsvRecordRep> activityProfiles = loadFromCsv(file, headerRow,
-            KinaseActivityProfileCsvRecordRep.class);
+            KinaseActivityProfileCsvRecordRep.class, schema);
         return activityProfileService.importActivityProfiles(activityProfiles, commit);
     }
 
@@ -111,7 +131,7 @@ public class ImportController {
     @ResponseStatus(HttpStatus.OK)
     ObjectImportRep importCompounds(@RequestPart("file") MultipartFile file,
                                       @RequestParam(defaultValue = "true") boolean commit) {
-        List<Compound> compounds = loadFromCsv(file, false, Compound.class);
+        List<Compound> compounds = loadFromCsv(file, false, Compound.class, null);
         return compoundService.importCompounds(compounds, commit);
     }
 }

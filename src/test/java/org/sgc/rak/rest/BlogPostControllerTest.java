@@ -1,11 +1,14 @@
 package org.sgc.rak.rest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.sgc.rak.exceptions.BadRequestException;
 import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.model.BlogPost;
 import org.sgc.rak.reps.PagedDataRep;
@@ -14,12 +17,21 @@ import org.sgc.rak.util.TestUtil;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.util.NestedServletException;
 
 import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class BlogPostControllerTest {
 
@@ -29,32 +41,49 @@ public class BlogPostControllerTest {
     @Mock
     private Messages mockMessages;
 
+    @InjectMocks
     private BlogPostController controller;
+
+    private ObjectMapper mapper;
+
+    private MockMvc mockMvc;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        controller = new BlogPostController(mockService, mockMessages);
+        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        mapper = new ObjectMapper();
     }
 
     @Test
-    public void testCreateBlogPost() {
+    public void testCreateBlogPost() throws Exception {
 
         BlogPost post = new BlogPost();
         post.setTitle("title");
         post.setBody("body");
 
-        controller.createBlogPost(post);
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/blogPosts")
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(post))
+        ).andExpect(MockMvcResultMatchers.status().isCreated());
+
+        verify(mockService, times(1)).createBlogPost(any(BlogPost.class));
     }
 
     @Test
-    public void testDeleteBlogPost() {
+    public void testDeleteBlogPost() throws Exception {
 
-        controller.deleteBlogPost(42L);
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/blogPosts/42")
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test
-    public void testGetBlogPosts() {
+    @SuppressWarnings("unchecked")
+    @Ignore("Figure out how to get Spring to instantiate Pageable instances")
+    public void testGetBlogPosts() throws Exception {
 
         PageRequest pr = PageRequest.of(0, 20);
 
@@ -62,7 +91,13 @@ public class BlogPostControllerTest {
         PageImpl<BlogPost> expectedPage = new PageImpl<>(posts, pr, 1);
         doReturn(expectedPage).when(mockService).getBlogPosts(any(Pageable.class));
 
-        PagedDataRep<BlogPost> actualPosts = controller.getBlogPosts(pr);
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/blogPosts")
+            .accept(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isOk()
+        ).andReturn();
+
+        PagedDataRep<BlogPost> actualPosts = mapper.readValue(result.getResponse().getContentAsString(),
+            PagedDataRep.class);
         Assert.assertEquals(0, actualPosts.getStart());
         Assert.assertEquals(1, actualPosts.getTotal());
         Assert.assertEquals(1, actualPosts.getCount());
@@ -72,7 +107,56 @@ public class BlogPostControllerTest {
     }
 
     @Test
-    @Ignore("Not yet implemented")
-    public void testUpdateBlogPost() {
+    public void testUpdateBlogPost_happyPath() throws Exception {
+
+        BlogPost post = new BlogPost();
+        post.setId(42L);
+        post.setTitle("title");
+        post.setBody("body");
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/blogPosts/" + post.getId())
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(mapper.writeValueAsString(post))
+        ).andExpect(MockMvcResultMatchers.status().isOk());
+
+        verify(mockService, times(1)).updateBlogPost(any(BlogPost.class));
+    }
+
+    @Test(expected = BadRequestException.class)
+    public void testUpdateBlogPost_error_nonNumericBlogPostId() throws Exception {
+
+        BlogPost post = new BlogPost();
+        post.setTitle("title");
+        post.setBody("body");
+
+        try {
+            mockMvc.perform(MockMvcRequestBuilders.put("/api/blogPosts/notANumber")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(post))
+            );
+        } catch (NestedServletException e) {
+            throw (Exception)e.getCause();
+        }
+    }
+
+    @Test(expected = BadRequestException.class)
+    public void testUpdateBlogPost_error_postIdsDontMatch() throws Exception {
+
+        BlogPost post = new BlogPost();
+        post.setId(42L);
+        post.setTitle("title");
+        post.setBody("body");
+
+        try {
+            mockMvc.perform(MockMvcRequestBuilders.put("/api/blogPosts/43")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(post))
+            );
+        } catch (NestedServletException e) {
+            throw (Exception)e.getCause();
+        }
     }
 }

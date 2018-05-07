@@ -21,14 +21,17 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/api/activityProfiles")
 class ActivityProfileController {
 
-    @Autowired
-    private ActivityProfileService activityProfileService;
+    private final ActivityProfileService activityProfileService;
+    private final KinaseService kinaseService;
+    private final Messages messages;
 
     @Autowired
-    private KinaseService kinaseService;
-
-    @Autowired
-    private Messages messages;
+    ActivityProfileController(ActivityProfileService activityProfileService, KinaseService kinaseService,
+                              Messages messages) {
+        this.activityProfileService = activityProfileService;
+        this.kinaseService = kinaseService;
+        this.messages = messages;
+    }
 
     /**
      * Returns kinase activity profile information, possibly filtered.

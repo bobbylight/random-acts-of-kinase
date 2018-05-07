@@ -1,4 +1,5 @@
 CREATE SCHEMA IF NOT EXISTS :schema;
+SET SCHEMA :'schema';
 
 DROP TABLE IF EXISTS :schema.compound CASCADE;
 CREATE TABLE :schema.compound (
@@ -47,14 +48,14 @@ WITH ( OIDS = FALSE );
 CREATE INDEX kinase_activity_profile_compound_nm_idx ON :schema.kinase_activity_profile (compound_nm);
 CREATE INDEX kinase_activity_profile_compound_nm_lower_idx ON :schema.kinase_activity_profile (lower(compound_nm));
 
-
 DROP TABLE IF EXISTS :schema.blog_post CASCADE;
 CREATE TABLE :schema.blog_post (
   blog_post_id serial,
   title character varying(128) NOT NULL,
   body character varying(1048576) NOT NULL,
   create_dttm TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-  view_count integer NOT NULL DEFAULT 0
+  view_count integer NOT NULL DEFAULT 0,
+  CONSTRAINT blog_post_pkey PRIMARY KEY (blog_post_id)
 )
 WITH ( OIDS = FALSE );
 

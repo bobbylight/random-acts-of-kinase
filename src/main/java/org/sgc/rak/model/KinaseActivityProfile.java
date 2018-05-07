@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 /**
  * JPA entity representing a kinase activity profile.
@@ -15,8 +16,9 @@ import javax.persistence.*;
 public class KinaseActivityProfile {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false)
-    private long id;
+    private Long id;
 
     @Column(name = "compound_nm", updatable = false)
     private String compoundName;
@@ -27,13 +29,13 @@ public class KinaseActivityProfile {
     @JoinColumn(name = "kinase", nullable = false, updatable = false)
     private Kinase kinase;
 
-    @Column(name = "percent_control", updatable = false)
-    private double percentControl;
+    @Column(name = "percent_control")
+    private Double percentControl;
 
-    @Column(name = "compound_concentration", updatable = false)
-    private int compoundConcentration;
+    @Column(name = "compound_concentration")
+    private Integer compoundConcentration;
 
-    @Column(name = "kd", updatable = false)
+    @Column(name = "kd")
     private Double kd;
 
     @Override
@@ -45,7 +47,7 @@ public class KinaseActivityProfile {
 
         if (obj instanceof KinaseActivityProfile) {
             KinaseActivityProfile kap2 = (KinaseActivityProfile)obj;
-            return id == kap2.id;
+            return Objects.equals(id, kap2.id);
         }
 
         return false;
@@ -53,14 +55,14 @@ public class KinaseActivityProfile {
 
     @Override
     public int hashCode() {
-        return (int)id;
+        return id == null ? 0 : Long.hashCode(id);
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -80,19 +82,19 @@ public class KinaseActivityProfile {
         this.kinase = kinase;
     }
 
-    public double getPercentControl() {
+    public Double getPercentControl() {
         return percentControl;
     }
 
-    public void setPercentControl(double percentControl) {
+    public void setPercentControl(Double percentControl) {
         this.percentControl = percentControl;
     }
 
-    public int getCompoundConcentration() {
+    public Integer getCompoundConcentration() {
         return compoundConcentration;
     }
 
-    public void setCompoundConcentration(int compoundConcentration) {
+    public void setCompoundConcentration(Integer compoundConcentration) {
         this.compoundConcentration = compoundConcentration;
     }
 

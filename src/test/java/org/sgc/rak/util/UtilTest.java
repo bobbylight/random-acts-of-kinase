@@ -3,7 +3,10 @@ package org.sgc.rak.util;
 import org.junit.Assert;
 import org.junit.Test;
 import org.sgc.rak.model.Compound;
+import org.sgc.rak.model.Kinase;
+import org.sgc.rak.model.KinaseActivityProfile;
 import org.sgc.rak.reps.KinaseActivityProfileCsvRecordRep;
+import org.sgc.rak.reps.ObjectImportRep;
 
 public class UtilTest {
 
@@ -29,6 +32,64 @@ public class UtilTest {
         Assert.assertNull(compound.getChemotype());
         Assert.assertNull(compound.getSmiles());
         Assert.assertNull(compound.getSource());
+    }
+
+    @Test
+    public void testCreateFieldStatus() {
+        ObjectImportRep.FieldStatus status = Util.createFieldStatus("name", "newValue", "oldValue");
+        Assert.assertEquals("name", status.getFieldName());
+        Assert.assertEquals("newValue", status.getNewValue());
+        Assert.assertEquals("oldValue", status.getOldValue());
+    }
+
+    @Test
+    public void testPatchActivityProfile_nonNullValuesOverwritePriorValues() {
+
+        Kinase existingKinase = new Kinase();
+        existingKinase.setId(3);
+        existingKinase.setDiscoverxGeneSymbol("existingDiscoverx");
+
+        KinaseActivityProfile existing = new KinaseActivityProfile();
+        existing.setId(42L);
+        existing.setCompoundConcentration(3);
+        existing.setCompoundName("compoundA");
+        existing.setKd(4.2);
+        existing.setKinase(existingKinase);
+        existing.setPercentControl(0.3);
+
+        KinaseActivityProfileCsvRecordRep newProfile = new KinaseActivityProfileCsvRecordRep();
+        newProfile.setCompoundConcentration(7);
+        newProfile.setCompoundName(existing.getCompoundName()); // It'a assumed these were already found to match
+        newProfile.setDiscoverxGeneSymbol(existing.getKinase().getDiscoverxGeneSymbol()); // Ditto
+        newProfile.setPercentControl(3.7);
+
+        KinaseActivityProfile result = Util.patchActivityProfile(existing, newProfile);
+        Assert.assertEquals(7, result.getCompoundConcentration().intValue());
+        Assert.assertEquals(3.7, result.getPercentControl(), 0.001);
+    }
+
+    @Test
+    public void testPatchActivityProfile_nullValuesDontOverwriteNonNullValues() {
+
+        Kinase existingKinase = new Kinase();
+        existingKinase.setId(3);
+        existingKinase.setDiscoverxGeneSymbol("existingDiscoverx");
+
+        KinaseActivityProfile existing = new KinaseActivityProfile();
+        existing.setId(42L);
+        existing.setCompoundConcentration(3);
+        existing.setCompoundName("compoundA");
+        existing.setKd(4.2);
+        existing.setKinase(existingKinase);
+        existing.setPercentControl(0.3);
+
+        KinaseActivityProfileCsvRecordRep newProfile = new KinaseActivityProfileCsvRecordRep();
+        newProfile.setCompoundName(existing.getCompoundName()); // It'a assumed these were already found to match
+        newProfile.setDiscoverxGeneSymbol(existing.getKinase().getDiscoverxGeneSymbol()); // Ditto
+
+        KinaseActivityProfile result = Util.patchActivityProfile(existing, newProfile);
+        Assert.assertEquals(3, result.getCompoundConcentration().intValue());
+        Assert.assertEquals(0.3, result.getPercentControl(), 0.001);
     }
 
     @Test

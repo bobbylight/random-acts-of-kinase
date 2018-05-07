@@ -37,6 +37,9 @@ rak:
   login:
     user: kinaseadmin
     password: password
+logging:
+  level:
+    org.sgc: DEBUG
 
 ---
 
@@ -52,6 +55,9 @@ rak:
   login:
     user: kinaseadmin
     password: password
+logging:
+  level:
+    org.sgc: DEBUG
 
 ---
 

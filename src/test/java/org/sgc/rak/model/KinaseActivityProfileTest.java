@@ -8,48 +8,48 @@ public class KinaseActivityProfileTest {
     @Test
     public void testEquals_sameObject() {
         KinaseActivityProfile profile = new KinaseActivityProfile();
-        profile.setId(42);
+        profile.setId(42L);
         Assert.assertTrue(profile.equals(profile));
     }
 
     @Test
     public void testEquals_equalButDifferentObjects() {
         KinaseActivityProfile profile = new KinaseActivityProfile();
-        profile.setId(42);
+        profile.setId(42L);
         KinaseActivityProfile profile2 = new KinaseActivityProfile();
-        profile2.setId(42);
+        profile2.setId(42L);
         Assert.assertTrue(profile.equals(profile2));
     }
 
     @Test
     public void testEquals_null() {
         KinaseActivityProfile profile = new KinaseActivityProfile();
-        profile.setId(42);
+        profile.setId(42L);
         Assert.assertFalse(profile.equals(null));
     }
 
     @Test
     public void testEquals_differentObjects() {
         KinaseActivityProfile profile = new KinaseActivityProfile();
-        profile.setId(42);
+        profile.setId(42L);
         KinaseActivityProfile profile2 = new KinaseActivityProfile();
-        profile2.setId(43);
+        profile2.setId(43L);
         Assert.assertFalse(profile.equals(profile2));
     }
 
     @Test
     public void testHashCode() {
         KinaseActivityProfile profile = new KinaseActivityProfile();
-        profile.setId(42);
+        profile.setId(42L);
         Assert.assertNotEquals(0, profile.hashCode());
     }
 
     @Test
     public void testGetSetId() {
         KinaseActivityProfile profile = new KinaseActivityProfile();
-        Assert.assertEquals(0, profile.getId());
-        profile.setId(42);
-        Assert.assertEquals(42, profile.getId());
+        Assert.assertNull(profile.getId());
+        profile.setId(42L);
+        Assert.assertEquals(42, profile.getId().longValue());
     }
 
     @Test
@@ -71,7 +71,7 @@ public class KinaseActivityProfileTest {
     @Test
     public void testGetSetPercentControl() {
         KinaseActivityProfile profile = new KinaseActivityProfile();
-        Assert.assertEquals(0, profile.getPercentControl(), 0.001);
+        Assert.assertNull(profile.getPercentControl());
         profile.setPercentControl(.5);
         Assert.assertEquals(.5, profile.getPercentControl(), 0.001);
     }
@@ -79,9 +79,9 @@ public class KinaseActivityProfileTest {
     @Test
     public void testGetSetCompoundConcentration() {
         KinaseActivityProfile profile = new KinaseActivityProfile();
-        Assert.assertEquals(0, profile.getCompoundConcentration());
+        Assert.assertNull(profile.getCompoundConcentration());
         profile.setCompoundConcentration(42);
-        Assert.assertEquals(42, profile.getCompoundConcentration());
+        Assert.assertEquals(42, profile.getCompoundConcentration().longValue());
     }
 
     @Test
@@ -95,7 +95,7 @@ public class KinaseActivityProfileTest {
     @Test
     public void testToString() {
         String expected = "KinaseActivityProfile[compoundName=<null>,kinase=<null>," +
-            "percentControl=0.0,compoundConcentration=0,kd=<null>]";
+            "percentControl=<null>,compoundConcentration=<null>,kd=<null>]";
         Assert.assertEquals(expected, new KinaseActivityProfile().toString());
     }
 }

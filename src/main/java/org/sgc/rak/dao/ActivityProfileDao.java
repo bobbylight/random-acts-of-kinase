@@ -6,9 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * DAO for manipulating kinase activity profiles.
@@ -30,13 +28,13 @@ public class ActivityProfileDao {
      *        {@code compoundNames}.
      * @return The found activity profiles.  This may be empty, but will never be {@code null}.
      */
-    public List<KinaseActivityProfile> getKinaseActivityProfiles(List<String> compoundNames, List<String> discoerxes) {
+    public Set<KinaseActivityProfile> getKinaseActivityProfiles(List<String> compoundNames, List<String> discoerxes) {
 
         if (compoundNames.size() != discoerxes.size()) {
             throw new IllegalStateException("List of compound names and discoverx gene symbols aren't the same length");
         }
 
-        List<KinaseActivityProfile> profiles = new ArrayList<>();
+        Set<KinaseActivityProfile> profiles = new HashSet<>();
 
         for (int i = 0; i < compoundNames.size(); i++) {
 

@@ -8,15 +8,14 @@ import org.sgc.rak.model.KinaseActivityProfile;
 import org.sgc.rak.reps.KinaseActivityProfileCsvRecordRep;
 import org.sgc.rak.reps.ObjectImportRep;
 import org.sgc.rak.util.Util;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -30,6 +29,8 @@ public class ActivityProfileService {
     private final KinaseService kinaseService;
 
     private final Messages messages;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ActivityProfileService.class);
 
     @Autowired
     public ActivityProfileService(ActivityProfileDao activityProfileDao, CompoundService compoundService,
@@ -151,7 +152,7 @@ public class ActivityProfileService {
             .map(KinaseActivityProfileCsvRecordRep::getCompoundName).collect(Collectors.toList());
         List<String> discoverxes = activityProfileCsvRecords.stream()
             .map(KinaseActivityProfileCsvRecordRep::getDiscoverxGeneSymbol).collect(Collectors.toList());
-        List<KinaseActivityProfile> existingProfiles = activityProfileDao
+        Set<KinaseActivityProfile> existingProfiles = activityProfileDao
             .getKinaseActivityProfiles(compoundNames, discoverxes);
 
         ObjectImportRep importRep = new ObjectImportRep();
@@ -179,6 +180,7 @@ public class ActivityProfileService {
             records.add(activityProfileCsvRecordToFieldStatusList(newActivityProfile, existingProfile));
         }
 
+        possiblyLogImportOperation(commit, toPersist);
         if (commit) {
             activityProfileDao.save(toPersist);
         }
@@ -186,12 +188,21 @@ public class ActivityProfileService {
         return importRep;
     }
 
-    private static KinaseActivityProfile possiblyGetActivityProfile(List<KinaseActivityProfile> profiles,
+    private static KinaseActivityProfile possiblyGetActivityProfile(Set<KinaseActivityProfile> profiles,
                                                                     String compoundName, String discoverx) {
         Optional<KinaseActivityProfile> optional = profiles.stream()
             .filter(c -> compoundName.equals(c.getCompoundName()) &&
                         discoverx.equals(c.getKinase().getDiscoverxGeneSymbol()))
             .findFirst();
         return optional.orElse(null);
+    }
+
+    private static void possiblyLogImportOperation(boolean commit, List<KinaseActivityProfile> toPersist) {
+        if (LOGGER.isDebugEnabled()) {
+            String header = commit ? "Saving the following {} new or updated activity profiles:" :
+                "Returning preview of saving the following {} new or updated activity profiles:";
+            LOGGER.debug(header, toPersist.size());
+            toPersist.forEach(profile -> LOGGER.debug("- {}", profile));
+        }
     }
 }
