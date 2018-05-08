@@ -14,10 +14,11 @@
             <template slot="items" slot-scope="props">
                 <td>
                     <div class="compound-name-cell">
-                        <img class="b-lazy"
+                        <img class="b-lazy compound-image"
                              src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
                              :data-src="getCompoundImage(props.item.compoundName)"
-                             width=40 height=40>
+                             @click="onImageClicked(props.item.compoundName)"
+                             width=80 height=80>
                         &nbsp;&nbsp;&nbsp;
                         <div class="compoundDesc">
                             <a class="compoundName" :href="getCompoundUrl(props.item.compoundName)">{{props.item.compoundName}}</a><br>
@@ -86,6 +87,10 @@ export default {
             return `#/compound/${compoundName}`;
         },
 
+        onImageClicked: function(compoundName) {
+            this.$store.commit('setLightboxImage', this.getCompoundImage(compoundName));
+        },
+
         reloadTable: function() {
 
             this.loading = true;
@@ -128,55 +133,63 @@ export default {
 </script>
 
 <style lang="less">
+@import '../styles/app-variables';
 
-    @transition-time: .5s;
+.compound-name-table {
+    thead {
+        display: none;
+    }
 
-    .compound-name-table {
-        thead {
-            display: none;
-        }
+    tr {
 
-        tr {
+        transition: background-color @transition-time;
 
-            transition: background-color @transition-time;
-
-            .compoundDesc {
-                vertical-align: middle;
-                display: inline-block;
-
-                .compoundName {
-                    text-decoration: none;
-                    color: gray;
-                    transition: color @transition-time;
-                }
-                .chemotype {
-                    font-size: medium;
-                    color: lightgray;
-                    transition: color @transition-time;
-                }
-            }
-
-            &:hover {
-                background-color: #f8f8f8;
-
-                .compoundName {
-                    color: #8080a0;
-                }
-                .chemotype {
-                    color: #8080a0;
-                }
-            }
-
-            div.compound-name-cell {
-                font-size: 1.5rem;
-                padding: 1rem 0;
-            }
-        }
-
-        border: none;
-
-        img {
+        .compoundDesc {
             vertical-align: middle;
+            display: inline-block;
+
+            .compoundName {
+                text-decoration: none;
+                color: gray;
+                transition: color @transition-time;
+            }
+            .chemotype {
+                font-size: medium;
+                color: lightgray;
+                transition: color @transition-time;
+            }
+        }
+
+        &:hover {
+            background-color: #f8f8f8;
+
+            .compoundName {
+                color: #8080a0;
+            }
+            .chemotype {
+                color: #8080a0;
+            }
+        }
+
+        div.compound-name-cell {
+            font-size: 1.5rem;
+            padding: 0;
         }
     }
+
+    border: none;
+
+    img {
+        vertical-align: middle;
+
+        &.compound-image {
+            cursor: pointer;
+            transition: transform @transition-time;
+
+            &:hover {
+                transform: scale(1.2);
+            }
+        }
+    }
+}
 </style>

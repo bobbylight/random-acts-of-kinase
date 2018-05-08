@@ -6,9 +6,13 @@ Vue.use(Vuex);
 
 const store: Store<RakState> = new Store({
     state: {
-        user: ''
+        user: '',
+        lightboxImage: null
     },
     mutations: {
+        setLightboxImage(state: any, image: string) {
+            state.lightboxImage = image;
+        },
         setUser(state: any, user: string) {
             state.user = user;
         }

@@ -55,4 +55,5 @@ export interface RakState {
 
 export interface UserRep {
     userName?: string;
+    lightboxImage?: string;
 }

@@ -1,5 +1,8 @@
 <template>
     <v-app>
+
+        <lightbox :image="$store.state.lightboxImage" @hide="onCloseLightbox"></lightbox>
+
         <navbar></navbar>
 
         <v-content class="main-content">
@@ -36,8 +39,9 @@ import Navbar from './navbar.vue';
 import restApi from './rest-api';
 import { UserRep } from './rak';
 import AboutModal from './about-modal.vue';
+import Lightbox from './lightbox.vue';
 
-@Component({ components: { Navbar, AboutModal } })
+@Component({ components: { Navbar, AboutModal, Lightbox } })
 export default class App extends Vue {
 
     showAbout: boolean = false;
@@ -50,6 +54,10 @@ export default class App extends Vue {
                     this.$store.commit('setUser', userInfo.userName);
                 }
             });
+    }
+
+    private onCloseLightbox() {
+        this.$store.commit('setLightboxImage', null);
     }
 
     private viewSource() {
