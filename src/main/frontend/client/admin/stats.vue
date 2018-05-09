@@ -1,62 +1,82 @@
 <template>
     <v-container grid-list-md>
-        <v-card class="top-card-padding">
+        <v-layout row wrap class="stats-wrapper">
 
-            <v-card-title primary-title>
-                <div class="title-content">
-                    <div>
-                        <h3 class="headline">Incomplete Compounds</h3>
-                        <div>Compounds without a SMILES string or s(10)</div>
-                    </div>
+            <section-header>Missing Data</section-header>
 
-                    <div class="admin-card-button-area">
-                        <download-button url="/admin/api/incompleteCompounds"></download-button>
-                    </div>
-                </div>
-            </v-card-title>
+            <v-flex xs12>
 
-            <v-card-text>
-                <CompoundsTable
-                    url="/admin/api/incompleteCompounds"
-                    :columnInfo="incompleteCompoundColumnInfo"></CompoundsTable>
-            </v-card-text>
-        </v-card>
-
-        <v-card class="not-top-card-padding">
-
-            <v-card-title primary-title>
-                <div class="title-content">
-                    <div>
-                        <h3 class="headline">Compounds Missing Activity Profiles</h3>
-                        <div>Compounds missing some activity profiles</div>
-                    </div>
-
-                    <div class="admin-card-button-area">
-                        <download-button url="/admin/api/compoundsMissingActivityProfiles"></download-button>
-                    </div>
-                </div>
-            </v-card-title>
-
-            <v-card-text>
-                <CompoundsTable
-                    url="/admin/api/compoundsMissingActivityProfiles"
-                    :columnInfo="compoundsMissingActivityProfilesColumnInfo"></CompoundsTable>
-            </v-card-text>
-        </v-card>
-
-        <v-card class="not-top-card-padding">
-
-            <v-card-title primary-title>
                 <div>
-                    <h3 class="headline">Something Else</h3>
-                    <div>Some other administrative stuff</div>
+                    The following reports show areas where our data is incomplete.
+                    Each table can be exported in CSV format.
                 </div>
-            </v-card-title>
 
-            <v-card-text>
-                Nothing here yet.
-            </v-card-text>
-        </v-card>
+                <v-card class="top-card-padding">
+
+                    <v-card-title primary-title>
+                        <div class="title-content">
+                            <div>
+                                <h3 class="headline">Incomplete Compounds</h3>
+                                <div>Compounds without a SMILES string or s(10)</div>
+                            </div>
+
+                            <div class="admin-card-button-area">
+                                <download-button url="/admin/api/incompleteCompounds"></download-button>
+                            </div>
+                        </div>
+                    </v-card-title>
+
+                    <v-card-text>
+                        <CompoundsTable
+                            url="/admin/api/incompleteCompounds"
+                            :columnInfo="incompleteCompoundColumnInfo"></CompoundsTable>
+                    </v-card-text>
+                </v-card>
+            </v-flex>
+
+            <v-flex xs12>
+
+                <v-card class="not-top-card-padding">
+
+                    <v-card-title primary-title>
+                        <div class="title-content">
+                            <div>
+                                <h3 class="headline">Compounds Missing Activity Profiles</h3>
+                                <div>Compounds missing some activity profiles</div>
+                            </div>
+
+                            <div class="admin-card-button-area">
+                                <download-button url="/admin/api/compoundsMissingActivityProfiles"></download-button>
+                            </div>
+                        </div>
+                    </v-card-title>
+
+                    <v-card-text>
+                        <CompoundsTable
+                            url="/admin/api/compoundsMissingActivityProfiles"
+                            :columnInfo="compoundsMissingActivityProfilesColumnInfo"></CompoundsTable>
+                    </v-card-text>
+                </v-card>
+            </v-flex>
+
+            <v-flex xs12>
+
+                <v-card class="not-top-card-padding">
+
+                    <v-card-title primary-title>
+                        <div>
+                            <h3 class="headline">Something Else</h3>
+                            <div>Some other administrative stuff</div>
+                        </div>
+                    </v-card-title>
+
+                    <v-card-text>
+                        Nothing here yet.
+                    </v-card-text>
+                </v-card>
+            </v-flex>
+
+        </v-layout>
     </v-container>
 </template>
 
@@ -65,8 +85,9 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import CompoundsTable, { ColumnInfo } from './compounds-table.vue';
 import DownloadButton from './download-button.vue';
+import SectionHeader from '../header.vue';
 
-@Component({ components: { CompoundsTable, DownloadButton } })
+@Component({ components: { CompoundsTable, DownloadButton, SectionHeader } })
 export default class Stats extends Vue {
 
     private incompleteCompoundColumnInfo: ColumnInfo[];

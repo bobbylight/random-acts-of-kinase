@@ -20,9 +20,11 @@
                              @click="onImageClicked(props.item.compoundName)"
                              width=80 height=80>
                         &nbsp;&nbsp;&nbsp;
-                        <div class="compoundDesc">
-                            <a class="compoundName" :href="getCompoundUrl(props.item.compoundName)">{{props.item.compoundName}}</a><br>
-                            <span class="chemotype">{{props.item.chemotype || '...'}}, s(10): {{props.item.s10 || '?'}}</span>
+                        <div class="compound-desc" @click="openCompound(props.item.compoundName)">
+                            <span class="compound-name">{{props.item.compoundName}}</span>
+                            <br>
+                            <div class="s10">s(10): {{props.item.s10 || '?'}}</div>
+                            <div class="chemotype" v-if="props.item.chemotype">{{props.item.chemotype}}</div>
                         </div>
                     </div>
                 </td>
@@ -87,6 +89,10 @@ export default {
             return `#/compound/${compoundName}`;
         },
 
+        openCompound: function(compoundName) {
+            window.location.href = this.getCompoundUrl(compoundName);
+        },
+
         onImageClicked: function(compoundName) {
             this.$store.commit('setLightboxImage', this.getCompoundImage(compoundName));
         },
@@ -144,16 +150,17 @@ export default {
 
         transition: background-color @transition-time;
 
-        .compoundDesc {
+        .compound-desc {
             vertical-align: middle;
             display: inline-block;
+            cursor: pointer;
 
-            .compoundName {
+            .compound-name {
                 text-decoration: none;
                 color: gray;
                 transition: color @transition-time;
             }
-            .chemotype {
+            .s10, .chemotype {
                 font-size: medium;
                 color: lightgray;
                 transition: color @transition-time;
@@ -163,10 +170,13 @@ export default {
         &:hover {
             background-color: #f8f8f8;
 
-            .compoundName {
+            .compound-name {
                 color: #8080a0;
             }
             .chemotype {
+                color: #8080a0;
+            }
+            .s10 {
                 color: #8080a0;
             }
         }

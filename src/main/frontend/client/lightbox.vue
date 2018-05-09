@@ -29,7 +29,6 @@ export default class Lightbox extends Vue {
         if (this.show) {
             document.addEventListener('keydown', this.keyHandler);
         }
-        console.log('show changing to: ' + this.show);
     }
 
     private hide() {
