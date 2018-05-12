@@ -22,7 +22,7 @@ public class Messages {
     }
 
     /**
-     * Returns text loclized in the request locale.
+     * Returns text localized in the request locale.
      *
      * @param key The key in the resource bundle of the text to retrieve.
      * @param params Any parameters needed in the text.

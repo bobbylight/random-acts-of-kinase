@@ -1,6 +1,8 @@
 package org.sgc.rak.rest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.sgc.rak.exceptions.NotFoundException;
+import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.model.Compound;
 import org.sgc.rak.reps.PagedDataRep;
 import org.sgc.rak.services.CompoundService;
@@ -19,8 +21,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/compounds")
 class CompoundController {
 
+    private final CompoundService compoundService;
+    private final Messages messages;
+
     @Autowired
-    private CompoundService compoundService;
+    CompoundController(CompoundService compoundService, Messages messages) {
+        this.compoundService = compoundService;
+        this.messages = messages;
+    }
 
     /**
      * Returns information on a specific compound.
@@ -30,7 +38,12 @@ class CompoundController {
      */
     @RequestMapping(method = RequestMethod.GET, path = "/{compoundName}")
     Compound getCompound(@PathVariable String compoundName) {
-        return compoundService.getCompound(compoundName);
+
+        Compound compound = compoundService.getCompound(compoundName);
+        if (compound == null) {
+            throw new NotFoundException(messages.get("error.noSuchCompound", compoundName));
+        }
+        return compound;
     }
 
     /**
@@ -71,8 +84,7 @@ class CompoundController {
      * @return The image for the compound, in SVG format.  If no image exists for a compound, a default
      *         image is returned.
      */
-    @RequestMapping(method = RequestMethod.GET, path = "/images/{compoundName}",
-        produces = "image/svg+xml")
+    @RequestMapping(method = RequestMethod.GET, path = "/images/{compoundName}", produces = "image/svg+xml")
     Resource getCompoundSmiles(@PathVariable String compoundName) {
         Resource resource = new ClassPathResource("/static/img/smiles/" + compoundName + ".svg");
         if (!resource.exists()) {

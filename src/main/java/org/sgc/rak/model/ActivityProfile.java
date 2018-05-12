@@ -13,14 +13,14 @@ import java.util.Objects;
 @Entity
 @Table(name = "kinase_activity_profile")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class KinaseActivityProfile {
+public class ActivityProfile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false)
     private Long id;
 
-    @Column(name = "compound_nm", updatable = false)
+    @Column(name = "compound_nm", updatable = false, length = ModelConstants.COMPOUND_COMPOUND_NAME_MAX)
     private String compoundName;
 
 //    @Column(name = "kinase", updatable = false)
@@ -45,8 +45,8 @@ public class KinaseActivityProfile {
             return true;
         }
 
-        if (obj instanceof KinaseActivityProfile) {
-            KinaseActivityProfile kap2 = (KinaseActivityProfile)obj;
+        if (obj instanceof ActivityProfile) {
+            ActivityProfile kap2 = (ActivityProfile)obj;
             return Objects.equals(id, kap2.id);
         }
 

@@ -26,7 +26,7 @@ public class StatControllerTest {
     private CompoundService mockCompoundService;
 
     @InjectMocks
-    private StatController controller = new StatController();
+    private StatController controller;
 
     @Before
     public void setUp() {

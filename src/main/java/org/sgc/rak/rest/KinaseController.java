@@ -16,8 +16,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/api/kinases")
 class KinaseController {
 
+    private final KinaseService kinaseService;
+
     @Autowired
-    private KinaseService kinaseService;
+    public KinaseController(KinaseService kinaseService) {
+        this.kinaseService = kinaseService;
+    }
 
     /**
      * Returns kinase information.

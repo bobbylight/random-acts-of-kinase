@@ -9,8 +9,8 @@ import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations;
 import org.sgc.rak.exceptions.BadRequestException;
 import org.sgc.rak.i18n.Messages;
+import org.sgc.rak.model.ActivityProfile;
 import org.sgc.rak.model.Kinase;
-import org.sgc.rak.model.KinaseActivityProfile;
 import org.sgc.rak.reps.PagedDataRep;
 import org.sgc.rak.services.ActivityProfileService;
 import org.sgc.rak.services.KinaseService;
@@ -42,38 +42,38 @@ public class ActivityProfileControllerTest {
     }
 
     @Test(expected = BadRequestException.class)
-    public void testGetKinaseActivityProfiles_kinaseWithoutActivity() {
-        controller.getKinaseActivityProfiles("compound", "kinase", null, null);
+    public void testGetActivityProfiles_kinaseWithoutActivity() {
+        controller.getActivityProfiles("compound", "kinase", null, null);
     }
 
     @Test(expected = BadRequestException.class)
-    public void testGetKinaseActivityProfiles_activityWithoutKinase() {
-        controller.getKinaseActivityProfiles("compound", null, 0d, null);
+    public void testGetActivityProfiles_activityWithoutKinase() {
+        controller.getActivityProfiles("compound", null, 0d, null);
     }
 
     @Test(expected = BadRequestException.class)
-    public void testGetKinaseActivityProfiles_activityLessThanZero() {
-        controller.getKinaseActivityProfiles("compound", "kinase", -1d, null);
+    public void testGetActivityProfiles_activityLessThanZero() {
+        controller.getActivityProfiles("compound", "kinase", -1d, null);
     }
 
     @Test(expected = BadRequestException.class)
-    public void testGetKinaseActivityProfiles_activityGreaterThanOne() {
-        controller.getKinaseActivityProfiles("compound", "kinase", 2d, null);
+    public void testGetActivityProfiles_activityGreaterThanOne() {
+        controller.getActivityProfiles("compound", "kinase", 2d, null);
     }
 
     @Test
-    public void testGetKinaseActivityprofiles_happyPath_nothingSpecified() {
+    public void testGetActivityProfiles_happyPath_nothingSpecified() {
 
-        List<KinaseActivityProfile> kapList = new ArrayList<>();
-        KinaseActivityProfile kap = new KinaseActivityProfile();
+        List<ActivityProfile> kapList = new ArrayList<>();
+        ActivityProfile kap = new ActivityProfile();
         kap.setId(33L);
         kapList.add(kap);
-        PageImpl<KinaseActivityProfile> expectedPage = new PageImpl<>(kapList);
+        PageImpl<ActivityProfile> expectedPage = new PageImpl<>(kapList);
         doReturn(expectedPage).when(mockActivityProfileService)
-            .getKinaseActivityProfiles(any(Pageable.class));
+            .getActivityProfiles(any(Pageable.class));
 
         PageRequest pageInfo = PageRequest.of(0, 20);
-        PagedDataRep<KinaseActivityProfile> actual = controller.getKinaseActivityProfiles(
+        PagedDataRep<ActivityProfile> actual = controller.getActivityProfiles(
             null, null, null, pageInfo);
 
         Assert.assertEquals(0, actual.getStart());
@@ -82,20 +82,20 @@ public class ActivityProfileControllerTest {
     }
 
     @Test
-    public void testGetKinaseActivityprofiles_happyPath_compoundOnly() {
+    public void testGetActivityProfiles_happyPath_compoundOnly() {
 
         String compoundName = "compound";
 
-        List<KinaseActivityProfile> kapList = new ArrayList<>();
-        KinaseActivityProfile kap = new KinaseActivityProfile();
+        List<ActivityProfile> kapList = new ArrayList<>();
+        ActivityProfile kap = new ActivityProfile();
         kap.setId(33L);
         kapList.add(kap);
-        PageImpl<KinaseActivityProfile> expectedPage = new PageImpl<>(kapList);
+        PageImpl<ActivityProfile> expectedPage = new PageImpl<>(kapList);
         doReturn(expectedPage).when(mockActivityProfileService)
-            .getKinaseActivityProfilesForCompound(eq(compoundName), any(Pageable.class));
+            .getActivityProfilesForCompound(eq(compoundName), any(Pageable.class));
 
         PageRequest pageInfo = PageRequest.of(0, 20);
-        PagedDataRep<KinaseActivityProfile> actual = controller.getKinaseActivityProfiles(
+        PagedDataRep<ActivityProfile> actual = controller.getActivityProfiles(
             compoundName, null, null, pageInfo);
 
         Assert.assertEquals(0, actual.getStart());
@@ -104,7 +104,7 @@ public class ActivityProfileControllerTest {
     }
 
     @Test
-    public void testGetKinaseActivityprofiles_happyPath_kinaseAndActivityProfile() {
+    public void testGetActivityProfiles_happyPath_kinaseAndActivityProfile() {
 
         long kinaseId = 42;
         String kinaseDiscoverx = "discoverx";
@@ -114,16 +114,16 @@ public class ActivityProfileControllerTest {
         kinase.setDiscoverxGeneSymbol(kinaseDiscoverx);
         doReturn(kinase).when(mockKinaseService).getKinase(eq(kinaseDiscoverx));
 
-        List<KinaseActivityProfile> kapList = new ArrayList<>();
-        KinaseActivityProfile kap = new KinaseActivityProfile();
+        List<ActivityProfile> kapList = new ArrayList<>();
+        ActivityProfile kap = new ActivityProfile();
         kap.setId(33L);
         kapList.add(kap);
-        PageImpl<KinaseActivityProfile> expectedPage = new PageImpl<>(kapList);
+        PageImpl<ActivityProfile> expectedPage = new PageImpl<>(kapList);
         doReturn(expectedPage).when(mockActivityProfileService)
-            .getKinaseActivityProfilesForKinaseAndPercentControl(eq(kinaseId), anyDouble(), any(Pageable.class));
+            .getActivityProfilesForKinaseAndPercentControl(eq(kinaseId), anyDouble(), any(Pageable.class));
 
         PageRequest pageInfo = PageRequest.of(0, 20);
-        PagedDataRep<KinaseActivityProfile> actual = controller.getKinaseActivityProfiles(
+        PagedDataRep<ActivityProfile> actual = controller.getActivityProfiles(
             null, kinaseDiscoverx, 0.3, pageInfo);
 
         Assert.assertEquals(0, actual.getStart());
@@ -132,7 +132,7 @@ public class ActivityProfileControllerTest {
     }
 
     @Test
-    public void testGetKinaseActivityprofiles_happyPath_compoundAndKinaseAndActivityProfile() {
+    public void testGetActivityProfiles_happyPath_compoundAndKinaseAndActivityProfile() {
 
         String compoundName = "compound";
         long kinaseId = 42;
@@ -143,17 +143,17 @@ public class ActivityProfileControllerTest {
         kinase.setDiscoverxGeneSymbol(kinaseDiscoverx);
         doReturn(kinase).when(mockKinaseService).getKinase(eq(kinaseDiscoverx));
 
-        List<KinaseActivityProfile> kapList = new ArrayList<>();
-        KinaseActivityProfile kap = new KinaseActivityProfile();
+        List<ActivityProfile> kapList = new ArrayList<>();
+        ActivityProfile kap = new ActivityProfile();
         kap.setId(33L);
         kapList.add(kap);
-        PageImpl<KinaseActivityProfile> expectedPage = new PageImpl<>(kapList);
+        PageImpl<ActivityProfile> expectedPage = new PageImpl<>(kapList);
         doReturn(expectedPage).when(mockActivityProfileService)
-            .getKinaseActivityProfilesForCompoundAndKinaseAndPercentControl(eq(compoundName),
+            .getActivityProfilesForCompoundAndKinaseAndPercentControl(eq(compoundName),
                 eq(kinaseId), anyDouble(), any(Pageable.class));
 
         PageRequest pageInfo = PageRequest.of(0, 20);
-        PagedDataRep<KinaseActivityProfile> actual = controller.getKinaseActivityProfiles(
+        PagedDataRep<ActivityProfile> actual = controller.getActivityProfiles(
             compoundName, kinaseDiscoverx, 0.3, pageInfo);
 
         Assert.assertEquals(0, actual.getStart());

@@ -14,11 +14,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class KinaseService {
 
-    @Autowired
-    private KinaseDao kinaseDao;
+    private final KinaseDao kinaseDao;
+
+    private final Messages messages;
 
     @Autowired
-    private Messages messages;
+    public KinaseService(KinaseDao kinaseDao, Messages messages) {
+        this.kinaseDao = kinaseDao;
+        this.messages = messages;
+    }
 
     /**
      * Returns information on a kinase by its discoverx gene symbol.

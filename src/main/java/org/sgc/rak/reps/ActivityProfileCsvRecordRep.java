@@ -13,7 +13,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "compoundName", "discoverxGeneSymbol", "entrezGeneSymbol",
     "percentControl", "compoundConcentration" })
-public class KinaseActivityProfileCsvRecordRep {
+public class ActivityProfileCsvRecordRep {
 
     private String compoundName;
 

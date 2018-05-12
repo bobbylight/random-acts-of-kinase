@@ -3,8 +3,10 @@ package org.sgc.rak.services;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.sgc.rak.exceptions.NotFoundException;
 import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.model.BlogPost;
 import org.sgc.rak.repositories.BlogPostRepository;
@@ -13,8 +15,10 @@ import org.springframework.data.domain.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
@@ -28,21 +32,18 @@ public class BlogPostServiceTest {
     @Mock
     private Messages mockMessages;
 
+    @InjectMocks
     private BlogPostService service;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        service = new BlogPostService(mockRepository, mockMessages);
     }
 
     @Test
     public void testCreateBlogPost() {
 
-        BlogPost post = new BlogPost();
-        post.setTitle("title");
-        post.setBody("body");
-
+        BlogPost post = TestUtil.createBlogPost("title", "body");
         service.createBlogPost(post);
 
         verify(mockRepository, times(1)).save(any());
@@ -73,5 +74,36 @@ public class BlogPostServiceTest {
         for (int i = 0; i < posts.size(); i++) {
             TestUtil.assertBlogPostsEqual(posts.get(i), actualPosts.getContent().get(i));
         }
+    }
+
+    @Test
+    public void testUpdateBlogPost_happyPath() {
+
+        BlogPost post = TestUtil.createBlogPost("new title", "new body");
+        post.setId(42L);
+
+        BlogPost origPost = TestUtil.createBlogPost("old title", "old body");
+        origPost.setId(42L);
+        origPost.setViewCount(3L);
+
+        doReturn(Optional.of(origPost)).when(mockRepository).findById(anyLong());
+        doReturn(origPost).when(mockRepository).save(any(BlogPost.class));
+
+        BlogPost actual = service.updateBlogPost(post);
+        Assert.assertEquals(42, actual.getId().longValue());
+        Assert.assertEquals("new title", actual.getTitle());
+        Assert.assertEquals("new body", actual.getBody());
+        Assert.assertEquals(4, actual.getViewCount().longValue());
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void testUpdateBlogPost_error_blogPostNotFound() {
+
+        BlogPost post = TestUtil.createBlogPost("title", "body");
+        post.setId(42L);
+
+        doReturn(Optional.empty()).when(mockRepository).findById(anyLong());
+
+        service.updateBlogPost(post);
     }
 }

@@ -1,9 +1,9 @@
 package org.sgc.rak.util;
 
 import org.apache.commons.lang3.StringUtils;
+import org.sgc.rak.model.ActivityProfile;
 import org.sgc.rak.model.Compound;
-import org.sgc.rak.model.KinaseActivityProfile;
-import org.sgc.rak.reps.KinaseActivityProfileCsvRecordRep;
+import org.sgc.rak.reps.ActivityProfileCsvRecordRep;
 import org.sgc.rak.reps.ObjectImportRep;
 
 /**
@@ -22,7 +22,7 @@ public final class Util {
      *
      * @param activityProfile The activity profile to examine.
      */
-    public static void convertEmptyStringsToNulls(KinaseActivityProfileCsvRecordRep activityProfile) {
+    public static void convertEmptyStringsToNulls(ActivityProfileCsvRecordRep activityProfile) {
 
         // Compound name is not checked
 
@@ -81,10 +81,10 @@ public final class Util {
      *        the result.
      * @return The result of the patch/merge operation.
      */
-    public static KinaseActivityProfile patchActivityProfile(KinaseActivityProfile existing,
-                                                             KinaseActivityProfileCsvRecordRep newProfile) {
+    public static ActivityProfile patchActivityProfile(ActivityProfile existing,
+                                                       ActivityProfileCsvRecordRep newProfile) {
 
-        KinaseActivityProfile retVal = new KinaseActivityProfile();
+        ActivityProfile retVal = new ActivityProfile();
         retVal.setId(existing.getId());
 
         // It's assumed that the two activity profiles having the same compound and kinase was previously verified

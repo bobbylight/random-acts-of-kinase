@@ -18,8 +18,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/admin/api")
 public class StatController {
 
+    private final CompoundService compoundService;
+
     @Autowired
-    private CompoundService compoundService;
+    StatController(CompoundService compoundService) {
+        this.compoundService = compoundService;
+    }
 
     /**
      * Returns information about compounds that are missing activity profiles.

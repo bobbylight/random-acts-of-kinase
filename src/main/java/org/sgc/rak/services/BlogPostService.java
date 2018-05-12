@@ -57,6 +57,14 @@ public class BlogPostService {
         return repository.findAll(pageInfo);
     }
 
+    /**
+     * Updates a blog post.
+     *
+     * @param post The blog post to update.  The blog post with the {@code id} of the input post is updated with the
+     *        new title and body.
+     * @return The updated version of the blog post.
+     * @throws NotFoundException If no blog post with the specified ID exists.
+     */
     public BlogPost updateBlogPost(BlogPost post) {
 
         Optional<BlogPost> optional = repository.findById(post.getId());

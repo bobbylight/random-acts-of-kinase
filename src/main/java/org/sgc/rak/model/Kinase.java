@@ -21,10 +21,10 @@ public class Kinase {
     @Column(name = "id", updatable = false)
     private long id;
 
-    @Column(name = "discoverx_gene_symbol", updatable = false)
+    @Column(name = "discoverx_gene_symbol", updatable = false, length = ModelConstants.KINASE_DISCOVERX_GENE_SYMBOL_MAX)
     private String discoverxGeneSymbol;
 
-    @Column(name = "entrez_gene_symbol", updatable = false)
+    @Column(name = "entrez_gene_symbol", updatable = false, length = ModelConstants.KINASE_ENTREZ_GENE_SYMBOL_MAX)
     private String entrezGeneSymbol;
 
     public long getId() {

@@ -20,19 +20,19 @@ import javax.persistence.Table;
 public class Compound {
 
     @Id
-    @Column(name = "compound_nm", updatable = false)
+    @Column(name = "compound_nm", updatable = false, length = ModelConstants.COMPOUND_COMPOUND_NAME_MAX)
     private String compoundName;
 
-    @Column(name = "chemotype")
+    @Column(name = "chemotype", length = ModelConstants.COMPOUND_CHEMOTYPE_MAX)
     private String chemotype;
 
     @Column(name = "s_10")
     private Double s10;
 
-    @Column(name = "smiles")
+    @Column(name = "smiles", length = ModelConstants.COMPOUND_SMILES_MAX)
     private String smiles;
 
-    @Column(name = "source")
+    @Column(name = "source", length = ModelConstants.COMPOUND_SOURCE_MAX)
     private String source;
 
     public String getChemotype() {

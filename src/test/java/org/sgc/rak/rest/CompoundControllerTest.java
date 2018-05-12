@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.sgc.rak.exceptions.NotFoundException;
+import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.model.Compound;
 import org.sgc.rak.reps.PagedDataRep;
 import org.sgc.rak.services.CompoundService;
@@ -24,8 +26,11 @@ public class CompoundControllerTest {
     @Mock
     private CompoundService compoundService;
 
+    @Mock
+    private Messages messages;
+
     @InjectMocks
-    private CompoundController controller = new CompoundController();
+    private CompoundController controller;
 
     @Before
     public void setUp() {
@@ -33,7 +38,7 @@ public class CompoundControllerTest {
     }
 
     @Test
-    public void testGetCompound() {
+    public void testGetCompound_happyPath() {
 
         String compoundName = "compoundA";
         Compound expectedCompound = new Compound();
@@ -43,6 +48,12 @@ public class CompoundControllerTest {
 
         Compound actualCompound = controller.getCompound(compoundName);
         Assert.assertEquals(compoundName, actualCompound.getCompoundName());
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void testGetCompound_notFound() {
+        doReturn(null).when(compoundService).getCompound(anyString());
+        controller.getCompound("compoundA");
     }
 
     @Test

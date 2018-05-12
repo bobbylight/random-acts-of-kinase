@@ -58,9 +58,7 @@ public class BlogPostControllerTest {
     @Test
     public void testCreateBlogPost() throws Exception {
 
-        BlogPost post = new BlogPost();
-        post.setTitle("title");
-        post.setBody("body");
+        BlogPost post = TestUtil.createBlogPost("title", "body");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/blogPosts")
             .accept(MediaType.APPLICATION_JSON)
@@ -109,10 +107,8 @@ public class BlogPostControllerTest {
     @Test
     public void testUpdateBlogPost_happyPath() throws Exception {
 
-        BlogPost post = new BlogPost();
+        BlogPost post = TestUtil.createBlogPost("title", "body");
         post.setId(42L);
-        post.setTitle("title");
-        post.setBody("body");
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/blogPosts/" + post.getId())
             .accept(MediaType.APPLICATION_JSON)
@@ -126,9 +122,7 @@ public class BlogPostControllerTest {
     @Test(expected = BadRequestException.class)
     public void testUpdateBlogPost_error_nonNumericBlogPostId() throws Exception {
 
-        BlogPost post = new BlogPost();
-        post.setTitle("title");
-        post.setBody("body");
+        BlogPost post = TestUtil.createBlogPost("title", "body");
 
         try {
             mockMvc.perform(MockMvcRequestBuilders.put("/api/blogPosts/notANumber")
@@ -144,10 +138,8 @@ public class BlogPostControllerTest {
     @Test(expected = BadRequestException.class)
     public void testUpdateBlogPost_error_postIdsDontMatch() throws Exception {
 
-        BlogPost post = new BlogPost();
+        BlogPost post = TestUtil.createBlogPost("title", "body");
         post.setId(42L);
-        post.setTitle("title");
-        post.setBody("body");
 
         try {
             mockMvc.perform(MockMvcRequestBuilders.put("/api/blogPosts/43")

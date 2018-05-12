@@ -15,8 +15,8 @@ import org.springframework.data.domain.PageRequest;
 import java.util.Collections;
 import java.util.List;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 
 public class KinaseControllerTest {
@@ -25,7 +25,7 @@ public class KinaseControllerTest {
     private KinaseService mockKinaseService;
 
     @InjectMocks
-    private KinaseController controller = new KinaseController();
+    private KinaseController controller;
 
     @Before
     public void setUp() {

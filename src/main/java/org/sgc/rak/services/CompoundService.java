@@ -6,8 +6,8 @@ import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.model.Compound;
 import org.sgc.rak.model.CompoundCountPair;
 import org.sgc.rak.model.Kinase;
-import org.sgc.rak.model.KinaseActivityProfile;
-import org.sgc.rak.repositories.KinaseActivityProfileRepository;
+import org.sgc.rak.model.ActivityProfile;
+import org.sgc.rak.repositories.ActivityProfileRepository;
 import org.sgc.rak.reps.ObjectImportRep;
 import org.sgc.rak.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,22 +28,24 @@ import java.util.stream.Collectors;
 @Service
 public class CompoundService {
 
-    @Autowired
-    private CompoundDao compoundDao;
+    private final CompoundDao compoundDao;
+    private final KinaseService kinaseService;
+    private final ActivityProfileRepository activityProfileRepository;
+    private final Messages messages;
 
     @Autowired
-    private KinaseService kinaseService;
-
-    @Autowired
-    private KinaseActivityProfileRepository kinaseActivityProfileRepository;
-
-    @Autowired
-    private Messages messages;
+    public CompoundService(CompoundDao compoundDao, KinaseService kinaseService,
+                           ActivityProfileRepository activityProfileRepository, Messages messages) {
+        this.compoundDao = compoundDao;
+        this.kinaseService = kinaseService;
+        this.activityProfileRepository = activityProfileRepository;
+        this.messages = messages;
+    }
 
     /**
-     * Creates a field status list from a compound.
+     * Creates a field status list from a compound that's being modified.
      *
-     * @param compound The compound.
+     * @param compound The new version of the compound.
      * @param existing The prior version of the compound.
      * @return The field status list.
      */
@@ -76,16 +78,11 @@ public class CompoundService {
      * Returns information on a specific compound.
      *
      * @param compoundName The compound name, ignoring case.
-     * @return Information on the compound.  If no such compound is known, an exception
-     *         is thrown.
+     * @return Information on the compound, or {@code null} if no such compound is known.
      * @see #getCompoundExists(String)
      */
     public Compound getCompound(String compoundName) {
-        Compound compound = compoundDao.getCompound(compoundName);
-        if (compound == null) {
-            throw new NotFoundException(messages.get("error.noSuchCompound", compoundName));
-        }
-        return compound;
+        return compoundDao.getCompound(compoundName);
     }
 
     /**
@@ -132,10 +129,10 @@ public class CompoundService {
         }
         long kinaseId = kinase2.getId();
 
-        Page<KinaseActivityProfile> profiles = kinaseActivityProfileRepository.
-            getKinaseActivityProfilesByKinaseIdAndPercentControlLessThanEqual(kinaseId, activity, pageInfo);
+        Page<ActivityProfile> profiles = activityProfileRepository.
+            getActivityProfilesByKinaseIdAndPercentControlLessThanEqual(kinaseId, activity, pageInfo);
 
-        List<String> compoundNames = profiles.getContent().stream().map(KinaseActivityProfile::getCompoundName)
+        List<String> compoundNames = profiles.getContent().stream().map(ActivityProfile::getCompoundName)
             .collect(Collectors.toList());
 
         List<Compound> compounds = compoundDao.getCompounds(compoundNames);

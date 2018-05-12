@@ -2,10 +2,10 @@ package org.sgc.rak.util;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.sgc.rak.model.ActivityProfile;
 import org.sgc.rak.model.Compound;
 import org.sgc.rak.model.Kinase;
-import org.sgc.rak.model.KinaseActivityProfile;
-import org.sgc.rak.reps.KinaseActivityProfileCsvRecordRep;
+import org.sgc.rak.reps.ActivityProfileCsvRecordRep;
 import org.sgc.rak.reps.ObjectImportRep;
 
 public class UtilTest {
@@ -13,7 +13,7 @@ public class UtilTest {
     @Test
     public void testConvertEmptyStringsToNulls_activityProfile() {
 
-        KinaseActivityProfileCsvRecordRep activityProfileCsvRecordRep = new KinaseActivityProfileCsvRecordRep();
+        ActivityProfileCsvRecordRep activityProfileCsvRecordRep = new ActivityProfileCsvRecordRep();
         activityProfileCsvRecordRep.setDiscoverxGeneSymbol("");
 
         Util.convertEmptyStringsToNulls(activityProfileCsvRecordRep);
@@ -49,7 +49,7 @@ public class UtilTest {
         existingKinase.setId(3);
         existingKinase.setDiscoverxGeneSymbol("existingDiscoverx");
 
-        KinaseActivityProfile existing = new KinaseActivityProfile();
+        ActivityProfile existing = new ActivityProfile();
         existing.setId(42L);
         existing.setCompoundConcentration(3);
         existing.setCompoundName("compoundA");
@@ -57,13 +57,13 @@ public class UtilTest {
         existing.setKinase(existingKinase);
         existing.setPercentControl(0.3);
 
-        KinaseActivityProfileCsvRecordRep newProfile = new KinaseActivityProfileCsvRecordRep();
+        ActivityProfileCsvRecordRep newProfile = new ActivityProfileCsvRecordRep();
         newProfile.setCompoundConcentration(7);
         newProfile.setCompoundName(existing.getCompoundName()); // It'a assumed these were already found to match
         newProfile.setDiscoverxGeneSymbol(existing.getKinase().getDiscoverxGeneSymbol()); // Ditto
         newProfile.setPercentControl(3.7);
 
-        KinaseActivityProfile result = Util.patchActivityProfile(existing, newProfile);
+        ActivityProfile result = Util.patchActivityProfile(existing, newProfile);
         Assert.assertEquals(7, result.getCompoundConcentration().intValue());
         Assert.assertEquals(3.7, result.getPercentControl(), 0.001);
     }
@@ -75,7 +75,7 @@ public class UtilTest {
         existingKinase.setId(3);
         existingKinase.setDiscoverxGeneSymbol("existingDiscoverx");
 
-        KinaseActivityProfile existing = new KinaseActivityProfile();
+        ActivityProfile existing = new ActivityProfile();
         existing.setId(42L);
         existing.setCompoundConcentration(3);
         existing.setCompoundName("compoundA");
@@ -83,11 +83,11 @@ public class UtilTest {
         existing.setKinase(existingKinase);
         existing.setPercentControl(0.3);
 
-        KinaseActivityProfileCsvRecordRep newProfile = new KinaseActivityProfileCsvRecordRep();
+        ActivityProfileCsvRecordRep newProfile = new ActivityProfileCsvRecordRep();
         newProfile.setCompoundName(existing.getCompoundName()); // It'a assumed these were already found to match
         newProfile.setDiscoverxGeneSymbol(existing.getKinase().getDiscoverxGeneSymbol()); // Ditto
 
-        KinaseActivityProfile result = Util.patchActivityProfile(existing, newProfile);
+        ActivityProfile result = Util.patchActivityProfile(existing, newProfile);
         Assert.assertEquals(3, result.getCompoundConcentration().intValue());
         Assert.assertEquals(0.3, result.getPercentControl(), 0.001);
     }

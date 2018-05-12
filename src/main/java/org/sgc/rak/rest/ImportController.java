@@ -10,7 +10,7 @@ import org.sgc.rak.exceptions.BadRequestException;
 import org.sgc.rak.exceptions.InternalServerErrorException;
 import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.model.Compound;
-import org.sgc.rak.reps.KinaseActivityProfileCsvRecordRep;
+import org.sgc.rak.reps.ActivityProfileCsvRecordRep;
 import org.sgc.rak.reps.ObjectImportRep;
 import org.sgc.rak.services.ActivityProfileService;
 import org.sgc.rak.services.CompoundService;
@@ -32,10 +32,10 @@ import java.util.List;
 @RequestMapping(path = "/admin/api")
 public class ImportController {
 
-    private CompoundService compoundService;
-    private ActivityProfileService activityProfileService;
+    private final CompoundService compoundService;
+    private final ActivityProfileService activityProfileService;
 
-    private Messages messages;
+    private final Messages messages;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ImportController.class);
 
@@ -114,8 +114,8 @@ public class ImportController {
             .addColumn("compoundConcentration", CsvSchema.ColumnType.NUMBER)
             .build();
 
-        List<KinaseActivityProfileCsvRecordRep> activityProfiles = loadFromCsv(file, headerRow,
-            KinaseActivityProfileCsvRecordRep.class, schema);
+        List<ActivityProfileCsvRecordRep> activityProfiles = loadFromCsv(file, headerRow,
+            ActivityProfileCsvRecordRep.class, schema);
         return activityProfileService.importActivityProfiles(activityProfiles, commit);
     }
 

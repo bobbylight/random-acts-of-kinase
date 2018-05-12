@@ -1,7 +1,7 @@
 package org.sgc.rak.dao;
 
-import org.sgc.rak.model.KinaseActivityProfile;
-import org.sgc.rak.repositories.KinaseActivityProfileRepository;
+import org.sgc.rak.model.ActivityProfile;
+import org.sgc.rak.repositories.ActivityProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,10 +13,10 @@ import java.util.*;
  */
 public class ActivityProfileDao {
 
-    private final KinaseActivityProfileRepository activityProfileRepository;
+    private final ActivityProfileRepository activityProfileRepository;
 
     @Autowired
-    public ActivityProfileDao(KinaseActivityProfileRepository repository) {
+    public ActivityProfileDao(ActivityProfileRepository repository) {
         this.activityProfileRepository = repository;
     }
 
@@ -28,20 +28,20 @@ public class ActivityProfileDao {
      *        {@code compoundNames}.
      * @return The found activity profiles.  This may be empty, but will never be {@code null}.
      */
-    public Set<KinaseActivityProfile> getKinaseActivityProfiles(List<String> compoundNames, List<String> discoerxes) {
+    public Set<ActivityProfile> getActivityProfiles(List<String> compoundNames, List<String> discoerxes) {
 
         if (compoundNames.size() != discoerxes.size()) {
             throw new IllegalStateException("List of compound names and discoverx gene symbols aren't the same length");
         }
 
-        Set<KinaseActivityProfile> profiles = new HashSet<>();
+        Set<ActivityProfile> profiles = new HashSet<>();
 
         for (int i = 0; i < compoundNames.size(); i++) {
 
             String compoundName = compoundNames.get(i);
             String discoverx = discoerxes.get(i);
 
-            Optional<KinaseActivityProfile> possibleProfile = activityProfileRepository
+            Optional<ActivityProfile> possibleProfile = activityProfileRepository
                 .findByCompoundNameAndKinaseDiscoverxGeneSymbol(compoundName, discoverx);
             possibleProfile.ifPresent(profiles::add);
         }
@@ -54,9 +54,9 @@ public class ActivityProfileDao {
      *
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of kinase activity profiles.
-     * @see #getKinaseActivityProfilesByCompoundNameIgnoreCase(String, Pageable)
+     * @see #getActivityProfilesByCompoundNameIgnoreCase(String, Pageable)
      */
-    public Page<KinaseActivityProfile> getKinaseActivityProfiles(Pageable pageInfo) {
+    public Page<ActivityProfile> getActivityProfiles(Pageable pageInfo) {
         return activityProfileRepository.findAll(pageInfo);
     }
 
@@ -66,11 +66,11 @@ public class ActivityProfileDao {
      * @param compoundName The compound name.  Case is ignored.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of kinase activity profiles.
-     * @see #getKinaseActivityProfiles(Pageable)
+     * @see #getActivityProfiles(Pageable)
      */
-    public Page<KinaseActivityProfile> getKinaseActivityProfilesByCompoundNameIgnoreCase(String compoundName,
-                                                                                         Pageable pageInfo) {
-        return activityProfileRepository.getKinaseActivityProfilesByCompoundNameIgnoreCase(compoundName, pageInfo);
+    public Page<ActivityProfile> getActivityProfilesByCompoundNameIgnoreCase(String compoundName,
+                                                                           Pageable pageInfo) {
+        return activityProfileRepository.getActivityProfilesByCompoundNameIgnoreCase(compoundName, pageInfo);
     }
 
     /**
@@ -81,19 +81,19 @@ public class ActivityProfileDao {
      * @param activity The activity of the reaction.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of kinase activity profiles.
-     * @see #getKinaseActivityProfiles(Pageable)
+     * @see #getActivityProfiles(Pageable)
      */
-    public Page<KinaseActivityProfile>
-            getKinaseActivityProfilesByCompoundNameIgnoreCaseAndKinaseIgnoreCaseAndPercentControl(
+    public Page<ActivityProfile>
+            getActivityProfilesByCompoundNameIgnoreCaseAndKinaseIgnoreCaseAndPercentControl(
                                     String compoundName, long kinase, double activity, Pageable pageInfo) {
         return activityProfileRepository.
-            getKinaseActivityProfilesByCompoundNameIgnoreCaseAndKinaseIdAndPercentControlLessThanEqual(
+            getActivityProfilesByCompoundNameIgnoreCaseAndKinaseIdAndPercentControlLessThanEqual(
                     compoundName, kinase, activity, pageInfo);
     }
 
-    public Page<KinaseActivityProfile> getKinaseActivityProfilesByKinaseIgnoreCaseAndPercentControl(long kinase,
-                                                      double activity, Pageable pageInfo) {
-        return activityProfileRepository.getKinaseActivityProfilesByKinaseIdAndPercentControlLessThanEqual(kinase,
+    public Page<ActivityProfile> getActivityProfilesByKinaseIgnoreCaseAndPercentControl(long kinase,
+                                                                              double activity, Pageable pageInfo) {
+        return activityProfileRepository.getActivityProfilesByKinaseIdAndPercentControlLessThanEqual(kinase,
             activity,  pageInfo);
     }
 
@@ -102,7 +102,7 @@ public class ActivityProfileDao {
      *
      * @param activityProfiles The activity profiles to save.
      */
-    public void save(Iterable<KinaseActivityProfile> activityProfiles) {
+    public void save(Iterable<ActivityProfile> activityProfiles) {
         activityProfileRepository.saveAll(activityProfiles);
     }
 }

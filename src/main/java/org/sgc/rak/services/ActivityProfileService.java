@@ -3,9 +3,9 @@ package org.sgc.rak.services;
 import org.sgc.rak.dao.ActivityProfileDao;
 import org.sgc.rak.exceptions.BadRequestException;
 import org.sgc.rak.i18n.Messages;
+import org.sgc.rak.model.ActivityProfile;
 import org.sgc.rak.model.Kinase;
-import org.sgc.rak.model.KinaseActivityProfile;
-import org.sgc.rak.reps.KinaseActivityProfileCsvRecordRep;
+import org.sgc.rak.reps.ActivityProfileCsvRecordRep;
 import org.sgc.rak.reps.ObjectImportRep;
 import org.sgc.rak.util.Util;
 import org.slf4j.Logger;
@@ -41,7 +41,7 @@ public class ActivityProfileService {
         this.messages = messages;
     }
 
-    private KinaseActivityProfile activityProfileCsvRecordToActivityProfile(KinaseActivityProfileCsvRecordRep csvRep) {
+    private ActivityProfile activityProfileCsvRecordToActivityProfile(ActivityProfileCsvRecordRep csvRep) {
 
         if (!compoundService.getCompoundExists(csvRep.getCompoundName())) {
             throw new BadRequestException(messages.get("error.importReferencesUnknownCompound",
@@ -54,7 +54,7 @@ public class ActivityProfileService {
                 csvRep.getDiscoverxGeneSymbol()));
         }
 
-        KinaseActivityProfile profile = new KinaseActivityProfile();
+        ActivityProfile profile = new ActivityProfile();
         profile.setCompoundName(csvRep.getCompoundName());
         profile.setKinase(kinase);
         profile.setPercentControl(csvRep.getPercentControl());
@@ -64,7 +64,7 @@ public class ActivityProfileService {
     }
 
     private List<ObjectImportRep.FieldStatus> activityProfileCsvRecordToFieldStatusList(
-            KinaseActivityProfile newProfile, KinaseActivityProfile existingProfile) {
+        ActivityProfile newProfile, ActivityProfile existingProfile) {
 
         String existingCompoundName = null;
         String existingDiscoverx = null;
@@ -93,10 +93,10 @@ public class ActivityProfileService {
      *
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of kinase activity profiles.
-     * @see #getKinaseActivityProfilesForCompound(String, Pageable)
+     * @see #getActivityProfilesForCompound(String, Pageable)
      */
-    public Page<KinaseActivityProfile> getKinaseActivityProfiles(Pageable pageInfo) {
-        return activityProfileDao.getKinaseActivityProfiles(pageInfo);
+    public Page<ActivityProfile> getActivityProfiles(Pageable pageInfo) {
+        return activityProfileDao.getActivityProfiles(pageInfo);
     }
 
     /**
@@ -105,12 +105,12 @@ public class ActivityProfileService {
      * @param compoundName The compound name.  Case is ignored.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of kinase activity profiles.
-     * @see #getKinaseActivityProfiles(Pageable)
+     * @see #getActivityProfiles(Pageable)
      */
-    public Page<KinaseActivityProfile> getKinaseActivityProfilesForCompound(String compoundName,
-                                                                            Pageable pageInfo) {
+    public Page<ActivityProfile> getActivityProfilesForCompound(String compoundName,
+                                                                      Pageable pageInfo) {
         compoundService.getCompound(compoundName); // Throw exception if compound not found
-        return activityProfileDao.getKinaseActivityProfilesByCompoundNameIgnoreCase(compoundName, pageInfo);
+        return activityProfileDao.getActivityProfilesByCompoundNameIgnoreCase(compoundName, pageInfo);
     }
 
     /**
@@ -121,20 +121,20 @@ public class ActivityProfileService {
      * @param activity The activity of the reaction.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of kinase activity profiles.
-     * @see #getKinaseActivityProfiles(Pageable)
+     * @see #getActivityProfiles(Pageable)
      */
-    public Page<KinaseActivityProfile> getKinaseActivityProfilesForCompoundAndKinaseAndPercentControl(
+    public Page<ActivityProfile> getActivityProfilesForCompoundAndKinaseAndPercentControl(
             String compoundName, long kinase, double activity, Pageable pageInfo) {
         compoundService.getCompound(compoundName); // Throw exception if compound not found
         //kinaseService.getKinase(kinase); // Throw exception if kinase not found
-        return activityProfileDao.getKinaseActivityProfilesByCompoundNameIgnoreCaseAndKinaseIgnoreCaseAndPercentControl(
+        return activityProfileDao.getActivityProfilesByCompoundNameIgnoreCaseAndKinaseIgnoreCaseAndPercentControl(
             compoundName, kinase, activity, pageInfo);
     }
 
-    public Page<KinaseActivityProfile> getKinaseActivityProfilesForKinaseAndPercentControl(long kinase,
-                                                 double activity, Pageable pageInfo) {
+    public Page<ActivityProfile> getActivityProfilesForKinaseAndPercentControl(long kinase,
+                                                                             double activity, Pageable pageInfo) {
         //kinaseService.getKinase(kinase); // Throw exception if kinase not found
-        return activityProfileDao.getKinaseActivityProfilesByKinaseIgnoreCaseAndPercentControl(kinase,
+        return activityProfileDao.getActivityProfilesByKinaseIgnoreCaseAndPercentControl(kinase,
             activity, pageInfo);
     }
 
@@ -145,29 +145,29 @@ public class ActivityProfileService {
      * @param commit Whether to actually commit the patch, or just return the possible result.
      * @return The result of the operation (or possible result, if {@code commit} is {@code false}).
      */
-    public ObjectImportRep importActivityProfiles(List<KinaseActivityProfileCsvRecordRep> activityProfileCsvRecords,
+    public ObjectImportRep importActivityProfiles(List<ActivityProfileCsvRecordRep> activityProfileCsvRecords,
                                                   boolean commit) {
 
         List<String> compoundNames = activityProfileCsvRecords.stream()
-            .map(KinaseActivityProfileCsvRecordRep::getCompoundName).collect(Collectors.toList());
+            .map(ActivityProfileCsvRecordRep::getCompoundName).collect(Collectors.toList());
         List<String> discoverxes = activityProfileCsvRecords.stream()
-            .map(KinaseActivityProfileCsvRecordRep::getDiscoverxGeneSymbol).collect(Collectors.toList());
-        Set<KinaseActivityProfile> existingProfiles = activityProfileDao
-            .getKinaseActivityProfiles(compoundNames, discoverxes);
+            .map(ActivityProfileCsvRecordRep::getDiscoverxGeneSymbol).collect(Collectors.toList());
+        Set<ActivityProfile> existingProfiles = activityProfileDao
+            .getActivityProfiles(compoundNames, discoverxes);
 
         ObjectImportRep importRep = new ObjectImportRep();
         List<List<ObjectImportRep.FieldStatus>> records = new ArrayList<>();
         importRep.setFieldStatuses(records);
-        List<KinaseActivityProfile> toPersist = new ArrayList<>();
+        List<ActivityProfile> toPersist = new ArrayList<>();
 
-        for (KinaseActivityProfileCsvRecordRep activityProfileCsvRecord : activityProfileCsvRecords) {
+        for (ActivityProfileCsvRecordRep activityProfileCsvRecord : activityProfileCsvRecords) {
 
             Util.convertEmptyStringsToNulls(activityProfileCsvRecord);
             String compoundName = activityProfileCsvRecord.getCompoundName();
             String discoverx = activityProfileCsvRecord.getDiscoverxGeneSymbol();
-            KinaseActivityProfile newActivityProfile;
+            ActivityProfile newActivityProfile;
 
-            KinaseActivityProfile existingProfile = possiblyGetActivityProfile(existingProfiles, compoundName,
+            ActivityProfile existingProfile = possiblyGetActivityProfile(existingProfiles, compoundName,
                 discoverx);
             if (existingProfile != null) {
                 newActivityProfile = Util.patchActivityProfile(existingProfile, activityProfileCsvRecord);
@@ -188,16 +188,16 @@ public class ActivityProfileService {
         return importRep;
     }
 
-    private static KinaseActivityProfile possiblyGetActivityProfile(Set<KinaseActivityProfile> profiles,
-                                                                    String compoundName, String discoverx) {
-        Optional<KinaseActivityProfile> optional = profiles.stream()
+    private static ActivityProfile possiblyGetActivityProfile(Set<ActivityProfile> profiles,
+                                                              String compoundName, String discoverx) {
+        Optional<ActivityProfile> optional = profiles.stream()
             .filter(c -> compoundName.equals(c.getCompoundName()) &&
                         discoverx.equals(c.getKinase().getDiscoverxGeneSymbol()))
             .findFirst();
         return optional.orElse(null);
     }
 
-    private static void possiblyLogImportOperation(boolean commit, List<KinaseActivityProfile> toPersist) {
+    private static void possiblyLogImportOperation(boolean commit, List<ActivityProfile> toPersist) {
         if (LOGGER.isDebugEnabled()) {
             String header = commit ? "Saving the following {} new or updated activity profiles:" :
                 "Returning preview of saving the following {} new or updated activity profiles:";

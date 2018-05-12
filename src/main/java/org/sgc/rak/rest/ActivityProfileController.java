@@ -3,8 +3,8 @@ package org.sgc.rak.rest;
 import org.apache.commons.lang3.StringUtils;
 import org.sgc.rak.exceptions.BadRequestException;
 import org.sgc.rak.i18n.Messages;
+import org.sgc.rak.model.ActivityProfile;
 import org.sgc.rak.model.Kinase;
-import org.sgc.rak.model.KinaseActivityProfile;
 import org.sgc.rak.reps.PagedDataRep;
 import org.sgc.rak.services.ActivityProfileService;
 import org.sgc.rak.services.KinaseService;
@@ -42,11 +42,11 @@ class ActivityProfileController {
      * @return The list of kinase activity profiles.
      */
     @RequestMapping(method = RequestMethod.GET)
-    PagedDataRep<KinaseActivityProfile> getKinaseActivityProfiles(@RequestParam(required = false) String compound,
-                  @RequestParam(required = false) String kinaseDiscoverx,
-                  @RequestParam(required = false) Double activity,
-                  @SortDefault.SortDefaults({ @SortDefault("kd"), @SortDefault("percentControl") })
-                  Pageable pageInfo) {
+    PagedDataRep<ActivityProfile> getActivityProfiles(@RequestParam(required = false) String compound,
+                                    @RequestParam(required = false) String kinaseDiscoverx,
+                                    @RequestParam(required = false) Double activity,
+                                    @SortDefault.SortDefaults({ @SortDefault("kd"), @SortDefault("percentControl") })
+                                    Pageable pageInfo) {
 
         // Kinase and activity are a pair; you can't filter with just one
         if (StringUtils.isEmpty(kinaseDiscoverx) && activity != null) {
@@ -70,23 +70,23 @@ class ActivityProfileController {
             kinaseId = kinase.getId();
         }
 
-        Page<KinaseActivityProfile> page;
+        Page<ActivityProfile> page;
 
         if (StringUtils.isEmpty(compound)) {
             if (StringUtils.isEmpty(kinaseDiscoverx)) {
-                page = activityProfileService.getKinaseActivityProfiles(pageInfo);
+                page = activityProfileService.getActivityProfiles(pageInfo);
             }
             else {
-                page = activityProfileService.getKinaseActivityProfilesForKinaseAndPercentControl(kinaseId, activity,
+                page = activityProfileService.getActivityProfilesForKinaseAndPercentControl(kinaseId, activity,
                     pageInfo);
             }
         }
         else {
             if (StringUtils.isEmpty(kinaseDiscoverx)) {
-                page = activityProfileService.getKinaseActivityProfilesForCompound(compound, pageInfo);
+                page = activityProfileService.getActivityProfilesForCompound(compound, pageInfo);
             }
             else {
-                page = activityProfileService.getKinaseActivityProfilesForCompoundAndKinaseAndPercentControl(compound,
+                page = activityProfileService.getActivityProfilesForCompoundAndKinaseAndPercentControl(compound,
                     kinaseId, activity, pageInfo);
             }
         }

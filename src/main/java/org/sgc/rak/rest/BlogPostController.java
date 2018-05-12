@@ -78,6 +78,7 @@ public class BlogPostController {
     @ResponseStatus(HttpStatus.OK)
     BlogPost updateBlogPost(@PathVariable String blogPostId, @Valid @RequestBody BlogPost post) {
 
+        // Blog post ID must be a number
         Long id;
         try {
             id = Long.parseLong(blogPostId);
@@ -85,6 +86,7 @@ public class BlogPostController {
             throw new BadRequestException(messages.get("error.invalidBlogPostId", blogPostId));
         }
 
+        // Blog post ID in body must match that in URL
         if (!id.equals(post.getId())) {
             throw new BadRequestException(messages.get("error.blogPostIdMismatch"));
         }
