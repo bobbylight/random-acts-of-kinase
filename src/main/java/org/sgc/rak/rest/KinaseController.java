@@ -19,7 +19,7 @@ class KinaseController {
     private final KinaseService kinaseService;
 
     @Autowired
-    public KinaseController(KinaseService kinaseService) {
+    KinaseController(KinaseService kinaseService) {
         this.kinaseService = kinaseService;
     }
 
