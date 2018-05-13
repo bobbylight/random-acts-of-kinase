@@ -8,6 +8,8 @@ CREATE TABLE :schema.compound (
   s_10 numeric,
   source character varying(12),
   smiles character varying(2048),
+  reference_1 character varying(512),
+  reference_1_url character varying(2048),
   CONSTRAINT compound_pkey PRIMARY KEY (compound_nm)
 )
 WITH ( OIDS = FALSE );

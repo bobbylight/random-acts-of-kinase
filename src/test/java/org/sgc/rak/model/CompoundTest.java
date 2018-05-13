@@ -46,6 +46,22 @@ public class CompoundTest {
     }
 
     @Test
+    public void testGetSetPrimaryReference() {
+        Compound compound = new Compound();
+        Assert.assertNull(compound.getPrimaryReference());
+        compound.setPrimaryReference("foo");
+        Assert.assertEquals("foo", compound.getPrimaryReference());
+    }
+
+    @Test
+    public void testGetSetPrimaryReferenceUrl() {
+        Compound compound = new Compound();
+        Assert.assertNull(compound.getPrimaryReferenceUrl());
+        compound.setPrimaryReferenceUrl("foo");
+        Assert.assertEquals("foo", compound.getPrimaryReferenceUrl());
+    }
+
+    @Test
     public void testToString() {
         String expected = "Compound[compoundName=<null>,chemotype=<null>," +
             "s10=<null>,smiles=<null>,source=<null>]";

@@ -85,6 +85,17 @@ export class RestApi {
             });
     }
 
+    getCompound(compoundName: string): Promise<Compound> {
+
+        return this.instance.get(`api/compounds/${compoundName}`)
+            .then((response: AxiosResponse<Compound>) => {
+                return response.data;
+            })
+            .catch((error: AxiosError) => {
+                throw RestApi.axiosErrorToErrorResponse(error);
+            });
+    }
+
     getCompounds(page: number, size: number, filters: any): Promise<PagedDataRep<Compound>> {
 
         let url: string = `api/compounds?page=${page}&size=${size}`;

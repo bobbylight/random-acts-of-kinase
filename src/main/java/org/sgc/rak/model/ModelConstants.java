@@ -15,6 +15,10 @@ public final class ModelConstants {
 
     public static final int COMPOUND_CHEMOTYPE_MAX = 100;
 
+    public static final int COMPOUND_REFERENCE_MAX = 512;
+
+    public static final int COMPOUND_REFERENCE_URL_MAX = 2048;
+
     public static final int COMPOUND_SOURCE_MAX = 12;
 
     public static final int COMPOUND_SMILES_MAX = 2048;

@@ -35,6 +35,12 @@ public class Compound {
     @Column(name = "source", length = ModelConstants.COMPOUND_SOURCE_MAX)
     private String source;
 
+    @Column(name = "reference_1", length = ModelConstants.COMPOUND_REFERENCE_MAX)
+    private String primaryReference;
+
+    @Column(name = "reference_1_url", length = ModelConstants.COMPOUND_REFERENCE_URL_MAX)
+    private String primaryReferenceUrl;
+
     public String getChemotype() {
         return chemotype;
     }
@@ -73,6 +79,22 @@ public class Compound {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    public String getPrimaryReference() {
+        return primaryReference;
+    }
+
+    public void setPrimaryReference(String primaryReference) {
+        this.primaryReference = primaryReference;
+    }
+
+    public String getPrimaryReferenceUrl() {
+        return primaryReferenceUrl;
+    }
+
+    public void setPrimaryReferenceUrl(String primaryReferenceUrl) {
+        this.primaryReferenceUrl = primaryReferenceUrl;
     }
 
     @Override

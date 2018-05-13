@@ -4,6 +4,10 @@
 
             <section-header>Results for {{this.id}}</section-header>
 
+            <v-flex xs12>
+                <compound-details-card :compound-name="id"></compound-details-card>
+            </v-flex>
+
             <v-flex xs12 v-if="chartData">
                 <column-chart :data="chartData"></column-chart>
             </v-flex>
@@ -21,10 +25,11 @@ import Component from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
 import SectionHeader from './header.vue';
 import ResultTable from './result-table.vue';
+import CompoundDetailsCard from './compound-details-card.vue';
 import restApi from './rest-api';
 import { ActivityProfile, PagedDataRep } from './rak';
 
-@Component({ components: { ResultTable, SectionHeader } })
+@Component({ components: { CompoundDetailsCard, ResultTable, SectionHeader } })
 export default class Compound extends Vue {
 
     @Prop({ required: true })

@@ -19,6 +19,8 @@ export interface Compound {
     compoundName: string;
     chemotype: string;
     s10: string;
+    primaryReference?: string;
+    primaryReferenceUrl?: string;
 }
 
 export interface ErrorResponse {
