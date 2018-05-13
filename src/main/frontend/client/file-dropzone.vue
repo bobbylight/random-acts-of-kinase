@@ -53,6 +53,7 @@ export default class ImportCompounds extends Vue {
     border: 1px solid #e0e0e0;
     border-radius: 3px;
     text-align: center;
+    transition: background @transition-time;
 
     &:hover {
         background: #f0f0f0;

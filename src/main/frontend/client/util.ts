@@ -3,7 +3,7 @@ import { FieldStatus } from './rak';
 export default class RakUtil {
 
     static isNewFieldStatus(fieldStatus: FieldStatus): boolean {
-        return (fieldStatus.newValue && fieldStatus.oldValue == null) ||
+        return (fieldStatus.newValue != null && fieldStatus.oldValue == null) ||
             (fieldStatus.newValue == null && fieldStatus.oldValue == null);
     }
 

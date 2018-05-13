@@ -76,10 +76,12 @@ export default class Blog extends Vue {
 </script>
 
 <style lang="less">
+@import '../styles/app-variables';
+
 .blog-wrapper {
 
     .blog-post:not(:first-of-type) {
-        margin-top: 2rem;
+        margin-top: @card-vertical-spacing;
     }
 
     .blog-page-footer {

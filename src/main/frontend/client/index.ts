@@ -30,6 +30,7 @@ import VDataIterator from 'vuetify/es5/components/VDataIterator';
 import VDataTable from 'vuetify/es5/components/VDataTable';
 import VDialog from 'vuetify/es5/components/VDialog';
 import VDivider from 'vuetify/es5/components/VDivider';
+import VExpansionPanel from 'vuetify/es5/components/VExpansionPanel';
 import VFooter from 'vuetify/es5/components/VFooter';
 import VGrid from 'vuetify/es5/components/VGrid'; // VContainer, VContent, VFlex, VGrid, VLayout, VSpacer
 import VIcon from 'vuetify/es5/components/VIcon';
@@ -73,6 +74,7 @@ Vue.use(Vuetify, {
         VDataTable,
         VDialog,
         VDivider,
+        VExpansionPanel,
         VFooter,
         VGrid,
         VIcon,

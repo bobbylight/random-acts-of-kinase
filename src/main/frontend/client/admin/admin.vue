@@ -20,69 +20,78 @@
 
         <v-layout row fill-height> <!-- don't wrap or justify-center -->
 
-            <v-flex xs3 fill-height v-if="navDrawerOpen && this.$store.getters.loggedIn"
-                    elevation-1 class="slide-out-admin-options">
+            <transition name="slide-x-transition" mode="out-in">
+                <v-flex key="navDrawer" xs3 fill-height v-if="navDrawerOpen && this.$store.getters.loggedIn"
+                        elevation-1 class="slide-out-admin-options">
 
-                <v-toolbar flat class="transparent">
-                    <v-list class="pt-0">
-                        <v-list-tile avatar>
+                    <v-toolbar flat class="transparent">
+                        <v-list class="pt-0">
+                            <v-list-tile avatar>
+                                <v-list-tile-action>
+                                    <v-icon>fa-cog</v-icon>
+                                </v-list-tile-action>
+                                <v-list-tile-content>
+                                    Admin Actions
+                                </v-list-tile-content>
+                                <v-list-tile-action>
+                                    <v-btn icon @click.stop="navDrawerOpen = false">
+                                        <v-icon>chevron_left</v-icon>
+                                    </v-btn>
+                                </v-list-tile-action>
+                            </v-list-tile>
+                        </v-list>
+                    </v-toolbar>
+
+                    <v-list dense class="pt-0">
+
+                        <v-divider></v-divider>
+
+                        <v-list-group
+                            prepend-icon="fa-upload"
+                            no-action
+                            v-model="importSubMenuExpanded">
+
+                            <v-list-tile slot="activator">
+                                <v-list-tile-content>
+                                    <v-list-tile-title>Import Data</v-list-tile-title>
+                                </v-list-tile-content>
+                            </v-list-tile>
+
+                            <v-list-tile to="import-compounds">
+                                <v-list-tile-content>
+                                    <v-list-tile-title>Import Compounds</v-list-tile-title>
+                                </v-list-tile-content>
+                            </v-list-tile>
+
+
+                            <v-list-tile to="import-activity-profiles">
+                                <v-list-tile-content>
+                                    <v-list-tile-title>Import Activity Profiles</v-list-tile-title>
+                                </v-list-tile-content>
+                            </v-list-tile>
+                        </v-list-group>
+
+                        <v-list-tile to="blog-manager">
                             <v-list-tile-action>
-                                <v-icon>fa-cog</v-icon>
+                                <v-icon>fa-newspaper-o</v-icon>
                             </v-list-tile-action>
                             <v-list-tile-content>
-                                Admin Actions
+                                <v-list-tile-title>News Posts</v-list-tile-title>
                             </v-list-tile-content>
-                            <v-list-tile-action>
-                                <v-btn icon @click.stop="navDrawerOpen = false">
-                                    <v-icon>chevron_left</v-icon>
-                                </v-btn>
-                            </v-list-tile-action>
                         </v-list-tile>
+
+                        <v-list-tile to="stats">
+                            <v-list-tile-action>
+                                <v-icon>fa-database</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                                <v-list-tile-title>Missing Data</v-list-tile-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+
                     </v-list>
-                </v-toolbar>
-
-                <v-list dense class="pt-0">
-
-                    <v-divider></v-divider>
-
-                    <v-list-tile to="import-compounds">
-                        <v-list-tile-action>
-                            <v-icon>fa-upload</v-icon>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                            <v-list-tile-title>Import Compounds</v-list-tile-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-
-                    <v-list-tile to="import-activity-profiles">
-                        <v-list-tile-action>
-                            <v-icon>fa-upload</v-icon>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                            <v-list-tile-title>Import Activity Profiles</v-list-tile-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-
-                    <v-list-tile to="blog-manager">
-                        <v-list-tile-action>
-                            <v-icon>fa-newspaper-o</v-icon>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                            <v-list-tile-title>News Posts</v-list-tile-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-
-                    <v-list-tile to="stats">
-                        <v-list-tile-action>
-                            <v-icon>fa-database</v-icon>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                            <v-list-tile-title>Missing Data</v-list-tile-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
-
-                </v-list>
-            </v-flex>
+                </v-flex>
+            </transition>
 
             <v-container grid-list-md fill-height class="page-wrapper">
                 <v-layout row wrap fill-height justify-center>
@@ -115,6 +124,8 @@ import Component from 'vue-class-component';
 export default class AdminHome extends Vue {
 
     private navDrawerOpen: boolean = true;
+
+    private importSubMenuExpanded: boolean = true;
 }
 </script>
 

@@ -8,12 +8,23 @@
                 <compound-details-card :compound-name="id"></compound-details-card>
             </v-flex>
 
-            <v-flex xs12 v-if="chartData">
-                <column-chart :data="chartData"></column-chart>
+            <v-flex xs12 class="card-vertical-spacing">
+                <result-table :filters="gridFilters"></result-table>
             </v-flex>
 
-            <v-flex xs12>
-                <result-table :filters="gridFilters"></result-table>
+            <v-flex xs12 class="card-vertical-spacing" v-if="chartData">
+                <v-expansion-panel class="expansion-panel-no-left-margin">
+                    <v-expansion-panel-content>
+                        <div slot="header">
+                            <h3 class="headline">Chart View</h3>
+                        </div>
+                        <v-card>
+                            <v-card-text>
+                                <column-chart :data="chartData"></column-chart>
+                            </v-card-text>
+                        </v-card>
+                    </v-expansion-panel-content>
+                </v-expansion-panel>
             </v-flex>
         </v-layout>
     </v-container>
@@ -75,4 +86,13 @@ export default class Compound extends Vue {
 </script>
 
 <style lang="less">
+@import '../styles/app-variables';
+
+.expansion-panel-no-left-margin {
+    margin-left: 0;
+}
+
+.card-vertical-spacing {
+    margin-top: @card-vertical-spacing;
+}
 </style>

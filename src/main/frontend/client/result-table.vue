@@ -11,6 +11,20 @@
             :rows-per-page-items='[ 20, 50, 100 ]'
         >
 
+            <!-- Custom header rendering is solely to allow HTML in header.text! -->
+            <template slot="headers" slot-scope="props">
+                <th
+                    v-for="header in props.headers"
+                    :key="header.text"
+                    :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
+                    :style="getHeaderStyle(header)"
+                    @click="changeSort(header.value)"
+                >
+                    <span v-html="header.text"></span>
+                    <v-icon small>arrow_upward</v-icon>
+                </th>
+            </template>
+
             <template slot="items" slot-scope="props">
                 <td>{{props.item.compoundName}}</td>
                 <td class="text-xs-right">{{props.item.percentControl}}</td>
@@ -34,8 +48,8 @@ export default {
                 { text: 'Compound', value: 'compoundName' },
                 { text: '% Control', value: 'percentControl', align: 'right' },
                 { text: 'Concentration (nM)', value: 'compoundConcentration', align: 'right' },
-                { text: 'DiscX Gene Symbol', value: 'discoverxGeneSymbol' },
-                { text: 'Entrez Gene Symbol', value: 'entrezGeneSymbol' },
+                { text: 'DiscX Gene Symbol', value: 'kinase.discoverxGeneSymbol' },
+                { text: 'Entrez Gene Symbol', value: 'kinase.entrezGeneSymbol' },
                 { text: 'K<sub>d</sub>', value: 'kd' }
             ];
         }
@@ -89,6 +103,19 @@ export default {
             if (this.filters.kinase) {
                 data.kinase = this.filters.kinase;
             }
+        },
+
+        changeSort: function(column) {
+            if (this.pagination.sortBy === column) {
+                this.pagination.descending = !this.pagination.descending
+            } else {
+                this.pagination.sortBy = column
+                this.pagination.descending = false
+            }
+        },
+
+        getHeaderStyle: function(header) {
+            return `text-align: ${header.align || 'left'}`;
         },
 
         reloadTable: function() {

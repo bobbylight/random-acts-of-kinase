@@ -19,13 +19,21 @@
 
             <v-flex xs6 v-if="file">
                 <div class="headline">File: {{fileName}}</div>
-                <div class="import-details">{{importSummary}}</div>
+                <div class="import-details">
+                    <import-summary
+                        :newCount="newRecordCount"
+                        :modifiedCount="modifiedRecordCount"
+                        :totalCount="totalRecordCount"
+                        :status="loadingStatus"></import-summary>
+                </div>
             </v-flex>
 
             <v-flex xs6 v-if="file">
                 <v-layout justify-end>
-                    <v-btn color="success" @click="onImport">Import</v-btn>
-                    <v-btn @click="onCancel">Cancel</v-btn>
+                    <v-btn color="success" @click="onImport"
+                           :disabled="loading">Import</v-btn>
+                    <v-btn @click="onCancel"
+                           :disabled="loading">Cancel</v-btn>
                 </v-layout>
             </v-flex>
 
@@ -35,16 +43,33 @@
 
                     <v-card-title primary-title>
 
-                        <div class="title-content">
-                            <h3 class="headline">
-                                Imported Data Preview
-                            </h3>
-                        </div>
+                        <v-layout class="title-content" row wrap>
+
+                            <v-flex xs8>
+                                <h3 class="headline" style="display: inline-block">
+                                    Imported Data Preview
+                                </h3>
+                            </v-flex>
+                            <v-flex xs4>
+                                <v-select
+                                    class="import-filter-select"
+                                    :items="[ 'none', 'new', 'modified', 'unmodified' ]"
+                                    :disabled="loading"
+                                    @change="filterPreviewGridItems($event)"
+                                    label="Filter"
+                                    single-line
+                                    auto
+                                    prepend-icon="fa-filter"
+                                    hide-details
+                                ></v-select>
+                            </v-flex>
+                        </v-layout>
                     </v-card-title>
 
                     <import-preview-table
                         :column-info="previewGridColumnInfos"
-                        :items="previewGridItems">
+                        :items="previewGridItems"
+                        :loading="loading">
                     </import-preview-table>
                 </v-card>
             </v-flex>
@@ -63,8 +88,9 @@ import { ObjectImportRep, ErrorResponse, FieldStatus } from '../rak';
 import { Watch } from 'vue-property-decorator';
 import restApi from '../rest-api';
 import RakUtil from '../util';
+import ImportSummary, { LoadingStatus, PreviewGridFilterType } from './import-summary.vue';
 
-@Component({ components: { SectionHeader, FileDropzone, ImportPreviewTable } })
+@Component({ components: { SectionHeader, FileDropzone, ImportPreviewTable, ImportSummary } })
 export default class ImportCompounds extends Vue {
 
     private file: File | null = null;
@@ -73,12 +99,28 @@ export default class ImportCompounds extends Vue {
     private fileName: string | null = null;
 
     private previewGridItems: any[] = [];
+    private loading: boolean = false;
+    private newRecordCount: number = 0;
+    private modifiedRecordCount: number = 0;
+    private totalRecordCount: number = 0;
+    private loadingStatus: LoadingStatus = 'loading';
 
-    private createPreviewGridItems(): any[] {
+    private createPreviewGridItems(filterType: PreviewGridFilterType = 'none'): any[] {
 
         const items: any[] = [];
 
         this.importRep!.fieldStatuses.forEach((rowData: FieldStatus[]) => {
+
+            if (filterType === 'new' && !RakUtil.isNewRecord(rowData)) {
+                return;
+            }
+            if (filterType === 'modified' && (RakUtil.isNewRecord(rowData) ||
+                RakUtil.isUnchangedRecord(rowData))) {
+                return;
+            }
+            if (filterType === 'unmodified' && !RakUtil.isUnchangedRecord(rowData)) {
+                return;
+            }
 
             const row: any = {};
 
@@ -92,6 +134,10 @@ export default class ImportCompounds extends Vue {
         return items;
     }
 
+    private filterPreviewGridItems(type: PreviewGridFilterType) {
+        this.previewGridItems = this.createPreviewGridItems(type);
+    }
+
     get previewGridColumnInfos(): ColumnInfo[] {
 
         return [
@@ -103,22 +149,25 @@ export default class ImportCompounds extends Vue {
         ];
     }
 
-    get importSummary() {
+    updateImportSummary() {
 
         if (!this.importRep) {
-            return 'Error getting import description';
+            this.loadingStatus = this.loading ? 'loading' : 'error';
+            this.newRecordCount = this.modifiedRecordCount = this.totalRecordCount = -1;
+            return;
         }
 
+        this.loadingStatus = 'loaded';
         const fieldStatuses: FieldStatus[][] = this.importRep.fieldStatuses;
 
-        const newRecordCount: number = fieldStatuses.filter((rowData: FieldStatus[]) => {
+        this.newRecordCount = fieldStatuses.filter((rowData: FieldStatus[]) => {
             return RakUtil.isNewRecord(rowData);
         }).length;
         const unchangedRecordCount: number = fieldStatuses.filter((rowData: FieldStatus[]) => {
             return RakUtil.isUnchangedRecord(rowData);
         }).length;
-        const modifiedRecordCount: number = fieldStatuses.length - newRecordCount - unchangedRecordCount;
-        return `Creating ${newRecordCount} new records, modifying ${modifiedRecordCount}`;
+        this.modifiedRecordCount = fieldStatuses.length - this.newRecordCount - unchangedRecordCount;
+        this.totalRecordCount = fieldStatuses.length;
     }
 
     private onCancel() {
@@ -128,16 +177,23 @@ export default class ImportCompounds extends Vue {
     @Watch('file')
     private onFileChanged() {
 
+        this.previewGridItems = [];
+        this.updateImportSummary();
+
         if (this.file) {
             restApi.importCompounds(this.file, false)
                 .then((importRep: ObjectImportRep) => {
                     this.importRep = importRep;
+                    this.updateImportSummary();
                     this.previewGridItems = this.createPreviewGridItems();
                     this.fileName = this.file!.name;
+                    this.loading = false;
                 })
                 .catch((errorResponse: ErrorResponse) => {
                     this.reset();
+                    this.loading = false;
                     this.previewGridItems = [];
+                    this.updateImportSummary();
                     Toaster.error(errorResponse.message);
                 });
         }
@@ -145,12 +201,16 @@ export default class ImportCompounds extends Vue {
 
     private onImport() {
 
+        this.loading = true;
+
         restApi.importCompounds(this.file!)
             .then(() => {
                 this.reset();
+                this.loading = false;
                 Toaster.success('Import successful');
             })
             .catch((errorResponse: ErrorResponse) => {
+                this.loading = false;
                 Toaster.error(errorResponse.message);
             });
     }

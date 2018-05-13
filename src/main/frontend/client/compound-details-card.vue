@@ -1,20 +1,32 @@
 <template>
-    <v-card>
-        <v-card-title>
-            <h3 class="headline">{{compoundName}}</h3>
+    <v-card class="compound-details-card">
+        <v-card-title class="compound-details-card-title">
+            <h3 class="headline">General Information</h3>
         </v-card-title>
 
-        <v-card-text>
+        <v-card-text class="pt-0 pb-0">
             <v-container grid-list-md>
-                <v-layout row wrap>
+                <v-layout row wrap align-center>
 
-                    <v-flex xs3>
-                        <img :src="compoundImageUrl" width="100" height="100">
+                    <v-flex xs3 pt-0>
+                        <v-tooltip right>
+                            <img :src="compoundImageUrl"
+                                 class="compound-image"
+                                 @click="onImageClicked"
+                                 width="200" height="200"
+                                 slot="activator">
+                            <span>Click to enlarge</span>
+                        </v-tooltip>
                     </v-flex>
 
-                    <v-flex xs9>
+                    <v-flex xs9 pt-0 pl-5>
 
                         <div class="compound-details-table">
+
+                            <div class="compound-details-table-row">
+                                <div class="compound-details-table-cell compound-details-table-cell-header">Compound:</div>
+                                <div class="compound-details-table-cell">{{compoundName}}</div>
+                            </div>
 
                             <div class="compound-details-table-row">
                                 <div class="compound-details-table-cell compound-details-table-cell-header">Chemotype:</div>
@@ -32,8 +44,6 @@
                             </div>
                         </div>
                     </v-flex>
-                    <div>Lorem</div>
-                    <div>ipsum...</div>
                 </v-layout>
             </v-container>
         </v-card-text>
@@ -67,7 +77,8 @@ export default class CompoundDetailsCard extends Vue {
 
         if (this.primaryReference) {
             if (this.primaryReferenceUrl) {
-                return `<a href="${this.primaryReferenceUrl}">${this.primaryReference}</a>`;
+                return `<a href="${this.primaryReferenceUrl}" target="_blank" ` +
+                    `rel="noopener noreferrer">${this.primaryReference}</a>`;
             }
             return this.primaryReference;
         }
@@ -88,25 +99,51 @@ export default class CompoundDetailsCard extends Vue {
                 Toaster.error('Error retrieving compound information');
             });
     }
+
+    onImageClicked() {
+        this.$store.commit('setLightboxImage', this.compoundImageUrl);
+    }
 }
 </script>
 
 <style lang="less">
-.compound-details-table {
+@import '../styles/app-variables';
 
-    display: table;
+.compound-details-card {
 
-    .compound-details-table-row {
+    .compound-details-card-title {
+        padding-bottom: 0;
+    }
 
-        display: table-row;
+    img {
+        vertical-align: middle;
 
-        .compound-details-table-cell {
+        &.compound-image {
+            cursor: pointer;
+            transition: transform @transition-time;
 
-            display: table-cell;
-            padding: 0 1rem 0 0;
+            &:hover {
+                transform: scale(1.2);
+            }
+        }
+    }
 
-            &.compound-details-table-cell-header {
-                font-weight: bold;
+    .compound-details-table {
+
+        display: table;
+
+        .compound-details-table-row {
+
+            display: table-row;
+
+            .compound-details-table-cell {
+
+                display: table-cell;
+                padding: 0 2rem 0 0;
+
+                &.compound-details-table-cell-header {
+                    font-weight: bold;
+                }
             }
         }
     }
