@@ -55,8 +55,8 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
 import restApi from './rest-api';
-import {Compound, ErrorResponse} from "./rak";
-import Toaster from "./toaster";
+import { Compound, ErrorResponse } from './rak';
+import Toaster from './toaster';
 
 @Component
 export default class CompoundDetailsCard extends Vue {

@@ -63,10 +63,15 @@
                                 </v-list-tile-content>
                             </v-list-tile>
 
-
                             <v-list-tile to="import-activity-profiles">
                                 <v-list-tile-content>
                                     <v-list-tile-title>Import Activity Profiles</v-list-tile-title>
+                                </v-list-tile-content>
+                            </v-list-tile>
+
+                            <v-list-tile to="import-kds">
+                                <v-list-tile-content>
+                                    <v-list-tile-title>Import K<sub>d</sub>s</v-list-tile-title>
                                 </v-list-tile-content>
                             </v-list-tile>
                         </v-list-group>
