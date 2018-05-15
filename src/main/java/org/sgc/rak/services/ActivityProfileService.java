@@ -6,6 +6,7 @@ import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.model.ActivityProfile;
 import org.sgc.rak.model.Kinase;
 import org.sgc.rak.reps.ActivityProfileCsvRecordRep;
+import org.sgc.rak.reps.KdCsvRecordRep;
 import org.sgc.rak.reps.ObjectImportRep;
 import org.sgc.rak.util.Util;
 import org.slf4j.Logger;
@@ -186,6 +187,101 @@ public class ActivityProfileService {
         }
 
         return importRep;
+    }
+
+    /**
+     * Upserts a list of Kd values into activity profiles.  New profiles are added, existing ones are updated.
+     *
+     * @param kdValueCsvRecords The Kd data to upsert.
+     * @param commit Whether to actually commit the patch, or just return the possible result.
+     * @return The result of the operation (or possible result, if {@code commit} is {@code false}).
+     */
+    public ObjectImportRep importKdValues(List<KdCsvRecordRep> kdValueCsvRecords,
+                                                  boolean commit) {
+
+        List<String> compoundNames = kdValueCsvRecords.stream()
+            .map(KdCsvRecordRep::getCompoundName).collect(Collectors.toList());
+        List<String> discoverxes = kdValueCsvRecords.stream()
+            .map(KdCsvRecordRep::getDiscoverxGeneSymbol).collect(Collectors.toList());
+        Set<ActivityProfile> existingProfiles = activityProfileDao
+            .getActivityProfiles(compoundNames, discoverxes);
+
+        ObjectImportRep importRep = new ObjectImportRep();
+        List<List<ObjectImportRep.FieldStatus>> records = new ArrayList<>();
+        importRep.setFieldStatuses(records);
+        List<ActivityProfile> toPersist = new ArrayList<>();
+
+        for (KdCsvRecordRep kdValueCsvRecord : kdValueCsvRecords) {
+
+            Util.convertEmptyStringsToNulls(kdValueCsvRecord);
+            String compoundName = kdValueCsvRecord.getCompoundName();
+            String discoverx = kdValueCsvRecord.getDiscoverxGeneSymbol();
+            ActivityProfile newActivityProfile;
+
+            ActivityProfile existingProfile = possiblyGetActivityProfile(existingProfiles, compoundName,
+                discoverx);
+            if (existingProfile != null) {
+                newActivityProfile = Util.patchActivityProfile(existingProfile, kdValueCsvRecord);
+            }
+            else {
+                newActivityProfile = kdCsvRecordToActivityProfile(kdValueCsvRecord);
+            }
+
+            toPersist.add(newActivityProfile);
+            records.add(kdValueCsvRecordToFieldStatusList(newActivityProfile, existingProfile));
+        }
+
+        possiblyLogImportOperation(commit, toPersist);
+        if (commit) {
+            activityProfileDao.save(toPersist);
+        }
+
+        return importRep;
+    }
+
+    private ActivityProfile kdCsvRecordToActivityProfile(KdCsvRecordRep csvRep) {
+
+        if (!compoundService.getCompoundExists(csvRep.getCompoundName())) {
+            throw new BadRequestException(messages.get("error.importReferencesUnknownCompound",
+                csvRep.getCompoundName()));
+        }
+
+        Kinase kinase = kinaseService.getKinase(csvRep.getDiscoverxGeneSymbol());
+        if (kinase == null) {
+            throw new BadRequestException(messages.get("error.importReferencesUnknownKinase",
+                csvRep.getDiscoverxGeneSymbol()));
+        }
+
+        ActivityProfile profile = new ActivityProfile();
+        profile.setCompoundName(csvRep.getCompoundName());
+        profile.setKinase(kinase);
+        profile.setKd(csvRep.getKd());
+
+        return profile;
+    }
+
+    private List<ObjectImportRep.FieldStatus> kdValueCsvRecordToFieldStatusList(
+        ActivityProfile newProfile, ActivityProfile existingProfile) {
+
+        String existingCompoundName = null;
+        String existingDiscoverx = null;
+        String existingEntrez = null;
+        Double existingKd = null;
+
+        if (existingProfile != null) {
+            existingCompoundName = existingProfile.getCompoundName();
+            existingDiscoverx = existingProfile.getKinase().getDiscoverxGeneSymbol();
+            existingEntrez = existingProfile.getKinase().getEntrezGeneSymbol();
+            existingKd = existingProfile.getKd();
+        }
+
+        return Arrays.asList(
+            Util.createFieldStatus("compoundName", newProfile.getCompoundName(), existingCompoundName),
+            Util.createFieldStatus("discoverxGeneSymbol", newProfile.getKinase().getDiscoverxGeneSymbol(),
+                existingDiscoverx),
+            Util.createFieldStatus("entrezGeneSymbol", newProfile.getKinase().getEntrezGeneSymbol(), existingEntrez),
+            Util.createFieldStatus("kd", newProfile.getKd(), existingKd)
+        );
     }
 
     private static ActivityProfile possiblyGetActivityProfile(Set<ActivityProfile> profiles,

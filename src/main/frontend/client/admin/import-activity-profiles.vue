@@ -57,17 +57,10 @@
                                 </h3>
                             </v-flex>
                             <v-flex xs4>
-                                <v-select
-                                    class="import-filter-select"
-                                    :items="[ 'none', 'new', 'modified', 'unmodified' ]"
+                                <import-preview-table-filter
                                     :disabled="loading"
                                     @change="filterPreviewGridItems($event)"
-                                    label="Filter"
-                                    single-line
-                                    auto
-                                    prepend-icon="fa-filter"
-                                    hide-details
-                                ></v-select>
+                                ></import-preview-table-filter>
                             </v-flex>
                         </v-layout>
                     </v-card-title>
@@ -89,6 +82,7 @@ import Component from 'vue-class-component';
 import SectionHeader from '../header.vue';
 import FileDropzone from '../file-dropzone.vue';
 import ImportPreviewTable, { ColumnInfo } from './import-preview-table.vue';
+import ImportPreviewTableFilter from './import-preview-table-filter.vue';
 import Toaster from '../toaster';
 import { ObjectImportRep, ErrorResponse, FieldStatus } from '../rak';
 import { Watch } from 'vue-property-decorator';
@@ -96,7 +90,7 @@ import restApi from '../rest-api';
 import RakUtil from '../util';
 import ImportSummary, { LoadingStatus, PreviewGridFilterType } from './import-summary.vue';
 
-@Component({ components: { SectionHeader, FileDropzone, ImportPreviewTable, ImportSummary } })
+@Component({ components: { SectionHeader, FileDropzone, ImportPreviewTable, ImportPreviewTableFilter, ImportSummary } })
 export default class ImportActivityProfiles extends Vue {
 
     private file: File | null = null;
@@ -246,14 +240,6 @@ export default class ImportActivityProfiles extends Vue {
 
         .title-content {
             width: 100%;
-        }
-
-        .import-filter-select {
-            padding-top: 0 !important;
-
-            label {
-                top: 0;
-            }
         }
     }
 }

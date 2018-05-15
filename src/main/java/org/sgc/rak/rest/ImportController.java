@@ -11,6 +11,7 @@ import org.sgc.rak.exceptions.InternalServerErrorException;
 import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.model.Compound;
 import org.sgc.rak.reps.ActivityProfileCsvRecordRep;
+import org.sgc.rak.reps.KdCsvRecordRep;
 import org.sgc.rak.reps.ObjectImportRep;
 import org.sgc.rak.services.ActivityProfileService;
 import org.sgc.rak.services.CompoundService;
@@ -97,7 +98,7 @@ public class ImportController {
      * that is, new activity profiles are added, and existing activity profiles have their non-null/empty values
      * merged into the existing record.
      *
-     * @param file The CSV compound data.
+     * @param file The CSV activity profile data from Discoverx.
      * @return The result of the operation.
      */
     @RequestMapping(method = RequestMethod.PATCH, path = "activityProfiles")
@@ -133,5 +134,32 @@ public class ImportController {
                                       @RequestParam(defaultValue = "true") boolean commit) {
         List<Compound> compounds = loadFromCsv(file, false, Compound.class, null);
         return compoundService.importCompounds(compounds, commit);
+    }
+
+    /**
+     * Imports a CSV file of Kd values from Discoverx.  The data is merged/patched into the existing activity
+     * profile data; that is, new activity profiles are added, and existing activity profiles have their non-null/empty
+     * values merged into the existing record.
+     *
+     * @param file The CSV Kd data from Discoverx.
+     * @return The result of the operation.
+     */
+    @RequestMapping(method = RequestMethod.PATCH, path = "kdValues")
+    @ResponseStatus(HttpStatus.OK)
+    ObjectImportRep importKdValues(@RequestPart("file") MultipartFile file,
+                                   @RequestParam(defaultValue = "true") boolean headerRow,
+                                   @RequestParam(defaultValue = "true") boolean commit) {
+
+        CsvSchema schema = CsvSchema.builder()
+            .addColumn("compoundName", CsvSchema.ColumnType.STRING)
+            .addColumn("discoverxGeneSymbol", CsvSchema.ColumnType.STRING)
+            .addColumn("entrezGeneSymbol", CsvSchema.ColumnType.STRING)
+            .addColumn("modifier", CsvSchema.ColumnType.STRING)
+            .addColumn("kd", CsvSchema.ColumnType.NUMBER)
+            .build();
+
+        List<KdCsvRecordRep> activityProfiles = loadFromCsv(file, headerRow,
+            KdCsvRecordRep.class, schema);
+        return activityProfileService.importKdValues(activityProfiles, commit);
     }
 }

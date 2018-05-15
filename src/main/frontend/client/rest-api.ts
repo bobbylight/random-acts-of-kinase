@@ -116,11 +116,20 @@ export class RestApi {
     }
 
     importActivityProfiles(file: File, headerRow: boolean, commit: boolean = true): Promise<ObjectImportRep> {
+        return this.importCsvDataImpl('admin/api/activityProfiles', file, headerRow, commit);
+    }
+
+    importCompounds(file: File, commit: boolean = true): Promise<ObjectImportRep> {
+        return this.importCsvDataImpl('admin/api/compounds', file, false, commit);
+    }
+
+    private importCsvDataImpl(baseUrl: string, file: File, headerRow: boolean,
+                              commit: boolean = true): Promise<ObjectImportRep> {
 
         const data: FormData = new FormData();
         data.append('file', file);
 
-        let url: string = `admin/api/activityProfiles?commit=${commit}`;
+        let url: string = `${baseUrl}?commit=${commit}`;
         if (headerRow) {
             url += '&headerRow=true';
         }
@@ -134,18 +143,8 @@ export class RestApi {
             });
     }
 
-    importCompounds(file: File, commit: boolean = true): Promise<ObjectImportRep> {
-
-        const data: FormData = new FormData();
-        data.append('file', file);
-
-        return this.instance.patch(`admin/api/compounds?commit=${commit}`, data)
-            .then((response: AxiosResponse<ObjectImportRep>) => {
-                return response.data;
-            })
-            .catch((error: AxiosError) => {
-                throw RestApi.axiosErrorToErrorResponse(error);
-            });
+    importKds(file: File, headerRow: boolean, commit: boolean = true): Promise<ObjectImportRep> {
+        return this.importCsvDataImpl('admin/api/kdValues', file, headerRow, commit);
     }
 
     login(user: string, password: string): Promise<UserRep> {

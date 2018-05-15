@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.sgc.rak.model.ActivityProfile;
 import org.sgc.rak.model.Compound;
 import org.sgc.rak.reps.ActivityProfileCsvRecordRep;
+import org.sgc.rak.reps.KdCsvRecordRep;
 import org.sgc.rak.reps.ObjectImportRep;
 
 /**
@@ -50,6 +51,28 @@ public final class Util {
 
         if (StringUtils.isBlank(compound.getSource())) {
             compound.setSource(null);
+        }
+    }
+
+    /**
+     * Converts any fields that are empty strings into {@code null}.
+     *
+     * @param kdCsvRecord The activity profile to examine.
+     */
+    public static void convertEmptyStringsToNulls(KdCsvRecordRep kdCsvRecord) {
+
+        // Compound name is not checked
+
+        if (StringUtils.isBlank(kdCsvRecord.getDiscoverxGeneSymbol())) {
+            kdCsvRecord.setDiscoverxGeneSymbol(null);
+        }
+
+        if (StringUtils.isBlank(kdCsvRecord.getEntrezGeneSymbol())) {
+            kdCsvRecord.setModifier(null);
+        }
+
+        if (StringUtils.isBlank(kdCsvRecord.getModifier())) {
+            kdCsvRecord.setModifier(null);
         }
     }
 
@@ -103,6 +126,36 @@ public final class Util {
         }
         else {
             retVal.setCompoundConcentration(existing.getCompoundConcentration());
+        }
+
+        return retVal;
+    }
+
+    /**
+     * Creates and returns a new activity profile that is essentially a patch of {@code newProfile}'s fields into
+     * {@code existing}.  That is, the returned activity profile will have any non-{@code null} property values
+     * from the new profile, and for any {@code null} property values, it will have the existing profile's
+     * values.
+     *
+     * @param existing The existing activity profile.
+     * @param kdCsvRecord The new activity profile, whose non-{@code null}/empty values should be merged into
+     *        the result.
+     * @return The result of the patch/merge operation.
+     */
+    public static ActivityProfile patchActivityProfile(ActivityProfile existing, KdCsvRecordRep kdCsvRecord) {
+
+        ActivityProfile retVal = new ActivityProfile();
+        retVal.setId(existing.getId());
+
+        // It's assumed that the two activity profiles having the same compound and kinase was previously verified
+        retVal.setCompoundName(existing.getCompoundName());
+        retVal.setKinase(existing.getKinase());
+
+        if (kdCsvRecord.getKd() != null) {
+            retVal.setKd(kdCsvRecord.getKd());
+        }
+        else {
+            retVal.setKd(existing.getKd());
         }
 
         return retVal;
