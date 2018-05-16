@@ -44,8 +44,8 @@ public class KdCsvRecordRepTest {
     @Test
     public void testGetSetKd() {
         Assert.assertNull(rep.getKd());
-        rep.setKd(42);
-        Assert.assertEquals(42, rep.getKd().intValue());
+        rep.setKd(42d);
+        Assert.assertEquals(42d, rep.getKd(), 0.01);
     }
 
     @Test
