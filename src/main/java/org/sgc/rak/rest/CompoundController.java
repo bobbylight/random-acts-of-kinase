@@ -88,7 +88,7 @@ class CompoundController {
     Resource getCompoundSmiles(@PathVariable String compoundName) {
         Resource resource = new ClassPathResource("/static/img/smiles/" + compoundName + ".svg");
         if (!resource.exists()) {
-            resource = new ClassPathResource("/static/img/molecule.svg");
+            resource = new ClassPathResource("/static/img/molecule-unknown.svg");
         }
         return resource;
     }
