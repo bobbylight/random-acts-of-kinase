@@ -3,7 +3,7 @@ import { ActivityProfile, BlogPost, Compound, ObjectImportRep, ErrorResponse, Pa
 
 export class RestApi {
 
-    private instance: AxiosInstance;
+    private readonly instance: AxiosInstance;
 
     constructor() {
         this.instance = axios.create({
