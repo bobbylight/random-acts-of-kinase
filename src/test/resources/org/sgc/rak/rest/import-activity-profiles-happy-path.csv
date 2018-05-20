@@ -1,4 +1,4 @@
-compoundName,discoverxGeneSymbol,entrezGeneSymbol,modifier,kd
+compoundName,discoverxGeneSymbol,entrezGeneSymbol,percentControl,compoundConcentration
 aaaCompound,AAK1,AAK1,4,4
 aabCompound,AAK1,AAK1,5,5
 aacCompound,AAK1,AAK1,5,6

@@ -37,9 +37,9 @@ public class PagedDataRepTest {
         rep.setData(Arrays.asList("three", "four", "five"));
         Assert.assertEquals(3, rep.getCount());
         Assert.assertEquals(3, rep.getData().size());
-        Assert.assertEquals("three", data.get(0));
-        Assert.assertEquals("four", data.get(1));
-        Assert.assertEquals("five", data.get(1));
+        Assert.assertEquals("three", rep.getData().get(0));
+        Assert.assertEquals("four", rep.getData().get(1));
+        Assert.assertEquals("five", rep.getData().get(2));
     }
 
     @Test

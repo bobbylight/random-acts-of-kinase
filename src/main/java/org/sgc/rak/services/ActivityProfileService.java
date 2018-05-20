@@ -103,14 +103,18 @@ public class ActivityProfileService {
     /**
      * Returns kinase activity profiles for a given compound/inhibitor.
      *
-     * @param compoundName The compound name.  Case is ignored.
+     * @param compoundName The compound name.  Case is ignored.  If this compound does not exist, an exception
+     *        is thrown.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of kinase activity profiles.
      * @see #getActivityProfiles(Pageable)
      */
-    public Page<ActivityProfile> getActivityProfilesForCompound(String compoundName,
-                                                                      Pageable pageInfo) {
-        compoundService.getCompound(compoundName); // Throw exception if compound not found
+    public Page<ActivityProfile> getActivityProfilesForCompound(String compoundName, Pageable pageInfo) {
+
+        if (!compoundService.getCompoundExists(compoundName)) {
+            throw new BadRequestException(messages.get("error.noSuchCompound", compoundName));
+        }
+
         return activityProfileDao.getActivityProfilesByCompoundNameIgnoreCase(compoundName, pageInfo);
     }
 
@@ -126,8 +130,13 @@ public class ActivityProfileService {
      */
     public Page<ActivityProfile> getActivityProfilesForCompoundAndKinaseAndPercentControl(
             String compoundName, long kinase, double activity, Pageable pageInfo) {
-        compoundService.getCompound(compoundName); // Throw exception if compound not found
+
+        if (!compoundService.getCompoundExists(compoundName)) {
+            throw new BadRequestException(messages.get("error.noSuchCompound", compoundName));
+        }
+
         //kinaseService.getKinase(kinase); // Throw exception if kinase not found
+
         return activityProfileDao.getActivityProfilesByCompoundNameIgnoreCaseAndKinaseIgnoreCaseAndPercentControl(
             compoundName, kinase, activity, pageInfo);
     }
