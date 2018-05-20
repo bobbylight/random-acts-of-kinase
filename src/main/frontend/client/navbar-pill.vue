@@ -1,16 +1,15 @@
 <template>
-    <div class="navbar-pill-parent">
-        <div class="navbar-pill" v-bind:class="{ active: isActiveTab() }"
-                v-on:click="navigate">{{compound}}
-            <i class="fa fa-times close-icon" aria-hidden="true" @click="close"></i>
-        </div>
-    </div>
+    <v-btn flat class="navbar-pill" v-bind:class="{ active: isActiveTab() }" v-on:click="navigate">
+        {{compound}}
+        <i class="fa fa-times close-icon" aria-hidden="true" @click="close"></i>
+    </v-btn>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
+import RakUtil from './util';
 
 @Component
 export default class NavbarPill extends Vue {
@@ -19,8 +18,7 @@ export default class NavbarPill extends Vue {
     compound: string;
 
     isActiveTab(): boolean {
-        const pathRegex: RegExp = new RegExp(this.compound + '$');
-        return !!this.$route.fullPath.match(pathRegex);
+        return RakUtil.isActiveTab(this.$route, this.compound);
     }
 
     navigate() {
@@ -47,34 +45,31 @@ export default class NavbarPill extends Vue {
 /* pill styles are essentially copied from ui inverted menu */
 .navbar-pill {
 
-    background: rgba(255, 255, 255, 0.08);
-    color: rgba(255,255,255,.9);
-    padding: 0.25rem 1rem;
-    border-radius: 1rem;
-    transition: color @transition-time ease,
-                background-color @transition-time ease;
-    cursor: pointer;
-
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
 
     &:hover, &.active {
-        background: rgba(255, 255, 255, 0.15);
+        background: rgba(255, 255, 255, 0.15) !important;
         color: #fff;
+    }
 
-        .close-icon {
-            color: lighten(@close-icon-color, 25%);
-        }
+    &:hover .close-icon {
+        opacity: 1;
+        color: lighten(@close-icon-color, 25%);
     }
 
     .close-icon {
+
+        transition: color @transition-time, opacity @transition-time;
+
+        opacity: 0;
         color: @close-icon-color;
         font-size: 1.3rem;
         position: absolute;
-        top: -6px;
-        right: 0;
-        transition: color @transition-time ease;
+        top: 3px;
+        right: 3px;
+
         &:hover {
             color: white;
         }

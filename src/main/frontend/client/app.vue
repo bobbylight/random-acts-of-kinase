@@ -1,7 +1,9 @@
 <template>
     <v-app>
 
-        <lightbox :image="$store.state.lightboxImage" @hide="onCloseLightbox"></lightbox>
+        <lightbox :title="$store.state.lightboxTitle"
+                  :image="$store.state.lightboxImage"
+                  @hide="onCloseLightbox"></lightbox>
 
         <navbar></navbar>
 

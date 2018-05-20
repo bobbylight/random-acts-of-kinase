@@ -3,7 +3,7 @@
     <v-toolbar app absolute dark>
 
         <v-toolbar-title class="toolbar-title-fix" @click="setActiveTab('home')">
-            <img src="/img/molecule-white.svg" width="50" height="50" class="navbar-image"> <!--KIANSE-->
+            <img src="/img/molecule-white.svg" width="50" height="50" class="navbar-image">
         </v-toolbar-title>
 
         <v-toolbar-items>
@@ -19,13 +19,10 @@
                    @click="setActiveTab('import-compounds')" v-if="$store.getters.loggedIn">
                 Admin
             </v-btn>
-        </v-toolbar-items>
 
-        <div class="button-section">
-            <div v-for="compound in openCompounds">
-                <navbar-pill :compound="compound" v-on:close="close($event)"></navbar-pill>
-            </div>
-        </div>
+            <navbar-pill v-for="compound in openCompounds" :key="compound"
+                         :compound="compound" v-on:close="close($event)"></navbar-pill>
+        </v-toolbar-items>
 
         <v-spacer></v-spacer>
 
@@ -60,6 +57,7 @@ import { Watch } from 'vue-property-decorator';
 import Component from 'vue-class-component';
 import NavbarPill from './navbar-pill.vue';
 import LoginModal from './login-modal.vue';
+import RakUtil from './util';
 import restApi from './rest-api';
 import Toaster from './toaster';
 
@@ -70,9 +68,7 @@ export default class Navbar extends Vue {
     private showLogin: boolean = false;
 
     private isActiveTab(tabName: string): boolean {
-        const tabNameRegex: RegExp = new RegExp(tabName + '(?:/.+)?$');
-        //console.log(tabName + ' -- ' + this.$route.fullPath + ', ' + (this.$route.fullPath && this.$route.fullPath.match(tabNameRegex)));
-        return !!this.$route.fullPath && !!this.$route.fullPath.match(tabNameRegex);
+        return RakUtil.isActiveTab(this.$route, tabName);
     }
 
     private setActiveTab(tabName: string) {
@@ -136,10 +132,5 @@ export default class Navbar extends Vue {
 .active-toolbar-item {
     background: rgba(255, 255, 255, 0.15) !important;
     color: #fff;
-}
-
-.button-section {
-    margin-left: 1rem;
-    display: flex;
 }
 </style>

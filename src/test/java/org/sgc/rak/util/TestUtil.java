@@ -1,6 +1,7 @@
 package org.sgc.rak.util;
 
 import org.junit.Assert;
+import org.sgc.rak.model.ActivityProfile;
 import org.sgc.rak.model.BlogPost;
 
 /**
@@ -19,6 +20,12 @@ public final class TestUtil {
         Assert.assertEquals(expected.getTitle(), actual.getTitle());
         Assert.assertEquals(expected.getBody(), actual.getBody());
         Assert.assertEquals(expected.getCreateDate(), actual.getCreateDate());
+    }
+
+    public static ActivityProfile createActivityProfile(Long id) {
+        ActivityProfile profile = new ActivityProfile();
+        profile.setId(id);
+        return profile;
     }
 
     public static BlogPost createBlogPost(String title, String body) {

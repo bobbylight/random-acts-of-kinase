@@ -67,7 +67,9 @@ export default {
             totalItems: 0,
             items: [],
             loading: true,
-            pagination: {}
+            pagination: {
+                sortBy: 'percentControl'
+            }
         };
     },
     watch: {
@@ -137,7 +139,6 @@ export default {
 
         compoundRenderer: function(data, type, row) {
             return '<a href="#/compound/' + data + '">' + data + '</a>';
-//                return '<a v-link="{ path: \'/compound/' + data + '\' }">' + data + '</a>';
         }
     }
 };

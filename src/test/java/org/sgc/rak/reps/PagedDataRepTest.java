@@ -26,20 +26,33 @@ public class PagedDataRepTest {
     }
 
     @Test
-    public void testGetData() {
+    public void testGetSetData() {
+
         List<String> data = rep.getData();
+        Assert.assertEquals(2, rep.getCount());
         Assert.assertEquals(2, data.size());
         Assert.assertEquals("one", data.get(0));
         Assert.assertEquals("two", data.get(1));
+
+        rep.setData(Arrays.asList("three", "four", "five"));
+        Assert.assertEquals(3, rep.getCount());
+        Assert.assertEquals(3, rep.getData().size());
+        Assert.assertEquals("three", data.get(0));
+        Assert.assertEquals("four", data.get(1));
+        Assert.assertEquals("five", data.get(1));
     }
 
     @Test
-    public void testGetStart() {
+    public void testGetSetStart() {
         Assert.assertEquals(10, rep.getStart());
+        rep.setStart(2);
+        Assert.assertEquals(2, rep.getStart());
     }
 
     @Test
-    public void testGetTotal() {
+    public void testGetSetTotal() {
         Assert.assertEquals(100, rep.getTotal());
+        rep.setTotal(200);
+        Assert.assertEquals(200, rep.getTotal());
     }
 }

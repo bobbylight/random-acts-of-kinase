@@ -1,9 +1,9 @@
 package org.sgc.rak.rest;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -17,6 +17,7 @@ import org.sgc.rak.util.TestUtil;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -51,7 +52,9 @@ public class BlogPostControllerTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(controller)
+            .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+            .build();
         mapper = new ObjectMapper();
     }
 
@@ -80,7 +83,6 @@ public class BlogPostControllerTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    @Ignore("Figure out how to get Spring to instantiate Pageable instances")
     public void testGetBlogPosts() throws Exception {
 
         PageRequest pr = PageRequest.of(0, 20);
@@ -96,6 +98,9 @@ public class BlogPostControllerTest {
 
         PagedDataRep<BlogPost> actualPosts = mapper.readValue(result.getResponse().getContentAsString(),
             PagedDataRep.class);
+        // jackson converts collections of objects to Collection<LinkedHashMap>, so we must manually deserialize
+        // the list that's one-level deep
+        actualPosts.setData(mapper.convertValue(actualPosts.getData(), new TypeReference<List<BlogPost>>() {}));
         Assert.assertEquals(0, actualPosts.getStart());
         Assert.assertEquals(1, actualPosts.getTotal());
         Assert.assertEquals(1, actualPosts.getCount());

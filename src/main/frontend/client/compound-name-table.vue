@@ -95,6 +95,7 @@ export default {
 
         onImageClicked: function(compoundName) {
             this.$store.commit('setLightboxImage', this.getCompoundImage(compoundName));
+            this.$store.commit('setLightboxTitle', compoundName);
         },
 
         reloadTable: function() {

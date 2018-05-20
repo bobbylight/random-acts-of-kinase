@@ -1,5 +1,6 @@
 package org.sgc.rak.reps;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -13,6 +14,10 @@ public class PagedDataRep<T> {
     private long start;
     private int count;
     private long total;
+
+    public PagedDataRep() {
+        this(Collections.emptyList(), 0, 0);
+    }
 
     public PagedDataRep(List<T> data, long start, long total) {
         this.data = data;
@@ -29,11 +34,24 @@ public class PagedDataRep<T> {
         return data;
     }
 
+    public void setData(List<T> data) {
+        this.data = data;
+        this.count = data.size();
+    }
+
     public long getStart() {
         return start;
     }
 
+    public void setStart(long start) {
+        this.start = start;
+    }
+
     public long getTotal() {
         return total;
+    }
+
+    public void setTotal(long total) {
+        this.total = total;
     }
 }

@@ -102,6 +102,7 @@ export default class CompoundDetailsCard extends Vue {
 
     onImageClicked() {
         this.$store.commit('setLightboxImage', this.compoundImageUrl);
+        this.$store.commit('setLightboxTitle', this.compoundName);
     }
 }
 </script>

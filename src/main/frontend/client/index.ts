@@ -11,8 +11,8 @@ import '../node_modules/quill/assets/snow.styl';
 import './class-component-hooks';
 
 import Vue from 'vue';
-import App from './App.vue';
-import VueRouter from 'vue-router';
+import App from './app.vue';
+import VueRouter, { Route } from 'vue-router';
 import Toasted from 'vue-toasted';
 import VueChartkick from 'vue-chartkick';
 import Chart from 'chart.js';
@@ -157,8 +157,11 @@ window.onload = () => {
     ];
 
     const router: VueRouter = new VueRouter({
-        /*mode: 'history'w,*/
-        routes
+        /*mode: 'history',*/
+        routes,
+        scrollBehavior: (to: Route, from: Route, savedPosition: any) => {
+            return { x: 0, y: 0 };
+        }
     });
 
     // tslint:disable-next-line:no-unused-expression

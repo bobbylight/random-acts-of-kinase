@@ -5,7 +5,17 @@
              @click="hide"
              v-if="show">
 
-            <img :src="image" width=600 height=600>
+            <div class="lightbox-content-wrapper elevation-1 pa-3"
+                    @click.stop="">
+                <div class="lightbox-close-icon" @click="hide">
+                    <v-tooltip right>
+                        <v-icon slot="activator">close</v-icon>
+                        <span>Close</span>
+                    </v-tooltip>
+                </div>
+                <section-header>{{title}}</section-header>
+                <img :src="image" width=600 height=600>
+            </div>
         </div>
     </transition>
 </template>
@@ -14,12 +24,16 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop, Watch } from 'vue-property-decorator';
+import SectionHeader from './header.vue';
 
-@Component
+@Component({ components: { SectionHeader } })
 export default class Lightbox extends Vue {
 
+    @Prop()
+    private title: string | undefined;
+
     @Prop({ required: true })
-    private image: string | undefined;
+    private image: string;
 
     private show: boolean = false;
 
@@ -45,6 +59,8 @@ export default class Lightbox extends Vue {
 </script>
 
 <style lang="less">
+@import '../styles/app-variables';
+
 .lightbox {
 
     color: black;
@@ -60,5 +76,26 @@ export default class Lightbox extends Vue {
     display: flex;
     justify-content: center;
     align-items: center;
+
+    .lightbox-content-wrapper {
+
+        position: relative;
+        background: white;
+
+        .lightbox-close-icon {
+
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            cursor: pointer;
+
+            color: gray;
+            transition: color @transition-time;
+
+            &:hover i {
+                color: black;
+            }
+        }
+    }
 }
 </style>

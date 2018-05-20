@@ -1,25 +1,36 @@
 package org.sgc.rak.rest;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import static org.mockito.Mockito.*;
 import org.mockito.MockitoAnnotations;
 import org.sgc.rak.exceptions.BadRequestException;
 import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.model.ActivityProfile;
 import org.sgc.rak.model.Kinase;
-import org.sgc.rak.reps.PagedDataRep;
 import org.sgc.rak.services.ActivityProfileService;
 import org.sgc.rak.services.KinaseService;
+import org.sgc.rak.util.TestUtil;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.util.NestedServletException;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyDouble;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doReturn;
 
 public class ActivityProfileControllerTest {
 
@@ -30,134 +41,218 @@ public class ActivityProfileControllerTest {
     private KinaseService mockKinaseService;
 
     @Mock
-    private Messages mockMessages;
+    private Messages messages;
 
     @InjectMocks
     private ActivityProfileController controller;
 
+    private MockMvc mockMvc;
+
+    private static final String COMPOUND_NAME = "compoundA";
+    private static final String KINASE_DISCOVERX = "kinase";
+
     @Before
     public void setUp() {
-
         MockitoAnnotations.initMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(controller)
+            .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
+            .build();
     }
 
     @Test(expected = BadRequestException.class)
-    public void testGetActivityProfiles_kinaseWithoutActivity() {
-        controller.getActivityProfiles("compound", "kinase", null, null);
+    public void testGetActivityProfiles_kinaseWithoutActivity() throws Exception {
+
+        try {
+            mockMvc.perform(MockMvcRequestBuilders.get("/api/activityProfiles")
+                .param("kinaseDiscoverx", KINASE_DISCOVERX)
+                .param("compound", COMPOUND_NAME)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+            ).andExpect(MockMvcResultMatchers.status().isOk());
+        } catch (NestedServletException e) {
+            throw (Exception)e.getCause();
+        }
     }
 
     @Test(expected = BadRequestException.class)
-    public void testGetActivityProfiles_activityWithoutKinase() {
-        controller.getActivityProfiles("compound", null, 0d, null);
+    public void testGetActivityProfiles_activityWithoutKinase() throws Exception {
+
+        try {
+            mockMvc.perform(MockMvcRequestBuilders.get("/api/activityProfiles")
+                .param("activity", "3")
+                .param("compound", COMPOUND_NAME)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+            );
+        } catch (NestedServletException e) {
+            throw (Exception)e.getCause();
+        }
     }
 
     @Test(expected = BadRequestException.class)
-    public void testGetActivityProfiles_activityLessThanZero() {
-        controller.getActivityProfiles("compound", "kinase", -1d, null);
+    public void testGetActivityProfiles_activityLessThanZero() throws Exception {
+
+        try {
+            mockMvc.perform(MockMvcRequestBuilders.get("/api/activityProfiles")
+                .param("kinaseDiscoverx", KINASE_DISCOVERX)
+                .param("activity", "-1")
+                .param("compound", COMPOUND_NAME)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+            );
+        } catch (NestedServletException e) {
+            throw (Exception)e.getCause();
+        }
     }
 
     @Test(expected = BadRequestException.class)
-    public void testGetActivityProfiles_activityGreaterThanOne() {
-        controller.getActivityProfiles("compound", "kinase", 2d, null);
+    public void testGetActivityProfiles_activityGreaterThanOne() throws Exception {
+
+        try {
+            mockMvc.perform(MockMvcRequestBuilders.get("/api/activityProfiles")
+                .param("kinaseDiscoverx", KINASE_DISCOVERX)
+                .param("activity", "2")
+                .param("compound", COMPOUND_NAME)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+            );
+        } catch (NestedServletException e) {
+            throw (Exception)e.getCause();
+        }
+    }
+
+    @Test(expected = BadRequestException.class)
+    public void testGetActivityProfiles_noSuchKinase() throws Exception {
+
+        doReturn(null).when(mockKinaseService).getKinase(eq(KINASE_DISCOVERX));
+
+        try {
+            mockMvc.perform(MockMvcRequestBuilders.get("/api/activityProfiles")
+                .param("kinaseDiscoverx", KINASE_DISCOVERX)
+                .param("activity", "1")
+                .param("compound", COMPOUND_NAME)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+            );
+        } catch (NestedServletException e) {
+            throw (Exception)e.getCause();
+        }
     }
 
     @Test
-    public void testGetActivityProfiles_happyPath_nothingSpecified() {
+    public void testGetActivityProfiles_happyPath_nothingSpecified() throws Exception{
 
-        List<ActivityProfile> kapList = new ArrayList<>();
-        ActivityProfile kap = new ActivityProfile();
-        kap.setId(33L);
-        kapList.add(kap);
+        List<ActivityProfile> kapList = Collections.singletonList(
+            TestUtil.createActivityProfile(33L)
+        );
         PageImpl<ActivityProfile> expectedPage = new PageImpl<>(kapList);
+
         doReturn(expectedPage).when(mockActivityProfileService)
             .getActivityProfiles(any(Pageable.class));
 
-        PageRequest pageInfo = PageRequest.of(0, 20);
-        PagedDataRep<ActivityProfile> actual = controller.getActivityProfiles(
-            null, null, null, pageInfo);
-
-        Assert.assertEquals(0, actual.getStart());
-        Assert.assertEquals(kapList.size(), actual.getCount());
-        Assert.assertEquals(kapList.size(), actual.getTotal());
+        try {
+            mockMvc.perform(MockMvcRequestBuilders.get("/api/activityProfiles")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+            ).andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.start", is(0)))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.count", is(1)))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.total", is(1)))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].id", is(33)));
+        } catch (NestedServletException e) {
+            throw (Exception)e.getCause();
+        }
     }
 
     @Test
-    public void testGetActivityProfiles_happyPath_compoundOnly() {
+    public void testGetActivityProfiles_happyPath_compoundOnly() throws Exception {
 
-        String compoundName = "compound";
-
-        List<ActivityProfile> kapList = new ArrayList<>();
-        ActivityProfile kap = new ActivityProfile();
-        kap.setId(33L);
-        kapList.add(kap);
+        List<ActivityProfile> kapList = Collections.singletonList(
+            TestUtil.createActivityProfile(33L)
+        );
         PageImpl<ActivityProfile> expectedPage = new PageImpl<>(kapList);
+
         doReturn(expectedPage).when(mockActivityProfileService)
-            .getActivityProfilesForCompound(eq(compoundName), any(Pageable.class));
+            .getActivityProfilesForCompound(eq(COMPOUND_NAME), any(Pageable.class));
 
-        PageRequest pageInfo = PageRequest.of(0, 20);
-        PagedDataRep<ActivityProfile> actual = controller.getActivityProfiles(
-            compoundName, null, null, pageInfo);
-
-        Assert.assertEquals(0, actual.getStart());
-        Assert.assertEquals(kapList.size(), actual.getCount());
-        Assert.assertEquals(kapList.size(), actual.getTotal());
+        try {
+            mockMvc.perform(MockMvcRequestBuilders.get("/api/activityProfiles")
+                .param("compound", COMPOUND_NAME)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+            ).andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.start", is(0)))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.count", is(1)))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.total", is(1)))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].id", is(33)));
+        } catch (NestedServletException e) {
+            throw (Exception)e.getCause();
+        }
     }
 
     @Test
-    public void testGetActivityProfiles_happyPath_kinaseAndActivityProfile() {
-
-        long kinaseId = 42;
-        String kinaseDiscoverx = "discoverx";
+    public void testGetActivityProfiles_happyPath_kinaseAndPercentControl() throws Exception {
 
         Kinase kinase = new Kinase();
-        kinase.setId(kinaseId);
-        kinase.setDiscoverxGeneSymbol(kinaseDiscoverx);
-        doReturn(kinase).when(mockKinaseService).getKinase(eq(kinaseDiscoverx));
+        kinase.setId(42L);
+        kinase.setDiscoverxGeneSymbol(KINASE_DISCOVERX);
+        doReturn(kinase).when(mockKinaseService).getKinase(eq(KINASE_DISCOVERX));
 
-        List<ActivityProfile> kapList = new ArrayList<>();
-        ActivityProfile kap = new ActivityProfile();
-        kap.setId(33L);
-        kapList.add(kap);
+        List<ActivityProfile> kapList = Collections.singletonList(
+            TestUtil.createActivityProfile(33L)
+        );
         PageImpl<ActivityProfile> expectedPage = new PageImpl<>(kapList);
+
         doReturn(expectedPage).when(mockActivityProfileService)
-            .getActivityProfilesForKinaseAndPercentControl(eq(kinaseId), anyDouble(), any(Pageable.class));
+            .getActivityProfilesForKinaseAndPercentControl(eq(42L), anyDouble(), any(Pageable.class));
 
-        PageRequest pageInfo = PageRequest.of(0, 20);
-        PagedDataRep<ActivityProfile> actual = controller.getActivityProfiles(
-            null, kinaseDiscoverx, 0.3, pageInfo);
-
-        Assert.assertEquals(0, actual.getStart());
-        Assert.assertEquals(kapList.size(), actual.getCount());
-        Assert.assertEquals(kapList.size(), actual.getTotal());
+        try {
+            mockMvc.perform(MockMvcRequestBuilders.get("/api/activityProfiles")
+                .param("kinaseDiscoverx", KINASE_DISCOVERX)
+                .param("activity", "1")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+            ).andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.start", is(0)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.count", is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.total", is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].id", is(33)));
+        } catch (NestedServletException e) {
+            throw (Exception)e.getCause();
+        }
     }
 
     @Test
-    public void testGetActivityProfiles_happyPath_compoundAndKinaseAndActivityProfile() {
-
-        String compoundName = "compound";
-        long kinaseId = 42;
-        String kinaseDiscoverx = "discoverx";
+    public void testGetActivityProfiles_happyPath_compoundAndKinaseAndPercentControl() throws Exception {
 
         Kinase kinase = new Kinase();
-        kinase.setId(kinaseId);
-        kinase.setDiscoverxGeneSymbol(kinaseDiscoverx);
-        doReturn(kinase).when(mockKinaseService).getKinase(eq(kinaseDiscoverx));
+        kinase.setId(42L);
+        kinase.setDiscoverxGeneSymbol(KINASE_DISCOVERX);
+        doReturn(kinase).when(mockKinaseService).getKinase(eq(KINASE_DISCOVERX));
 
-        List<ActivityProfile> kapList = new ArrayList<>();
-        ActivityProfile kap = new ActivityProfile();
-        kap.setId(33L);
-        kapList.add(kap);
+        List<ActivityProfile> kapList = Collections.singletonList(
+            TestUtil.createActivityProfile(33L)
+        );
         PageImpl<ActivityProfile> expectedPage = new PageImpl<>(kapList);
+
         doReturn(expectedPage).when(mockActivityProfileService)
-            .getActivityProfilesForCompoundAndKinaseAndPercentControl(eq(compoundName),
-                eq(kinaseId), anyDouble(), any(Pageable.class));
+            .getActivityProfilesForCompoundAndKinaseAndPercentControl(eq(COMPOUND_NAME), eq(42L), anyDouble(),
+                any(Pageable.class));
 
-        PageRequest pageInfo = PageRequest.of(0, 20);
-        PagedDataRep<ActivityProfile> actual = controller.getActivityProfiles(
-            compoundName, kinaseDiscoverx, 0.3, pageInfo);
-
-        Assert.assertEquals(0, actual.getStart());
-        Assert.assertEquals(kapList.size(), actual.getCount());
-        Assert.assertEquals(kapList.size(), actual.getTotal());
+        try {
+            mockMvc.perform(MockMvcRequestBuilders.get("/api/activityProfiles")
+                .param("compound", COMPOUND_NAME)
+                .param("kinaseDiscoverx", KINASE_DISCOVERX)
+                .param("activity", "1")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+            ).andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.start", is(0)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.count", is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.total", is(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].id", is(33)));
+        } catch (NestedServletException e) {
+            throw (Exception)e.getCause();
+        }
     }
 }
