@@ -2,7 +2,6 @@ package org.sgc.rak.services;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -225,14 +224,43 @@ public class ActivityProfileServiceTest {
         verify(mockActivityProfileDao, times(commit ? 1 : 0)).save(any());
     }
 
-    @Test
-    @Ignore("Not yet implemented")
-    public void testImportActivityProfiles_error_unknownCompound() {
+    @Test(expected = BadRequestException.class)
+    public void testImportActivityProfiles_error_unknownCompound() throws BadRequestException {
+
+        List<ActivityProfileCsvRecordRep> records = Collections.singletonList(
+            TestUtil.createActivityProfileCsvRecordRep("unknown", "discoverxA", "entrezA",
+                0.9, 4)
+        );
+
+        Set<ActivityProfile> existingProfiles = new HashSet<>();
+        existingProfiles.add(TestUtil.createActivityProfile(42L, "compoundA",
+            "discoverxA", "entrezA", 0.1, 1));
+        doReturn(existingProfiles).when(mockActivityProfileDao).getActivityProfiles(any(), any());
+
+        // Mocks required during csv rep => activity profile conversion
+        doReturn(false).when(mockCompoundService).getCompoundExists(anyString());
+        Kinase kinase = TestUtil.createKinase("discoverxA", "entrezA");
+        doReturn(kinase).when(mockKinaseService).getKinase(eq(kinase.getDiscoverxGeneSymbol()));
+
+        service.importActivityProfiles(records, true);
     }
 
-    @Test
-    @Ignore("Not yet implemented")
-    public void testImportActivityProfiles_error_unknownKinase() {
+    @Test(expected = BadRequestException.class)
+    public void testImportActivityProfiles_error_unknownKinase() throws BadRequestException {
+
+        List<ActivityProfileCsvRecordRep> records = Collections.singletonList(
+            TestUtil.createActivityProfileCsvRecordRep(COMPOUND_NAME, "unknown", "unknown",
+                0.9, 4)
+        );
+
+        Set<ActivityProfile> existingProfiles = new HashSet<>();
+        doReturn(existingProfiles).when(mockActivityProfileDao).getActivityProfiles(any(), any());
+
+        // Mocks required during csv rep => activity profile conversion
+        doReturn(true).when(mockCompoundService).getCompoundExists(anyString());
+        doReturn(null).when(mockKinaseService).getKinase(eq("unknown"));
+
+        service.importActivityProfiles(records, true);
     }
 
     @Test
@@ -304,13 +332,39 @@ public class ActivityProfileServiceTest {
         verify(mockActivityProfileDao, times(commit ? 1 : 0)).save(any());
     }
 
-    @Test
-    @Ignore("Not yet implemented")
-    public void testImportKdValues_error_unknownCompound() {
+    @Test(expected = BadRequestException.class)
+    public void testImportKdValues_error_unknownCompound() throws BadRequestException {
+
+        List<KdCsvRecordRep> records = Collections.singletonList(
+            TestUtil.createKdCsvRecordRep("unknown", "discoverxA", "entrezA",
+                "=", 0.3)
+        );
+
+        Set<ActivityProfile> existingProfiles = new HashSet<>();
+        doReturn(existingProfiles).when(mockActivityProfileDao).getActivityProfiles(any(), any());
+
+        // Mocks required during csv rep => activity profile conversion
+        doReturn(false).when(mockCompoundService).getCompoundExists(anyString());
+        Kinase kinase = TestUtil.createKinase("discoverxA", "entrezA");
+        doReturn(kinase).when(mockKinaseService).getKinase(eq(records.get(0).getDiscoverxGeneSymbol()));
+
+        service.importKdValues(records, true);
     }
 
-    @Test
-    @Ignore("Not yet implemented")
-    public void testImportKdValues_error_unknownKinase() {
+    @Test(expected = BadRequestException.class)
+    public void testImportKdValues_error_unknownKinase() throws BadRequestException {
+
+        List<KdCsvRecordRep> records = Collections.singletonList(
+            TestUtil.createKdCsvRecordRep(COMPOUND_NAME, "unknown", "unknown", "=", 0.3)
+        );
+
+        Set<ActivityProfile> existingProfiles = new HashSet<>();
+        doReturn(existingProfiles).when(mockActivityProfileDao).getActivityProfiles(any(), any());
+
+        // Mocks required during csv rep => activity profile conversion
+        doReturn(true).when(mockCompoundService).getCompoundExists(anyString());
+        doReturn(null).when(mockKinaseService).getKinase(eq(records.get(0).getDiscoverxGeneSymbol()));
+
+        service.importKdValues(records, true);
     }
 }

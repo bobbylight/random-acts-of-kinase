@@ -116,8 +116,7 @@ public class CompoundService {
      * @return The list of compounds.
      * @see #getCompounds(Pageable)
      */
-    public Page<Compound> getCompoundsByCompoundName(String compoundNamePart,
-                                                     Pageable pageInfo) {
+    public Page<Compound> getCompoundsByCompoundName(String compoundNamePart, Pageable pageInfo) {
         return compoundDao.getCompoundsByCompoundNameStartsWithIgnoreCase(compoundNamePart, pageInfo);
     }
 
@@ -175,6 +174,7 @@ public class CompoundService {
         ObjectImportRep importRep = new ObjectImportRep();
         List<List<ObjectImportRep.FieldStatus>> records = new ArrayList<>();
         importRep.setFieldStatuses(records);
+
         List<Compound> toPersist = new ArrayList<>();
 
         for (Compound compound : compounds) {

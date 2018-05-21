@@ -3,6 +3,7 @@ package org.sgc.rak.util;
 import org.junit.Assert;
 import org.sgc.rak.model.ActivityProfile;
 import org.sgc.rak.model.BlogPost;
+import org.sgc.rak.model.Compound;
 import org.sgc.rak.model.Kinase;
 import org.sgc.rak.reps.ActivityProfileCsvRecordRep;
 import org.sgc.rak.reps.KdCsvRecordRep;
@@ -32,6 +33,16 @@ public final class TestUtil {
         Assert.assertEquals(expected.getTitle(), actual.getTitle());
         Assert.assertEquals(expected.getBody(), actual.getBody());
         Assert.assertEquals(expected.getCreateDate(), actual.getCreateDate());
+    }
+
+    public static void assertCompoundsEqual(Compound expected, Compound actual) {
+        Assert.assertEquals(expected.getChemotype(), actual.getChemotype());
+        Assert.assertEquals(expected.getCompoundName(), actual.getCompoundName());
+        Assert.assertEquals(expected.getPrimaryReference(), actual.getPrimaryReference());
+        Assert.assertEquals(expected.getPrimaryReferenceUrl(), actual.getPrimaryReferenceUrl());
+        Assert.assertEquals(expected.getS10(), actual.getS10());
+        Assert.assertEquals(expected.getSmiles(), actual.getSmiles());
+        Assert.assertEquals(expected.getSource(), actual.getSource());
     }
 
     public static ActivityProfile createActivityProfile(Long id) {
@@ -67,8 +78,19 @@ public final class TestUtil {
         return post;
     }
 
+    public static Compound createCompound(String name) {
+        Compound compound = new Compound();
+        compound.setCompoundName(name);
+        return compound;
+    }
+
     public static Kinase createKinase(String discoverx, String entrez) {
+        return createKinase(0, discoverx, entrez);
+    }
+
+    public static Kinase createKinase(long id, String discoverx, String entrez) {
         Kinase kinase = new Kinase();
+        kinase.setId(id);
         kinase.setDiscoverxGeneSymbol(discoverx);
         kinase.setEntrezGeneSymbol(entrez);
         return kinase;
