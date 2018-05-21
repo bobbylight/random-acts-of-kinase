@@ -1,6 +1,6 @@
 const loaders = require('./loaders');
 const path = require('path');
-// const { VueLoaderPlugin } = require('vue-loader')
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackAutoInject = require('webpack-auto-inject-version');
@@ -9,17 +9,6 @@ const webpack = require('webpack');
 
 const devBuild = process.env.NODE_ENV === 'dev';
 console.log(`Starting webpack build with NODE_ENV: ${process.env.NODE_ENV}`);
-
-// Loaders specific to compiling
-loaders.push({
-    test: /\.tsx?$/,
-    enforce: 'pre',
-    loader: 'tslint-loader',
-    exclude: /node_modules/,
-    options: {
-        typeCheck: true
-    }
-});
 
 const config = {
     entry: {
@@ -32,7 +21,7 @@ const config = {
         filename: '[name].js'
     },
     resolve: {
-        extensions: [ '.ts', '.tsx', '.js', '.json', '.vue', '.svg' ],
+        extensions: [ '.ts', '.tsx', '.js', '.json', '.svg' ],
         modules: [ 'client', 'img', 'styles', 'node_modules' ],
         alias: {
             'vue$': 'vue/dist/vue.esm.js'
@@ -42,7 +31,7 @@ const config = {
     // source-map doesn't seem to be working, see webpack bug reports
     devtool: devBuild ? 'cheap-eval-source-map' : undefined,//'source-map',
     plugins: [
-        // new VueLoaderPlugin(),
+        new VueLoaderPlugin(),
         new CopyWebpackPlugin([
             { from: 'img', to: 'img' }
         ]),

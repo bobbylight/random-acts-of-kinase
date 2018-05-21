@@ -63,7 +63,7 @@ import SectionHeader from '../header.vue';
 import BlogManagerPostNameCell from './blog-manager-post-name-cell.vue';
 import restApi from '../rest-api';
 import Toaster from '../toaster';
-import BlogPostEditorModal from './blog-post-editor-modal';
+import BlogPostEditorModal from './blog-post-editor-modal.vue';
 
 @Component({ components: { BlogPostEditorModal, SectionHeader, BlogManagerPostNameCell, ConfirmModal } })
 export default class BlogManager extends Vue {

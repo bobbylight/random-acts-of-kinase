@@ -11,7 +11,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import AbstractImportData, { ImportFunction } from './abstract-import-data';
+import AbstractImportData, { ImportFunction } from './abstract-import-data.vue';
 import { ColumnInfo } from './import-preview-table.vue';
 import restApi from '../rest-api';
 

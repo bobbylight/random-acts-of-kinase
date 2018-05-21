@@ -34,7 +34,7 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import LazyDropdown from '../lazy-dropdown.vue';
 import { Kinase, PagedDataRep } from '../rak';
-import ActivityOrKdField from './activity-or-kd-field';
+import ActivityOrKdField from './activity-or-kd-field.vue';
 
 @Component({ components: { ActivityOrKdField, LazyDropdown } })
 export default class SearchFilters extends Vue {
