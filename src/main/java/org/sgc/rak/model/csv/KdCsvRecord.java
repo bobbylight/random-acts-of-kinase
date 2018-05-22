@@ -1,4 +1,4 @@
-package org.sgc.rak.reps;
+package org.sgc.rak.model.csv;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -6,24 +6,17 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
- * A record representing an activity profile in a CSV file from discoverx.<p>
- *
- * Note only the fields we need to create activity profile records are enumerated; other fields are ignored.
+ * A record representing a KD report in a CSV file from discoverx ({@code *_Kd Report.csv}).
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "compoundName", "discoverxGeneSymbol", "entrezGeneSymbol",
-    "percentControl", "compoundConcentration" })
-public class ActivityProfileCsvRecordRep {
+@JsonPropertyOrder({ "compoundName", "discoverxGeneSymbol", "entrezGeneSymbol", "modifier", "kd" })
+public class KdCsvRecord {
 
     private String compoundName;
-
     private String discoverxGeneSymbol;
-
     private String entrezGeneSymbol;
-
-    private double percentControl;
-
-    private int compoundConcentration;
+    private String modifier;
+    private Double kd;
 
     public String getCompoundName() {
         return compoundName;
@@ -49,20 +42,20 @@ public class ActivityProfileCsvRecordRep {
         this.entrezGeneSymbol = entrezGeneSymbol;
     }
 
-    public double getPercentControl() {
-        return percentControl;
+    public String getModifier() {
+        return modifier;
     }
 
-    public void setPercentControl(double percentControl) {
-        this.percentControl = percentControl;
+    public void setModifier(String modifier) {
+        this.modifier = modifier;
     }
 
-    public int getCompoundConcentration() {
-        return compoundConcentration;
+    public Double getKd() {
+        return kd;
     }
 
-    public void setCompoundConcentration(int compoundConcentration) {
-        this.compoundConcentration = compoundConcentration;
+    public void setKd(Double kd) {
+        this.kd = kd;
     }
 
     @Override
@@ -71,8 +64,8 @@ public class ActivityProfileCsvRecordRep {
             .append("compoundName", compoundName)
             .append("discoverxGeneSymbol", discoverxGeneSymbol)
             .append("entrezGeneSymbol", entrezGeneSymbol)
-            .append("percentControl", percentControl)
-            .append("compoundConcentration", compoundConcentration)
+            .append("modifier", modifier)
+            .append("kd", kd)
             .build();
     }
 }

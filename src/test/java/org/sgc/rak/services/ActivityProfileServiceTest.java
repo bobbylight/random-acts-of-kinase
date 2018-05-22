@@ -11,8 +11,8 @@ import org.sgc.rak.exceptions.BadRequestException;
 import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.model.ActivityProfile;
 import org.sgc.rak.model.Kinase;
-import org.sgc.rak.reps.ActivityProfileCsvRecordRep;
-import org.sgc.rak.reps.KdCsvRecordRep;
+import org.sgc.rak.model.csv.ActivityProfileCsvRecord;
+import org.sgc.rak.model.csv.KdCsvRecord;
 import org.sgc.rak.reps.ObjectImportRep;
 import org.sgc.rak.util.TestUtil;
 import org.springframework.data.domain.*;
@@ -167,10 +167,10 @@ public class ActivityProfileServiceTest {
 
     private void testImportActivityProfiles_happyPath_impl(boolean commit) {
 
-        List<ActivityProfileCsvRecordRep> records = Arrays.asList(
-            TestUtil.createActivityProfileCsvRecordRep("compoundA", "discoverxA", "entrezA",
+        List<ActivityProfileCsvRecord> records = Arrays.asList(
+            TestUtil.createActivityProfileCsvRecord("compoundA", "discoverxA", "entrezA",
                 0.9, 4),
-            TestUtil.createActivityProfileCsvRecordRep("compoundB", "discoverxB", "entrezB",
+            TestUtil.createActivityProfileCsvRecord("compoundB", "discoverxB", "entrezB",
                 0.8, 3)
         );
 
@@ -227,8 +227,8 @@ public class ActivityProfileServiceTest {
     @Test(expected = BadRequestException.class)
     public void testImportActivityProfiles_error_unknownCompound() throws BadRequestException {
 
-        List<ActivityProfileCsvRecordRep> records = Collections.singletonList(
-            TestUtil.createActivityProfileCsvRecordRep("unknown", "discoverxA", "entrezA",
+        List<ActivityProfileCsvRecord> records = Collections.singletonList(
+            TestUtil.createActivityProfileCsvRecord("unknown", "discoverxA", "entrezA",
                 0.9, 4)
         );
 
@@ -248,8 +248,8 @@ public class ActivityProfileServiceTest {
     @Test(expected = BadRequestException.class)
     public void testImportActivityProfiles_error_unknownKinase() throws BadRequestException {
 
-        List<ActivityProfileCsvRecordRep> records = Collections.singletonList(
-            TestUtil.createActivityProfileCsvRecordRep(COMPOUND_NAME, "unknown", "unknown",
+        List<ActivityProfileCsvRecord> records = Collections.singletonList(
+            TestUtil.createActivityProfileCsvRecord(COMPOUND_NAME, "unknown", "unknown",
                 0.9, 4)
         );
 
@@ -275,10 +275,10 @@ public class ActivityProfileServiceTest {
 
     private void testImportKdValues_happyPath_impl(boolean commit) {
 
-        List<KdCsvRecordRep> records = Arrays.asList(
-            TestUtil.createKdCsvRecordRep("compoundA", "discoverxA", "entrezA",
+        List<KdCsvRecord> records = Arrays.asList(
+            TestUtil.createKdCsvRecord("compoundA", "discoverxA", "entrezA",
                 "=", 0.3),
-            TestUtil.createKdCsvRecordRep("compoundB", "discoverxB", "entrezB",
+            TestUtil.createKdCsvRecord("compoundB", "discoverxB", "entrezB",
                 "=", 0.4)
         );
 
@@ -335,8 +335,8 @@ public class ActivityProfileServiceTest {
     @Test(expected = BadRequestException.class)
     public void testImportKdValues_error_unknownCompound() throws BadRequestException {
 
-        List<KdCsvRecordRep> records = Collections.singletonList(
-            TestUtil.createKdCsvRecordRep("unknown", "discoverxA", "entrezA",
+        List<KdCsvRecord> records = Collections.singletonList(
+            TestUtil.createKdCsvRecord("unknown", "discoverxA", "entrezA",
                 "=", 0.3)
         );
 
@@ -354,8 +354,8 @@ public class ActivityProfileServiceTest {
     @Test(expected = BadRequestException.class)
     public void testImportKdValues_error_unknownKinase() throws BadRequestException {
 
-        List<KdCsvRecordRep> records = Collections.singletonList(
-            TestUtil.createKdCsvRecordRep(COMPOUND_NAME, "unknown", "unknown", "=", 0.3)
+        List<KdCsvRecord> records = Collections.singletonList(
+            TestUtil.createKdCsvRecord(COMPOUND_NAME, "unknown", "unknown", "=", 0.3)
         );
 
         Set<ActivityProfile> existingProfiles = new HashSet<>();

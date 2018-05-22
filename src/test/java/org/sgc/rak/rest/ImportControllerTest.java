@@ -226,6 +226,62 @@ public class ImportControllerTest {
         }
     }
 
+    @Test
+    public void testImportSScores_happyPath_noOptionalParams() throws Exception {
+        testImportSScores_impl("import-sScores-happy-path.csv", null, true);
+    }
+
+    @Test
+    public void testImportSScores_happyPath_commitExplicitlyFalse() throws Exception {
+        testImportSScores_impl("import-sScores-happy-path.csv", false, true);
+    }
+
+    @Test
+    public void testImportSScores_happyPath_commitExplicitlyTrue() throws Exception {
+        testImportSScores_impl("import-sScores-happy-path.csv", true, true);
+    }
+
+    @Test(expected = BadRequestException.class)
+    public void testImportSScores_error_missingAColumn() throws Exception {
+        testImportSScores_impl("import-sScores-missing-selectivityScore-column.csv", false, false);
+    }
+
+    @Test(expected = BadRequestException.class)
+    public void testImportSScores_error_notCsv() throws Exception {
+        testImportSScores_impl("not-csv-data.csv", false, false);
+    }
+
+    private void testImportSScores_impl(String csv, Boolean commitParam, boolean expectSuccess)
+        throws Exception {
+
+        MockMultipartFile file = new MockMultipartFile("file", getCsv(csv));
+
+        String url = "/admin/api/sScores";
+        if (commitParam != null) {
+            url += "?commit=" + commitParam;
+        }
+        boolean expectedCommit = commitParam != null ? commitParam : true;
+
+        ResultActions actions;
+        try {
+            actions = mockMvc.perform(MockMvcRequestBuilders.multipart(url)
+                .file(file)
+                .with(new PatchRequestPostProcessor())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+            );
+        } catch (NestedServletException e) {
+            throw (Exception)e.getCause(); // For tests that test failure paths, throw the underlying exception
+        }
+
+        if (expectSuccess) {
+            actions.andExpect(MockMvcResultMatchers.status().isOk()
+            ).andReturn();
+
+            verify(mockCompoundService, times(1)).importCompounds(any(), eq(expectedCommit));
+        }
+    }
+
     /**
      * Modifies the mock request used by tests to be a {@code PATCH}, as expected by our API.  Unfortunately
      * Spring Test assumes multipart requests are always {@code POST}.

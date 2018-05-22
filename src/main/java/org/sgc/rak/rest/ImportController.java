@@ -10,11 +10,13 @@ import org.sgc.rak.exceptions.BadRequestException;
 import org.sgc.rak.exceptions.InternalServerErrorException;
 import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.model.Compound;
-import org.sgc.rak.reps.ActivityProfileCsvRecordRep;
-import org.sgc.rak.reps.KdCsvRecordRep;
+import org.sgc.rak.model.csv.ActivityProfileCsvRecord;
+import org.sgc.rak.model.csv.KdCsvRecord;
+import org.sgc.rak.model.csv.SScoreCsvRecord;
 import org.sgc.rak.reps.ObjectImportRep;
 import org.sgc.rak.services.ActivityProfileService;
 import org.sgc.rak.services.CompoundService;
+import org.sgc.rak.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * REST API for importing data.
@@ -99,6 +102,8 @@ public class ImportController {
      * merged into the existing record.
      *
      * @param file The CSV activity profile data from Discoverx.
+     * @param headerRow Whether the CSV data contains a header row.
+     * @param commit Whether the upsert should be committed (vs. a dry run with just the results returned).
      * @return The result of the operation.
      */
     @RequestMapping(method = RequestMethod.PATCH, path = "activityProfiles")
@@ -115,8 +120,8 @@ public class ImportController {
             .addColumn("compoundConcentration", CsvSchema.ColumnType.NUMBER)
             .build();
 
-        List<ActivityProfileCsvRecordRep> activityProfiles = loadFromCsv(file, headerRow,
-            ActivityProfileCsvRecordRep.class, schema);
+        List<ActivityProfileCsvRecord> activityProfiles = loadFromCsv(file, headerRow,
+            ActivityProfileCsvRecord.class, schema);
         return activityProfileService.importActivityProfiles(activityProfiles, commit);
     }
 
@@ -126,6 +131,7 @@ public class ImportController {
      * merged into the existing compound record.
      *
      * @param file The CSV compound data.
+     * @param commit Whether the upsert should be committed (vs. a dry run with just the results returned).
      * @return The result of the operation.
      */
     @RequestMapping(method = RequestMethod.PATCH, path = "compounds")
@@ -142,6 +148,8 @@ public class ImportController {
      * values merged into the existing record.
      *
      * @param file The CSV Kd data from Discoverx.
+     * @param headerRow Whether the CSV data contains a header row.
+     * @param commit Whether the upsert should be committed (vs. a dry run with just the results returned).
      * @return The result of the operation.
      */
     @RequestMapping(method = RequestMethod.PATCH, path = "kdValues")
@@ -158,8 +166,39 @@ public class ImportController {
             .addColumn("kd", CsvSchema.ColumnType.NUMBER)
             .build();
 
-        List<KdCsvRecordRep> activityProfiles = loadFromCsv(file, headerRow,
-            KdCsvRecordRep.class, schema);
-        return activityProfileService.importKdValues(activityProfiles, commit);
+        List<KdCsvRecord> kdValues = loadFromCsv(file, headerRow, KdCsvRecord.class, schema);
+        return activityProfileService.importKdValues(kdValues, commit);
+    }
+
+    /**
+     * Imports a CSV file of S scores (s10) from Discoverx.  The data is merged/patched into the existing activity
+     * profile data; that is, new activity profiles are added, and existing activity profiles have their non-null/empty
+     * values merged into the existing record.
+     *
+     * @param file The CSV S Score data from Discoverx.
+     * @param headerRow Whether the CSV data contains a header row.
+     * @param commit Whether the upsert should be committed (vs. a dry run with just the results returned).
+     * @return The result of the operation.
+     */
+    @RequestMapping(method = RequestMethod.PATCH, path = "sScores")
+    @ResponseStatus(HttpStatus.OK)
+    ObjectImportRep importSScores(@RequestPart("file") MultipartFile file,
+                                   @RequestParam(defaultValue = "true") boolean headerRow,
+                                   @RequestParam(defaultValue = "true") boolean commit) {
+
+        CsvSchema schema = CsvSchema.builder()
+            .addColumn("compoundName", CsvSchema.ColumnType.STRING)
+            .addColumn("selectivityScoreType", CsvSchema.ColumnType.STRING)
+            .addColumn("numberOfHits", CsvSchema.ColumnType.NUMBER)
+            .addColumn("numberOfNonMutantHits", CsvSchema.ColumnType.NUMBER)
+            .addColumn("screeningConcentration", CsvSchema.ColumnType.NUMBER)
+            .addColumn("selectivityScore", CsvSchema.ColumnType.NUMBER)
+            .build();
+
+        List<SScoreCsvRecord> sScores = loadFromCsv(file, headerRow, SScoreCsvRecord.class, schema);
+
+        List<Compound> compounds = sScores.stream().map(Util::sScoreCsvRecordToCompound)
+            .collect(Collectors.toList());
+        return compoundService.importCompounds(compounds, commit);
     }
 }

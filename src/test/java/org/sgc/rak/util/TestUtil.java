@@ -5,8 +5,8 @@ import org.sgc.rak.model.ActivityProfile;
 import org.sgc.rak.model.BlogPost;
 import org.sgc.rak.model.Compound;
 import org.sgc.rak.model.Kinase;
-import org.sgc.rak.reps.ActivityProfileCsvRecordRep;
-import org.sgc.rak.reps.KdCsvRecordRep;
+import org.sgc.rak.model.csv.ActivityProfileCsvRecord;
+import org.sgc.rak.model.csv.KdCsvRecord;
 
 /**
  * Utility methods for unit tests.
@@ -60,9 +60,9 @@ public final class TestUtil {
         return profile;
     }
 
-    public static ActivityProfileCsvRecordRep createActivityProfileCsvRecordRep(String compoundName, String discoverx,
+    public static ActivityProfileCsvRecord createActivityProfileCsvRecord(String compoundName, String discoverx,
                         String entrez, double percentControl, int compoundConcentration) {
-        ActivityProfileCsvRecordRep rep = new ActivityProfileCsvRecordRep();
+        ActivityProfileCsvRecord rep = new ActivityProfileCsvRecord();
         rep.setCompoundName(compoundName);
         rep.setDiscoverxGeneSymbol(discoverx);
         rep.setEntrezGeneSymbol(entrez);
@@ -96,9 +96,9 @@ public final class TestUtil {
         return kinase;
     }
 
-    public static KdCsvRecordRep createKdCsvRecordRep(String compoundName, String discoverx, String entrez,
+    public static KdCsvRecord createKdCsvRecord(String compoundName, String discoverx, String entrez,
                                                       String modifier, Double kd) {
-        KdCsvRecordRep rep = new KdCsvRecordRep();
+        KdCsvRecord rep = new KdCsvRecord();
         rep.setCompoundName(compoundName);
         rep.setDiscoverxGeneSymbol(discoverx);
         rep.setEntrezGeneSymbol(entrez);

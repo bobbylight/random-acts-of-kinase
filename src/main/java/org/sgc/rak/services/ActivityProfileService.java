@@ -5,8 +5,8 @@ import org.sgc.rak.exceptions.BadRequestException;
 import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.model.ActivityProfile;
 import org.sgc.rak.model.Kinase;
-import org.sgc.rak.reps.ActivityProfileCsvRecordRep;
-import org.sgc.rak.reps.KdCsvRecordRep;
+import org.sgc.rak.model.csv.ActivityProfileCsvRecord;
+import org.sgc.rak.model.csv.KdCsvRecord;
 import org.sgc.rak.reps.ObjectImportRep;
 import org.sgc.rak.util.Util;
 import org.slf4j.Logger;
@@ -42,7 +42,7 @@ public class ActivityProfileService {
         this.messages = messages;
     }
 
-    private ActivityProfile activityProfileCsvRecordToActivityProfile(ActivityProfileCsvRecordRep csvRep) {
+    private ActivityProfile activityProfileCsvRecordToActivityProfile(ActivityProfileCsvRecord csvRep) {
 
         if (!compoundService.getCompoundExists(csvRep.getCompoundName())) {
             throw new BadRequestException(messages.get("error.importReferencesUnknownCompound",
@@ -155,13 +155,13 @@ public class ActivityProfileService {
      * @param commit Whether to actually commit the patch, or just return the possible result.
      * @return The result of the operation (or possible result, if {@code commit} is {@code false}).
      */
-    public ObjectImportRep importActivityProfiles(List<ActivityProfileCsvRecordRep> activityProfileCsvRecords,
+    public ObjectImportRep importActivityProfiles(List<ActivityProfileCsvRecord> activityProfileCsvRecords,
                                                   boolean commit) {
 
         List<String> compoundNames = activityProfileCsvRecords.stream()
-            .map(ActivityProfileCsvRecordRep::getCompoundName).collect(Collectors.toList());
+            .map(ActivityProfileCsvRecord::getCompoundName).collect(Collectors.toList());
         List<String> discoverxes = activityProfileCsvRecords.stream()
-            .map(ActivityProfileCsvRecordRep::getDiscoverxGeneSymbol).collect(Collectors.toList());
+            .map(ActivityProfileCsvRecord::getDiscoverxGeneSymbol).collect(Collectors.toList());
         Set<ActivityProfile> existingProfiles = activityProfileDao
             .getActivityProfiles(compoundNames, discoverxes);
 
@@ -170,7 +170,7 @@ public class ActivityProfileService {
         importRep.setFieldStatuses(records);
         List<ActivityProfile> toPersist = new ArrayList<>();
 
-        for (ActivityProfileCsvRecordRep activityProfileCsvRecord : activityProfileCsvRecords) {
+        for (ActivityProfileCsvRecord activityProfileCsvRecord : activityProfileCsvRecords) {
 
             Util.convertEmptyStringsToNulls(activityProfileCsvRecord);
             String compoundName = activityProfileCsvRecord.getCompoundName();
@@ -205,13 +205,13 @@ public class ActivityProfileService {
      * @param commit Whether to actually commit the patch, or just return the possible result.
      * @return The result of the operation (or possible result, if {@code commit} is {@code false}).
      */
-    public ObjectImportRep importKdValues(List<KdCsvRecordRep> kdValueCsvRecords,
+    public ObjectImportRep importKdValues(List<KdCsvRecord> kdValueCsvRecords,
                                                   boolean commit) {
 
         List<String> compoundNames = kdValueCsvRecords.stream()
-            .map(KdCsvRecordRep::getCompoundName).collect(Collectors.toList());
+            .map(KdCsvRecord::getCompoundName).collect(Collectors.toList());
         List<String> discoverxes = kdValueCsvRecords.stream()
-            .map(KdCsvRecordRep::getDiscoverxGeneSymbol).collect(Collectors.toList());
+            .map(KdCsvRecord::getDiscoverxGeneSymbol).collect(Collectors.toList());
         Set<ActivityProfile> existingProfiles = activityProfileDao
             .getActivityProfiles(compoundNames, discoverxes);
 
@@ -220,7 +220,7 @@ public class ActivityProfileService {
         importRep.setFieldStatuses(records);
         List<ActivityProfile> toPersist = new ArrayList<>();
 
-        for (KdCsvRecordRep kdValueCsvRecord : kdValueCsvRecords) {
+        for (KdCsvRecord kdValueCsvRecord : kdValueCsvRecords) {
 
             Util.convertEmptyStringsToNulls(kdValueCsvRecord);
             String compoundName = kdValueCsvRecord.getCompoundName();
@@ -248,7 +248,7 @@ public class ActivityProfileService {
         return importRep;
     }
 
-    private ActivityProfile kdCsvRecordToActivityProfile(KdCsvRecordRep csvRep) {
+    private ActivityProfile kdCsvRecordToActivityProfile(KdCsvRecord csvRep) {
 
         if (!compoundService.getCompoundExists(csvRep.getCompoundName())) {
             throw new BadRequestException(messages.get("error.importReferencesUnknownCompound",

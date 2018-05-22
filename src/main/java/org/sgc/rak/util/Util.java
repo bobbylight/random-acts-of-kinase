@@ -3,8 +3,9 @@ package org.sgc.rak.util;
 import org.apache.commons.lang3.StringUtils;
 import org.sgc.rak.model.ActivityProfile;
 import org.sgc.rak.model.Compound;
-import org.sgc.rak.reps.ActivityProfileCsvRecordRep;
-import org.sgc.rak.reps.KdCsvRecordRep;
+import org.sgc.rak.model.csv.ActivityProfileCsvRecord;
+import org.sgc.rak.model.csv.KdCsvRecord;
+import org.sgc.rak.model.csv.SScoreCsvRecord;
 import org.sgc.rak.reps.ObjectImportRep;
 
 /**
@@ -23,7 +24,7 @@ public final class Util {
      *
      * @param activityProfile The activity profile to examine.
      */
-    public static void convertEmptyStringsToNulls(ActivityProfileCsvRecordRep activityProfile) {
+    public static void convertEmptyStringsToNulls(ActivityProfileCsvRecord activityProfile) {
 
         // Compound name is not checked
 
@@ -59,7 +60,7 @@ public final class Util {
      *
      * @param kdCsvRecord The activity profile to examine.
      */
-    public static void convertEmptyStringsToNulls(KdCsvRecordRep kdCsvRecord) {
+    public static void convertEmptyStringsToNulls(KdCsvRecord kdCsvRecord) {
 
         // Compound name is not checked
 
@@ -105,7 +106,7 @@ public final class Util {
      * @return The result of the patch/merge operation.
      */
     public static ActivityProfile patchActivityProfile(ActivityProfile existing,
-                                                       ActivityProfileCsvRecordRep newProfile) {
+                                                       ActivityProfileCsvRecord newProfile) {
 
         ActivityProfile retVal = new ActivityProfile();
         retVal.setId(existing.getId());
@@ -142,7 +143,7 @@ public final class Util {
      *        the result.
      * @return The result of the patch/merge operation.
      */
-    public static ActivityProfile patchActivityProfile(ActivityProfile existing, KdCsvRecordRep kdCsvRecord) {
+    public static ActivityProfile patchActivityProfile(ActivityProfile existing, KdCsvRecord kdCsvRecord) {
 
         ActivityProfile retVal = new ActivityProfile();
         retVal.setId(existing.getId());
@@ -208,5 +209,20 @@ public final class Util {
         }
 
         return retVal;
+    }
+
+    /**
+     * Converts a CSV record from an S-Scores CSV file from Discoverx into a {@code Compound}.  Note that since most
+     * of the fields in the CSV record are not included in our data model, the returned {@code Compound} will be
+     * sparse.
+     *
+     * @param rep The CSV record.
+     * @return The {@code Compound}.
+     */
+    public static Compound sScoreCsvRecordToCompound(SScoreCsvRecord rep) {
+        Compound compound = new Compound();
+        compound.setCompoundName(rep.getCompoundName());
+        compound.setS10(rep.getSelectivityScore());
+        return compound;
     }
 }

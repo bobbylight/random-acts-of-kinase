@@ -1,16 +1,16 @@
-package org.sgc.rak.reps;
+package org.sgc.rak.model.csv;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ActivityProfileCsvRecordRepTest {
+public class KdCsvRecordTest {
 
-    private ActivityProfileCsvRecordRep rep;
+    private KdCsvRecord rep;
 
     @Before
     public void setUp() {
-        rep = new ActivityProfileCsvRecordRep();
+        rep = new KdCsvRecord();
     }
 
     @Test
@@ -35,27 +35,27 @@ public class ActivityProfileCsvRecordRepTest {
     }
 
     @Test
-    public void testGetSetPercentControl() {
-        Assert.assertEquals(0, rep.getPercentControl(), 0.01);
-        rep.setPercentControl(4.2);
-        Assert.assertEquals(4.2, rep.getPercentControl(), 0.01);
+    public void testGetSetModifier() {
+        Assert.assertNull(rep.getModifier());
+        rep.setModifier("modifier");
+        Assert.assertEquals("modifier", rep.getModifier());
     }
 
     @Test
-    public void testGetSetCompuondConcentration() {
-        Assert.assertEquals(0, rep.getCompoundConcentration());
-        rep.setCompoundConcentration(42);
-        Assert.assertEquals(42, rep.getCompoundConcentration());
+    public void testGetSetKd() {
+        Assert.assertNull(rep.getKd());
+        rep.setKd(42d);
+        Assert.assertEquals(42d, rep.getKd(), 0.01);
     }
 
     @Test
     public void testToString() {
-        Assert.assertEquals("ActivityProfileCsvRecordRep[" +
+        Assert.assertEquals("KdCsvRecord[" +
             "compoundName=<null>," +
             "discoverxGeneSymbol=<null>," +
             "entrezGeneSymbol=<null>," +
-            "percentControl=0.0," +
-            "compoundConcentration=0" +
+            "modifier=<null>," +
+            "kd=<null>" +
             "]", rep.toString());
     }
 }

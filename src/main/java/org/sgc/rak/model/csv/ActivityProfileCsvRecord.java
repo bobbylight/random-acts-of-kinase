@@ -1,4 +1,4 @@
-package org.sgc.rak.reps;
+package org.sgc.rak.model.csv;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -6,12 +6,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
- * A record representing a KD report in a CSV file from discoverx.
+ * A record representing an activity profile in a CSV file from discoverx ({@code *_Data_Report.csv}).
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "compoundName", "discoverxGeneSymbol", "entrezGeneSymbol",
-    "modifier", "kd" })
-public class KdCsvRecordRep {
+@JsonPropertyOrder({ "compoundName", "discoverxGeneSymbol", "entrezGeneSymbol", "percentControl",
+    "compoundConcentration" })
+public class ActivityProfileCsvRecord {
 
     private String compoundName;
 
@@ -19,9 +19,9 @@ public class KdCsvRecordRep {
 
     private String entrezGeneSymbol;
 
-    private String modifier;
+    private double percentControl;
 
-    private Double kd;
+    private int compoundConcentration;
 
     public String getCompoundName() {
         return compoundName;
@@ -47,20 +47,20 @@ public class KdCsvRecordRep {
         this.entrezGeneSymbol = entrezGeneSymbol;
     }
 
-    public String getModifier() {
-        return modifier;
+    public double getPercentControl() {
+        return percentControl;
     }
 
-    public void setModifier(String modifier) {
-        this.modifier = modifier;
+    public void setPercentControl(double percentControl) {
+        this.percentControl = percentControl;
     }
 
-    public Double getKd() {
-        return kd;
+    public int getCompoundConcentration() {
+        return compoundConcentration;
     }
 
-    public void setKd(Double kd) {
-        this.kd = kd;
+    public void setCompoundConcentration(int compoundConcentration) {
+        this.compoundConcentration = compoundConcentration;
     }
 
     @Override
@@ -69,8 +69,8 @@ public class KdCsvRecordRep {
             .append("compoundName", compoundName)
             .append("discoverxGeneSymbol", discoverxGeneSymbol)
             .append("entrezGeneSymbol", entrezGeneSymbol)
-            .append("modifier", modifier)
-            .append("kd", kd)
+            .append("percentControl", percentControl)
+            .append("compoundConcentration", compoundConcentration)
             .build();
     }
 }

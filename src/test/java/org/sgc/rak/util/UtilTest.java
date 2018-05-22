@@ -5,7 +5,8 @@ import org.junit.Test;
 import org.sgc.rak.model.ActivityProfile;
 import org.sgc.rak.model.Compound;
 import org.sgc.rak.model.Kinase;
-import org.sgc.rak.reps.ActivityProfileCsvRecordRep;
+import org.sgc.rak.model.csv.ActivityProfileCsvRecord;
+import org.sgc.rak.model.csv.SScoreCsvRecord;
 import org.sgc.rak.reps.ObjectImportRep;
 
 public class UtilTest {
@@ -13,11 +14,11 @@ public class UtilTest {
     @Test
     public void testConvertEmptyStringsToNulls_activityProfile() {
 
-        ActivityProfileCsvRecordRep activityProfileCsvRecordRep = new ActivityProfileCsvRecordRep();
-        activityProfileCsvRecordRep.setDiscoverxGeneSymbol("");
+        ActivityProfileCsvRecord activityProfileCsvRecord = new ActivityProfileCsvRecord();
+        activityProfileCsvRecord.setDiscoverxGeneSymbol("");
 
-        Util.convertEmptyStringsToNulls(activityProfileCsvRecordRep);
-        Assert.assertNull(activityProfileCsvRecordRep.getDiscoverxGeneSymbol());
+        Util.convertEmptyStringsToNulls(activityProfileCsvRecord);
+        Assert.assertNull(activityProfileCsvRecord.getDiscoverxGeneSymbol());
     }
 
     @Test
@@ -57,7 +58,7 @@ public class UtilTest {
         existing.setKinase(existingKinase);
         existing.setPercentControl(0.3);
 
-        ActivityProfileCsvRecordRep newProfile = new ActivityProfileCsvRecordRep();
+        ActivityProfileCsvRecord newProfile = new ActivityProfileCsvRecord();
         newProfile.setCompoundConcentration(7);
         newProfile.setCompoundName(existing.getCompoundName()); // It'a assumed these were already found to match
         newProfile.setDiscoverxGeneSymbol(existing.getKinase().getDiscoverxGeneSymbol()); // Ditto
@@ -83,7 +84,7 @@ public class UtilTest {
         existing.setKinase(existingKinase);
         existing.setPercentControl(0.3);
 
-        ActivityProfileCsvRecordRep newProfile = new ActivityProfileCsvRecordRep();
+        ActivityProfileCsvRecord newProfile = new ActivityProfileCsvRecord();
         newProfile.setCompoundName(existing.getCompoundName()); // It'a assumed these were already found to match
         newProfile.setDiscoverxGeneSymbol(existing.getKinase().getDiscoverxGeneSymbol()); // Ditto
 
@@ -138,5 +139,17 @@ public class UtilTest {
         Assert.assertEquals("a", result.getSmiles());
         Assert.assertEquals("a", result.getSource());
         Assert.assertEquals(0.3, result.getS10(), 0.01);
+    }
+
+    @Test
+    public void testSScoreCsvRecordToCompound() {
+
+        SScoreCsvRecord rep = new SScoreCsvRecord();
+        rep.setCompoundName("compoundA");
+        rep.setSelectivityScore(0.3);
+
+        Compound compound = Util.sScoreCsvRecordToCompound(rep);
+        Assert.assertEquals(rep.getCompoundName(), compound.getCompoundName());
+        Assert.assertEquals(rep.getSelectivityScore(), compound.getS10());
     }
 }
