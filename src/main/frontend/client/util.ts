@@ -6,7 +6,7 @@ export default class RakUtil {
     static isActiveTab($route: Route, tabName: string): boolean {
         const tabNameRegex: RegExp = new RegExp(tabName + '(?:/.+)?$');
         console.log(tabName + ' -- ' + $route.fullPath + ', ' + (!!$route.fullPath && !!$route.fullPath.match(tabNameRegex)));
-        return !!$route.fullPath && !!$route.fullPath.match(tabNameRegex);
+        return !!$route.fullPath && !!decodeURIComponent($route.fullPath).match(tabNameRegex);
     }
 
     static isNewFieldStatus(fieldStatus: FieldStatus): boolean {

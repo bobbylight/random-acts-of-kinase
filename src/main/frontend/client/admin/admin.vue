@@ -74,6 +74,12 @@
                                     <v-list-tile-title>Import K<sub>d</sub>s</v-list-tile-title>
                                 </v-list-tile-content>
                             </v-list-tile>
+
+                            <v-list-tile to="import-s10s">
+                                <v-list-tile-content>
+                                    <v-list-tile-title>Import s(10)s</v-list-tile-title>
+                                </v-list-tile-content>
+                            </v-list-tile>
                         </v-list-group>
 
                         <v-list-tile to="blog-manager">

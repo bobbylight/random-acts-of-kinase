@@ -21,7 +21,7 @@
             </v-btn>
 
             <navbar-pill v-for="compound in openCompounds" :key="compound"
-                         :compound="compound" v-on:close="close($event)"></navbar-pill>
+                         :compound="compound" @close="close($event)"></navbar-pill>
         </v-toolbar-items>
 
         <v-spacer></v-spacer>
@@ -81,7 +81,7 @@ export default class Navbar extends Vue {
             this.openCompounds.splice(index, 1);
         }
         const tabNameRegex: RegExp = new RegExp($event + '$');
-        if (this.$route.fullPath && !!this.$route.fullPath.match(tabNameRegex)) {
+        if (this.$route.fullPath && !!decodeURIComponent(this.$route.fullPath).match(tabNameRegex)) {
             console.log('Going back');
             this.$router.back();
         }

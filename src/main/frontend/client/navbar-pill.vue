@@ -17,18 +17,18 @@ export default class NavbarPill extends Vue {
     @Prop({ required: true })
     compound: string;
 
+    close(e: MouseEvent) {
+        this.$emit('close', this.compound);
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
     isActiveTab(): boolean {
         return RakUtil.isActiveTab(this.$route, this.compound);
     }
 
     navigate() {
         this.$router.push({ name: 'compound', params: { id: this.compound }});
-    }
-
-    close(e: MouseEvent) {
-        this.$emit('close', this.compound);
-        e.preventDefault();
-        e.stopPropagation();
     }
 }
 </script>

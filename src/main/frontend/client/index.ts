@@ -54,6 +54,7 @@ import Admin from './admin/admin.vue';
 import ImportCompounds from './admin/import-compounds.vue';
 import ImportActivityProfiles from './admin/import-activity-profiles.vue';
 import ImportKds from './admin/import-kds.vue';
+import ImportS10s from './admin/import-s10s.vue';
 import Stats from './admin/stats.vue';
 import BlogManager from './admin/blog-manager.vue';
 import { RouteConfig } from 'vue-router/types/router';
@@ -131,6 +132,11 @@ window.onload = () => {
                     path: 'import-kds',
                     name: 'import-kds',
                     component: ImportKds
+                },
+                {
+                    path: 'import-s10s',
+                    name: 'import-s10s',
+                    component: ImportS10s
                 },
                 {
                     path: 'blog-manager',

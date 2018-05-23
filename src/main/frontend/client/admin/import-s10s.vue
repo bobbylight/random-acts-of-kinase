@@ -1,8 +1,8 @@
 <template>
     <abstract-import-data
-        header="Import Compounds"
+        header="Import s(10)s"
         :details="details"
-        image="img/import-compound-headers.png"
+        image="img/import-s10-headers.png"
         :importFunction="importFunction"
         :previewGridColumnInfos="previewGridColumnInfos">
     </abstract-import-data>
@@ -16,11 +16,12 @@ import { ColumnInfo } from './import-preview-table.vue';
 import restApi from '../rest-api';
 
 @Component({ components: { AbstractImportData } })
-export default class ImportCompounds extends Vue {
+export default class ImportS10s extends Vue {
 
-    private details: string = 'Upload a CSV file with compound information to add it to the database.\n' +
-        'The file should contain the following columns, in this order, but with no header\n' +
-        '(data can be sparse):';
+    private details: string = 'Upload a CSV file with S-score to add it to the database.  Only s(10) records\n' +
+        'will be imported.\n' +
+        'The file should contain the following columns, in this order (data can be sparse).\n' +
+        'A header row with values matching these header names is required:';
 
     get previewGridColumnInfos(): ColumnInfo[] {
 
@@ -34,7 +35,7 @@ export default class ImportCompounds extends Vue {
     }
 
     get importFunction(): ImportFunction {
-        return restApi.importCompounds.bind(restApi);
+        return restApi.importS10s.bind(restApi);
     }
 }
 </script>

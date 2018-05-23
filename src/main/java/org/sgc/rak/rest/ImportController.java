@@ -173,7 +173,9 @@ public class ImportController {
     /**
      * Imports a CSV file of S scores (s10) from Discoverx.  The data is merged/patched into the existing activity
      * profile data; that is, new activity profiles are added, and existing activity profiles have their non-null/empty
-     * values merged into the existing record.
+     * values merged into the existing record.<p>
+     *
+     * If the CSV data contains any S scores other than s(10)s (for example, s(1)s or s(35)s), they are ignored.
      *
      * @param file The CSV S Score data from Discoverx.
      * @param headerRow Whether the CSV data contains a header row.
@@ -197,7 +199,9 @@ public class ImportController {
 
         List<SScoreCsvRecord> sScores = loadFromCsv(file, headerRow, SScoreCsvRecord.class, schema);
 
-        List<Compound> compounds = sScores.stream().map(Util::sScoreCsvRecordToCompound)
+        List<Compound> compounds = sScores.stream()
+            .filter(s -> "S(10)".equals(s.getSelectivityScoreType())) // Only care about s(10) for now
+            .map(Util::sScoreCsvRecordToCompound)
             .collect(Collectors.toList());
         return compoundService.importCompounds(compounds, commit);
     }

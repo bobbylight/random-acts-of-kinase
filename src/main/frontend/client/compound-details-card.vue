@@ -9,7 +9,7 @@
                 <v-layout row wrap align-center>
 
                     <v-flex xs3 pt-0>
-                        <v-tooltip right>
+                        <v-tooltip bottom>
                             <img :src="compoundImageUrl"
                                  class="compound-image"
                                  @click="onImageClicked"
