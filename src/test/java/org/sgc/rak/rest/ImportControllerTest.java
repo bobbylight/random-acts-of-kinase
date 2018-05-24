@@ -17,12 +17,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.util.NestedServletException;
 
 import java.io.InputStream;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
@@ -57,37 +60,47 @@ public class ImportControllerTest {
 
     @Test
     public void testImportActivityProfiles_happyPath_noOptionalParams() throws Exception {
-        testImportActivityProfiles_impl("import-activity-profiles-happy-path.csv", null, true);
+        testImportActivityProfiles_impl("import-activity-profiles-happy-path.csv", null, null, true);
     }
 
     @Test
     public void testImportActivityProfiles_happyPath_commitExplicitlyFalse() throws Exception {
-        testImportActivityProfiles_impl("import-activity-profiles-happy-path.csv", false, true);
+        testImportActivityProfiles_impl("import-activity-profiles-happy-path.csv", null, false, true);
     }
 
     @Test
     public void testImportActivityProfiles_happyPath_commitExplicitlyTrue() throws Exception {
-        testImportActivityProfiles_impl("import-activity-profiles-happy-path.csv", true, true);
+        testImportActivityProfiles_impl("import-activity-profiles-happy-path.csv", null, true, true);
+    }
+
+    @Test
+    public void testImportActivityProfiles_happyPath_headerRowExplicitlyFalse() throws Exception {
+        testImportActivityProfiles_impl("import-activity-profiles-happy-path-no-header.csv", false, true, true);
     }
 
     @Test(expected = BadRequestException.class)
     public void testImportActivityProfiles_error_missingAColumn() throws Exception {
-        testImportActivityProfiles_impl("import-activity-profiles-missing-entrez-column.csv", false, false);
+        testImportActivityProfiles_impl("import-activity-profiles-missing-entrez-column.csv", null, false, false);
     }
 
     @Test(expected = BadRequestException.class)
     public void testImportActivityProfiles_error_notCsv() throws Exception {
-        testImportActivityProfiles_impl("not-csv-data.csv", false, false);
+        testImportActivityProfiles_impl("not-csv-data.csv", null, false, false);
     }
 
-    private void testImportActivityProfiles_impl(String csv, Boolean commitParam, boolean expectSuccess)
-            throws Exception {
+    private void testImportActivityProfiles_impl(String csv, Boolean headerRow, Boolean commitParam,
+                                                 boolean expectSuccess) throws Exception {
 
         MockMultipartFile file = new MockMultipartFile("file", getCsv(csv));
+        boolean requestParams = false;
 
         String url = "/admin/api/activityProfiles";
+        if (headerRow != null) {
+            url += "?headerRow=" + headerRow;
+            requestParams = true;
+        }
         if (commitParam != null) {
-            url += "?commit=" + commitParam;
+            url += (requestParams ? "&" : "?") + "commit=" + commitParam;
         }
         boolean expectedCommit = commitParam != null ? commitParam : true;
 

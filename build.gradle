@@ -72,6 +72,25 @@ idea {
     }
 }
 
+sourceSets {
+    integrationTest {
+        java.srcDirs = [ 'src/integration-test/java' ]
+        resources.srcDirs = [ 'src/integration-test/resources' ]
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
+    }
+}
+
+configurations {
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestRuntime.extendsFrom testRuntime
+}
+
+task integration(type: Test, description: 'Runs the integration tests.', group: 'Verification') {
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
 clean.doLast {
     delete "${rootDir}/aws-archive.zip"
 }
