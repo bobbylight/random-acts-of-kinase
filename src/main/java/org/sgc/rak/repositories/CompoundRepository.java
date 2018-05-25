@@ -36,12 +36,12 @@ public interface CompoundRepository extends PagingAndSortingRepository<Compound,
     Page<Compound> findSmilesIsNullOrS10IsNull(Pageable pageInfo);
 
     /**
-     * Returns compounds whose names start with a given string, ignoring case.
+     * Returns compounds whose names start contain a given substring, ignoring case.
      *
-     * @param compoundNamePart The start of a compound name.
+     * @param compoundNamePart A part of a compound name.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
      */
-    Page<Compound> getCompoundsByCompoundNameStartsWithIgnoreCaseAndSourceIsNull(String compoundNamePart,
-                                                                                 Pageable pageInfo);
+    Page<Compound> getCompoundsByCompoundNameContainsIgnoreCaseAndSourceIsNull(String compoundNamePart,
+                                                                               Pageable pageInfo);
 }

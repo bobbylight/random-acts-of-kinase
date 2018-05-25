@@ -107,18 +107,18 @@ public class CompoundDaoTest {
     @Test
     public void testGetCompoundsByCompoundNameStartsWithIgnoreCase() {
 
-        String startsWith = "comp";
+        String namePart = "comp";
 
         Compound compound1 = new Compound();
         compound1.setCompoundName("compoundA");
         Compound compound2= new Compound();
         compound2.setCompoundName("compoundB");
         Page<Compound> expectedPage = new PageImpl<>(Arrays.asList(compound1, compound2));
-        doReturn(expectedPage).when(compoundRepository).getCompoundsByCompoundNameStartsWithIgnoreCaseAndSourceIsNull(
-            eq(startsWith), any(Pageable.class));
+        doReturn(expectedPage).when(compoundRepository).getCompoundsByCompoundNameContainsIgnoreCaseAndSourceIsNull(
+            eq(namePart), any(Pageable.class));
 
         Pageable pageInfo = PageRequest.of(0, 20);
-        Page<Compound> actualPage = compoundDao.getCompoundsByCompoundNameStartsWithIgnoreCase(startsWith, pageInfo);
+        Page<Compound> actualPage = compoundDao.getCompoundsByCompoundNameContainsIgnoreCase(namePart, pageInfo);
 
         comparePages(expectedPage, actualPage);
     }

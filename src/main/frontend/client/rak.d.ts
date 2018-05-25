@@ -19,6 +19,8 @@ export interface Compound {
     compoundName: string;
     chemotype: string;
     s10: string;
+    smiles?: string;
+    source?: string;
     primaryReference?: string;
     primaryReferenceUrl?: string;
 }

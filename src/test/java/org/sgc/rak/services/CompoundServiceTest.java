@@ -93,7 +93,7 @@ public class CompoundServiceTest {
 
         List<Compound> expectedCompounds = Collections.singletonList(TestUtil.createCompound(COMPOUND_NAME));
         PageImpl<Compound> expectedPage = new PageImpl<>(expectedCompounds, pr, 1);
-        doReturn(expectedPage).when(mockCompoundDao).getCompoundsByCompoundNameStartsWithIgnoreCase(anyString(),
+        doReturn(expectedPage).when(mockCompoundDao).getCompoundsByCompoundNameContainsIgnoreCase(anyString(),
             any(Pageable.class));
 
         Page<Compound> actualCompounds = service.getCompoundsByCompoundName("foo", pr);

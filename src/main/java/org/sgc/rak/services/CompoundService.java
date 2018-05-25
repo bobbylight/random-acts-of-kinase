@@ -109,15 +109,15 @@ public class CompoundService {
     }
 
     /**
-     * Returns compounds whose names start with a given string, ignoring case.
+     * Returns compounds whose names contains a given substring, ignoring case.
      *
-     * @param compoundNamePart The start of a compound name.
+     * @param compoundNamePart A pert of a compound name.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
      * @see #getCompounds(Pageable)
      */
     public Page<Compound> getCompoundsByCompoundName(String compoundNamePart, Pageable pageInfo) {
-        return compoundDao.getCompoundsByCompoundNameStartsWithIgnoreCase(compoundNamePart, pageInfo);
+        return compoundDao.getCompoundsByCompoundNameContainsIgnoreCase(compoundNamePart, pageInfo);
     }
 
     public Page<Compound> getCompoundsByKinaseAndActivity(String kinase, double activity, Pageable pageInfo) {

@@ -56,7 +56,7 @@ public class CompoundDao {
      *
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
-     * @see #getCompoundsByCompoundNameStartsWithIgnoreCase(String, Pageable)
+     * @see #getCompoundsByCompoundNameContainsIgnoreCase(String, Pageable)
      */
     public Page<Compound> getCompounds(Pageable pageInfo) {
 //        return compoundRepository.findAll(pageInfo);
@@ -68,16 +68,15 @@ public class CompoundDao {
     }
 
     /**
-     * Returns compounds whose names start with a given string, ignoring case.
+     * Returns compounds whose names contain a given substring, ignoring case.
      *
-     * @param compoundNamePart The start of a compound name.
+     * @param compoundNamePart A pert of a compound name.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
      * @see #getCompounds(Pageable)
      */
-    public Page<Compound> getCompoundsByCompoundNameStartsWithIgnoreCase(String compoundNamePart,
-                                                               Pageable pageInfo) {
-        return compoundRepository.getCompoundsByCompoundNameStartsWithIgnoreCaseAndSourceIsNull(
+    public Page<Compound> getCompoundsByCompoundNameContainsIgnoreCase(String compoundNamePart, Pageable pageInfo) {
+        return compoundRepository.getCompoundsByCompoundNameContainsIgnoreCaseAndSourceIsNull(
             compoundNamePart, pageInfo);
     }
 
