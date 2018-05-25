@@ -23,12 +23,41 @@ export default class NavbarPill extends Vue {
         this.$emit('close', this.compound);
     }
 
+    beforeDestroy() {
+        const closeButton: Element = this.$el.querySelector('.close-icon')!;
+        closeButton.removeEventListener('mouseover', this.onCloseButtonMouseOver);
+        closeButton.removeEventListener('mouseout', this.onCloseButtonMouseOut);
+    }
+
+    created() {
+        this.onCloseButtonMouseOver = this.onCloseButtonMouseOver.bind(this);
+        this.onCloseButtonMouseOut = this.onCloseButtonMouseOut.bind(this);
+    }
+
     isActiveTab(): boolean {
         return RakUtil.isActiveTab(this.$route, this.compound);
     }
 
+    mounted() {
+        // We must programmatically change style of "parent" div when close button
+        // is armed unfortunately.
+        const closeButton: Element = this.$el.querySelector('.close-icon')!;
+        closeButton.addEventListener('mouseover', this.onCloseButtonMouseOver);
+        closeButton.addEventListener('mouseout', this.onCloseButtonMouseOut);
+    }
+
     navigate() {
         this.$router.push({ name: 'compound', params: { id: this.compound }});
+    }
+
+    onCloseButtonMouseOver() {
+        const elem: HTMLElement = this.$el.getElementsByClassName('navbar-pill')[0] as HTMLElement;
+        elem.classList.add('closeButtonArmed');
+    }
+
+    onCloseButtonMouseOut() {
+        const elem: HTMLElement = this.$el.getElementsByClassName('navbar-pill')[0] as HTMLElement;
+        elem.classList.remove('closeButtonArmed');
     }
 }
 </script>
@@ -51,7 +80,10 @@ export default class NavbarPill extends Vue {
 
         &:hover, &.active {
             background: rgba(255, 255, 255, 0.15) !important;
-            color: #fff;
+        }
+
+        &.closeButtonArmed { // Hovering over the "close" icon
+            background: rgba(255, 255, 255, 0.3) !important;
         }
     }
 
