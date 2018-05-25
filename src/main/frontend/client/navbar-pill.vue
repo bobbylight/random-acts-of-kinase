@@ -1,8 +1,10 @@
 <template>
-    <v-btn flat class="navbar-pill" v-bind:class="{ active: isActiveTab() }" v-on:click="navigate">
-        {{compound}}
+    <div class="navbar-pill-wrapper">
+        <v-btn flat class="navbar-pill" v-bind:class="{ active: isActiveTab() }" @click="navigate">
+            {{compound}}
+        </v-btn>
         <i class="fa fa-times close-icon" aria-hidden="true" @click="close"></i>
-    </v-btn>
+    </div>
 </template>
 
 <script lang="ts">
@@ -19,8 +21,6 @@ export default class NavbarPill extends Vue {
 
     close(e: MouseEvent) {
         this.$emit('close', this.compound);
-        e.preventDefault();
-        e.stopPropagation();
     }
 
     isActiveTab(): boolean {
@@ -34,24 +34,25 @@ export default class NavbarPill extends Vue {
 </script>
 
 <style lang="less">
-@import "../styles/app-variables";
+@import '../styles/app-variables';
 @close-icon-color: gray;
 
-.navbar-pill-parent {
+.navbar-pill-wrapper {
+
+    height: inherit;
     position: relative;
-    margin-right: 1rem;
-}
 
-/* pill styles are essentially copied from ui inverted menu */
-.navbar-pill {
+    /* pill styles are essentially copied from ui inverted menu */
+    .navbar-pill {
 
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
 
-    &:hover, &.active {
-        background: rgba(255, 255, 255, 0.15) !important;
-        color: #fff;
+        &:hover, &.active {
+            background: rgba(255, 255, 255, 0.15) !important;
+            color: #fff;
+        }
     }
 
     &:hover .close-icon {
@@ -63,6 +64,7 @@ export default class NavbarPill extends Vue {
 
         transition: color @transition-time, opacity @transition-time;
 
+        cursor: pointer;
         opacity: 0;
         color: @close-icon-color;
         font-size: 1.3rem;
