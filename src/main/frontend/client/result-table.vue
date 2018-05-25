@@ -2,7 +2,7 @@
     <div>
         <v-data-table
             :headers="headers"
-            class="compound-table elevation-1"
+            class="compound-table"
             :items="items"
             :search="search"
             :pagination.sync="pagination"

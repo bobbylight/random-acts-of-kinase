@@ -16,7 +16,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "compound")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "compoundName", "chemotype", "s10", "smiles", "source" })
+@JsonPropertyOrder({ "compoundName", "chemotype", "s10", "smiles", "source", "primaryReference",
+    "primaryReferenceUrl" })
 public class Compound {
 
     @Id

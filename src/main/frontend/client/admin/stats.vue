@@ -64,14 +64,22 @@
                 <v-card class="not-top-card-padding">
 
                     <v-card-title primary-title>
-                        <div>
-                            <h3 class="headline">Something Else</h3>
-                            <div>Some other administrative stuff</div>
+                        <div class="title-content">
+                            <div>
+                                <h3 class="headline">Compounds Missing Publication Info</h3>
+                                <div>Compounds missing either a publication name or URL</div>
+                            </div>
+
+                            <div class="admin-card-button-area">
+                                <download-button url="/admin/api/compoundsMissingPublicationInfo"></download-button>
+                            </div>
                         </div>
                     </v-card-title>
 
                     <v-card-text>
-                        Nothing here yet.
+                        <CompoundsTable
+                            url="/admin/api/compoundsMissingPublicationInfo"
+                            :columnInfo="compoundsMissingPublicationInfoColumnInfo"></CompoundsTable>
                     </v-card-text>
                 </v-card>
             </v-flex>
@@ -92,6 +100,7 @@ export default class Stats extends Vue {
 
     private incompleteCompoundColumnInfo: ColumnInfo[];
     private compoundsMissingActivityProfilesColumnInfo: ColumnInfo[];
+    private compoundsMissingPublicationInfoColumnInfo: ColumnInfo[];
 
     created() {
 
@@ -106,6 +115,16 @@ export default class Stats extends Vue {
         this.compoundsMissingActivityProfilesColumnInfo = [
             { columnId: 'compoundName', columnName: 'Compound', isCompound: true },
             { columnId: 'count', columnName: 'Activity Profile Count' }
+        ];
+
+        this.compoundsMissingPublicationInfoColumnInfo = [
+            { columnId: 'compoundName', columnName: 'Compound', isCompound: true },
+            { columnId: 'chemotype', columnName: 'Chemotype' },
+            { columnId: 's10', columnName: 's(10)' },
+            { columnId: 'smiles', columnName: 'SMILES' },
+            { columnId: 'source', columnName: 'Source' },
+            { columnId: 'primaryReference', columnName: 'Primary Reference' },
+            { columnId: 'primaryReferenceUrl', columnName: 'Primary Reference URL' }
         ];
     }
 }

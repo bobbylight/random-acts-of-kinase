@@ -36,13 +36,24 @@ public class StatController {
     PagedDataRep<CompoundCountPair> getCompoundsMissingActivityProfiles(
             @SortDefault("compoundName") Pageable pageInfo) {
         Page<CompoundCountPair> page = compoundService.getCompoundsMissingActivityProfiles(pageInfo);
-        long start = page.getNumber() * pageInfo.getPageSize();
-        long total = page.getTotalElements();
-        return new PagedDataRep<>(page.getContent(), start, total);
+        return pageToPagedDataRep(page, pageInfo.getPageSize());
     }
 
     /**
-     * Returns information about compounds without SMILES strings, or any other missing fields, possibly filtered.
+     * Returns information about compounds that are missing activity profiles.
+     *
+     * @param pageInfo How to sort the data and what page of the data to return.
+     * @return The list of compounds.
+     */
+    @RequestMapping(method = RequestMethod.GET, path = "/compoundsMissingPublicationInfo",
+        produces = { MediaType.APPLICATION_JSON_VALUE, "text/csv" })
+    PagedDataRep<Compound> getCompoundsMissingPublicationInfo(@SortDefault("compoundName") Pageable pageInfo) {
+        Page<Compound> page = compoundService.getCompoundsMissingPublicationInfo(pageInfo);
+        return pageToPagedDataRep(page, pageInfo.getPageSize());
+    }
+
+    /**
+     * Returns information about compounds without SMILES strings or s(10) values, possibly filtered.
      *
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
@@ -51,7 +62,11 @@ public class StatController {
             produces = { MediaType.APPLICATION_JSON_VALUE, "text/csv" })
     PagedDataRep<Compound> getIncompleteCompounds(@SortDefault("compoundName") Pageable pageInfo) {
         Page<Compound> page = compoundService.getIncompleteCompounds(pageInfo);
-        long start = page.getNumber() * pageInfo.getPageSize();
+        return pageToPagedDataRep(page, pageInfo.getPageSize());
+    }
+
+    private static <T> PagedDataRep<T> pageToPagedDataRep(Page<T> page, int pageSize) {
+        long start = (long)page.getNumber() * pageSize; // Cast to appease FindBugs
         long total = page.getTotalElements();
         return new PagedDataRep<>(page.getContent(), start, total);
     }

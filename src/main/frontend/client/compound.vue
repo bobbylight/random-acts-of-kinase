@@ -8,8 +8,20 @@
                 <compound-details-card :compound-name="id"></compound-details-card>
             </v-flex>
 
+
             <v-flex xs12 class="card-vertical-spacing">
-                <result-table :filters="gridFilters"></result-table>
+                <v-expansion-panel class="expansion-panel-no-left-margin">
+                    <v-expansion-panel-content value="true">
+                        <div slot="header">
+                            <h3 class="headline">Table View</h3>
+                        </div>
+                        <v-card>
+                            <v-card-text>
+                                <result-table :filters="gridFilters"></result-table>
+                            </v-card-text>
+                        </v-card>
+                    </v-expansion-panel-content>
+                </v-expansion-panel>
             </v-flex>
 
             <v-flex xs12 class="card-vertical-spacing" v-if="chartData">

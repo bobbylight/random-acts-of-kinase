@@ -24,7 +24,8 @@
                 <v-flex sm4>
                     <v-text-field type="number" label="Remaining activity %" class="search-field right-aligned"
                                   :rules="numericValidationRules" v-model="filters.activity"
-                                  step="0.1" min="0.1" max="100"></v-text-field>
+                                  step="0.1" min="0.1" max="100" suffix="%">
+                    </v-text-field>
                 </v-flex>
             </v-layout>
         </v-flex>

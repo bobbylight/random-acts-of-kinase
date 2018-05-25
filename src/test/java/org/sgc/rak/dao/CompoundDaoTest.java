@@ -13,6 +13,7 @@ import org.sgc.rak.model.Compound;
 import org.sgc.rak.model.CompoundCountPair;
 import org.sgc.rak.repositories.CompoundRepository;
 import org.sgc.rak.repositories.KinaseRepository;
+import org.sgc.rak.util.TestUtil;
 import org.springframework.data.domain.*;
 
 import javax.persistence.EntityManager;
@@ -50,8 +51,7 @@ public class CompoundDaoTest {
 
         String expectedCompoundName = "compoundA";
 
-        Compound expectedCompound = new Compound();
-        expectedCompound.setCompoundName(expectedCompoundName);
+        Compound expectedCompound = TestUtil.createCompound(expectedCompoundName);
         Optional<Compound> optional = Optional.of(expectedCompound);
         doReturn(optional).when(compoundRepository).findById(eq(expectedCompoundName));
 
@@ -71,10 +71,8 @@ public class CompoundDaoTest {
     @Test
     public void testGetCompounds_pageable() {
 
-        Compound compound1 = new Compound();
-        compound1.setCompoundName("compoundA");
-        Compound compound2= new Compound();
-        compound2.setCompoundName("compoundB");
+        Compound compound1 = TestUtil.createCompound("compoundA");
+        Compound compound2 = TestUtil.createCompound("compoundB");
         Page<Compound> expectedPage = new PageImpl<>(Arrays.asList(compound1, compound2));
         //doReturn(expectedPage).when(compoundRepository).findAll(any(Pageable.class));
         doReturn(expectedPage).when(compoundRepository).findSourceIsNull(any(Pageable.class));
@@ -88,10 +86,8 @@ public class CompoundDaoTest {
     @Test
     public void testGetCompounds_list() {
 
-        Compound compound1 = new Compound();
-        compound1.setCompoundName("compoundA");
-        Compound compound2= new Compound();
-        compound2.setCompoundName("compoundB");
+        Compound compound1 = TestUtil.createCompound("compoundA");
+        Compound compound2 = TestUtil.createCompound("compoundB");
         List<Compound> expectedList = Arrays.asList(compound1, compound2);
         doReturn(expectedList).when(compoundRepository).findByCompoundNameInIgnoreCase(any());
 
@@ -109,10 +105,8 @@ public class CompoundDaoTest {
 
         String namePart = "comp";
 
-        Compound compound1 = new Compound();
-        compound1.setCompoundName("compoundA");
-        Compound compound2= new Compound();
-        compound2.setCompoundName("compoundB");
+        Compound compound1 = TestUtil.createCompound("compoundA");
+        Compound compound2 = TestUtil.createCompound("compoundB");
         Page<Compound> expectedPage = new PageImpl<>(Arrays.asList(compound1, compound2));
         doReturn(expectedPage).when(compoundRepository).getCompoundsByCompoundNameContainsIgnoreCaseAndSourceIsNull(
             eq(namePart), any(Pageable.class));
@@ -125,6 +119,23 @@ public class CompoundDaoTest {
 
     @Test
     public void testGetCompoundsMissingActivityProfiles() {
+
+        Compound compound1 = TestUtil.createCompound("compoundA");
+        Compound compound2 = TestUtil.createCompound("compoundB");
+        Page<Compound> expectedPage = new PageImpl<>(Arrays.asList(compound1, compound2));
+        doReturn(expectedPage).when(compoundRepository)
+            .getCompoundsByPrimaryReferenceIsNullOrPrimaryReferenceUrlIsNull(any(Pageable.class));
+
+        Sort sort = Sort.by(new Sort.Order(Sort.Direction.ASC, "compoundName"),
+            new Sort.Order(Sort.Direction.ASC, "count"));
+        Pageable pageInfo = PageRequest.of(0, 20, sort);
+        Page<Compound> actualPage = compoundDao.getCompoundsMissingPublicationInfo(pageInfo);
+
+        comparePages(expectedPage, actualPage);
+    }
+
+    @Test
+    public void testGetCompoundsMissingPublicationInfo() {
 
         doReturn(1000L).when(kinaseRepository).count();
 
@@ -161,10 +172,8 @@ public class CompoundDaoTest {
     @Test
     public void testGetIncompleteCompounds() {
 
-        Compound compound1 = new Compound();
-        compound1.setCompoundName("compoundA");
-        Compound compound2= new Compound();
-        compound2.setCompoundName("compoundB");
+        Compound compound1 = TestUtil.createCompound("compoundA");
+        Compound compound2 = TestUtil.createCompound("compoundB");
         Page<Compound> expectedPage = new PageImpl<>(Arrays.asList(compound1, compound2));
         doReturn(expectedPage).when(compoundRepository).findSmilesIsNullOrS10IsNull(any(Pageable.class));
 

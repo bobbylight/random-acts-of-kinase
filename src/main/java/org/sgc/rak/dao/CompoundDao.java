@@ -139,7 +139,17 @@ public class CompoundDao {
     }
 
     /**
-     * Returns information on compounds without SMILES strings.
+     * Returns information about compounds that are missing publication information.
+     *
+     * @param pageInfo How to sort the data and what page of the data to return.
+     * @return The list of compounds.
+     */
+    public Page<Compound> getCompoundsMissingPublicationInfo(Pageable pageInfo) {
+        return compoundRepository.getCompoundsByPrimaryReferenceIsNullOrPrimaryReferenceUrlIsNull(pageInfo);
+    }
+
+    /**
+     * Returns information on compounds without SMILES strings or s(10) values.
      *
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.

@@ -11,16 +11,20 @@ import org.sgc.rak.exceptions.NotFoundException;
 import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.model.ActivityProfile;
 import org.sgc.rak.model.Compound;
+import org.sgc.rak.model.CompoundCountPair;
 import org.sgc.rak.model.Kinase;
 import org.sgc.rak.repositories.ActivityProfileRepository;
 import org.sgc.rak.util.TestUtil;
 import org.springframework.data.domain.*;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class CompoundServiceTest {
 
@@ -144,5 +148,110 @@ public class CompoundServiceTest {
         PageRequest pr = PageRequest.of(0, 20, sort);
 
         service.getCompoundsByKinaseAndActivity(KINASE_DISCOVERX, 0.3, pr);
+    }
+
+    @Test
+    public void testGetCompoundsMissingActivityProfiles_happyPath() {
+
+        List<Compound> compounds = Arrays.asList(
+            TestUtil.createCompound("compoundA"),
+            TestUtil.createCompound("compoundB")
+        );
+
+        Pageable pageable = PageRequest.of(3, 2);
+
+        PageImpl<Compound> page = new PageImpl<>(compounds, pageable, 100);
+        doReturn(page).when(mockCompoundDao).getCompoundsMissingPublicationInfo(any(Pageable.class));
+
+        Page<Compound> actualResponse = service.getCompoundsMissingPublicationInfo(pageable);
+        Assert.assertEquals(2, actualResponse.getNumberOfElements());
+        Assert.assertEquals(100, actualResponse.getTotalElements());
+        Assert.assertEquals(50, actualResponse.getTotalPages());
+        Assert.assertEquals(compounds.size(), actualResponse.getSize());
+        for (int i = 0; i < compounds.size(); i++) {
+            Compound expected = compounds.get(i);
+            Compound actual = actualResponse.getContent().get(i);
+            Assert.assertEquals(expected.getCompoundName(), actual.getCompoundName());
+        }
+    }
+
+    @Test
+    public void testGetCompoundsMissingPublicationInfo_happyPath() {
+
+        CompoundCountPair pairA = new CompoundCountPair("compoundA", 3);
+        CompoundCountPair pairB = new CompoundCountPair("compoundB", 4);
+        List<CompoundCountPair> pairs = Arrays.asList(pairA, pairB);
+
+        Pageable pageable = PageRequest.of(3, 2);
+
+        PageImpl<CompoundCountPair> page = new PageImpl<>(pairs, pageable, 100);
+        doReturn(page).when(mockCompoundDao).getCompoundsMissingActivityProfiles(any(Pageable.class));
+
+        Page<CompoundCountPair> actualResponse = service.getCompoundsMissingActivityProfiles(pageable);
+        Assert.assertEquals(2, actualResponse.getNumberOfElements());
+        Assert.assertEquals(100, actualResponse.getTotalElements());
+        Assert.assertEquals(50, actualResponse.getTotalPages());
+        Assert.assertEquals(pairs.size(), actualResponse.getSize());
+        for (int i = 0; i < pairs.size(); i++) {
+            CompoundCountPair expected = pairs.get(i);
+            CompoundCountPair actual = actualResponse.getContent().get(i);
+            Assert.assertEquals(expected.getCompoundName(), actual.getCompoundName());
+            Assert.assertEquals(expected.getCount(), actual.getCount());
+        }
+    }
+
+    @Test
+    public void testGetIncompleteCompounds_happyPath() {
+
+        List<Compound> compounds = Arrays.asList(
+            TestUtil.createCompound("compoundA"),
+            TestUtil.createCompound("compoundB")
+        );
+
+        Pageable pageable = PageRequest.of(3, 2);
+
+        PageImpl<Compound> page = new PageImpl<>(compounds, pageable, 100);
+        doReturn(page).when(mockCompoundDao).getIncompleteCompounds(any(Pageable.class));
+
+        Page<Compound> actualResponse = service.getIncompleteCompounds(pageable);
+        Assert.assertEquals(2, actualResponse.getNumberOfElements());
+        Assert.assertEquals(100, actualResponse.getTotalElements());
+        Assert.assertEquals(50, actualResponse.getTotalPages());
+        Assert.assertEquals(compounds.size(), actualResponse.getSize());
+        for (int i = 0; i < compounds.size(); i++) {
+            Compound expected = compounds.get(i);
+            Compound actual = actualResponse.getContent().get(i);
+            Assert.assertEquals(expected.getCompoundName(), actual.getCompoundName());
+        }
+    }
+
+    @Test
+    public void testImportCompounds_happyPath_commit() {
+        testImportCompoundsImpl(false);
+    }
+
+    @Test
+    public void testImportCompounds_happyPath_noCommit() {
+        testImportCompoundsImpl(true);
+    }
+
+    private void testImportCompoundsImpl(boolean commit) {
+
+        List<Compound> compounds = Arrays.asList(
+            TestUtil.createCompound("compoundA"),
+            TestUtil.createCompound("compoundB")
+        );
+
+        List<Compound> priorCompounds = Collections.singletonList(
+            TestUtil.createCompound("compoundA")
+        );
+        doReturn(priorCompounds).when(mockCompoundDao).getCompounds(anyList());
+
+        service.importCompounds(compounds, commit);
+
+        // Verify save was only performed if commit was true
+        if (commit) {
+            verify(mockCompoundDao, times(1)).save(any());
+        }
     }
 }

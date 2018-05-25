@@ -44,4 +44,12 @@ public interface CompoundRepository extends PagingAndSortingRepository<Compound,
      */
     Page<Compound> getCompoundsByCompoundNameContainsIgnoreCaseAndSourceIsNull(String compoundNamePart,
                                                                                Pageable pageInfo);
+
+    /**
+     * Returns a list of compounds missing a primary reference field.
+     *
+     * @param pageInfo How to sort the data and what page of the data to return.
+     * @return The list of compounds.
+     */
+    Page<Compound> getCompoundsByPrimaryReferenceIsNullOrPrimaryReferenceUrlIsNull(Pageable pageInfo);
 }

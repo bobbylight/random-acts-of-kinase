@@ -187,6 +187,13 @@ public final class Util {
             retVal.setChemotype(existing.getChemotype());
         }
 
+        if (newCompound.getS10() != null) {
+            retVal.setS10(newCompound.getS10());
+        }
+        else {
+            retVal.setS10(existing.getS10());
+        }
+
         if (StringUtils.isNotBlank(newCompound.getSmiles())) {
             retVal.setSmiles(newCompound.getSmiles());
         }
@@ -201,11 +208,18 @@ public final class Util {
             retVal.setSource(existing.getSource());
         }
 
-        if (newCompound.getS10() != null) {
-            retVal.setS10(newCompound.getS10());
+        if (StringUtils.isNotBlank(newCompound.getPrimaryReference())) {
+            retVal.setPrimaryReference(newCompound.getPrimaryReference());
         }
         else {
-            retVal.setS10(existing.getS10());
+            retVal.setPrimaryReference(existing.getPrimaryReference());
+        }
+
+        if (StringUtils.isNotBlank(newCompound.getPrimaryReferenceUrl())) {
+            retVal.setPrimaryReferenceUrl(newCompound.getPrimaryReferenceUrl());
+        }
+        else {
+            retVal.setPrimaryReferenceUrl(existing.getPrimaryReferenceUrl());
         }
 
         return retVal;

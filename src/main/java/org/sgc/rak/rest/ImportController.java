@@ -70,12 +70,7 @@ public class ImportController {
 
         try {
 
-            if (schema == null) {
-                reader = mapper.readerWithSchemaFor(clazz);
-            }
-            else {
-                reader = mapper.readerFor(clazz).with(schema);
-            }
+            reader = mapper.readerFor(clazz).with(schema);
 
             MappingIterator<T> iter = reader
                 // Note this doesn't seem to work, so we manually null out empty strings later
@@ -126,19 +121,34 @@ public class ImportController {
     }
 
     /**
-     * Imports a CSV file of compounds.  The data is merged/patched into the existing compound data;
-     * that is, new compounds are added, and existing compounds have their non-null/empty values
-     * merged into the existing compound record.
+     * Imports a CSV file of compounds.  This isn't a data file received from Discoverx, but rather just a
+     * utility provided for easy bulk modification of compounds.<p>
+     *
+     * The data is merged/patched into the existing compound data; that is, new compounds are added, and existing
+     * compounds have their non-null/empty values merged into the existing compound record.
      *
      * @param file The CSV compound data.
+     * @param headerRow Whether the CSV data contains a header row.
      * @param commit Whether the upsert should be committed (vs. a dry run with just the results returned).
      * @return The result of the operation.
      */
     @RequestMapping(method = RequestMethod.PATCH, path = "compounds")
     @ResponseStatus(HttpStatus.OK)
     ObjectImportRep importCompounds(@RequestPart("file") MultipartFile file,
-                                      @RequestParam(defaultValue = "true") boolean commit) {
-        List<Compound> compounds = loadFromCsv(file, false, Compound.class, null);
+                                    @RequestParam(defaultValue = "true") boolean headerRow,
+                                    @RequestParam(defaultValue = "true") boolean commit) {
+
+        CsvSchema schema = CsvSchema.builder()
+            .addColumn("compoundName", CsvSchema.ColumnType.STRING)
+            .addColumn("chemotype", CsvSchema.ColumnType.STRING)
+            .addColumn("s10", CsvSchema.ColumnType.NUMBER)
+            .addColumn("smiles", CsvSchema.ColumnType.STRING)
+            .addColumn("source", CsvSchema.ColumnType.STRING)
+            .addColumn("primaryReference", CsvSchema.ColumnType.STRING)
+            .addColumn("primaryReferenceUrl", CsvSchema.ColumnType.STRING)
+            .build();
+
+        List<Compound> compounds = loadFromCsv(file, headerRow, Compound.class, schema);
         return compoundService.importCompounds(compounds, commit);
     }
 

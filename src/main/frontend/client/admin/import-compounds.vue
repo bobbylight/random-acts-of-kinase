@@ -29,7 +29,9 @@ export default class ImportCompounds extends Vue {
             { name: 'Chemotype', value: 'chemotype' },
             { name: 's(10)', value: 's10' },
             { name: 'SMILES', value: 'smiles' },
-            { name: 'Source', value: 'source' }
+            { name: 'Source', value: 'source' },
+            { name: 'Reference', value: 'primaryReference' },
+            { name: 'Reference URL', value: 'primaryReferenceUrl' }
         ];
     }
 

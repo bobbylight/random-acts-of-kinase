@@ -10,6 +10,7 @@ import org.sgc.rak.model.Compound;
 import org.sgc.rak.model.CompoundCountPair;
 import org.sgc.rak.reps.PagedDataRep;
 import org.sgc.rak.services.CompoundService;
+import org.sgc.rak.util.TestUtil;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -59,13 +60,37 @@ public class StatControllerTest {
     }
 
     @Test
+    public void testGetCompoundsMissingPublicationInfo_happyPath() {
+
+        List<Compound> compounds = Arrays.asList(
+            TestUtil.createCompound("compoundA"),
+            TestUtil.createCompound("compoundB")
+        );
+
+        Pageable pageable = PageRequest.of(3, 2);
+
+        PageImpl<Compound> page = new PageImpl<>(compounds, pageable, 100);
+        doReturn(page).when(mockCompoundService).getCompoundsMissingPublicationInfo(any(Pageable.class));
+
+        PagedDataRep<Compound> actualResponse = controller.getCompoundsMissingPublicationInfo(pageable);
+        Assert.assertEquals(6, actualResponse.getStart());
+        Assert.assertEquals(2, actualResponse.getCount());
+        Assert.assertEquals(100, actualResponse.getTotal());
+        Assert.assertEquals(compounds.size(), actualResponse.getData().size());
+        for (int i = 0; i < compounds.size(); i++) {
+            Compound expected = compounds.get(i);
+            Compound actual = actualResponse.getData().get(i);
+            Assert.assertEquals(expected.getCompoundName(), actual.getCompoundName());
+        }
+    }
+
+    @Test
     public void testGetIncompleteCompounds_happyPath() {
 
-        Compound compound1 = new Compound();
-        compound1.setCompoundName("compoundA");
-        Compound compound2 = new Compound();
-        compound2.setCompoundName("compoundB");
-        List<Compound> compounds = Arrays.asList(compound1, compound2);
+        List<Compound> compounds = Arrays.asList(
+            TestUtil.createCompound("compoundA"),
+            TestUtil.createCompound("compoundB")
+        );
 
         Pageable pageable = PageRequest.of(3, 2);
 

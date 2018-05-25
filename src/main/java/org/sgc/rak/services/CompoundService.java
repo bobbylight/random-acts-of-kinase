@@ -56,6 +56,8 @@ public class CompoundService {
         String existingSmiles = null;
         Double existingS10 = null;
         String existingSource = null;
+        String existingPrimaryReference = null;
+        String existingPrimaryReferenceUrl = null;
 
         if (existing != null) {
             existingCompoundName = existing.getCompoundName();
@@ -63,6 +65,8 @@ public class CompoundService {
             existingSmiles = existing.getSmiles();
             existingS10 = existing.getS10();
             existingSource = existing.getSource();
+            existingPrimaryReference = existing.getPrimaryReference();
+            existingPrimaryReferenceUrl = existing.getPrimaryReferenceUrl();
         }
 
         return Arrays.asList(
@@ -70,7 +74,10 @@ public class CompoundService {
             Util.createFieldStatus("chemotype", compound.getChemotype(), existingChemotype),
             Util.createFieldStatus("smiles", compound.getSmiles(), existingSmiles),
             Util.createFieldStatus("s10", compound.getS10(), existingS10),
-            Util.createFieldStatus("source", compound.getSource(), existingSource)
+            Util.createFieldStatus("source", compound.getSource(), existingSource),
+            Util.createFieldStatus("primaryReference", compound.getPrimaryReference(), existingPrimaryReference),
+            Util.createFieldStatus("primaryReferenceUrl", compound.getPrimaryReferenceUrl(),
+                existingPrimaryReferenceUrl)
         );
     }
 
@@ -143,17 +150,33 @@ public class CompoundService {
      *
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
+     * @see #getCompoundsMissingPublicationInfo(Pageable)
+     * @see #getIncompleteCompounds(Pageable)
      */
     public Page<CompoundCountPair> getCompoundsMissingActivityProfiles(Pageable pageInfo) {
         return compoundDao.getCompoundsMissingActivityProfiles(pageInfo);
     }
 
     /**
-     * Returns information about compounds without SMILES strings, or any other missing fields.
+     * Returns information about compounds that are missing one or more publication information fields.
+     *
+     * @param pageInfo How to sort the data and what page of the data to return.
+     * @return The list of compounds.
+     * @see #getCompoundsMissingActivityProfiles(Pageable)
+     * @see #getIncompleteCompounds(Pageable)
+     */
+    public Page<Compound> getCompoundsMissingPublicationInfo(Pageable pageInfo) {
+        return compoundDao.getCompoundsMissingPublicationInfo(pageInfo);
+    }
+
+    /**
+     * Returns information about compounds without SMILES strings or s(10) values.
      *
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
      * @see #getCompounds(Pageable)
+     * @see #getCompoundsMissingActivityProfiles(Pageable)
+     * @see #getCompoundsMissingPublicationInfo(Pageable)
      */
     public Page<Compound> getIncompleteCompounds(Pageable pageInfo) {
         return compoundDao.getIncompleteCompounds(pageInfo);
