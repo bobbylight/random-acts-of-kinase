@@ -1,5 +1,14 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { ActivityProfile, BlogPost, Compound, ObjectImportRep, ErrorResponse, PagedDataRep, UserRep } from './rak';
+import {
+    ActivityProfile,
+    BlogPost,
+    Compound,
+    ObjectImportRep,
+    ErrorResponse,
+    PagedDataRep,
+    UserRep,
+    Feedback
+} from './rak';
 
 export class RestApi {
 
@@ -115,6 +124,24 @@ export class RestApi {
             });
     }
 
+    getFeedback(page: number, size: number, filters: any,
+                 sortParam: string): Promise<PagedDataRep<Feedback>> {
+
+        let url: string = `api/feedback?page=${page}&size=${size}`;
+        if (filters.author) {
+            url += `&author=${filters.author}`;
+        }
+
+        if (sortParam) {
+            url += `&sort=${sortParam}`;
+        }
+
+        return this.instance.get(url)
+            .then((response: AxiosResponse<PagedDataRep<Feedback>>) => {
+                return response.data;
+            });
+    }
+
     importActivityProfiles(file: File, headerRow: boolean, commit: boolean = true): Promise<ObjectImportRep> {
         return this.importCsvDataImpl('admin/api/activityProfiles', file, headerRow, commit);
     }
@@ -129,10 +156,7 @@ export class RestApi {
         const data: FormData = new FormData();
         data.append('file', file);
 
-        let url: string = `${baseUrl}?commit=${commit}`;
-        if (headerRow) {
-            url += '&headerRow=true';
-        }
+        const url: string = `${baseUrl}?commit=${commit}&headerRow=${headerRow}`;
 
         return this.instance.patch(url, data)
             .then((response: AxiosResponse<ObjectImportRep>) => {

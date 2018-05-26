@@ -51,6 +51,26 @@ public class ImportControllerIntegrationTest {
     }
 
     /**
+     * Asserts that the number of activity profiles in the database is a specific value.
+     *
+     * @param count The expected value.
+     * @throws SQLException If an error occurs.
+     */
+    private void assertActivityProfileCount(long count) throws SQLException {
+
+        long actualCount;
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement("select count(1) from kinase_activity_profile");
+             ResultSet rs = stmt.executeQuery()) {
+            rs.next();
+            actualCount = rs.getLong(1);
+        }
+
+        Assert.assertEquals("Unexpected activity profile count after test completed", count, actualCount);
+    }
+
+    /**
      * Asserts that the number of compounds in the database is a specific value.
      *
      * @param count The expected value.
@@ -68,6 +88,26 @@ public class ImportControllerIntegrationTest {
         }
 
         Assert.assertEquals("Unexpected compound count after test completed", count, actualCount);
+    }
+
+    private void assertKdValue(String compoundName, int kinaseIndex, double expectedKd) throws SQLException {
+
+        double actualKd;
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(
+                 "select kd from kinase_activity_profile where compound_nm = ? and kinase = ?")) {
+
+            stmt.setString(1, compoundName);
+            stmt.setInt(2, kinaseIndex);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                rs.next();
+                actualKd = rs.getDouble(1);
+            }
+        }
+
+        Assert.assertEquals("Unexpected kd for " + compoundName, expectedKd, actualKd, 0.001);
     }
 
     private void deleteCompound(String compoundName) throws SQLException {
@@ -168,6 +208,16 @@ public class ImportControllerIntegrationTest {
     }
 
     @Test
+    public void testImportCompounds_happyPath_oneNewOneModified_noOptionalParams() throws Exception {
+
+        ResultActions actions = testImportCompounds_impl("import-compounds-header-one-new-one-modified.csv",
+            null, null, true);
+
+        actions.andExpect(jsonPath("$.fieldStatuses", hasSize(2)));
+        assertCompoundCount(4);
+    }
+
+    @Test
     public void testImportCompounds_happyPath_oneNewOneModified_noHeaderNoCommit() throws Exception {
 
         ResultActions actions = testImportCompounds_impl("import-compounds-no-header-one-new-one-modified.csv",
@@ -207,16 +257,6 @@ public class ImportControllerIntegrationTest {
         assertCompoundCount(4);
     }
 
-    @Test
-    public void testImportCompounds_happyPath_oneNewOneModified_noOptionalParams() throws Exception {
-
-        ResultActions actions = testImportCompounds_impl("import-compounds-header-one-new-one-modified.csv",
-            null, null, true);
-
-        actions.andExpect(jsonPath("$.fieldStatuses", hasSize(2)));
-        assertCompoundCount(4);
-    }
-
     private ResultActions testImportCompounds_impl(String csv, Boolean headerRow, Boolean commitParam,
                                                    boolean expectSuccess) throws Exception {
 
@@ -224,6 +264,136 @@ public class ImportControllerIntegrationTest {
         boolean requestParams = false;
 
         String url = "/admin/api/compounds";
+        if (headerRow != null) {
+            url += "?headerRow=" + headerRow;
+            requestParams = true;
+        }
+        if (commitParam != null) {
+            url += (requestParams ? "&" : "?") + "commit=" + commitParam;
+        }
+
+        ResultActions actions;
+        try {
+            actions = mockMvc.perform(MockMvcRequestBuilders.multipart(url)
+                .file(file)
+                .with(new ImportControllerTest.PatchRequestPostProcessor())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+            )
+                .andDo(print());
+        } catch (NestedServletException e) {
+            throw (Exception)e.getCause(); // For tests that test failure paths, throw the underlying exception
+        }
+
+        if (expectSuccess) {
+            actions.andExpect(status().isOk()
+            ).andReturn();
+        }
+
+        return actions;
+    }
+
+    @Test
+    public void testImportKds_happyPath_noOptionalParams() throws Exception {
+
+        ResultActions actions = testImportKds_impl("import-kd-values-header.csv",
+            null, null, true);
+
+        // Records from the file were returned
+        actions.andExpect(jsonPath("$.fieldStatuses", hasSize(2)));
+
+        // Entirely new row from file added to database
+        assertActivityProfileCount(4);
+
+        // Records from the file updated the database Kd values
+        assertKdValue("compoundA", 1, 777);
+        assertKdValue("compoundB", 1, 888);
+    }
+
+    @Test
+    public void testImportKds_happyPath_noHeaderNoCommit() throws Exception {
+
+        ResultActions actions = testImportKds_impl("import-kd-values-no-header.csv",
+            false, null, true);
+
+        // Records from the file were returned
+        actions.andExpect(jsonPath("$.fieldStatuses", hasSize(2)));
+
+        // Entirely new row from file added to database
+        assertActivityProfileCount(4);
+
+        // Records from the file updated the database Kd values
+        assertKdValue("compoundA", 1, 777);
+        assertKdValue("compoundB", 1, 888);
+    }
+
+    @Test
+    public void testImportKds_happyPath_withHeaderNoCommit() throws Exception {
+
+        ResultActions actions = testImportKds_impl("import-kd-values-header.csv",
+            true, null, true);
+
+        // Records from the file were returned
+        actions.andExpect(jsonPath("$.fieldStatuses", hasSize(2)));
+
+        // Entirely new row from file added to database
+        assertActivityProfileCount(4);
+
+        // Records from the file updated the database Kd values
+        assertKdValue("compoundA", 1, 777);
+        assertKdValue("compoundB", 1, 888);
+    }
+
+    @Test
+    public void testImportKds_happyPath_noHeaderWithCommit() throws Exception {
+
+        ResultActions actions = testImportKds_impl("import-kd-values-no-header.csv",
+            false, true, true);
+
+        // Records from the file were returned
+        actions.andExpect(jsonPath("$.fieldStatuses", hasSize(2)));
+
+        // Entirely new row from file added to database
+        assertActivityProfileCount(4);
+
+        // Records from the file updated the database Kd values
+        assertKdValue("compoundA", 1, 777);
+        assertKdValue("compoundB", 1, 888);
+    }
+
+    @Test
+    public void testImportKds_happyPath_withHeaderWithCommit() throws Exception {
+
+        ResultActions actions = testImportKds_impl("import-kd-values-header.csv",
+            true, true, true);
+
+        // Records from the file were returned
+        actions.andExpect(jsonPath("$.fieldStatuses", hasSize(2)));
+
+        // Entirely new row from file added to database
+        assertActivityProfileCount(4);
+
+        // Records from the file updated the database Kd values
+        assertKdValue("compoundA", 1, 777);
+        assertKdValue("compoundB", 1, 888);
+    }
+
+    @Test
+    public void testImportKds_error_unknownDiscoverx() throws Exception {
+
+        ResultActions actions = testImportKds_impl("import-kd-values-header-error-unknown-discoverx.csv",
+            true, null, false);
+
+        actions.andExpect(status().isBadRequest());
+    }
+
+    private ResultActions testImportKds_impl(String csv, Boolean headerRow, Boolean commitParam,
+                                             boolean expectSuccess) throws Exception {
+
+        MockMultipartFile file = new MockMultipartFile("file", getCsv(csv));
+        boolean requestParams = false;
+
+        String url = "/admin/api/kdValues";
         if (headerRow != null) {
             url += "?headerRow=" + headerRow;
             requestParams = true;

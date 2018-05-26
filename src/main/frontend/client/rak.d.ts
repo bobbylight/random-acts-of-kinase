@@ -30,6 +30,14 @@ export interface ErrorResponse {
     message: string;
 }
 
+export interface Feedback {
+    id?: number;
+    title: string;
+    body: string;
+    author?: string;
+    createDate?: string;
+}
+
 export interface FieldStatus {
     fieldName: string;
     oldValue?: any;

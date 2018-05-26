@@ -66,3 +66,16 @@ CREATE TABLE :schema.blog_post (
 WITH ( OIDS = FALSE );
 
 CREATE INDEX blog_post_create_dttm_idx ON :schema.blog_post (create_dttm);
+
+
+DROP TABLE IF EXISTS :schema.feedback CASCADE;
+CREATE TABLE :schema.feedback (
+  feedback_id serial,
+  title character varying(128) NOT NULL,
+  body character varying(16384) NOT NULL,
+  create_dttm TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+  CONSTRAINT feedback_pkey PRIMARY KEY (feedback_id)
+)
+WITH ( OIDS = FALSE );
+
+CREATE INDEX feedback_create_dttm_idx ON :schema.blog_post (create_dttm);

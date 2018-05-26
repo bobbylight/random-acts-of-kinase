@@ -25,7 +25,7 @@ public class ActivityProfile {
 
 //    @Column(name = "kinase", updatable = false)
 //    private int kinase;
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "kinase", nullable = false, updatable = false)
     private Kinase kinase;
 

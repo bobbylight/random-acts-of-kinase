@@ -56,6 +56,7 @@ import ImportActivityProfiles from './admin/import-activity-profiles.vue';
 import ImportKds from './admin/import-kds.vue';
 import ImportS10s from './admin/import-s10s.vue';
 import Stats from './admin/stats.vue';
+import Feedback from './admin/feedback.vue';
 import BlogManager from './admin/blog-manager.vue';
 import { RouteConfig } from 'vue-router/types/router';
 
@@ -147,6 +148,11 @@ window.onload = () => {
                     path: 'stats',
                     name: 'stats',
                     component: Stats
+                },
+                {
+                    path: 'feedback',
+                    name: 'feedback',
+                    component: Feedback
                 },
                 {
                     path: '', // Default view when unknown sub-route specified

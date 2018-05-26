@@ -1,10 +1,7 @@
 package org.sgc.rak.util;
 
 import org.junit.Assert;
-import org.sgc.rak.model.ActivityProfile;
-import org.sgc.rak.model.BlogPost;
-import org.sgc.rak.model.Compound;
-import org.sgc.rak.model.Kinase;
+import org.sgc.rak.model.*;
 import org.sgc.rak.model.csv.ActivityProfileCsvRecord;
 import org.sgc.rak.model.csv.KdCsvRecord;
 
@@ -45,6 +42,13 @@ public final class TestUtil {
         Assert.assertEquals(expected.getSource(), actual.getSource());
     }
 
+    public static void assertFeedbacksEqual(Feedback expected, Feedback actual) {
+        Assert.assertEquals(expected.getId(), actual.getId());
+        Assert.assertEquals(expected.getTitle(), actual.getTitle());
+        Assert.assertEquals(expected.getBody(), actual.getBody());
+        Assert.assertEquals(expected.getCreateDate(), actual.getCreateDate());
+    }
+
     public static ActivityProfile createActivityProfile(Long id) {
         return createActivityProfile(id, null, null, null, null, null);
     }
@@ -82,6 +86,13 @@ public final class TestUtil {
         Compound compound = new Compound();
         compound.setCompoundName(name);
         return compound;
+    }
+
+    public static Feedback createFeedback(String title, String body) {
+        Feedback feedback = new Feedback();
+        feedback.setTitle(title);
+        feedback.setBody(body);
+        return feedback;
     }
 
     public static Kinase createKinase(String discoverx, String entrez) {

@@ -23,6 +23,12 @@ public final class ModelConstants {
 
     public static final int COMPOUND_SMILES_MAX = 2048;
 
+    public static final int FEEDBACK_TITLE_LENGTH_MIN = 5;
+
+    public static final int FEEDBACK_TITLE_LENGTH_MAX = 128;
+
+    public static final int FEEDBACK_BODY_LENGTH_MAX = 16384;
+
     public static final int KINASE_DISCOVERX_GENE_SYMBOL_MAX = 100;
 
     public static final int KINASE_ENTREZ_GENE_SYMBOL_MAX = 100;

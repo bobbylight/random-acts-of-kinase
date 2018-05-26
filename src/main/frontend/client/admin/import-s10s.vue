@@ -18,7 +18,7 @@ import restApi from '../rest-api';
 @Component({ components: { AbstractImportData } })
 export default class ImportS10s extends Vue {
 
-    private details: string = 'Upload a CSV file with S-score to add it to the database.  Only s(10) records\n' +
+    private details: string = 'Upload a CSV file with S-scores to add it to the database.  Only s(10) records\n' +
         'will be imported.\n' +
         'The file should contain the following columns, in this order (data can be sparse).\n' +
         'A header row with values matching these header names is required:';
