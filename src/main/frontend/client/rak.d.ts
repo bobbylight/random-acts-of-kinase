@@ -32,9 +32,10 @@ export interface ErrorResponse {
 
 export interface Feedback {
     id?: number;
+    email?: string;
+    ipAddress?: string;
     title: string;
     body: string;
-    author?: string;
     createDate?: string;
 }
 

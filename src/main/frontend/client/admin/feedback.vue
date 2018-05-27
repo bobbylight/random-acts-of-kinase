@@ -18,6 +18,7 @@
                 <v-data-table
                     :headers="headers"
                     class="elevation-1"
+                    v-model="selectedFeedback"
                     :items="items"
                     :search="search"
                     :pagination.sync="pagination"
@@ -27,8 +28,22 @@
                 >
 
                     <template slot="items" slot-scope="props">
+                        <td>
+                            <v-checkbox
+                                primary
+                                hide-details
+                                v-model="props.selected"
+                            ></v-checkbox>
+                        </td>
+                        <td>{{props.item.email}}</td>
                         <td>{{props.item.title}}</td>
                         <td>{{props.item.createDate}}</td>
+                    </template>
+
+                    <template slot="expand" slot-scope="props">
+                        <v-card flat>
+                            <v-card-text>{{props.item.body}}</v-card-text>
+                        </v-card>
                     </template>
                 </v-data-table>
             </v-flex>
@@ -47,6 +62,8 @@ import restApi from '../rest-api';
 @Component({ components: { SectionHeader } })
 export default class FeedbackManager extends Vue {
 
+    private selectedFeedback: any[] = [];
+
     private search: string = '';
 
     private totalItems: number = 0;
@@ -63,6 +80,7 @@ export default class FeedbackManager extends Vue {
     get headers(): any[] /*VTableHeader[]*/ {
 
         return [
+            { text: 'E-mail', value: 'email' },
             { text: 'Title', value: 'title' },
             { text: 'Date', value: 'createDate' }
         ];

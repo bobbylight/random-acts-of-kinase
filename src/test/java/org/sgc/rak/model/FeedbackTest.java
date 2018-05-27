@@ -23,6 +23,20 @@ public class FeedbackTest {
     }
 
     @Test
+    public void testGetSetEmail() {
+        Assert.assertNull(feedback.getEmail());
+        feedback.setEmail("foo");
+        Assert.assertEquals("foo", feedback.getEmail());
+    }
+
+    @Test
+    public void testGetSetIpAddress() {
+        Assert.assertNull(feedback.getIpAddress());
+        feedback.setIpAddress("foo");
+        Assert.assertEquals("foo", feedback.getIpAddress());
+    }
+
+    @Test
     public void testGetSetTitle() {
         Assert.assertNull(feedback.getTitle());
         feedback.setTitle("Title");
@@ -46,7 +60,8 @@ public class FeedbackTest {
 
     @Test
     public void testToString() {
-        String expected = "Feedback[id=<null>,title=<null>,body=<null>,createDate=<null>]";
+        String expected =
+            "Feedback[id=<null>,email=<null>,ipAddress=<null>,title=<null>,body=<null>,createDate=<null>]";
         Assert.assertEquals(expected, feedback.toString());
     }
 }

@@ -53,6 +53,17 @@ export class RestApi {
             });
     }
 
+    createFeedback(feedback: Feedback): Promise<Feedback> {
+
+        return this.instance.post('api/feedback', feedback)
+            .then((response: AxiosResponse<Feedback>) => {
+                return response.data;
+            })
+            .catch((error: AxiosError) => {
+                throw RestApi.axiosErrorToErrorResponse(error);
+            });
+    }
+
     getActivityProfiles(page: number, size: number, filters: any,
                         sortParam: string): Promise<PagedDataRep<ActivityProfile>> {
 

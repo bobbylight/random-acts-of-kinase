@@ -41,11 +41,12 @@
                 </v-list-tile>
             </v-list>
         </v-menu>
-        <v-btn flat icon large @click="newComment()" title="Comment" aria-label="Comment">
+        <v-btn flat icon large @click="showFeedback = true" title="Feedback" aria-label="Feedback">
             <v-icon>comment</v-icon>
         </v-btn>
 
         <login-modal :show="showLogin" @close="showLogin = false"></login-modal>
+        <feedback-modal :show="showFeedback" @close="showFeedback = false"></feedback-modal>
     </v-toolbar>
 
 </template>
@@ -57,15 +58,17 @@ import { Watch } from 'vue-property-decorator';
 import Component from 'vue-class-component';
 import NavbarPill from './navbar-pill.vue';
 import LoginModal from './login-modal.vue';
+import FeedbackModal from './feedback-modal.vue';
 import RakUtil from './util';
 import restApi from './rest-api';
 import Toaster from './toaster';
 
-@Component({ components: { NavbarPill, LoginModal } })
+@Component({ components: { NavbarPill, LoginModal, FeedbackModal } })
 export default class Navbar extends Vue {
 
     openCompounds: string[] = [];
     private showLogin: boolean = false;
+    private showFeedback: boolean = false;
 
     private isActiveTab(tabName: string): boolean {
         return RakUtil.isActiveTab(this.$route, tabName);

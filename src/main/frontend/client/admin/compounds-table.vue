@@ -11,8 +11,14 @@
             :rows-per-page-items='[ 10, 20, 50 ]'>
 
             <template slot="items" slot-scope="props">
-                <td v-for="header in createHeaders"
-                    :class="getClassesForRow(header.value)">{{props.item[header.value]}}</td>
+                <td v-for="header in createHeaders" :class="getClassesForRow(header.value)">
+                    <a v-if="header.value === 'compoundName'" :href="getCompoundLink(props.item[header.value])">
+                        {{props.item[header.value]}}
+                    </a>
+                    <span v-if="header.value !== 'compoundName'">
+                        {{props.item[header.value]}}
+                    </span>
+                </td>
             </template>
 
         </v-data-table>
@@ -55,9 +61,8 @@ export default class CompoundTable extends Vue {
 
     private pagination: any = {};
 
-    private compoundRenderer(data: string, type: any, row: number) {
-        return `<a href="#/compound/${data}">${data}</a>`;
-//                return '<a v-link="{ path: \'/compound/' + data + '\' }">' + data + '</a>';
+    private getCompoundLink(compoundName: string) {
+        return `#/compound/${compoundName}`;
     }
 
     private get createHeaders() {

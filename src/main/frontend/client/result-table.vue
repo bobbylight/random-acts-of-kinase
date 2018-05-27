@@ -29,7 +29,11 @@
                 <td>{{props.item.compoundName}}</td>
                 <td class="text-xs-right">{{props.item.percentControl}}</td>
                 <td class="text-xs-right">{{props.item.compoundConcentration}}</td>
-                <td>{{props.item.kinase.discoverxGeneSymbol}}</td>
+                <td>
+                    <a :href="getDiscoverxUrl(props.item.kinase.discoverxGeneSymbol)"
+                       target="_blank" rel="noopener noreferrer">
+                        {{props.item.kinase.discoverxGeneSymbol}}</a>
+                </td>
                 <td>{{props.item.kinase.entrezGeneSymbol}}</td>
                 <td>{{props.item.kd}}</td>
             </template>
@@ -109,11 +113,15 @@ export default {
 
         changeSort: function(column) {
             if (this.pagination.sortBy === column) {
-                this.pagination.descending = !this.pagination.descending
+                this.pagination.descending = !this.pagination.descending;
             } else {
-                this.pagination.sortBy = column
-                this.pagination.descending = false
+                this.pagination.sortBy = column;
+                this.pagination.descending = false;
             }
+        },
+
+        getDiscoverxUrl: function(discoverx) {
+            return `https://www.discoverx.com/target-data-sheets/kinase/${discoverx}`;
         },
 
         getHeaderStyle: function(header) {

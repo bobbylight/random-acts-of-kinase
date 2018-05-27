@@ -24,6 +24,12 @@ public class Feedback {
     @Column(name = "feedback_id")
     private Long id;
 
+    @Column(name = "email", length = ModelConstants.FEEDBACK_EMAIL_LENGTH_MAX)
+    private String email;
+
+    @Column(length = ModelConstants.FEEDBACK_IP_ADDRESS_LENGTH_MAX)
+    private String ipAddress;
+
     @Column(length = ModelConstants.FEEDBACK_TITLE_LENGTH_MAX, nullable = false)
     @Length(min = ModelConstants.FEEDBACK_TITLE_LENGTH_MIN,
         max = ModelConstants.FEEDBACK_TITLE_LENGTH_MAX,
@@ -31,12 +37,37 @@ public class Feedback {
     @NotEmpty(message = "The 'title' field is required")
     private String title;
 
+    @Column(length = ModelConstants.FEEDBACK_BODY_LENGTH_MAX)
+    @Length(max = ModelConstants.FEEDBACK_BODY_LENGTH_MAX,
+        message = "The 'body' field must be less than 8000 characters")
+    private String body;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "create_dttm", nullable = false, updatable = false)
+    private Date createDate;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
     }
 
     public String getTitle() {
@@ -56,21 +87,12 @@ public class Feedback {
     }
 
     public Date getCreateDate() {
-        return createDate;
+        return createDate != null ? new Date(createDate.getTime()) : null;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setCreateDate(Date date) {
+        this.createDate = date != null ? new Date(date.getTime()) : null;
     }
-
-    @Column(length = ModelConstants.FEEDBACK_BODY_LENGTH_MAX)
-    @Length(max = ModelConstants.FEEDBACK_BODY_LENGTH_MAX,
-        message = "The 'body' field must be less than 16384 characters")
-    private String body;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "create_dttm", nullable = false, updatable = false)
-    private Date createDate;
 
     @Override
     public String toString() {
@@ -79,6 +101,8 @@ public class Feedback {
 
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
             .append("id", id)
+            .append("email", email)
+            .append("ipAddress", ipAddress)
             .append("title", title)
             .append("body", shortenedBody)
             .append("createDate", createDate)

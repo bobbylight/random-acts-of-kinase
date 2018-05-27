@@ -66,35 +66,34 @@ export default class AboutModal extends Vue {
 </script>
 
 <style lang="less">
+.about-image {
+    float: left;
 
-    .about-image {
-        float: left;
-
-        img {
-            width: 48px;
-            height: 48px;
-            margin-right: 2rem;
-        }
+    img {
+        width: 48px;
+        height: 48px;
+        margin-right: 2rem;
     }
+}
 
-    .thanks {
+.thanks {
 
-        padding-top: 1rem;
+    padding-top: 1rem;
 
-        ul {
-            padding: 0 2rem;
-        }
+    ul {
+        padding: 0 2rem;
     }
+}
 
-    .build-info {
+.build-info {
 
-        position: absolute;
-        bottom: 0.5rem;
-        left: 0.5rem;
-        color: gray;
+    position: absolute;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    color: gray;
 
-        .about-metadata-splitter {
-            margin: 0 .5rem;
-        }
+    .about-metadata-splitter {
+        margin: 0 .5rem;
     }
+}
 </style>

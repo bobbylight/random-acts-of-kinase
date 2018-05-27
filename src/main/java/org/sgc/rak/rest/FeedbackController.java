@@ -11,6 +11,7 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 /**
@@ -34,7 +35,8 @@ public class FeedbackController {
      */
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    void createFeedback(@Valid @RequestBody Feedback feedback) {
+    void createFeedback(HttpServletRequest request,  @Valid @RequestBody Feedback feedback) {
+        feedback.setIpAddress(request.getRemoteAddr());
         feedbackService.createFeedback(feedback);
     }
 

@@ -109,7 +109,9 @@ export default class Stats extends Vue {
             { columnId: 'chemotype', columnName: 'Chemotype' },
             { columnId: 's10', columnName: 's(10)' },
             { columnId: 'smiles', columnName: 'SMILES' },
-            { columnId: 'source', columnName: 'Source' }
+            { columnId: 'source', columnName: 'Source' },
+            { columnId: 'primaryReference', columnName: 'Reference' },
+            { columnId: 'primaryReferenceUrl', columnName: 'Reference URL' }
         ];
 
         this.compoundsMissingActivityProfilesColumnInfo = [
@@ -117,15 +119,7 @@ export default class Stats extends Vue {
             { columnId: 'count', columnName: 'Activity Profile Count' }
         ];
 
-        this.compoundsMissingPublicationInfoColumnInfo = [
-            { columnId: 'compoundName', columnName: 'Compound', isCompound: true },
-            { columnId: 'chemotype', columnName: 'Chemotype' },
-            { columnId: 's10', columnName: 's(10)' },
-            { columnId: 'smiles', columnName: 'SMILES' },
-            { columnId: 'source', columnName: 'Source' },
-            { columnId: 'primaryReference', columnName: 'Primary Reference' },
-            { columnId: 'primaryReferenceUrl', columnName: 'Primary Reference URL' }
-        ];
+        this.compoundsMissingPublicationInfoColumnInfo = this.incompleteCompoundColumnInfo;
     }
 }
 </script>

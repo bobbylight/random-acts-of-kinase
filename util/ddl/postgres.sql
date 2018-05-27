@@ -6,9 +6,9 @@ CREATE TABLE :schema.compound (
   compound_nm character varying(100) NOT NULL,
   chemotype character varying(100),
   s_10 numeric,
-  source character varying(12),
+  source character varying(80),
   smiles character varying(2048),
-  reference_1 character varying(512),
+  reference_1 character varying(768),
   reference_1_url character varying(2048),
   CONSTRAINT compound_pkey PRIMARY KEY (compound_nm)
 )
@@ -71,8 +71,10 @@ CREATE INDEX blog_post_create_dttm_idx ON :schema.blog_post (create_dttm);
 DROP TABLE IF EXISTS :schema.feedback CASCADE;
 CREATE TABLE :schema.feedback (
   feedback_id serial,
+  email character varying(254),
+  ip_address character varying(39),
   title character varying(128) NOT NULL,
-  body character varying(16384) NOT NULL,
+  body character varying(8000) NOT NULL,
   create_dttm TIMESTAMP WITHOUT TIME ZONE NOT NULL,
   CONSTRAINT feedback_pkey PRIMARY KEY (feedback_id)
 )

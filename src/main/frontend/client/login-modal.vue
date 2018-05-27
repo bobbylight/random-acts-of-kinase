@@ -21,10 +21,10 @@
 
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="success" type="submit" form="login-form" :disabled="!user || !password">
+                <v-btn color="primary" type="submit" form="login-form" :disabled="!user || !password">
                     Log In
                 </v-btn>
-                <v-btn @click="onCancel">
+                <v-btn flat color="primary" @click="onCancel">
                     Cancel
                 </v-btn>
             </v-card-actions>

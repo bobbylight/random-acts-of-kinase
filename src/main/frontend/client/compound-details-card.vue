@@ -44,6 +44,11 @@
                             </div>
 
                             <div class="compound-details-table-row">
+                                <div class="compound-details-table-cell compound-details-table-cell-header">Source:</div>
+                                <div class="compound-details-table-cell">{{source}}</div>
+                            </div>
+
+                            <div class="compound-details-table-row">
                                 <div class="compound-details-table-cell compound-details-table-cell-header">Reference:</div>
                                 <div class="compound-details-table-cell" v-html="reference"></div>
                             </div>
@@ -72,6 +77,7 @@ export default class CompoundDetailsCard extends Vue {
     private chemotype: string | null | undefined = null;
     private s10: string | null | undefined = null;
     private smiles: string | null | undefined = null;
+    private source: string | null | undefined = null;
     private primaryReference: string | null | undefined = null;
     private primaryReferenceUrl: string | null | undefined = null;
 
@@ -99,6 +105,7 @@ export default class CompoundDetailsCard extends Vue {
                 this.chemotype = compound.chemotype;
                 this.s10 = compound.s10;
                 this.smiles = compound.smiles;
+                this.source = compound.source;
                 this.primaryReference = compound.primaryReference || compound.primaryReferenceUrl;
                 this.primaryReferenceUrl = compound.primaryReferenceUrl;
             })

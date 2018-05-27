@@ -20,3 +20,4 @@ PGPASSWORD=${PASSWORD} psql -h ${HOST} -U ${USER} -c "\copy (select * from ${SCH
 PGPASSWORD=${PASSWORD} psql -h ${HOST} -U ${USER} -c "\copy (select * from ${SCHEMA}.kinase order by id) to ${OUTDIR}/kinase.csv with csv header" ${DB}
 PGPASSWORD=${PASSWORD} psql -h ${HOST} -U ${USER} -c "\copy (select * from ${SCHEMA}.kinase_activity_profile order by id) to ${OUTDIR}/kinase_activity_profile.csv with csv header" ${DB}
 PGPASSWORD=${PASSWORD} psql -h ${HOST} -U ${USER} -c "\copy (select * from ${SCHEMA}.blog_post order by blog_post_id) to ${OUTDIR}/blog_post.csv with csv header" ${DB}
+PGPASSWORD=${PASSWORD} psql -h ${HOST} -U ${USER} -c "\copy (select * from ${SCHEMA}.feedback order by feedback_id) to ${OUTDIR}/feedback.csv with csv header" ${DB}
