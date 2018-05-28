@@ -21,7 +21,7 @@ apply plugin: 'findbugs'
 apply plugin: 'checkstyle'
 
 group = 'org.sgc'
-version = '0.7.1-SNAPSHOT'
+version = '0.7.2-SNAPSHOT'
 
 repositories {
     mavenCentral()
