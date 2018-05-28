@@ -58,6 +58,7 @@ public class CompoundService {
         String existingSource = null;
         String existingPrimaryReference = null;
         String existingPrimaryReferenceUrl = null;
+        Boolean existingHidden = Boolean.FALSE;
 
         if (existing != null) {
             existingCompoundName = existing.getCompoundName();
@@ -67,6 +68,7 @@ public class CompoundService {
             existingSource = existing.getSource();
             existingPrimaryReference = existing.getPrimaryReference();
             existingPrimaryReferenceUrl = existing.getPrimaryReferenceUrl();
+            existingHidden = existing.isHidden();
         }
 
         return Arrays.asList(
@@ -77,7 +79,8 @@ public class CompoundService {
             Util.createFieldStatus("source", compound.getSource(), existingSource),
             Util.createFieldStatus("primaryReference", compound.getPrimaryReference(), existingPrimaryReference),
             Util.createFieldStatus("primaryReferenceUrl", compound.getPrimaryReferenceUrl(),
-                existingPrimaryReferenceUrl)
+                existingPrimaryReferenceUrl),
+            Util.createFieldStatus("hidden", compound.isHidden(), existingHidden)
         );
     }
 
