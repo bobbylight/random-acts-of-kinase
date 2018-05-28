@@ -110,6 +110,7 @@ public final class Util {
 
         ActivityProfile retVal = new ActivityProfile();
         retVal.setId(existing.getId());
+        retVal.setKd(existing.getKd()); // Kds aren't in activity profile files, so keep existing value
 
         // It's assumed that the two activity profiles having the same compound and kinase was previously verified
         retVal.setCompoundName(existing.getCompoundName());
@@ -147,6 +148,10 @@ public final class Util {
 
         ActivityProfile retVal = new ActivityProfile();
         retVal.setId(existing.getId());
+
+        // These fields aren't in Kd files, so keep existing values
+        retVal.setPercentControl(existing.getPercentControl());
+        retVal.setCompoundConcentration(existing.getCompoundConcentration());
 
         // It's assumed that the two activity profiles having the same compound and kinase was previously verified
         retVal.setCompoundName(existing.getCompoundName());
