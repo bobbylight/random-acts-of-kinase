@@ -16,15 +16,12 @@ public interface CompoundRepository extends PagingAndSortingRepository<Compound,
     List<Compound> findByCompoundNameInIgnoreCase(List<String> compoundNames);
 
     /**
-     * This method is only here until we no longer have to hide certain compounds
-     * (those flagged with source = "hide").  At that point we can replace calls to this
-     * with findAll().
+     * Returns compounds that are not hidden.
      *
      * @param pageInfo How to sort the data and what page of data to return.
      * @return The list of compounds.
      */
-    @Query("from Compound c where c.source is null")
-    Page<Compound> findSourceIsNull(Pageable pageInfo);
+    Page<Compound> findByHiddenFalse(Pageable pageInfo);
 
     /**
      * Returns compounds without smiles strings or s10 values defined.
@@ -42,8 +39,8 @@ public interface CompoundRepository extends PagingAndSortingRepository<Compound,
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
      */
-    Page<Compound> getCompoundsByCompoundNameContainsIgnoreCaseAndSourceIsNull(String compoundNamePart,
-                                                                               Pageable pageInfo);
+    Page<Compound> getCompoundsByCompoundNameContainsIgnoreCaseAndHiddenFalse(String compoundNamePart,
+                                                                              Pageable pageInfo);
 
     /**
      * Returns a list of compounds missing a primary reference field.

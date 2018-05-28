@@ -18,10 +18,10 @@ import restApi from '../rest-api';
 @Component({ components: { AbstractImportData } })
 export default class ImportS10s extends Vue {
 
-    private details: string = 'Upload a CSV file with S-scores to add it to the database.  Only s(10) records\n' +
-        'will be imported.\n' +
-        'The file should contain the following columns, in this order (data can be sparse).\n' +
-        'A header row with values matching these header names is required:';
+    private details: string = 'Upload a CSV file with S-scores to add it to the database.  Only s(10) records ' +
+        'will be imported.' +
+        'The file should contain the following columns, in this order. If there is a header row, the ' +
+        'actual column names in the CSV file do not matter. Data can be sparse:';
 
     get previewGridColumnInfos(): ColumnInfo[] {
 

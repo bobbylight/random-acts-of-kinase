@@ -10,12 +10,14 @@ CREATE TABLE :schema.compound (
   smiles character varying(2048),
   reference_1 character varying(768),
   reference_1_url character varying(2048),
+  hidden boolean NOT NULL DEFAULT FALSE,
   CONSTRAINT compound_pkey PRIMARY KEY (compound_nm)
 )
 WITH ( OIDS = FALSE );
 
 CREATE INDEX compound_compound_nm_idx ON :schema.compound (compound_nm);
 CREATE INDEX compound_compound_nm_lower_idx ON :schema.compound (lower(compound_nm));
+CREATE INDEX compound_hidden_idx on :schema.compound (hidden);
 
 
 DROP TABLE IF EXISTS :schema.kinase CASCADE;

@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Table(name = "compound")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "compoundName", "chemotype", "s10", "smiles", "source", "primaryReference",
-    "primaryReferenceUrl" })
+    "primaryReferenceUrl", "hidden" })
 public class Compound {
 
     @Id
@@ -41,6 +41,9 @@ public class Compound {
 
     @Column(name = "reference_1_url", length = ModelConstants.COMPOUND_REFERENCE_URL_MAX)
     private String primaryReferenceUrl;
+
+    @Column(nullable = false)
+    private boolean hidden;
 
     public String getChemotype() {
         return chemotype;
@@ -98,6 +101,14 @@ public class Compound {
         this.primaryReferenceUrl = primaryReferenceUrl;
     }
 
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -106,6 +117,7 @@ public class Compound {
             append("s10", s10).
             append("smiles", smiles).
             append("source", source).
+            append("hidden", hidden).
             build();
     }
 }

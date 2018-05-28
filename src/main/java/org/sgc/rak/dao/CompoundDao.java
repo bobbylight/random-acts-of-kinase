@@ -60,7 +60,7 @@ public class CompoundDao {
      */
     public Page<Compound> getCompounds(Pageable pageInfo) {
 //        return compoundRepository.findAll(pageInfo);
-        return compoundRepository.findSourceIsNull(pageInfo);
+        return compoundRepository.findByHiddenFalse(pageInfo);
     }
 
     public List<Compound> getCompounds(List<String> compoundNames) {
@@ -76,7 +76,7 @@ public class CompoundDao {
      * @see #getCompounds(Pageable)
      */
     public Page<Compound> getCompoundsByCompoundNameContainsIgnoreCase(String compoundNamePart, Pageable pageInfo) {
-        return compoundRepository.getCompoundsByCompoundNameContainsIgnoreCaseAndSourceIsNull(
+        return compoundRepository.getCompoundsByCompoundNameContainsIgnoreCaseAndHiddenFalse(
             compoundNamePart, pageInfo);
     }
 

@@ -146,6 +146,7 @@ public class ImportController {
             .addColumn("source", CsvSchema.ColumnType.STRING)
             .addColumn("primaryReference", CsvSchema.ColumnType.STRING)
             .addColumn("primaryReferenceUrl", CsvSchema.ColumnType.STRING)
+            .addColumn("hidden", CsvSchema.ColumnType.BOOLEAN)
             .build();
 
         List<Compound> compounds = loadFromCsv(file, headerRow, Compound.class, schema);

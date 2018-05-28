@@ -62,9 +62,17 @@ public class CompoundTest {
     }
 
     @Test
+    public void testGetSetHidden() {
+        Compound compound = new Compound();
+        Assert.assertFalse(compound.isHidden());
+        compound.setHidden(true);
+        Assert.assertTrue(compound.isHidden());
+    }
+
+    @Test
     public void testToString() {
         String expected = "Compound[compoundName=<null>,chemotype=<null>," +
-            "s10=<null>,smiles=<null>,source=<null>]";
+            "s10=<null>,smiles=<null>,source=<null>,hidden=false]";
         Assert.assertEquals(expected, new Compound().toString());
     }
 }

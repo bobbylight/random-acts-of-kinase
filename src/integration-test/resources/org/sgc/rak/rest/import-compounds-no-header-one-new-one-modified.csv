@@ -1,2 +1,2 @@
-compoundA,chemotypeA,0,smilesA,sourceA,reference A,url A
-compoundNew,chemotypeNew,0,smilesNew,sourceNew,reference New,url New
+compoundA,chemotypeA,0,smilesA,sourceA,reference A,url A,false
+compoundNew,chemotypeNew,0,smilesNew,sourceNew,reference New,url New,false

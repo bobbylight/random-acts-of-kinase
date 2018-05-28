@@ -75,7 +75,7 @@ public class CompoundDaoTest {
         Compound compound2 = TestUtil.createCompound("compoundB");
         Page<Compound> expectedPage = new PageImpl<>(Arrays.asList(compound1, compound2));
         //doReturn(expectedPage).when(compoundRepository).findAll(any(Pageable.class));
-        doReturn(expectedPage).when(compoundRepository).findSourceIsNull(any(Pageable.class));
+        doReturn(expectedPage).when(compoundRepository).findByHiddenFalse(any(Pageable.class));
 
         Pageable pageInfo = PageRequest.of(0, 20);
         Page<Compound> actualPage = compoundDao.getCompounds(pageInfo);
@@ -108,7 +108,7 @@ public class CompoundDaoTest {
         Compound compound1 = TestUtil.createCompound("compoundA");
         Compound compound2 = TestUtil.createCompound("compoundB");
         Page<Compound> expectedPage = new PageImpl<>(Arrays.asList(compound1, compound2));
-        doReturn(expectedPage).when(compoundRepository).getCompoundsByCompoundNameContainsIgnoreCaseAndSourceIsNull(
+        doReturn(expectedPage).when(compoundRepository).getCompoundsByCompoundNameContainsIgnoreCaseAndHiddenFalse(
             eq(namePart), any(Pageable.class));
 
         Pageable pageInfo = PageRequest.of(0, 20);

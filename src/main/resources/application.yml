@@ -1,10 +1,6 @@
 spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL95Dialect
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
   profiles:
     active: dev-postgres
   mvc:

@@ -18,9 +18,9 @@ import restApi from '../rest-api';
 @Component({ components: { AbstractImportData } })
 export default class ImportCompounds extends Vue {
 
-    private details: string = 'Upload a CSV file with compound information to add it to the database.\n' +
-        'The file should contain the following columns, in this order, but with no header\n' +
-        '(data can be sparse):';
+    private details: string = 'Upload a CSV file with compound information to add it to the database. ' +
+        'The file should contain the following columns, in this order. If there is a header row, the ' +
+        'actual column names in the CSV file do not matter. Data can be sparse:';
 
     get previewGridColumnInfos(): ColumnInfo[] {
 
@@ -31,7 +31,8 @@ export default class ImportCompounds extends Vue {
             { name: 'SMILES', value: 'smiles' },
             { name: 'Source', value: 'source' },
             { name: 'Reference', value: 'primaryReference' },
-            { name: 'Reference URL', value: 'primaryReferenceUrl' }
+            { name: 'Reference URL', value: 'primaryReferenceUrl' },
+            { name: 'Hidden', value: 'hidden' }
         ];
     }
 
