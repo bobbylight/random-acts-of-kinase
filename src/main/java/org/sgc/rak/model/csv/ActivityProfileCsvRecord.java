@@ -19,9 +19,9 @@ public class ActivityProfileCsvRecord {
 
     private String entrezGeneSymbol;
 
-    private double percentControl;
+    private Double percentControl;
 
-    private int compoundConcentration;
+    private Integer compoundConcentration;
 
     public String getCompoundName() {
         return compoundName;
@@ -47,19 +47,19 @@ public class ActivityProfileCsvRecord {
         this.entrezGeneSymbol = entrezGeneSymbol;
     }
 
-    public double getPercentControl() {
+    public Double getPercentControl() {
         return percentControl;
     }
 
-    public void setPercentControl(double percentControl) {
+    public void setPercentControl(Double percentControl) {
         this.percentControl = percentControl;
     }
 
-    public int getCompoundConcentration() {
+    public Integer getCompoundConcentration() {
         return compoundConcentration;
     }
 
-    public void setCompoundConcentration(int compoundConcentration) {
+    public void setCompoundConcentration(Integer compoundConcentration) {
         this.compoundConcentration = compoundConcentration;
     }
 

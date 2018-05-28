@@ -116,14 +116,14 @@ public final class Util {
         retVal.setCompoundName(existing.getCompoundName());
         retVal.setKinase(existing.getKinase());
 
-        if (newProfile.getPercentControl() > 0) {
+        if (newProfile.getPercentControl() != null) {
             retVal.setPercentControl(newProfile.getPercentControl());
         }
         else {
             retVal.setPercentControl(existing.getPercentControl());
         }
 
-        if (newProfile.getCompoundConcentration() > 0) {
+        if (newProfile.getCompoundConcentration() != null) {
             retVal.setCompoundConcentration(newProfile.getCompoundConcentration());
         }
         else {

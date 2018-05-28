@@ -76,6 +76,37 @@ public class UtilTest {
     }
 
     @Test
+    public void testPatchActivityProfile_activityProfileCsvRecord_zeroForNumericValuesStillTake() {
+
+        Kinase existingKinase = new Kinase();
+        existingKinase.setId(3);
+        existingKinase.setDiscoverxGeneSymbol("existingDiscoverx");
+
+        ActivityProfile existing = new ActivityProfile();
+        existing.setId(42L);
+        existing.setCompoundConcentration(3);
+        existing.setCompoundName("compoundA");
+        existing.setKd(4.2);
+        existing.setKinase(existingKinase);
+        existing.setPercentControl(0.3);
+
+        ActivityProfileCsvRecord newProfile = new ActivityProfileCsvRecord();
+        newProfile.setCompoundConcentration(0); // Ensure 0 is inserted
+        newProfile.setCompoundName(existing.getCompoundName()); // It'a assumed these were already found to match
+        newProfile.setDiscoverxGeneSymbol(existing.getKinase().getDiscoverxGeneSymbol()); // Ditto
+        newProfile.setPercentControl(0d); // Ensure 0 is inserted
+
+        ActivityProfile result = Util.patchActivityProfile(existing, newProfile);
+
+        // New values for these fields overwrite prior values
+        Assert.assertEquals(0, result.getCompoundConcentration().intValue());
+        Assert.assertEquals(0, result.getPercentControl(), 0.001);
+
+        // Kd doesn't get cleared out just because it isn't in ActivityProfileCsvRecord
+        Assert.assertEquals(4.2, result.getKd(), 0.001);
+    }
+
+    @Test
     public void testPatchActivityProfile_activityProfileCsvRecord_nullValuesDontOverwriteNonNullValues() {
 
         Kinase existingKinase = new Kinase();

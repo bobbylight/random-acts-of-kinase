@@ -36,16 +36,16 @@ public class ActivityProfileCsvRecordTest {
 
     @Test
     public void testGetSetPercentControl() {
-        Assert.assertEquals(0, rep.getPercentControl(), 0.01);
+        Assert.assertNull(rep.getPercentControl());
         rep.setPercentControl(4.2);
         Assert.assertEquals(4.2, rep.getPercentControl(), 0.01);
     }
 
     @Test
     public void testGetSetCompuondConcentration() {
-        Assert.assertEquals(0, rep.getCompoundConcentration());
+        Assert.assertNull(rep.getCompoundConcentration());
         rep.setCompoundConcentration(42);
-        Assert.assertEquals(42, rep.getCompoundConcentration());
+        Assert.assertEquals(42, rep.getCompoundConcentration().intValue());
     }
 
     @Test
@@ -54,8 +54,8 @@ public class ActivityProfileCsvRecordTest {
             "compoundName=<null>," +
             "discoverxGeneSymbol=<null>," +
             "entrezGeneSymbol=<null>," +
-            "percentControl=0.0," +
-            "compoundConcentration=0" +
+            "percentControl=<null>," +
+            "compoundConcentration=<null>" +
             "]", rep.toString());
     }
 }
