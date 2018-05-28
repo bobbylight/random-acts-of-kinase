@@ -49,6 +49,12 @@ public final class TestUtil {
         Assert.assertEquals(expected.getCreateDate(), actual.getCreateDate());
     }
 
+    public static final void assertKinasesEqual(Kinase expected, Kinase actual) {
+        Assert.assertEquals(expected.getId(), actual.getId());
+        Assert.assertEquals(expected.getDiscoverxGeneSymbol(), actual.getDiscoverxGeneSymbol());
+        Assert.assertEquals(expected.getEntrezGeneSymbol(), actual.getEntrezGeneSymbol());
+    }
+
     public static ActivityProfile createActivityProfile(Long id) {
         return createActivityProfile(id, null, null, null, null, null);
     }
