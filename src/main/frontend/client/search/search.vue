@@ -15,7 +15,7 @@
         <v-container class="search-results">
             <v-layout row wrap justify-center>
                 <v-flex xs12 class="search-part-layout">
-                    <compound-name-table :filters="gridFilters"></compound-name-table>
+                    <search-result-table :filters="gridFilters"></search-result-table>
                 </v-flex>
             </v-layout>
         </v-container>
@@ -28,7 +28,7 @@ import Component from 'vue-class-component';
 import { Watch } from 'vue-property-decorator';
 import debounce from 'debounce';
 import SearchFilters from './search-filters.vue';
-import CompoundNameTable from './compound-name-table.vue';
+import SearchResultTable from './search-result-table.vue';
 
 interface Filter {
     inhibitor: string;
@@ -36,7 +36,7 @@ interface Filter {
     activity: any;
 }
 
-@Component({ components: { SearchFilters, CompoundNameTable } })
+@Component({ components: { SearchFilters, SearchResultTable } })
 export default class Search extends Vue {
 
     filters: Filter = {
@@ -52,7 +52,6 @@ export default class Search extends Vue {
     };
 
     created() {
-        console.log('search.vue created!');
         this.refreshTable = debounce(this.refreshTable, 750);
     }
 
@@ -86,7 +85,7 @@ export default class Search extends Vue {
 </script>
 
 <style lang="less">
-@import "../styles/app-variables";
+@import "../../styles/app-variables";
 
 .search-wrapper {
 

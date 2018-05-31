@@ -22,10 +22,7 @@
                 </v-flex>
 
                 <v-flex sm4>
-                    <v-text-field type="number" label="Remaining activity %" class="search-field right-aligned"
-                                  :rules="numericValidationRules" v-model="filters.activity"
-                                  step="0.1" min="0.1" max="100" suffix="%">
-                    </v-text-field>
+                    <activity-or-kd-field v-model="filters.activity"></activity-or-kd-field>
                 </v-flex>
             </v-layout>
         </v-flex>
@@ -36,38 +33,17 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
-import LazyDropdown from './lazy-dropdown.vue';
-import { Kinase, PagedDataRep } from './rak';
+import LazyDropdown from '../lazy-dropdown.vue';
+import { Kinase, PagedDataRep } from '../rak';
+import ActivityOrKdField from './activity-or-kd-field';
 
-@Component({ components: { LazyDropdown } })
+@Component({ components: { ActivityOrKdField, LazyDropdown } })
 export default class SearchFilters extends Vue {
 
     @Prop({ required: true })
     filters: any;
 
     private kinaseQueryParams: any = { size: 1000 };
-
-    private static isEmpty(text: string): boolean {
-        // text might be a number
-        return !text || !text.trim || !text.trim().length;
-    }
-
-    get numericValidationRules(): any[] {
-
-        const rules: any = [];
-
-        rules.push((value: string) => {
-            return SearchFilters.isEmpty(value) || !isNaN(parseFloat(value)) || 'Must be a number';
-        });
-        rules.push((value: string) => {
-            if (!parseFloat(value)) {
-                return true; // Will be caught by the rule above
-            }
-            return +value >= 0 && +value <= 100 || 'Must be between 0 and 100';
-        });
-
-        return rules;
-    }
 
     private kinaseResponseTransformer(response: PagedDataRep<Kinase>): any[] {
         const choices: any[] = response.data.map((kinase: Kinase) => {
@@ -81,19 +57,18 @@ export default class SearchFilters extends Vue {
 </script>
 
 <style lang="less">
-    .search-field {
-        //padding-top: 0;
-        width: 100%;
+.search-field {
+    width: 100%;
 
-        &.right-aligned {
-            input {
-                text-align: right;
-            }
+    &.right-aligned {
+        input {
+            text-align: right;
         }
     }
-    .ui.input.search-field.error {
-        .ui.label {
-            border: 1px solid #e0b4b4; // Matches input's error border
-        }
+}
+.ui.input.search-field.error {
+    .ui.label {
+        border: 1px solid #e0b4b4; // Matches input's error border
     }
+}
 </style>

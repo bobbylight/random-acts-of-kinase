@@ -66,6 +66,8 @@ export interface RakState {
     user: string;
 }
 
+export type SearchByKinaseSecondComponent = 'kinase' | 'percentControl';
+
 export interface UserRep {
     userName?: string;
     lightboxImage?: string;

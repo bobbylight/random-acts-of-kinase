@@ -2,7 +2,7 @@
     <div>
         <v-data-table
             hide-headers
-            class="compound-name-table"
+            class="search-result-table"
             :items="items"
             :search="search"
             :pagination.sync="pagination"
@@ -34,11 +34,11 @@
 </template>
 
 <script>
-import restApi from 'rest-api';
+import restApi from '../rest-api';
 import Blazy from 'blazy';
 
 export default {
-    name: 'compound-name-table',
+    name: 'ssearch-result-table',
     props: {
         //inhibitor: String,
         filters: {
@@ -132,7 +132,7 @@ export default {
         }
         else {
             this.blazy = new Blazy({
-                container: 'compound-name-table'
+                container: 'search-result-table'
             });
         }
     }
@@ -140,9 +140,9 @@ export default {
 </script>
 
 <style lang="less">
-@import '../styles/app-variables';
+@import '../../styles/app-variables';
 
-.compound-name-table {
+.search-result-table {
     thead {
         display: none;
     }
