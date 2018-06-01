@@ -39,7 +39,7 @@ public class Compound {
     @Column(name = "reference_1", length = ModelConstants.COMPOUND_REFERENCE_MAX)
     private String primaryReference;
 
-    @Column(name = "reference_1_url", length = ModelConstants.COMPOUND_REFERENCE_URL_MAX)
+    @Column(name = "reference_1_url", length = ModelConstants.URL_MAX)
     private String primaryReferenceUrl;
 
     @Column(nullable = false)

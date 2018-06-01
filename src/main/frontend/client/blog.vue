@@ -2,9 +2,10 @@
     <v-container grid-list-md class="page-wrapper">
 
         <v-layout row wrap class="blog-wrapper">
-            <v-flex xs12>
 
-                <section-header>News</section-header>
+            <section-header>News</section-header>
+
+            <v-flex xs12>
 
                 <div v-if="postCount === -1">
                     Loading...

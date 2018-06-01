@@ -62,6 +62,12 @@ export interface PagedDataRep<T> {
     total: number;
 }
 
+export interface Partner {
+    id: number;
+    name: string;
+    url: string;
+}
+
 export interface RakState {
     user: string;
 }

@@ -21,4 +21,5 @@ PGPASSWORD=${PASSWORD} psql -h ${HOST} -U ${USER} -c "\copy ${SCHEMA}.kinase fro
 PGPASSWORD=${PASSWORD} psql -h ${HOST} -U ${USER} -c "\copy ${SCHEMA}.kinase_activity_profile from '${OUTDIR}/kinase_activity_profile.csv' with csv header" ${DB}
 PGPASSWORD=${PASSWORD} psql -h ${HOST} -U ${USER} -c "\copy ${SCHEMA}.blog_post from '${OUTDIR}/blog_post.csv' with csv header" ${DB}
 PGPASSWORD=${PASSWORD} psql -h ${HOST} -U ${USER} -c "\copy ${SCHEMA}.feedback from '${OUTDIR}/feedback.csv' with csv header" ${DB}
+PGPASSWORD=${PASSWORD} psql -h ${HOST} -U ${USER} -c "\copy ${SCHEMA}.partner from '${OUTDIR}/partner.csv' with csv header" ${DB}
 PGPASSWORD=${PASSWORD} psql -h ${HOST} -U ${USER} -v schema=${SCHEMA} -f ddl/postgres-fix-sequences.sql ${DB}

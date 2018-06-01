@@ -1,10 +1,16 @@
 // WARNING - http://stackoverflow.com/questions/39488660/vue-js-2-0-not-rendering-anything
 
 // load our default (non specific) css
-import 'font-awesome/css/font-awesome.css';
 import 'app.less';
 import '../node_modules/vuetify/dist/vuetify.min.css';
 import '../node_modules/quill/assets/snow.styl';
+
+import fontawesome from '@fortawesome/fontawesome';
+import faHandshake from '@fortawesome/fontawesome-free-solid/faHandshake';
+import faQuestionCircle from '@fortawesome/fontawesome-free-solid/faQuestionCircle';
+import faUser from '@fortawesome/fontawesome-free-solid/faUser';
+import faGithub from '@fortawesome/fontawesome-free-brands/faGithub';
+fontawesome.library.add(faHandshake, faQuestionCircle, faUser, faGithub);
 
 // Register the router hooks with their names
 // (must be done before registering any components)
@@ -57,6 +63,7 @@ import ImportKds from './admin/import-kds.vue';
 import ImportS10s from './admin/import-s10s.vue';
 import Stats from './admin/stats.vue';
 import Feedback from './admin/feedback.vue';
+import Partners from './partners.vue';
 import BlogManager from './admin/blog-manager.vue';
 import { RouteConfig } from 'vue-router/types/router';
 
@@ -165,6 +172,11 @@ window.onload = () => {
             name: 'compound',
             component: Compound,
             props: true
+        },
+        {
+            path: '/partners',
+            name: 'partners',
+            component: Partners
         }
     ];
 

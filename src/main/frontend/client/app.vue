@@ -22,10 +22,10 @@
                     &copy; 2018&nbsp;<a href="http://sgc-unc.org">SGC-UNC</a>
                 </div>
                 <v-btn icon small @click="viewSource" title="View Source" aria-label="View Source">
-                    <v-icon small>fa fa-github</v-icon>
+                    <v-icon small>fab fa-github</v-icon>
                 </v-btn>
                 <v-btn icon small @click.stop="showAbout = true" title="About" aria-label="About">
-                    <v-icon small>fa fa-question-circle</v-icon>
+                    <v-icon small>fas fa-question-circle</v-icon>
                 </v-btn>
             </v-layout>
         </v-footer>

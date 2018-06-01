@@ -17,8 +17,6 @@ public final class ModelConstants {
 
     public static final int COMPOUND_REFERENCE_MAX = 768;
 
-    public static final int COMPOUND_REFERENCE_URL_MAX = 2048;
-
     public static final int COMPOUND_SOURCE_MAX = 80;
 
     public static final int COMPOUND_SMILES_MAX = 2048;
@@ -36,6 +34,10 @@ public final class ModelConstants {
     public static final int KINASE_DISCOVERX_GENE_SYMBOL_MAX = 100;
 
     public static final int KINASE_ENTREZ_GENE_SYMBOL_MAX = 100;
+
+    public static final int PARTNER_NAME_MAX = 64;
+
+    public static final int URL_MAX = 2048;
 
     /**
      * Private constructor to prevent instantiation.

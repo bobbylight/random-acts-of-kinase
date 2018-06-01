@@ -41,6 +41,9 @@
                 </v-list-tile>
             </v-list>
         </v-menu>
+        <v-btn flat icon large @click="showPartners" title="Partners" aria-label="Partners">
+            <v-icon>fa-handshake</v-icon>
+        </v-btn>
         <v-btn flat icon large @click="showFeedback = true" title="Feedback" aria-label="Feedback">
             <v-icon>comment</v-icon>
         </v-btn>
@@ -105,9 +108,6 @@ export default class Navbar extends Vue {
             });
     }
 
-    private newComment() {
-    }
-
     @Watch('$route')
     private onRouteChanged(to: Route, from: Route) {
         if (to.path.match(/\/compound\/\w+/)) {
@@ -118,6 +118,10 @@ export default class Navbar extends Vue {
                 this.openCompounds.push(compound);
             }
         }
+    }
+
+    private showPartners() {
+        this.$router.push({ name: 'partners' });
     }
 }
 </script>

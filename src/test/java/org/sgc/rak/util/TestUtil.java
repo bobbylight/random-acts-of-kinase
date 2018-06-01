@@ -55,6 +55,12 @@ public final class TestUtil {
         Assert.assertEquals(expected.getEntrezGeneSymbol(), actual.getEntrezGeneSymbol());
     }
 
+    public static void assertPartnersEqual(Partner expected, Partner actual) {
+        Assert.assertEquals(expected.getId(), actual.getId());
+        Assert.assertEquals(expected.getName(), actual.getName());
+        Assert.assertEquals(expected.getUrl(), actual.getUrl());
+    }
+
     public static ActivityProfile createActivityProfile(Long id) {
         return createActivityProfile(id, null, null, null, null, null);
     }
@@ -122,5 +128,13 @@ public final class TestUtil {
         rep.setModifier(modifier);
         rep.setKd(kd);
         return rep;
+    }
+
+    public static Partner createPartner(long id, String name, String url) {
+        Partner partner = new Partner();
+        partner.setId(id);
+        partner.setName(name);
+        partner.setUrl(url);
+        return partner;
     }
 }

@@ -83,3 +83,15 @@ CREATE TABLE :schema.feedback (
 WITH ( OIDS = FALSE );
 
 CREATE INDEX feedback_create_dttm_idx ON :schema.blog_post (create_dttm);
+
+
+DROP TABLE IF EXISTS :schema.partner CASCADE;
+CREATE TABLE :schema.partner (
+  id serial,
+  name character varying(64),
+  url character varying(2048),
+  CONSTRAINT id_pkey PRIMARY KEY (id)
+)
+WITH ( OIDS = FALSE );
+
+CREATE INDEX partner_name_idx ON :schema.partner (name);

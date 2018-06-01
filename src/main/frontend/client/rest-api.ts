@@ -7,7 +7,7 @@ import {
     ErrorResponse,
     PagedDataRep,
     UserRep,
-    Feedback
+    Feedback, Partner
 } from './rak';
 
 export class RestApi {
@@ -149,6 +149,13 @@ export class RestApi {
 
         return this.instance.get(url)
             .then((response: AxiosResponse<PagedDataRep<Feedback>>) => {
+                return response.data;
+            });
+    }
+
+    getPartners(): Promise<PagedDataRep<Partner>> {
+        return this.instance.get('api/partners?page=0&size=1000')
+            .then((response: AxiosResponse<PagedDataRep<Partner>>) => {
                 return response.data;
             });
     }
