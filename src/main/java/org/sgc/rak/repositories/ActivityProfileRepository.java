@@ -23,5 +23,7 @@ public interface ActivityProfileRepository extends PagingAndSortingRepository<Ac
         String compoundName, long kinase, double activity, Pageable pageInfo);
 
     Page<ActivityProfile> getActivityProfilesByKinaseIdAndPercentControlLessThanEqual(long kinase,
-                                                                                double activity, Pageable pageInfo);
+                                                                                  double activity, Pageable pageInfo);
+
+    Page<ActivityProfile> getActivityProfilesByKinaseIdAndKdLessThanEqual(long kinase, double kd, Pageable pageInfo);
 }

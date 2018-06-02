@@ -17,6 +17,7 @@ export default class ActivityOrKdToggleButton extends Vue {
 
     private toggle() {
         this.suffix = this.suffix === '%' ? 'nM' : '%';
+        this.$store.commit('setFilterType', this.suffix === '%' ? 'percentControl' : 'kd');
     }
 }
 </script>

@@ -122,7 +122,7 @@ public class CompoundServiceTest {
             TestUtil.createActivityProfile(3L, COMPOUND_NAME, KINASE_DISCOVERX, KINASE_ENTREZ,
                 0.3, 4)
         );
-        PageImpl<ActivityProfile> profilePage= new PageImpl<>(activityProfiles, pr, 1);
+        PageImpl<ActivityProfile> profilePage = new PageImpl<>(activityProfiles, pr, 1);
         doReturn(profilePage).when(mockActivityProfileRepository)
             .getActivityProfilesByKinaseIdAndPercentControlLessThanEqual(eq(KINASE_ID), anyDouble(),
                 any(Pageable.class));
@@ -139,15 +139,45 @@ public class CompoundServiceTest {
         }
     }
 
+    @Test
+    public void testGetCompoundsByKinaseAndKd_happyPath() {
+
+        Sort sort = Sort.by(Sort.Order.desc("compoundName"));
+        PageRequest pr = PageRequest.of(0, 20, sort);
+
+        Kinase kinase = TestUtil.createKinase(KINASE_ID, KINASE_DISCOVERX, KINASE_ENTREZ);
+        doReturn(kinase).when(mockKinaseService).getKinase(eq(KINASE_DISCOVERX));
+
+        List<ActivityProfile> activityProfiles = Collections.singletonList(
+            TestUtil.createActivityProfile(3L, COMPOUND_NAME, KINASE_DISCOVERX, KINASE_ENTREZ,
+                0.3, 4)
+        );
+        PageImpl<ActivityProfile> profilePage = new PageImpl<>(activityProfiles, pr, 1);
+        doReturn(profilePage).when(mockActivityProfileRepository)
+            .getActivityProfilesByKinaseIdAndKdLessThanEqual(eq(KINASE_ID), anyDouble(),
+                any(Pageable.class));
+
+        List<Compound> expectedCompounds = Collections.singletonList(TestUtil.createCompound(COMPOUND_NAME));
+        doReturn(expectedCompounds).when(mockCompoundDao).getCompounds(anyList());
+
+        Page<Compound> actualPage = service.getCompoundsByKinaseAndKd(KINASE_DISCOVERX, 42, pr);
+        Assert.assertEquals(1, actualPage.getNumberOfElements());
+        Assert.assertEquals(1, actualPage.getTotalElements());
+        Assert.assertEquals(1, actualPage.getTotalPages());
+        for (int i = 0; i < expectedCompounds.size(); i++) {
+            TestUtil.assertCompoundsEqual(expectedCompounds.get(i), actualPage.getContent().get(i));
+        }
+    }
+
     @Test(expected = NotFoundException.class)
-    public void testGetCompoundsByKinaseAndActivity_error_noSuchKinase() {
+    public void testGetCompoundsByKinaseAndKd_error_noSuchKinase() {
 
         doReturn(null).when(mockKinaseService).getKinase(eq(KINASE_DISCOVERX));
 
         Sort sort = Sort.by(Sort.Order.desc("compoundName"));
         PageRequest pr = PageRequest.of(0, 20, sort);
 
-        service.getCompoundsByKinaseAndActivity(KINASE_DISCOVERX, 0.3, pr);
+        service.getCompoundsByKinaseAndKd(KINASE_DISCOVERX, 42, pr);
     }
 
     @Test

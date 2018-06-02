@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-text-field type="number" label="Remaining activity" class="search-field right-aligned"
+        <v-text-field type="number" :label="label" class="search-field right-aligned"
                       :rules="numericValidationRules" v-model="fieldValue" @input="onFieldValueChanged"
                       step="0.1" min="0.1" max="100" suffix="%">
         </v-text-field>
@@ -11,18 +11,18 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { Prop } from 'vue-property-decorator';
+import { Watch } from 'vue-property-decorator';
 import ActivityOrKdToggleButton from './activity-or-kd-toggle-button.vue';
+import { SearchByKinaseSecondComponent } from '../rak';
 
 @Component({ components: { ActivityOrKdToggleButton } })
 export default class ActivityOrKdField extends Vue {
 
-    /**
-     * "value" facilitates v-model support
-     */
-    @Prop({ required: true })
-    value: any;
+    get filters() {
+        return this.$store.state.filters;
+    }
 
+    private label: string = 'Remaining activity';
     private fieldValue: string = '';
 
     private suffix: string = '%';
@@ -37,7 +37,8 @@ export default class ActivityOrKdField extends Vue {
             if (!parseFloat(value)) {
                 return true; // Will be caught by the rule above
             }
-            return +value >= 0 && +value <= 100 || 'Must be between 0 and 100';
+            const max: number = this.filters.activityOrKd === 'percentControl' ? 100 : 10000;
+            return +value >= 0 && +value <= max || `Must be between 0 and ${max}`;
         }
     ];
 
@@ -58,7 +59,31 @@ export default class ActivityOrKdField extends Vue {
     }
 
     onFieldValueChanged(newValue: string) {
-        this.$emit('input', newValue);
+        this.$store.commit('setFilterByActivity', newValue);
+    }
+
+    @Watch('filters.kinase')
+    onKinaseChanged(newValue: string) {
+        // Populate with default value when the first kinase is selected
+        if (!this.fieldValue.length) {
+            this.updateBasedOnActivityOrKd();
+        }
+    }
+
+    @Watch('filters.activityOrKd')
+    onActivityOrKdChanged() {
+        this.updateBasedOnActivityOrKd();
+    }
+
+    private updateBasedOnActivityOrKd() {
+        if (this.filters.activityOrKd === 'percentControl') {
+            this.label = 'Remaining activity';
+            this.fieldValue = this.filters.activity;
+        }
+        else {
+            this.label = 'Kd';
+            this.fieldValue = this.filters.kd;
+        }
     }
 }
 </script>

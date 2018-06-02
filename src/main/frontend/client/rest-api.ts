@@ -7,7 +7,7 @@ import {
     ErrorResponse,
     PagedDataRep,
     UserRep,
-    Feedback, Partner
+    Feedback, Partner, SearchFilter
 } from './rak';
 
 export class RestApi {
@@ -116,14 +116,17 @@ export class RestApi {
             });
     }
 
-    getCompounds(page: number, size: number, filters: any): Promise<PagedDataRep<Compound>> {
+    getCompounds(page: number, size: number, filters: SearchFilter): Promise<PagedDataRep<Compound>> {
 
         let url: string = `api/compounds?page=${page}&size=${size}`;
         if (filters.inhibitor) {
             url += `&compound=${filters.inhibitor}`;
         }
-        if (filters.activity) {
+        if (filters.activityOrKd === 'percentControl' && filters.activity) {
             url += `&activity=${filters.activity}`;
+        }
+        else if (filters.activityOrKd === 'kd' && filters.kd) {
+            url += `&kd=${filters.kd}`;
         }
         if (filters.kinase) {
             url += `&kinase=${filters.kinase}`;

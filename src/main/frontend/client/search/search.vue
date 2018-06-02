@@ -7,7 +7,7 @@
 
                     <h1>Search Compounds</h1>
 
-                    <search-filters :filters="filters"></search-filters>
+                    <search-filters></search-filters>
                 </v-flex>
             </v-layout>
         </v-container>
@@ -29,48 +29,38 @@ import { Watch } from 'vue-property-decorator';
 import debounce from 'debounce';
 import SearchFilters from './search-filters.vue';
 import SearchResultTable from './search-result-table.vue';
-
-interface Filter {
-    inhibitor: string;
-    kinase: string;
-    activity: any;
-}
+import { SearchFilter } from '../rak';
 
 @Component({ components: { SearchFilters, SearchResultTable } })
 export default class Search extends Vue {
 
-    filters: Filter = {
+    gridFilters: SearchFilter = {
         inhibitor: '',
         kinase: '',
-        activity: ''
-    };
-
-    gridFilters: Filter = {
-        inhibitor: '',
-        kinase: '',
-        activity: ''
+        activity: '',
+        kd: '',
+        activityOrKd: 'percentControl'
     };
 
     created() {
         this.refreshTable = debounce(this.refreshTable, 750);
     }
 
-    @Watch('filters.inhibitor')
-    private onInhibitorFilterChanged(newFilter: string) {
-        this.refreshTable();
+    get filters() {
+        return this.$store.state.filters;
     }
 
-    @Watch('filters.kinase')
+    @Watch('filters', { deep: true })
     private onKinaseFilterChanged(newFilter: string) {
-        if (!this.filters.activity) {
+        // We don't give these values defaults initially so they only show up if a kinase is selected
+        if (this.filters.activityOrKd === 'percentControl' && !this.filters.activity) {
             console.log('Defaulting activity to 10');
             this.filters.activity = 10;
         }
-        this.refreshTable();
-    }
-
-    @Watch('filters.activity')
-    private onActivityFilterChanged(newFilter: string) {
+        else if (this.filters.activityOrKd === 'kd' && !this.filters.kd) {
+            console.log('Defaulting Kd to 500');
+            this.filters.kd = 500;
+        }
         this.refreshTable();
     }
 
@@ -79,13 +69,15 @@ export default class Search extends Vue {
         this.gridFilters.inhibitor = this.filters.inhibitor;
         this.gridFilters.kinase = this.filters.kinase;
         this.gridFilters.activity = this.filters.activity;
+        this.gridFilters.kd = this.filters.kd;
+        this.gridFilters.activityOrKd = this.filters.activityOrKd;
         console.log('New gridFilters: ' + JSON.stringify(this.gridFilters));
     }
 }
 </script>
 
 <style lang="less">
-@import "../../styles/app-variables";
+@import '../../styles/app-variables';
 
 .search-wrapper {
 

@@ -69,6 +69,14 @@ export default {
             console.log('activity changed');
             this.reloadTable();
         },
+        'filters.kd': function(newFilter) {
+            console.log('Kd changed');
+            this.reloadTable();
+        },
+        'filters.activityOrKd': function(newValue) {
+            console.log('activityOrKd changed');
+            this.reloadTable();
+        },
 
         pagination: {
             handler () {

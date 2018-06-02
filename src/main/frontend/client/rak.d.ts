@@ -72,7 +72,15 @@ export interface RakState {
     user: string;
 }
 
-export type SearchByKinaseSecondComponent = 'kinase' | 'percentControl';
+export interface SearchFilter {
+    inhibitor: string;
+    kinase: string;
+    activity: any;
+    kd: any;
+    activityOrKd: SearchByKinaseSecondComponent;
+}
+
+export type SearchByKinaseSecondComponent = 'kd' | 'percentControl';
 
 export interface UserRep {
     userName?: string;

@@ -148,6 +148,24 @@ public class CompoundService {
         return new PageImpl<>(compounds, pageInfo, profiles.getTotalElements());
     }
 
+    public Page<Compound> getCompoundsByKinaseAndKd(String kinase, double kd, Pageable pageInfo) {
+
+        Kinase kinase2 = kinaseService.getKinase(kinase);
+        if (kinase2 == null) {
+            throw new NotFoundException(messages.get("error.noSuchKinase", kinase));
+        }
+        long kinaseId = kinase2.getId();
+
+        Page<ActivityProfile> profiles = activityProfileRepository.
+            getActivityProfilesByKinaseIdAndKdLessThanEqual(kinaseId, kd, pageInfo);
+
+        List<String> compoundNames = profiles.getContent().stream().map(ActivityProfile::getCompoundName)
+            .collect(Collectors.toList());
+
+        List<Compound> compounds = compoundDao.getCompounds(compoundNames);
+        return new PageImpl<>(compounds, pageInfo, profiles.getTotalElements());
+    }
+
     /**
      * Returns information about compounds that are missing activity profiles.
      *

@@ -12,7 +12,7 @@
                 <v-flex xm8>
                     <lazy-dropdown v-model="filters.kinase"
                                    id="kinase"
-                                   label="Or by kinase and activity"
+                                   :label="kinaseDropdownLabel"
                                    name="kinase" url="api/kinases"
                                    :queryParams="kinaseQueryParams"
                                    filterParamName="discoverx"
@@ -22,7 +22,7 @@
                 </v-flex>
 
                 <v-flex sm4>
-                    <activity-or-kd-field v-model="filters.activity"></activity-or-kd-field>
+                    <activity-or-kd-field></activity-or-kd-field>
                 </v-flex>
             </v-layout>
         </v-flex>
@@ -32,7 +32,6 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { Prop } from 'vue-property-decorator';
 import LazyDropdown from '../lazy-dropdown.vue';
 import { Kinase, PagedDataRep } from '../rak';
 import ActivityOrKdField from './activity-or-kd-field';
@@ -40,8 +39,13 @@ import ActivityOrKdField from './activity-or-kd-field';
 @Component({ components: { ActivityOrKdField, LazyDropdown } })
 export default class SearchFilters extends Vue {
 
-    @Prop({ required: true })
-    filters: any;
+    get filters() {
+        return this.$store.state.filters;
+    }
+
+    get kinaseDropdownLabel(): string {
+        return this.filters.activityOrKd === 'percentControl' ? 'Or by kinase and activity' : 'Or by kinase and Kd';
+    }
 
     private kinaseQueryParams: any = { size: 1000 };
 
