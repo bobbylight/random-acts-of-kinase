@@ -56,6 +56,8 @@ dependencies {
     compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv'
     compile 'org.apache.commons:commons-lang3:3.7'
     compile 'org.postgresql:postgresql'
+    compile 'org.apache.xmlgraphics:batik-transcoder:1.10'
+    compile 'org.apache.xmlgraphics:batik-codec:1.10'
     compile 'com.h2database:h2'
 
     testCompile 'org.springframework.boot:spring-boot-starter-test'

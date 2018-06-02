@@ -27,12 +27,12 @@
                             <v-select
                                 class="lightbox-save-select"
                                 :items="downloadOptions"
-                                value="png500500"
+                                v-model="imageFormat"
                                 required
                                 hide-details
                                 ></v-select>
-                            <v-btn flat color="primary" class="lightbox-save-button" @save="saveImage">
-                                Save
+                            <v-btn flat color="primary" class="lightbox-save-button" @click="saveImage">
+                                Download
                             </v-btn>
                         </div>
                     </div>
@@ -47,6 +47,7 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop, Watch } from 'vue-property-decorator';
 import SectionHeader from './header.vue';
+import restApi from './rest-api';
 
 @Component({ components: { SectionHeader } })
 export default class Lightbox extends Vue {
@@ -57,10 +58,12 @@ export default class Lightbox extends Vue {
     @Prop({ required: true })
     private image: string;
 
+    private imageFormat: string = 'png500500';
+
     private show: boolean = false;
 
     private downloadOptions: any[] = [
-        { text: 'PNG (200x200)', value: 'png200300' },
+        { text: 'PNG (200x200)', value: 'png200200' },
         { text: 'PNG (300x300)', value: 'png300300' },
         { text: 'PNG (500x500)', value: 'png500500' },
         { text: 'SVG', value: 'svg' }
@@ -87,6 +90,22 @@ export default class Lightbox extends Vue {
 
     saveImage() {
 
+        let width: number | undefined;
+        let height: number | undefined;
+
+        switch (this.imageFormat) {
+            case 'png200200':
+                width = height = 200;
+                break;
+            case 'png300300':
+                width = height = 300;
+                break;
+            case 'png500500':
+                width = height = 500;
+                break;
+        }
+
+        restApi.downloadCompoundImage(this.title, width, height);
     }
 }
 </script>

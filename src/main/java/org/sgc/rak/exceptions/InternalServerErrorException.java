@@ -10,4 +10,8 @@ public class InternalServerErrorException extends AbstractRestException {
     public InternalServerErrorException(String message) {
         super(HttpStatus.INTERNAL_SERVER_ERROR, message);
     }
+
+    public InternalServerErrorException(String message, Throwable cause) {
+        super(HttpStatus.INTERNAL_SERVER_ERROR, message, cause);
+    }
 }

@@ -7,6 +7,7 @@ import org.sgc.rak.dao.KinaseDao;
 import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.repositories.ActivityProfileRepository;
 import org.sgc.rak.rest.CsvHttpMessageConverter;
+import org.sgc.rak.util.ImageTranscoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -50,6 +51,11 @@ public class AppConfiguration implements WebMvcConfigurer {
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.add(CsvHttpMessageConverter.csv(new CsvMapper()));
+    }
+
+    @Bean
+    public ImageTranscoder imageTranscoder() {
+        return new ImageTranscoder();
     }
 
     @Bean

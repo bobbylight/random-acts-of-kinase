@@ -6,26 +6,33 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.sgc.rak.exceptions.InternalServerErrorException;
 import org.sgc.rak.exceptions.NotFoundException;
 import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.model.Compound;
 import org.sgc.rak.reps.PagedDataRep;
 import org.sgc.rak.services.CompoundService;
+import org.sgc.rak.util.ImageTranscoder;
 import org.sgc.rak.util.TestUtil;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
 
 public class CompoundControllerTest {
 
     @Mock
-    private CompoundService compoundService;
+    private CompoundService mockCompoundService;
+
+    @Mock
+    private ImageTranscoder mockImageTranscoder;
 
     @Mock
     private Messages messages;
@@ -45,7 +52,7 @@ public class CompoundControllerTest {
 
         Compound expectedCompound = TestUtil.createCompound(COMPOUND_NAME);
 
-        doReturn(expectedCompound).when(compoundService).getCompound(anyString());
+        doReturn(expectedCompound).when(mockCompoundService).getCompound(anyString());
 
         Compound actualCompound = controller.getCompound(COMPOUND_NAME);
         Assert.assertEquals(COMPOUND_NAME, actualCompound.getCompoundName());
@@ -53,7 +60,7 @@ public class CompoundControllerTest {
 
     @Test(expected = NotFoundException.class)
     public void testGetCompound_notFound() {
-        doReturn(null).when(compoundService).getCompound(anyString());
+        doReturn(null).when(mockCompoundService).getCompound(anyString());
         controller.getCompound("compoundA");
     }
 
@@ -66,7 +73,7 @@ public class CompoundControllerTest {
         List<Compound> expectedResults = Collections.singletonList(expectedCompound);
 
         PageImpl<Compound> expectedPage = new PageImpl<>(expectedResults, pr, 1);
-        doReturn(expectedPage).when(compoundService).getCompounds(any(Pageable.class));
+        doReturn(expectedPage).when(mockCompoundService).getCompounds(any(Pageable.class));
 
         PagedDataRep<Compound> compounds = controller.getCompounds(null, null, null, null, pr);
         Assert.assertEquals(0, compounds.getStart());
@@ -84,7 +91,7 @@ public class CompoundControllerTest {
         List<Compound> expectedResults = Collections.singletonList(expectedCompound);
 
         PageImpl<Compound> expectedPage = new PageImpl<>(expectedResults, pr, 21);
-        doReturn(expectedPage).when(compoundService).getCompounds(any(Pageable.class));
+        doReturn(expectedPage).when(mockCompoundService).getCompounds(any(Pageable.class));
 
         PagedDataRep<Compound> compounds = controller.getCompounds(null, null, null, null, pr);
         Assert.assertEquals(20, compounds.getStart());
@@ -102,7 +109,7 @@ public class CompoundControllerTest {
         List<Compound> expectedResults = Collections.singletonList(expectedCompound);
 
         PageImpl<Compound> expectedPage = new PageImpl<>(expectedResults, pr, 1);
-        doReturn(expectedPage).when(compoundService).getCompoundsByCompoundName(eq(COMPOUND_NAME), any(Pageable.class));
+        doReturn(expectedPage).when(mockCompoundService).getCompoundsByCompoundName(eq(COMPOUND_NAME), any(Pageable.class));
 
         PagedDataRep<Compound> compounds = controller.getCompounds(COMPOUND_NAME, null, null, null, pr);
         Assert.assertEquals(0, compounds.getStart());
@@ -120,7 +127,7 @@ public class CompoundControllerTest {
         List<Compound> expectedResults = Collections.singletonList(expectedCompound);
 
         PageImpl<Compound> expectedPage = new PageImpl<>(expectedResults, pr, 1);
-        doReturn(expectedPage).when(compoundService).getCompoundsByKinaseAndActivity(eq("kinase"), anyDouble(),
+        doReturn(expectedPage).when(mockCompoundService).getCompoundsByKinaseAndActivity(eq("kinase"), anyDouble(),
             any(Pageable.class));
 
         PagedDataRep<Compound> compounds = controller.getCompounds(null, "kinase", 0.8, null, pr);
@@ -139,7 +146,7 @@ public class CompoundControllerTest {
         List<Compound> expectedResults = Collections.singletonList(expectedCompound);
 
         PageImpl<Compound> expectedPage = new PageImpl<>(expectedResults, pr, 1);
-        doReturn(expectedPage).when(compoundService).getCompoundsByKinaseAndKd(eq("kinase"), anyDouble(),
+        doReturn(expectedPage).when(mockCompoundService).getCompoundsByKinaseAndKd(eq("kinase"), anyDouble(),
             any(Pageable.class));
 
         PagedDataRep<Compound> compounds = controller.getCompounds(null, "kinase", null, 42d, pr);
@@ -150,7 +157,23 @@ public class CompoundControllerTest {
     }
 
     @Test
-    public void testGetCompoundSmiles() {
-        Assert.assertNotNull(controller.getCompoundSmiles("compoundA"));
+    public void testGetCompoundImageAsPng() throws Exception {
+
+        doReturn(new byte[0]).when(mockImageTranscoder).svgToPng(anyString(), any(), anyFloat(), anyFloat());
+
+        Assert.assertNotNull(controller.getCompoundImageAsPng("compoundA", 200, 200));
+    }
+
+    @Test(expected = InternalServerErrorException.class)
+    public void testGetCompoundImageAsPng_errorGeneratingPng() throws Exception {
+
+        doThrow(new IOException()).when(mockImageTranscoder).svgToPng(anyString(), any(), anyFloat(), anyFloat());
+
+        controller.getCompoundImageAsPng("compoundA", 200, 200);
+    }
+
+    @Test
+    public void testGetCompoundImageAsSvg() {
+        Assert.assertNotNull(controller.getCompoundImageAsSvg("compoundA"));
     }
 }

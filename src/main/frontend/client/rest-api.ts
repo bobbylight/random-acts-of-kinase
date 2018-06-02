@@ -64,6 +64,17 @@ export class RestApi {
             });
     }
 
+    downloadCompoundImage(compoundName: string, width: number | undefined,
+                          height: number | undefined) {
+
+        let url: string = `api/compounds/images/${compoundName}`;
+        if (width && height) {
+            url += `?width=${width}&height=${height}`;
+        }
+
+        window.open(url);
+    }
+
     getActivityProfiles(page: number, size: number, filters: any,
                         sortParam: string): Promise<PagedDataRep<ActivityProfile>> {
 
