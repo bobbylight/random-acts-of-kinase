@@ -22,7 +22,8 @@ public class ImageTranscoderTest {
 
         String svg = "<svg version=\"1.1\" id=\"topsvg\"\n" +
             "xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n" +
-            "xmlns:cml=\"http://www.xml-cml.org/schema\" x=\"0\" y=\"0\" width=\"200px\" height=\"200px\" viewBox=\"0 0 100 100\">\n" +
+            "xmlns:cml=\"http://www.xml-cml.org/schema\" x=\"0\" y=\"0\" width=\"200px\" height=\"200px\" " +
+            "viewBox=\"0 0 100 100\">\n" +
             "</svg>";
 
         ByteArrayInputStream in = new ByteArrayInputStream(svg.getBytes(StandardCharsets.UTF_8));

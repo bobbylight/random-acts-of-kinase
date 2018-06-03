@@ -1,6 +1,5 @@
 package org.sgc.rak.repositories;
 
-import org.sgc.rak.model.BlogPost;
 import org.sgc.rak.model.Partner;
 import org.springframework.data.repository.PagingAndSortingRepository;
 

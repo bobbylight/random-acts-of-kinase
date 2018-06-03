@@ -13,6 +13,8 @@ import org.sgc.rak.reps.ObjectImportRep;
  */
 public final class Util {
 
+    private static final String VALID_NON_LETTER_NON_DIGIT_FILENAME_CHARS = "_- ";
+
     /**
      * Private constructor to prevent instantiation.
      */
@@ -92,6 +94,18 @@ public final class Util {
         status.setNewValue(newValue);
         status.setOldValue(existingValue);
         return status;
+    }
+
+    /**
+     * Returns whether a character is valid in a file name (e.g. for a suggested download
+     * file name).
+     *
+     * @param ch The character to check.
+     * @return Whether it is vaid.
+     */
+    private static boolean isValidFileNameChar(char ch) {
+        return Character.isLetterOrDigit(ch) ||
+            VALID_NON_LETTER_NON_DIGIT_FILENAME_CHARS.indexOf(ch) != -1;
     }
 
     /**
@@ -228,6 +242,25 @@ public final class Util {
         }
 
         return retVal;
+    }
+
+    /**
+     * Sanitizes a string to be a file name, or part of a file name.  Useful for
+     * file downloads, for example.
+     *
+     * @param str The string to sanitize.
+     * @return The sanitized version of the string.
+     */
+    public static String sanitizeForFileName(String str) {
+
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+            sb.append(isValidFileNameChar(ch) ? ch : '_');
+        }
+
+        return sb.toString();
     }
 
     /**

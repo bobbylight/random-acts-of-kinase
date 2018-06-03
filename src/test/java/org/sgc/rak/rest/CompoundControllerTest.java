@@ -17,6 +17,7 @@ import org.sgc.rak.util.TestUtil;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mock.web.MockHttpServletResponse;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -109,7 +110,8 @@ public class CompoundControllerTest {
         List<Compound> expectedResults = Collections.singletonList(expectedCompound);
 
         PageImpl<Compound> expectedPage = new PageImpl<>(expectedResults, pr, 1);
-        doReturn(expectedPage).when(mockCompoundService).getCompoundsByCompoundName(eq(COMPOUND_NAME), any(Pageable.class));
+        doReturn(expectedPage).when(mockCompoundService).getCompoundsByCompoundName(
+            eq(COMPOUND_NAME), any(Pageable.class));
 
         PagedDataRep<Compound> compounds = controller.getCompounds(COMPOUND_NAME, null, null, null, pr);
         Assert.assertEquals(0, compounds.getStart());
@@ -157,11 +159,24 @@ public class CompoundControllerTest {
     }
 
     @Test
-    public void testGetCompoundImageAsPng() throws Exception {
+    public void testGetCompoundImageAsPng_download() throws Exception {
 
         doReturn(new byte[0]).when(mockImageTranscoder).svgToPng(anyString(), any(), anyFloat(), anyFloat());
 
-        Assert.assertNotNull(controller.getCompoundImageAsPng("compoundA", 200, 200));
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        Assert.assertNotNull(controller.getCompoundImageAsPng("compoundA", response, 200, 200, true));
+        String contentDisposition = response.getHeader("Content-Disposition");
+        Assert.assertTrue(contentDisposition != null && contentDisposition.startsWith("attachment"));
+    }
+
+    @Test
+    public void testGetCompoundImageAsPng_noDownload() throws Exception {
+
+        doReturn(new byte[0]).when(mockImageTranscoder).svgToPng(anyString(), any(), anyFloat(), anyFloat());
+
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        Assert.assertNotNull(controller.getCompoundImageAsPng("compoundA", response, 200, 200, false));
+        Assert.assertNull(response.getHeader("Content-Disposition"));
     }
 
     @Test(expected = InternalServerErrorException.class)
@@ -169,11 +184,22 @@ public class CompoundControllerTest {
 
         doThrow(new IOException()).when(mockImageTranscoder).svgToPng(anyString(), any(), anyFloat(), anyFloat());
 
-        controller.getCompoundImageAsPng("compoundA", 200, 200);
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        controller.getCompoundImageAsPng("compoundA", response, 200, 200, false);
     }
 
     @Test
-    public void testGetCompoundImageAsSvg() {
-        Assert.assertNotNull(controller.getCompoundImageAsSvg("compoundA"));
+    public void testGetCompoundImageAsSvg_download() {
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        Assert.assertNotNull(controller.getCompoundImageAsSvg("compoundA", response, true));
+        String contentDisposition = response.getHeader("Content-Disposition");
+        Assert.assertTrue(contentDisposition != null && contentDisposition.startsWith("attachment"));
+    }
+
+    @Test
+    public void testGetCompoundImageAsSvg_noDownload() {
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        Assert.assertNotNull(controller.getCompoundImageAsSvg("compoundA", response, false));
+        Assert.assertNull(response.getHeader("Content-Disposition"));
     }
 }

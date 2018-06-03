@@ -35,4 +35,15 @@ export default class RakUtil {
         }
         return true;
     }
+
+    static programmaticallyDownload(url: string) {
+        const a: HTMLAnchorElement = document.createElement('a');
+        a.style.display = 'none';
+        a.addEventListener('click', () => {
+            window.location.href = url;
+        });
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
 }

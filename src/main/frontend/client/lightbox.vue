@@ -16,7 +16,7 @@
                 </div>
 
                 <section-header>{{title}}</section-header>
-                <img :src="image" width=400 height=400>
+                <img :src="image" width=500 height=500>
 
                 <v-flex xs12 style="text-align: right">
                     <div style="display: inline-block">
@@ -53,7 +53,7 @@ import restApi from './rest-api';
 export default class Lightbox extends Vue {
 
     @Prop()
-    private title: string | undefined;
+    private title: string;
 
     @Prop({ required: true })
     private image: string;

@@ -4,6 +4,9 @@ SET SCHEMA :'schema';
 -- sequences manually.
 --
 
+SELECT setval(pg_get_serial_sequence('kinase', 'id'),
+              COALESCE((SELECT MAX(id)+1 FROM :schema.kinase), 1), false);
+
 SELECT setval(pg_get_serial_sequence('kinase_activity_profile', 'id'),
               COALESCE((SELECT MAX(id)+1 FROM :schema.kinase_activity_profile), 1), false);
 

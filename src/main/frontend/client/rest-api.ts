@@ -9,6 +9,7 @@ import {
     UserRep,
     Feedback, Partner, SearchFilter
 } from './rak';
+import rakUtil from './util';
 
 export class RestApi {
 
@@ -67,12 +68,12 @@ export class RestApi {
     downloadCompoundImage(compoundName: string, width: number | undefined,
                           height: number | undefined) {
 
-        let url: string = `api/compounds/images/${compoundName}`;
+        let url: string = `api/compounds/images/${compoundName}?download=true`;
         if (width && height) {
-            url += `?width=${width}&height=${height}`;
+            url += `&width=${width}&height=${height}`;
         }
 
-        window.open(url);
+        rakUtil.programmaticallyDownload(url);
     }
 
     getActivityProfiles(page: number, size: number, filters: any,

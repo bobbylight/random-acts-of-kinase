@@ -256,6 +256,12 @@ public class UtilTest {
     }
 
     @Test
+    public void testSanitizeForFileName() {
+        String fileName = "abcdefghijlmnopqrstuvwxyz-_/\\ ()";
+        Assert.assertEquals("abcdefghijlmnopqrstuvwxyz-___ __", Util.sanitizeForFileName(fileName));
+    }
+
+    @Test
     public void testSScoreCsvRecordToCompound() {
 
         SScoreCsvRecord rep = new SScoreCsvRecord();

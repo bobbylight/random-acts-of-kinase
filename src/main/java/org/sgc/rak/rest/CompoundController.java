@@ -8,6 +8,7 @@ import org.sgc.rak.model.Compound;
 import org.sgc.rak.reps.PagedDataRep;
 import org.sgc.rak.services.CompoundService;
 import org.sgc.rak.util.ImageTranscoder;
+import org.sgc.rak.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
@@ -18,6 +19,7 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -101,23 +103,31 @@ class CompoundController {
      * We could have different endpoints for PNG vs. SVG, but that's not very REST-like either.
      *
      * @param compoundName A compound name.
+     * @param response The HTTP response.
      * @param width The width of the PNG file to create.  (Note this is a {@code float} due to a Batik quirk).
      * @param height The height of the PNG file to create.  (Note this is a {@code float} due to a Batik quirk).
+     * @param download Whether the file should be downloaded (vs. just opened).
      * @return The image for the compound, in PNG format.  If no image exists for a compound, a default
      *         image is returned.
-     * @see #getCompoundImageAsSvg(String)
+     * @see #getCompoundImageAsSvg(String, HttpServletResponse, boolean)
      */
-    @GetMapping(path = "/images/{compoundName}", params = { "width", "height" }, produces = MediaType.IMAGE_PNG_VALUE)
-    public Resource getCompoundImageAsPng(@PathVariable String compoundName,
-                                          @RequestParam float width, @RequestParam float height) {
+    @GetMapping(path = "/images/{compoundName}", params = { "width", "height" },
+        produces = { MediaType.IMAGE_PNG_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE })
+    public Resource getCompoundImageAsPng(@PathVariable String compoundName, HttpServletResponse response,
+                                          @RequestParam float width, @RequestParam float height,
+                                          @RequestParam(defaultValue = "false") boolean download) {
 
-        Resource resource = getCompoundImageAsSvg(compoundName);
+        Resource resource = getCompoundImageAsSvg(compoundName, response, download);
 
         byte[] bytes;
         try {
             bytes = imageTranscoder.svgToPng(compoundName, resource.getInputStream(), width, height);
         } catch (IOException ioe) {
             throw new InternalServerErrorException(messages.get("error.creatingImage"), ioe);
+        }
+
+        if (download) {
+            addDownloadHeader(response, compoundName, "png");
         }
 
         return new ByteArrayResource(bytes);
@@ -127,16 +137,31 @@ class CompoundController {
      * Returns the image for a compound as an SVG file.
      *
      * @param compoundName A compound name.
+     * @param response The HTTP response.
+     * @param download Whether the file should be downloaded (vs. just opened).
      * @return The image for the compound, in SVG format.  If no image exists for a compound, a default
      *         image is returned.
-     * @see #getCompoundImageAsPng(String, float, float)
+     * @see #getCompoundImageAsPng(String, HttpServletResponse, float, float, boolean)
      */
     @GetMapping(path = "/images/{compoundName}", produces = MEDIA_TYPE_SVG)
-    public Resource getCompoundImageAsSvg(@PathVariable String compoundName) {
+    public Resource getCompoundImageAsSvg(@PathVariable String compoundName, HttpServletResponse response,
+                                          @RequestParam(defaultValue = "false") boolean download) {
+
         Resource resource = new ClassPathResource("/static/img/smiles/" + compoundName + ".svg");
         if (!resource.exists()) {
             resource = new ClassPathResource("/static/img/molecule-unknown.svg");
         }
+
+        if (download) {
+            addDownloadHeader(response, compoundName, "svg");
+        }
+
         return resource;
+    }
+
+    private static void addDownloadHeader(HttpServletResponse response, String compoundName, String suffix) {
+        String fileName = Util.sanitizeForFileName(compoundName) + "." + suffix;
+        response.setHeader("Content-Disposition",
+            "attachment; filename=\"" + fileName + "\"");
     }
 }
