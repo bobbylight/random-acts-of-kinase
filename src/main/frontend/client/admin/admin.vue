@@ -28,7 +28,7 @@
                         <v-list class="pt-0">
                             <v-list-tile avatar>
                                 <v-list-tile-action>
-                                    <v-icon>fa-cog</v-icon>
+                                    <v-icon>fas fa-cog</v-icon>
                                 </v-list-tile-action>
                                 <v-list-tile-content>
                                     Admin Actions
@@ -47,7 +47,7 @@
                         <v-divider></v-divider>
 
                         <v-list-group
-                            prepend-icon="fa-upload"
+                            prepend-icon="fa fa-upload"
                             no-action
                             v-model="importSubMenuExpanded">
 
@@ -84,7 +84,7 @@
 
                         <v-list-tile to="blog-manager">
                             <v-list-tile-action>
-                                <v-icon>fa-newspaper-o</v-icon>
+                                <v-icon>fa-newspaper</v-icon>
                             </v-list-tile-action>
                             <v-list-tile-content>
                                 <v-list-tile-title>News Posts</v-list-tile-title>
@@ -102,7 +102,7 @@
 
                         <v-list-tile to="feedback">
                             <v-list-tile-action>
-                                <v-icon>feedback</v-icon>
+                                <v-icon>fa-comments</v-icon>
                             </v-list-tile-action>
                             <v-list-tile-content>
                                 <v-list-tile-title>Feedback</v-list-tile-title>

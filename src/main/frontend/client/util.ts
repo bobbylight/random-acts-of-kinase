@@ -4,8 +4,9 @@ import { Route } from 'vue-router';
 export default class RakUtil {
 
     static isActiveTab($route: Route, tabName: string): boolean {
-        const tabNameRegex: RegExp = new RegExp(tabName + '(?:/.+)?$');
-        console.log(tabName + ' -- ' + $route.fullPath + ', ' + (!!$route.fullPath && !!$route.fullPath.match(tabNameRegex)));
+        const tabNameRegex: RegExp = new RegExp(tabName.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&'));
+        console.log(`tabName: ${tabName}, tabNameRegex: ${tabNameRegex}, ` +
+            `!!$route.fullPath: ${!!$route.fullPath}, decodedRouteFullPath: ${decodeURIComponent($route.fullPath)}`);
         return !!$route.fullPath && !!decodeURIComponent($route.fullPath).match(tabNameRegex);
     }
 

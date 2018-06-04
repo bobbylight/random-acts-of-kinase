@@ -45,7 +45,7 @@
             <v-icon>fa-handshake</v-icon>
         </v-btn>
         <v-btn flat icon large @click="showFeedback = true" title="Feedback" aria-label="Feedback">
-            <v-icon>comment</v-icon>
+            <v-icon>fa-comments</v-icon>
         </v-btn>
 
         <login-modal :show="showLogin" @close="showLogin = false"></login-modal>
@@ -110,10 +110,10 @@ export default class Navbar extends Vue {
 
     @Watch('$route')
     private onRouteChanged(to: Route, from: Route) {
-        if (to.path.match(/\/compound\/\w+/)) {
+        if (to.path.match(/\/compound\/[\w()]+/)) {
             // tslint:disable:no-string-literal
             const compound: string = to.params['id'];
-            console.log('Compound clicked; adding pill for it if one doesn\'t yet exist: ' + compound);
+            console.log(`Compound clicked; adding pill for it if one doesn't yet exist: ${compound}`);
             if (this.openCompounds.indexOf(compound) === -1) {
                 this.openCompounds.push(compound);
             }

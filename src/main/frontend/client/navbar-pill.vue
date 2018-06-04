@@ -3,7 +3,9 @@
         <v-btn flat class="navbar-pill" v-bind:class="{ active: isActiveTab() }" @click="navigate">
             {{compound}}
         </v-btn>
-        <i class="fa fa-times close-icon" aria-hidden="true" @click="close"></i>
+        <span class="close-icon" @click="close">
+            <i class="fa fa-times" aria-hidden="true"></i>
+        </span>
     </div>
 </template>
 
@@ -100,6 +102,7 @@ export default class NavbarPill extends Vue {
         opacity: 0;
         color: @close-icon-color;
         font-size: 1.3rem;
+        line-height: initial;
         position: absolute;
         top: 3px;
         right: 3px;
