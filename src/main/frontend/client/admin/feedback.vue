@@ -7,10 +7,31 @@
             <v-flex xs12>
 
                 <div>
+                    <p>
                     Feedback as entered by users.  Hopefully at least some of this can be converted into bug reports
                     or feature requests.
+                    </p>
+
+                    <p>
+                    Click on a row to see more detail about the feedback.
+                    </p>
                 </div>
 
+            </v-flex>
+
+            <v-flex xs12>
+
+                <v-btn @click="onReply" :disabled="isReplyDisabled()">
+                    Reply
+                </v-btn>
+
+                <v-btn @click="onCreateTicket" :disabled="selectedFeedback.length !== 1">
+                    Create GitHub ticket
+                </v-btn>
+
+                <v-btn @click="onDelete" :disabled="selectedFeedback.length === 0">
+                    Delete
+                </v-btn>
             </v-flex>
 
             <v-flex xs12>
@@ -20,6 +41,8 @@
                     class="elevation-1"
                     v-model="selectedFeedback"
                     :items="items"
+                    item-key="id"
+                    select-all
                     :search="search"
                     :pagination.sync="pagination"
                     :total-items="totalItems"
@@ -28,16 +51,18 @@
                 >
 
                     <template slot="items" slot-scope="props">
-                        <td>
-                            <v-checkbox
-                                primary
-                                hide-details
-                                v-model="props.selected"
-                            ></v-checkbox>
-                        </td>
-                        <td>{{props.item.email}}</td>
-                        <td>{{props.item.title}}</td>
-                        <td>{{props.item.createDate}}</td>
+                        <tr @click="props.expanded = !props.expanded">
+                            <td>
+                                <v-checkbox
+                                    primary
+                                    hide-details
+                                    v-model="props.selected"
+                                ></v-checkbox>
+                            </td>
+                            <td v-html="linkifyEmail(props.item)"></td>
+                            <td>{{props.item.title}}</td>
+                            <td>{{new Date(props.item.createDate).toLocaleString()}}</td>
+                        </tr>
                     </template>
 
                     <template slot="expand" slot-scope="props">
@@ -58,6 +83,8 @@ import SectionHeader from '../header.vue';
 import { Feedback, PagedDataRep } from '../rak';
 import { Watch } from 'vue-property-decorator';
 import restApi from '../rest-api';
+import Toaster from '../toaster';
+import rakUtil from '../util';
 
 @Component({ components: { SectionHeader } })
 export default class FeedbackManager extends Vue {
@@ -84,6 +111,44 @@ export default class FeedbackManager extends Vue {
             { text: 'Title', value: 'title' },
             { text: 'Date', value: 'createDate' }
         ];
+    }
+
+    isReplyDisabled(): boolean {
+        return this.selectedFeedback.length !== 1 || !this.selectedFeedback[0].email;
+    }
+
+    /**
+     * Creates a <code>mailto:</code> URL to response to a feedback item.  It is assumed
+     * that the feedback's email has previously been verified as  non-<code>null</code>.
+     *
+     * @param {Feedback} feedback The feedback.
+     * @returns {string} The <code>mailto:</code> URL.
+     */
+    private createMailtoUrl(feedback: Feedback): string {
+        const email: string = feedback.email!;
+        const subject: string = `Random Acts of Kinase - Feedback &quot;${encodeURIComponent(feedback.title)}&quot;`;
+        return `mailto:${email}?subject=${subject}`;
+    }
+
+    linkifyEmail(feedback: Feedback): string {
+
+        if (!feedback.email) {
+            return '';
+        }
+        return `<a href="${this.createMailtoUrl(feedback)}">${feedback.email}</a>`;
+    }
+
+    onCreateTicket() {
+        Toaster.error('Not yet implemented');
+    }
+
+    onDelete() {
+        Toaster.error('Not yet implemented');
+    }
+
+    onReply() {
+        const feedback: Feedback = this.selectedFeedback[0];
+        rakUtil.programmaticallyClickLink(this.createMailtoUrl(feedback));
     }
 
     reloadTable() {

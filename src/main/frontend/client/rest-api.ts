@@ -73,7 +73,7 @@ export class RestApi {
             url += `&width=${width}&height=${height}`;
         }
 
-        rakUtil.programmaticallyDownload(url);
+        rakUtil.programmaticallyClickLink(url);
     }
 
     getActivityProfiles(page: number, size: number, filters: any,

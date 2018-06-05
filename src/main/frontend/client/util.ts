@@ -37,7 +37,7 @@ export default class RakUtil {
         return true;
     }
 
-    static programmaticallyDownload(url: string) {
+    static programmaticallyClickLink(url: string) {
         const a: HTMLAnchorElement = document.createElement('a');
         a.style.display = 'none';
         a.addEventListener('click', () => {
