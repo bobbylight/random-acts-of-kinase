@@ -2,7 +2,7 @@
     <div>
         <v-text-field type="number" :label="label" class="search-field right-aligned"
                       :rules="numericValidationRules" v-model="fieldValue" @input="onFieldValueChanged"
-                      step="0.1" min="0.1" max="100" suffix="%">
+                      :step="step" :min="min" :max="max" suffix="%">
         </v-text-field>
         <activity-or-kd-toggle-button ref="dropdown"></activity-or-kd-toggle-button>
     </div>
@@ -25,6 +25,9 @@ export default class ActivityOrKdField extends Vue {
     private label: string = 'Remaining activity';
     private fieldValue: string = '';
 
+    private step: number = 0.1;
+    private min: number = 0.1;
+    private max: number = 100;
     private suffix: string = '%';
 
     private numericValidationRules: any[] = [
@@ -59,7 +62,9 @@ export default class ActivityOrKdField extends Vue {
     }
 
     onFieldValueChanged(newValue: string) {
-        this.$store.commit('setFilterByActivity', newValue);
+        const storeCommitFunction: string =
+            this.filters.activityOrKd === 'percentControl' ? 'setFilterByActivity' : 'setFilterByKd';
+        this.$store.commit(storeCommitFunction, newValue);
     }
 
     @Watch('filters.kinase')
@@ -79,10 +84,14 @@ export default class ActivityOrKdField extends Vue {
         if (this.filters.activityOrKd === 'percentControl') {
             this.label = 'Remaining activity';
             this.fieldValue = this.filters.activity;
+            this.step = this.min = 0.1;
+            this.max = 100;
         }
         else {
             this.label = 'Kd';
             this.fieldValue = this.filters.kd;
+            this.step = this.min = 1;
+            this.max = 500;
         }
     }
 }
