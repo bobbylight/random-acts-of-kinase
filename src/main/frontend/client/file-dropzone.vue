@@ -2,7 +2,7 @@
     <div>
         <div class="file-dropzone">
 
-            <div class="file-dropzone-content">
+            <div class="file-dropzone-content" @drop.prevent="onDrop" @dragover.prevent="onDragOver">
                 <div class="headline">Drop file here, or</div>
                 <label for="compound-file-input">
                     <v-btn @click="onSelectFileButtonClicked" color="success">Select File</v-btn>
@@ -19,6 +19,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
+import Toaster from './toaster';
 
 @Component
 export default class ImportCompounds extends Vue {
@@ -28,6 +29,24 @@ export default class ImportCompounds extends Vue {
      */
     @Prop({ required: true })
     value: File | null;
+
+    onDragOver(e: DragEvent) {
+        e.dataTransfer.dropEffect = 'copy';
+    }
+
+    onDrop(e: DragEvent) {
+
+        const files: FileList = e.dataTransfer.files;
+        if (files.length === 0) {
+            Toaster.error('The dropped item is not a file');
+        }
+        else if (files.length > 1) {
+            Toaster.error('Only one file can be imported at a time');
+        }
+        else {
+            this.$emit('input', files[0]);
+        }
+    }
 
     private onFileChanged() {
 
