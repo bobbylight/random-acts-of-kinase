@@ -25,6 +25,7 @@ CREATE TABLE :schema.kinase (
   id serial,
   discoverx_gene_symbol character varying(100) NOT NULL,
   entrez_gene_symbol character varying(100) NOT NULL,
+  discoverx_url varchar(2048) UNIQUE NOT NULL,
   CONSTRAINT kinase_pkey PRIMARY KEY (id),
   CONSTRAINT kinase_discoverx_gene_symbol_entrez_gene_symbol_key UNIQUE (discoverx_gene_symbol, entrez_gene_symbol)
 )
@@ -32,7 +33,6 @@ WITH ( OIDS = FALSE );
 
 CREATE INDEX kinase_discoverx_gene_symbol_idx ON :schema.kinase (discoverx_gene_symbol);
 CREATE INDEX kinase_discoverx_gene_symbol_lower_idx ON :schema.kinase (lower(discoverx_gene_symbol));
-
 
 DROP TABLE IF EXISTS :schema.kinase_activity_profile CASCADE;
 CREATE TABLE :schema.kinase_activity_profile (
@@ -88,9 +88,9 @@ CREATE INDEX feedback_create_dttm_idx ON :schema.blog_post (create_dttm);
 DROP TABLE IF EXISTS :schema.partner CASCADE;
 CREATE TABLE :schema.partner (
   id serial,
-  name character varying(64),
-  url character varying(2048),
-  image character varying(80),
+  name character varying(64) UNIQUE NOT NULL,
+  url character varying(2048) UNIQUE NOT NULL,
+  image character varying(80) UNIQUE NOT NULL,
   CONSTRAINT id_pkey PRIMARY KEY (id)
 )
 WITH ( OIDS = FALSE );

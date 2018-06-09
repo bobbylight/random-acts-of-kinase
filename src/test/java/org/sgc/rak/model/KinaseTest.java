@@ -30,8 +30,16 @@ public class KinaseTest {
     }
 
     @Test
+    public void testGetSetDiscoverxUrl() {
+        Kinase kinase = new Kinase();
+        Assert.assertNull(kinase.getDiscoverxUrl());
+        kinase.setDiscoverxUrl("foo");
+        Assert.assertEquals("foo", kinase.getDiscoverxUrl());
+    }
+
+    @Test
     public void testToString() {
-        String expected = "Kinase[id=0,discoverxGeneSymbol=<null>,entrezGeneSymbol=<null>]";
+        String expected = "Kinase[id=0,discoverxGeneSymbol=<null>,entrezGeneSymbol=<null>,discoverxUrl=<null>]";
         Assert.assertEquals(expected, new Kinase().toString());
     }
 }

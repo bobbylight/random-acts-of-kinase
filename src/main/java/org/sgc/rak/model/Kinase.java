@@ -21,11 +21,14 @@ public class Kinase {
     @Column(name = "id", updatable = false)
     private long id;
 
-    @Column(name = "discoverx_gene_symbol", updatable = false, length = ModelConstants.KINASE_DISCOVERX_GENE_SYMBOL_MAX)
+    @Column(nullable = false, updatable = false, length = ModelConstants.KINASE_DISCOVERX_GENE_SYMBOL_MAX)
     private String discoverxGeneSymbol;
 
-    @Column(name = "entrez_gene_symbol", updatable = false, length = ModelConstants.KINASE_ENTREZ_GENE_SYMBOL_MAX)
+    @Column(nullable = false, updatable = false, length = ModelConstants.KINASE_ENTREZ_GENE_SYMBOL_MAX)
     private String entrezGeneSymbol;
+
+    @Column(nullable = false, updatable = false, length = ModelConstants.URL_MAX)
+    private String discoverxUrl;
 
     public long getId() {
         return id;
@@ -51,12 +54,21 @@ public class Kinase {
         this.entrezGeneSymbol = entrezGeneSymbol;
     }
 
+    public String getDiscoverxUrl() {
+        return discoverxUrl;
+    }
+
+    public void setDiscoverxUrl(String discoverxUrl) {
+        this.discoverxUrl = discoverxUrl;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
-            append("id", id).
-            append("discoverxGeneSymbol", discoverxGeneSymbol).
-            append("entrezGeneSymbol", entrezGeneSymbol).
-            build();
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+            .append("id", id)
+            .append("discoverxGeneSymbol", discoverxGeneSymbol)
+            .append("entrezGeneSymbol", entrezGeneSymbol)
+            .append("discoverxUrl", discoverxUrl)
+            .build();
     }
 }

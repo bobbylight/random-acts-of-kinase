@@ -49,6 +49,7 @@ export interface Kinase {
     id: number;
     discoverxGeneSymbol: string;
     entrezGeneSymbol: string;
+    discoverxUrl: string;
 }
 
 export interface ObjectImportRep {
