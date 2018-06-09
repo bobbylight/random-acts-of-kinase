@@ -2,7 +2,7 @@
     <v-container grid-list-md class="page-wrapper">
         <v-layout row wrap>
 
-            <section-header>Results for {{this.id}}</section-header>
+            <section-header>Results for {{id}}</section-header>
 
             <v-flex xs12>
                 <compound-details-card :compound-name="id"></compound-details-card>
@@ -69,7 +69,6 @@ export default class Compound extends Vue {
     }
 
     mounted() {
-        //this.chartData = [['Work', 32], ['Play', 1492]];
 
         const sort: any = null;
 

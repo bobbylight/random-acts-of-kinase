@@ -1,6 +1,6 @@
 <template>
 
-    <v-toolbar app absolute dark>
+    <v-toolbar app absolute dark class="rak-navbar">
 
         <v-toolbar-title class="toolbar-title-fix" @click="setActiveTab('home')">
             <img src="/img/molecule-white.svg" width="50" height="50" class="navbar-image">
@@ -16,7 +16,7 @@
             </v-btn>
 
             <v-btn flat v-bind:class="{ 'active-toolbar-item': isActiveTab('/admin') }"
-                   @click="setActiveTab('import-compounds')" v-if="$store.getters.loggedIn">
+                   @click="setActiveTab($store.state.lastAdminRouteName)" v-if="$store.getters.loggedIn">
                 Admin
             </v-btn>
 
@@ -93,6 +93,12 @@ export default class Navbar extends Vue {
         }
     }
 
+    created() {
+
+        // If the user bookmarked a compound, be sure it has an open tab
+        this.possiblyOpenCompoundTab(this.$route);
+    }
+
     private logout() {
         restApi.logout()
             .then(() => {
@@ -110,10 +116,14 @@ export default class Navbar extends Vue {
 
     @Watch('$route')
     private onRouteChanged(to: Route, from: Route) {
-        if (to.path.match(/\/compound\/[\w()]+/)) {
+        this.possiblyOpenCompoundTab(to);
+    }
+
+    private possiblyOpenCompoundTab(route: Route) {
+        if (route.path.match(/\/compound\/[\w()]+/)) {
             // tslint:disable:no-string-literal
-            const compound: string = to.params['id'];
-            console.log(`Compound clicked; adding pill for it if one doesn't yet exist: ${compound}`);
+            const compound: string = route.params['id'];
+            console.log(`Compound opened; adding pill for it if one doesn't yet exist: ${compound}`);
             if (this.openCompounds.indexOf(compound) === -1) {
                 this.openCompounds.push(compound);
             }
@@ -127,17 +137,19 @@ export default class Navbar extends Vue {
 </script>
 
 <style lang="less">
-.toolbar-title-fix {
-    margin-right: 16px;
-    cursor: pointer;
-}
+.rak-navbar {
+    .toolbar-title-fix {
+        margin-right: 16px;
+        cursor: pointer;
+    }
 
-.navbar-image {
-    vertical-align: middle;
-}
+    .navbar-image {
+        vertical-align: middle;
+    }
 
-.active-toolbar-item {
-    background: rgba(255, 255, 255, 0.15) !important;
-    color: #fff;
+    .active-toolbar-item {
+        background: rgba(255, 255, 255, 0.15) !important;
+        color: #fff;
+    }
 }
 </style>

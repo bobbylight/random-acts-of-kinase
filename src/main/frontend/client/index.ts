@@ -194,6 +194,12 @@ window.onload = () => {
             return { x: 0, y: 0 };
         }
     });
+    router.afterEach((to: Route) => {
+        if (to.path.indexOf('/admin') === 0) {
+            // Remember the most recent admin sub-route so we go straight back to it when the 'Admin' tab is clicked
+            store.commit('setLastAdminRouteName', to.name);
+        }
+    });
 
     // tslint:disable-next-line:no-unused-expression
     new Vue({

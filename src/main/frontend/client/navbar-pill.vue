@@ -37,7 +37,7 @@ export default class NavbarPill extends Vue {
     }
 
     isActiveTab(): boolean {
-        return RakUtil.isActiveTab(this.$route, this.compound);
+        return RakUtil.isActiveTab(this.$route, `/compound/${this.compound}`);
     }
 
     mounted() {

@@ -70,6 +70,10 @@ export interface Partner {
 
 export interface RakState {
     user: string;
+    lightboxImage: string | null;
+    lightboxTitle: string | undefined;
+    filters: SearchFilter;
+    lastAdminRouteName: string;
 }
 
 export interface SearchFilter {

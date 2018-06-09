@@ -15,32 +15,36 @@ const store: Store<RakState> = new Store({
             activity: '',
             kd: '',
             activityOrKd: 'percentControl'
-        }
+        },
+        lastAdminRouteName: 'import-compounds'
     },
     mutations: {
-        setLightboxImage(state: any, image: string) {
+        setLightboxImage(state: RakState, image: string) {
             state.lightboxImage = image;
         },
-        setLightboxTitle(state: any, title: string | undefined) {
+        setLightboxTitle(state: RakState, title: string | undefined) {
             state.lightboxTitle = title;
         },
-        setUser(state: any, user: string) {
+        setUser(state: RakState, user: string) {
             state.user = user;
         },
-        setFilterByInhibitor(state: any, inhibitor: string) {
+        setFilterByInhibitor(state: RakState, inhibitor: string) {
             state.filters.inhibitor = inhibitor;
         },
-        setFilterByKinase(state: any, kinase: string) {
+        setFilterByKinase(state: RakState, kinase: string) {
             state.filters.kinase = kinase;
         },
-        setFilterByActivity(state: any, activity: string) {
+        setFilterByActivity(state: RakState, activity: string) {
             state.filters.activity = activity;
         },
-        setFilterByKd(state: any, kd: string) {
+        setFilterByKd(state: RakState, kd: string) {
             state.filters.kd = kd;
         },
-        setFilterType(state: any, type: SearchByKinaseSecondComponent) {
+        setFilterType(state: RakState, type: SearchByKinaseSecondComponent) {
             state.filters.activityOrKd = type;
+        },
+        setLastAdminRouteName(state: RakState, routeName: string) {
+            state.lastAdminRouteName = routeName;
         }
     },
     getters: {
