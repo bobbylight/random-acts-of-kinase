@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.sgc.rak.exceptions.BadRequestException;
 import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.model.Feedback;
 import org.sgc.rak.reps.PagedDataRep;
@@ -23,6 +24,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.util.NestedServletException;
 
 import java.util.Collections;
 import java.util.List;
@@ -66,6 +68,38 @@ public class FeedbackControllerTest {
         ).andExpect(MockMvcResultMatchers.status().isCreated());
 
         verify(mockService, times(1)).createFeedback(any(Feedback.class));
+    }
+
+    @Test
+    public void testDeleteFeedback_happyPath() throws Exception {
+
+        Long feedbackId = 42L;
+
+        doReturn(true).when(mockService).getFeedbackExists(eq(feedbackId));
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/feedback/" + feedbackId)
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(MockMvcResultMatchers.status().isNoContent());
+
+        verify(mockService, times(1)).deleteFeedback(eq(feedbackId));
+    }
+
+    @Test(expected = BadRequestException.class)
+    public void testDeleteFeedback_error_noSuchFeedback() throws Throwable {
+
+        Long feedbackId = 42L;
+
+        doReturn(false).when(mockService).getFeedbackExists(eq(feedbackId));
+
+        try {
+            mockMvc.perform(MockMvcRequestBuilders.delete("/api/feedback/" + feedbackId)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+            );
+        } catch (NestedServletException e) {
+            throw e.getCause();
+        }
     }
 
     @Test

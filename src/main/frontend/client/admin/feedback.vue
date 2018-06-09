@@ -25,11 +25,11 @@
                     Reply
                 </v-btn>
 
-                <v-btn @click="onCreateTicket" :disabled="selectedFeedback.length !== 1">
+                <v-btn @click="onCreateTicket" :disabled="loading || selectedFeedback.length !== 1">
                     Create GitHub ticket
                 </v-btn>
 
-                <v-btn @click="onDelete" :disabled="selectedFeedback.length === 0">
+                <v-btn @click="onDelete" :disabled="loading || selectedFeedback.length === 0">
                     Delete
                 </v-btn>
             </v-flex>
@@ -73,6 +73,24 @@
                 </v-data-table>
             </v-flex>
         </v-layout>
+
+        <v-dialog v-model="showConfirmDeleteModal" max-width="500px">
+            <v-card>
+                <v-card-title class="headline">
+                    Confirm Delete Feedback
+                </v-card-title>
+
+                <v-card-text>
+                    Are you sure you want to delete the selected feedback items?
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="primary" @click.stop="deleteSelectedFeedback">Yes</v-btn>
+                    <v-btn color="primary" flat @click.stop="showConfirmDeleteModal = false">No</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
     </v-container>
 </template>
 
@@ -80,7 +98,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import SectionHeader from '../header.vue';
-import { Feedback, PagedDataRep } from '../rak';
+import { ErrorResponse, Feedback, PagedDataRep } from '../rak';
 import { Watch } from 'vue-property-decorator';
 import restApi from '../rest-api';
 import Toaster from '../toaster';
@@ -99,6 +117,8 @@ export default class FeedbackManager extends Vue {
 
     private loading: boolean = true;
 
+    private showConfirmDeleteModal: boolean = false;
+
     private pagination: any = {
         sortBy: 'createDate',
         descending: true
@@ -114,7 +134,7 @@ export default class FeedbackManager extends Vue {
     }
 
     isReplyDisabled(): boolean {
-        return this.selectedFeedback.length !== 1 || !this.selectedFeedback[0].email;
+        return this.loading || this.selectedFeedback.length !== 1 || !this.selectedFeedback[0].email;
     }
 
     /**
@@ -130,6 +150,33 @@ export default class FeedbackManager extends Vue {
         return `mailto:${email}?subject=${subject}`;
     }
 
+    deleteSelectedFeedback() {
+        this.showConfirmDeleteModal = false;
+        this.loading = true;
+        this.deleteSelectedFeedbackImpl(this.selectedFeedback.slice(), 0);
+    }
+
+    private deleteSelectedFeedbackImpl(feedbacks: Feedback[], index: number) {
+
+        const feedback: Feedback = feedbacks[index];
+
+        restApi.deleteFeedback(feedback.id!)
+            .then(() => {
+                if (index < feedbacks.length - 1) {
+                    this.deleteSelectedFeedbackImpl(feedbacks, index + 1);
+                }
+                else {
+                    this.selectedFeedback.length = 0;
+                    this.reloadTable();
+                    Toaster.success('Feedback successfully deleted');
+                }
+            })
+            .catch((error: ErrorResponse) => {
+                this.reloadTable();
+                Toaster.error('An error occurred deleting one or more feedback entries');
+            });
+    }
+
     linkifyEmail(feedback: Feedback): string {
 
         if (!feedback.email) {
@@ -143,7 +190,7 @@ export default class FeedbackManager extends Vue {
     }
 
     onDelete() {
-        Toaster.error('Not yet implemented');
+        this.showConfirmDeleteModal = true;
     }
 
     onReply() {

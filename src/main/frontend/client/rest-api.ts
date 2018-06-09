@@ -65,6 +65,17 @@ export class RestApi {
             });
     }
 
+    deleteFeedback(feedbackId: number): Promise<any> {
+
+        return this.instance.delete(`api/feedback/${feedbackId}`)
+            .then((response: AxiosResponse<void>) => {
+                return undefined;
+            })
+            .catch((error: AxiosError) => {
+                throw RestApi.axiosErrorToErrorResponse(error);
+            });
+    }
+
     downloadCompoundImage(compoundName: string, width: number | undefined,
                           height: number | undefined) {
 

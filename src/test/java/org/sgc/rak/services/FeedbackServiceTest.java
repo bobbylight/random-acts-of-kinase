@@ -40,6 +40,12 @@ public class FeedbackServiceTest {
     }
 
     @Test
+    public void testDeleteFeedback() {
+        service.deleteFeedback(42L);
+        verify(mockRepository, times(1)).deleteById(anyLong());
+    }
+
+    @Test
     public void testGetFeedback() {
 
         Sort sort = Sort.by(Sort.Order.desc("createDate"));
@@ -56,5 +62,11 @@ public class FeedbackServiceTest {
         for (int i = 0; i < posts.size(); i++) {
             TestUtil.assertFeedbacksEqual(posts.get(i), actualPosts.getContent().get(i));
         }
+    }
+
+    @Test
+    public void testGetFeedbackExists() {
+        service.getFeedbackExists(42L);
+        verify(mockRepository, times(1)).existsById(anyLong());
     }
 }

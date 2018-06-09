@@ -1,5 +1,7 @@
 package org.sgc.rak.rest;
 
+import org.sgc.rak.exceptions.BadRequestException;
+import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.model.Feedback;
 import org.sgc.rak.reps.PagedDataRep;
 import org.sgc.rak.services.FeedbackService;
@@ -23,9 +25,12 @@ public class FeedbackController {
 
     private final FeedbackService feedbackService;
 
+    private final Messages messages;
+
     @Autowired
-    FeedbackController(FeedbackService feedbackService) {
+    FeedbackController(FeedbackService feedbackService, Messages messages) {
         this.feedbackService = feedbackService;
+        this.messages = messages;
     }
 
     /**
@@ -35,9 +40,25 @@ public class FeedbackController {
      */
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    void createFeedback(HttpServletRequest request,  @Valid @RequestBody Feedback feedback) {
+    void createFeedback(HttpServletRequest request, @Valid @RequestBody Feedback feedback) {
         feedback.setIpAddress(request.getRemoteAddr());
         feedbackService.createFeedback(feedback);
+    }
+
+    /**
+     * Deletes a feedback entry.
+     *
+     * @param feedbackId The ID of the feedback entry to delete.
+     */
+    @DeleteMapping("/{feedbackId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void deleteFeedback(@PathVariable Long feedbackId) {
+
+        if (!feedbackService.getFeedbackExists(feedbackId)) {
+            throw new BadRequestException(messages.get("error.noSuchFeedback", feedbackId));
+        }
+
+        feedbackService.deleteFeedback(feedbackId);
     }
 
     /**
@@ -48,7 +69,7 @@ public class FeedbackController {
      */
     @RequestMapping(method = RequestMethod.GET)
     PagedDataRep<Feedback> getFeedback(@SortDefault(value = "createDate",
-        direction = Sort.Direction.DESC) Pageable pageInfo) {
+            direction = Sort.Direction.DESC) Pageable pageInfo) {
         Page<Feedback> page = feedbackService.getFeedback(pageInfo);
         long start = page.getNumber() * pageInfo.getPageSize();
         long total = page.getTotalElements();

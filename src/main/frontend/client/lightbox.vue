@@ -1,7 +1,7 @@
 <template>
     <transition name="fade">
-        <div class="lightbox"
-             :class="{ 'visible-lightbox': show }"
+        <div class="lightbox overlay"
+             :class="{ 'overlay--active': show }"
              @click="hide"
              v-if="show">
 
@@ -16,7 +16,7 @@
                 </div>
 
                 <section-header>{{title}}</section-header>
-                <img :src="image" width=500 height=500>
+                <img :src="image" width=600 height=450>
 
                 <v-flex xs12 style="text-align: right">
                     <div style="display: inline-block">
@@ -115,15 +115,8 @@ export default class Lightbox extends Vue {
 
 .lightbox {
 
-    color: black;
-    background: #ffffff40;
-    z-index: 10000;
-
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    // Note: We rely on background, opacity, and layout styles to come from
+    // vuetify's overlay and overlay--active.  So yes, we're a little fragile.
 
     display: flex;
     justify-content: center;

@@ -33,6 +33,15 @@ public class FeedbackService {
     }
 
     /**
+     * Deletes a feedback entry.
+     *
+     * @param id The ID of the feedback entry to delete.
+     */
+    public void deleteFeedback(Long id) {
+        repository.deleteById(id);
+    }
+
+    /**
      * Returns feedback.
      *
      * @param pageInfo How to sort the data and what page of the data to return.
@@ -40,5 +49,15 @@ public class FeedbackService {
      */
     public Page<Feedback> getFeedback(Pageable pageInfo) {
         return repository.findAll(pageInfo);
+    }
+
+    /**
+     * Returns whether a feedback entry exists.
+     *
+     * @param id The ID of the feedback entry to search for.
+     * @return Whether the feedback entry exists.
+     */
+    public boolean getFeedbackExists(Long id) {
+        return repository.existsById(id);
     }
 }
