@@ -35,8 +35,15 @@ public class PartnerTest {
     }
 
     @Test
+    public void testGetSetImage() {
+        Assert.assertNull(partner.getImage());
+        partner.setImage("foo");
+        Assert.assertEquals("foo", partner.getImage());
+    }
+
+    @Test
     public void testToString() {
-        String expected = "Partner[id=<null>,name=<null>,url=<null>]";
+        String expected = "Partner[id=<null>,name=<null>,url=<null>,image=<null>]";
         Assert.assertEquals(expected, partner.toString());
     }
 }

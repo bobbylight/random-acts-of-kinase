@@ -5,8 +5,8 @@
 
             <section-header>Partners</section-header>
 
-            <v-flex xs6 v-for="partner in partners" :key="partner.id">
-                {{partner.name}}
+            <v-flex md6 sm12 v-for="partner in partners" :key="partner.id">
+                <partner-badge :partner="partner"></partner-badge>
             </v-flex>
         </v-layout>
     </v-container>
@@ -16,18 +16,16 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import SectionHeader from './header.vue';
+import PartnerBadge from './partner.vue';
 import { PagedDataRep, Partner } from './rak';
 import restApi from './rest-api';
 
-@Component({ components: { SectionHeader } })
+@Component({ components: { PartnerBadge, SectionHeader } })
 export default class Partners extends Vue {
 
     private partners: Partner[] = [];
 
     private loadPartners() {
-
-        console.log('Loading partners...');
-
         restApi.getPartners()
             .then((partners: PagedDataRep<Partner>) => {
                 this.partners = partners.data;

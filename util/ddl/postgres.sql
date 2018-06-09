@@ -90,6 +90,7 @@ CREATE TABLE :schema.partner (
   id serial,
   name character varying(64),
   url character varying(2048),
+  image character varying(80),
   CONSTRAINT id_pkey PRIMARY KEY (id)
 )
 WITH ( OIDS = FALSE );
