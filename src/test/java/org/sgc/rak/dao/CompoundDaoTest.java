@@ -12,7 +12,6 @@ import org.mockito.MockitoAnnotations;
 import org.sgc.rak.model.Compound;
 import org.sgc.rak.model.CompoundCountPair;
 import org.sgc.rak.repositories.CompoundRepository;
-import org.sgc.rak.repositories.KinaseRepository;
 import org.sgc.rak.util.TestUtil;
 import org.springframework.data.domain.*;
 
@@ -31,9 +30,6 @@ public class CompoundDaoTest {
 
     @Mock
     private CompoundRepository compoundRepository;
-
-    @Mock
-    private KinaseRepository kinaseRepository;
 
     @Mock
     private EntityManager entityManager;
@@ -136,8 +132,6 @@ public class CompoundDaoTest {
 
     @Test
     public void testGetCompoundsMissingPublicationInfo() {
-
-        doReturn(1000L).when(kinaseRepository).count();
 
         Query mockQuery = Mockito.mock(Query.class);
         doReturn(mockQuery).when(entityManager).createNativeQuery(anyString());

@@ -24,9 +24,6 @@ public class CompoundDao {
     private CompoundRepository compoundRepository;
 
     @Autowired
-    private KinaseRepository kinaseRepository;
-
-    @Autowired
     private EntityManager entityManager;
 
     /**
@@ -89,7 +86,8 @@ public class CompoundDao {
     @SuppressWarnings("MagicNumber")
     public Page<CompoundCountPair> getCompoundsMissingActivityProfiles(Pageable pageInfo) {
 
-        long kinaseCount = kinaseRepository.count();
+        // TODO: kinaseRepository.getAnalyzedKinaseCount();
+        long kinaseCount = 468; //kinaseRepository.count();
 
         // TODO: This Postgres-specific query also checks the count for each compound name.
         // I don't think this can be converted to jpql, due to an inability

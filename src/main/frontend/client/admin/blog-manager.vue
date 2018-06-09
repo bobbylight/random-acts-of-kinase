@@ -6,9 +6,9 @@
 
             <v-flex xs12>
 
-                <div>
+                <p>
                     Create, edit, or delete news posts.
-                </div>
+                </p>
 
                 <v-btn color="info" @click="onNewPost">New Post</v-btn>
             </v-flex>

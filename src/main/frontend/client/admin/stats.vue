@@ -6,10 +6,10 @@
 
             <v-flex xs12>
 
-                <div>
+                <p>
                     The following reports show areas where our data is incomplete.
                     Each table can be exported in CSV format.
-                </div>
+                </p>
 
                 <v-card class="top-card-padding">
 
