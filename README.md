@@ -23,10 +23,11 @@ Unfortunately you need to start three processes to develop - annoying.  I couldn
 webpack to build directly into `build/` without Spring Boot getting cranky and clearing
 out the contents of `build/resources/main/static` on restarts.
 
-*Note:* Ctrl+C may not propagate the SIGKILL to the child npm tasks for
-`webpackWatch` and `copyStaticResourcesToBuildWatch`, which can cause race conditions on
-file copies and in turn weird behavior (stale static resources).  If you see this happening, you
-might consider running the wrapped npm tasks directly.
+*Note:* Ctrl+C may not propagate the SIGKILL to the child npm tasks for `webpackWatch`
+and `copyStaticResourcesToBuildWatch`, which can cause race conditions on file copies
+and in turn weird behavior (stale static resources).  If you see this happening, you
+might consider running the wrapped npm tasks directly.  See
+[here](https://github.com/srs/gradle-node-plugin/issues/143) for more information.
 
 If you have data to develop against in a local postgres instance, you can run against
 via `./gradlew bootRun -Dspring.profiles.active=dev-postgres`.
