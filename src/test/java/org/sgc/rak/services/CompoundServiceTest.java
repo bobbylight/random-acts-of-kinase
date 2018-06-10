@@ -231,6 +231,31 @@ public class CompoundServiceTest {
     }
 
     @Test
+    public void testGetHiddenCompounds() {
+
+        List<Compound> compounds = Arrays.asList(
+            TestUtil.createCompound("compoundA"),
+            TestUtil.createCompound("compoundB")
+        );
+
+        Pageable pageable = PageRequest.of(3, 2);
+
+        PageImpl<Compound> page = new PageImpl<>(compounds, pageable, 100);
+        doReturn(page).when(mockCompoundDao).getHiddenCompounds(any(Pageable.class));
+
+        Page<Compound> actualResponse = service.getHiddenCompounds(pageable);
+        Assert.assertEquals(2, actualResponse.getNumberOfElements());
+        Assert.assertEquals(100, actualResponse.getTotalElements());
+        Assert.assertEquals(50, actualResponse.getTotalPages());
+        Assert.assertEquals(compounds.size(), actualResponse.getSize());
+        for (int i = 0; i < compounds.size(); i++) {
+            Compound expected = compounds.get(i);
+            Compound actual = actualResponse.getContent().get(i);
+            Assert.assertEquals(expected.getCompoundName(), actual.getCompoundName());
+        }
+    }
+
+    @Test
     public void testGetIncompleteCompounds_happyPath() {
 
         List<Compound> compounds = Arrays.asList(

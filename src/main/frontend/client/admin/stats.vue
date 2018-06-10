@@ -21,7 +21,8 @@
                             </div>
 
                             <div class="admin-card-button-area">
-                                <download-button url="/admin/api/incompleteCompounds"></download-button>
+                                <download-button url="/admin/api/incompleteCompounds"
+                                        download-file-name="incomplete-compounds.csv"></download-button>
                             </div>
                         </div>
                     </v-card-title>
@@ -46,7 +47,8 @@
                             </div>
 
                             <div class="admin-card-button-area">
-                                <download-button url="/admin/api/compoundsMissingActivityProfiles"></download-button>
+                                <download-button url="/admin/api/compoundsMissingActivityProfiles"
+                                     download-file-name="compounds-missing-activity-profiles.csv"></download-button>
                             </div>
                         </div>
                     </v-card-title>
@@ -71,7 +73,8 @@
                             </div>
 
                             <div class="admin-card-button-area">
-                                <download-button url="/admin/api/compoundsMissingPublicationInfo"></download-button>
+                                <download-button url="/admin/api/compoundsMissingPublicationInfo"
+                                        download-file-name="compounds-missing-publication-info.csv"></download-button>
                             </div>
                         </div>
                     </v-card-title>
@@ -80,6 +83,31 @@
                         <CompoundsTable
                             url="/admin/api/compoundsMissingPublicationInfo"
                             :columnInfo="compoundsMissingPublicationInfoColumnInfo"></CompoundsTable>
+                    </v-card-text>
+                </v-card>
+            </v-flex>
+
+            <v-flex xs12>
+
+                <v-card class="not-top-card-padding">
+
+                    <v-card-title primary-title>
+                        <div class="title-content">
+                            <div>
+                                <h3 class="headline">Hidden Compounds</h3>
+                                <div>Compounds hidden in the main application</div>
+                            </div>
+
+                            <div class="admin-card-button-area">
+                                <download-button url="/admin/api/hiddenCompounds"
+                                                 download-file-name="hidden-compounds.csv"></download-button>
+                            </div>
+                        </div>
+                    </v-card-title>
+
+                    <v-card-text>
+                        <CompoundsTable
+                            url="/admin/api/hiddenCompounds" :columnInfo="hiddenCompoundsColumnInfo"></CompoundsTable>
                     </v-card-text>
                 </v-card>
             </v-flex>
@@ -101,6 +129,7 @@ export default class Stats extends Vue {
     private incompleteCompoundColumnInfo: ColumnInfo[];
     private compoundsMissingActivityProfilesColumnInfo: ColumnInfo[];
     private compoundsMissingPublicationInfoColumnInfo: ColumnInfo[];
+    private hiddenCompoundsColumnInfo: ColumnInfo[];
 
     created() {
 
@@ -120,6 +149,17 @@ export default class Stats extends Vue {
         ];
 
         this.compoundsMissingPublicationInfoColumnInfo = this.incompleteCompoundColumnInfo;
+
+        this.hiddenCompoundsColumnInfo = [
+            { columnId: 'compoundName', columnName: 'Compound', isCompound: true },
+            { columnId: 'chemotype', columnName: 'Chemotype' },
+            { columnId: 's10', columnName: 's(10)' },
+            { columnId: 'smiles', columnName: 'SMILES' },
+            { columnId: 'source', columnName: 'Source' },
+            { columnId: 'primaryReference', columnName: 'Reference' },
+            { columnId: 'primaryReferenceUrl', columnName: 'Reference URL' },
+            { columnId: 'hidden', columnName: 'Hidden' },
+        ];
     }
 }
 </script>

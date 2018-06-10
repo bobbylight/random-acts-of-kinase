@@ -1,7 +1,7 @@
 <template>
     <v-tooltip right>
         <v-btn flat icon class="download-button" slot="activator"
-               :href="downloadUrl">
+               :download="downloadFileName" :href="downloadUrl">
             <v-icon>file_download</v-icon>
         </v-btn>
         <span>Download</span>
@@ -18,6 +18,9 @@ export default class DownloadButton extends Vue {
 
     @Prop({ required: true })
     private url: string;
+
+    @Prop({ required: true })
+    private downloadFileName: string;
 
     get downloadUrl() {
         const firstParamChar: string = this.url.indexOf('?') > -1 ? '&' : '?';

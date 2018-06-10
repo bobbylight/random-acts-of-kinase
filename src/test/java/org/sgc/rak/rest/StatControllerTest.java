@@ -78,9 +78,30 @@ public class StatControllerTest {
         Assert.assertEquals(100, actualResponse.getTotal());
         Assert.assertEquals(compounds.size(), actualResponse.getData().size());
         for (int i = 0; i < compounds.size(); i++) {
-            Compound expected = compounds.get(i);
-            Compound actual = actualResponse.getData().get(i);
-            Assert.assertEquals(expected.getCompoundName(), actual.getCompoundName());
+            TestUtil.assertCompoundsEqual(compounds.get(i), actualResponse.getData().get(i));
+        }
+    }
+
+    @Test
+    public void testGetHiddenCompounds_happyPath() {
+
+        List<Compound> compounds = Arrays.asList(
+            TestUtil.createCompound("compoundA"),
+            TestUtil.createCompound("compoundB")
+        );
+
+        Pageable pageable = PageRequest.of(3, 2);
+
+        PageImpl<Compound> page = new PageImpl<>(compounds, pageable, 100);
+        doReturn(page).when(mockCompoundService).getHiddenCompounds(any(Pageable.class));
+
+        PagedDataRep<Compound> actualResponse = controller.getHiddenCompounds(pageable);
+        Assert.assertEquals(6, actualResponse.getStart());
+        Assert.assertEquals(2, actualResponse.getCount());
+        Assert.assertEquals(100, actualResponse.getTotal());
+        Assert.assertEquals(compounds.size(), actualResponse.getData().size());
+        for (int i = 0; i < compounds.size(); i++) {
+            TestUtil.assertCompoundsEqual(compounds.get(i), actualResponse.getData().get(i));
         }
     }
 
@@ -103,9 +124,7 @@ public class StatControllerTest {
         Assert.assertEquals(100, actualResponse.getTotal());
         Assert.assertEquals(compounds.size(), actualResponse.getData().size());
         for (int i = 0; i < compounds.size(); i++) {
-            Compound expected = compounds.get(i);
-            Compound actual = actualResponse.getData().get(i);
-            Assert.assertEquals(expected.getCompoundName(), actual.getCompoundName());
+            TestUtil.assertCompoundsEqual(compounds.get(i), actualResponse.getData().get(i));
         }
     }
 }

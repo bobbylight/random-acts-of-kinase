@@ -16,12 +16,13 @@ public interface CompoundRepository extends PagingAndSortingRepository<Compound,
     List<Compound> findByCompoundNameInIgnoreCase(List<String> compoundNames);
 
     /**
-     * Returns compounds that are not hidden.
+     * Returns compounds that are either hidden or not.
      *
+     * @param hidden Whether to return hidden or non-hidden compounds.
      * @param pageInfo How to sort the data and what page of data to return.
      * @return The list of compounds.
      */
-    Page<Compound> findByHiddenFalse(Pageable pageInfo);
+    Page<Compound> findByHidden(boolean hidden, Pageable pageInfo);
 
     /**
      * Returns compounds without smiles strings or s10 values defined.
@@ -30,7 +31,7 @@ public interface CompoundRepository extends PagingAndSortingRepository<Compound,
      * @return The list of compounds.
      */
     @Query("from Compound c where c.smiles is null or s10 is null")
-    Page<Compound> findSmilesIsNullOrS10IsNull(Pageable pageInfo);
+    Page<Compound> findBySmilesIsNullOrS10IsNull(Pageable pageInfo);
 
     /**
      * Returns compounds whose names start contain a given substring, ignoring case.

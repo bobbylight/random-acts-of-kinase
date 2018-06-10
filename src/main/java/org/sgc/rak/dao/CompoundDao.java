@@ -3,7 +3,6 @@ package org.sgc.rak.dao;
 import org.sgc.rak.model.Compound;
 import org.sgc.rak.model.CompoundCountPair;
 import org.sgc.rak.repositories.CompoundRepository;
-import org.sgc.rak.repositories.KinaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -57,7 +56,7 @@ public class CompoundDao {
      */
     public Page<Compound> getCompounds(Pageable pageInfo) {
 //        return compoundRepository.findAll(pageInfo);
-        return compoundRepository.findByHiddenFalse(pageInfo);
+        return compoundRepository.findByHidden(false, pageInfo);
     }
 
     public List<Compound> getCompounds(List<String> compoundNames) {
@@ -147,13 +146,23 @@ public class CompoundDao {
     }
 
     /**
+     * Returns information about compounds that are hidden.
+     *
+     * @param pageInfo How to sort the data and what page of the data to return.
+     * @return The list of compounds.
+     */
+    public Page<Compound> getHiddenCompounds(Pageable pageInfo) {
+        return compoundRepository.findByHidden(true, pageInfo);
+    }
+
+    /**
      * Returns information on compounds without SMILES strings or s(10) values.
      *
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
      */
     public Page<Compound> getIncompleteCompounds(Pageable pageInfo) {
-        return compoundRepository.findSmilesIsNullOrS10IsNull(pageInfo);
+        return compoundRepository.findBySmilesIsNullOrS10IsNull(pageInfo);
     }
 
     /**

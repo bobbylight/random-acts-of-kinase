@@ -191,6 +191,16 @@ public class CompoundService {
     }
 
     /**
+     * Returns information about compounds that are hidden.
+     *
+     * @param pageInfo How to sort the data and what page of the data to return.
+     * @return The list of compounds.
+     */
+    public Page<Compound> getHiddenCompounds(Pageable pageInfo) {
+        return compoundDao.getHiddenCompounds(pageInfo);
+    }
+
+    /**
      * Returns information about compounds without SMILES strings or s(10) values.
      *
      * @param pageInfo How to sort the data and what page of the data to return.

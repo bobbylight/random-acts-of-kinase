@@ -31,7 +31,7 @@ public class StatController {
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
      */
-    @RequestMapping(method = RequestMethod.GET, path = "/compoundsMissingActivityProfiles",
+    @GetMapping(path = "/compoundsMissingActivityProfiles",
         produces = { MediaType.APPLICATION_JSON_VALUE, "text/csv" })
     PagedDataRep<CompoundCountPair> getCompoundsMissingActivityProfiles(
             @SortDefault("compoundName") Pageable pageInfo) {
@@ -45,10 +45,21 @@ public class StatController {
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
      */
-    @RequestMapping(method = RequestMethod.GET, path = "/compoundsMissingPublicationInfo",
-        produces = { MediaType.APPLICATION_JSON_VALUE, "text/csv" })
+    @GetMapping(path = "/compoundsMissingPublicationInfo", produces = { MediaType.APPLICATION_JSON_VALUE, "text/csv" })
     PagedDataRep<Compound> getCompoundsMissingPublicationInfo(@SortDefault("compoundName") Pageable pageInfo) {
         Page<Compound> page = compoundService.getCompoundsMissingPublicationInfo(pageInfo);
+        return pageToPagedDataRep(page, pageInfo.getPageSize());
+    }
+
+    /**
+     * Returns information about compounds that are hidden.
+     *
+     * @param pageInfo How to sort the data and what page of the data to return.
+     * @return The list of compounds.
+     */
+    @GetMapping(path = "/hiddenCompounds", produces = { MediaType.APPLICATION_JSON_VALUE, "text/csv" })
+    PagedDataRep<Compound> getHiddenCompounds(@SortDefault("compoundName") Pageable pageInfo) {
+        Page<Compound> page = compoundService.getHiddenCompounds(pageInfo);
         return pageToPagedDataRep(page, pageInfo.getPageSize());
     }
 
@@ -58,8 +69,7 @@ public class StatController {
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
      */
-    @RequestMapping(method = RequestMethod.GET, path = "/incompleteCompounds",
-            produces = { MediaType.APPLICATION_JSON_VALUE, "text/csv" })
+    @GetMapping(path = "/incompleteCompounds", produces = { MediaType.APPLICATION_JSON_VALUE, "text/csv" })
     PagedDataRep<Compound> getIncompleteCompounds(@SortDefault("compoundName") Pageable pageInfo) {
         Page<Compound> page = compoundService.getIncompleteCompounds(pageInfo);
         return pageToPagedDataRep(page, pageInfo.getPageSize());
