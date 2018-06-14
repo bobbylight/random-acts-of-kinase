@@ -91,8 +91,26 @@ CREATE TABLE :schema.partner (
   name character varying(64) UNIQUE NOT NULL,
   url character varying(2048) UNIQUE NOT NULL,
   image character varying(80) UNIQUE NOT NULL,
-  CONSTRAINT id_pkey PRIMARY KEY (id)
+  CONSTRAINT partner_pkey PRIMARY KEY (id)
 )
 WITH ( OIDS = FALSE );
 
 CREATE INDEX partner_name_idx ON :schema.partner (name);
+
+
+DROP TABLE IF EXISTS :schema.audit CASCADE;
+CREATE TABLE :schema.audit (
+  id serial,
+  user_nm character varying(40) NOT NULL,
+  action character varying(40) NOT NULL,
+  ip_address character varying(39),
+  create_dttm TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+  success boolean NOT NULL DEFAULT TRUE,
+  CONSTRAINT audit_pk PRIMARY KEY (id)
+)
+WITH ( OIDS = FALSE );
+
+CREATE INDEX audit_user_nm_idx ON :schema.audit (user_nm);
+CREATE INDEX audit_action_idx ON :schema.audit (action);
+CREATE INDEX audit_create_dttm_idx ON :schema.audit (create_dttm);
+CREATE INDEX success ON :schema.audit (success);

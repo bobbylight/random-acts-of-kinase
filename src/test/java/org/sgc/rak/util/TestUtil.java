@@ -25,11 +25,21 @@ public final class TestUtil {
         Assert.assertEquals(expected.getPercentControl(), actual.getPercentControl());
     }
 
+    public static void assertAuditsEqual(Audit expected, Audit actual) {
+        Assert.assertEquals(expected.getId(), actual.getId());
+        Assert.assertEquals(expected.getUserName(), actual.getUserName());
+        Assert.assertEquals(expected.getAction(), actual.getAction());
+        Assert.assertEquals(expected.getIpAddress(), actual.getIpAddress());
+        Assert.assertEquals(expected.getCreateDate(), actual.getCreateDate());
+        Assert.assertEquals(expected.getSuccess(), actual.getSuccess());
+    }
+
     public static void assertBlogPostsEqual(BlogPost expected, BlogPost actual) {
         Assert.assertEquals(expected.getId(), actual.getId());
         Assert.assertEquals(expected.getTitle(), actual.getTitle());
         Assert.assertEquals(expected.getBody(), actual.getBody());
         Assert.assertEquals(expected.getCreateDate(), actual.getCreateDate());
+        Assert.assertEquals(expected.getViewCount(), actual.getViewCount());
     }
 
     public static void assertCompoundsEqual(Compound expected, Compound actual) {
@@ -85,6 +95,14 @@ public final class TestUtil {
         rep.setPercentControl(percentControl);
         rep.setCompoundConcentration(compoundConcentration);
         return rep;
+    }
+
+    public static Audit createAudit(String user, AuditAction action, Boolean success) {
+        Audit audit = new Audit();
+        audit.setUserName(user);
+        audit.setAction(action);
+        audit.setSuccess(success);
+        return audit;
     }
 
     public static BlogPost createBlogPost(String title, String body) {

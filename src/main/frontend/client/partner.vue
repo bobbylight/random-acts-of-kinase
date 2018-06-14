@@ -1,7 +1,7 @@
 <template>
     <div class="partner-badge-wrapper">
         <a :href="partner.url" target="_blank" rel="noopener noreferrer">
-            <img :src="getImageUrl(partner.image)" style="width: 300px">
+            <img class="partner-image" :src="getImageUrl(partner.image)">
         </a>
     </div>
 </template>
@@ -25,6 +25,8 @@ export default class PartnerBadge extends Vue {
 </script>
 
 <style lang="less">
+@import '../styles/app-variables';
+
 .partner-badge-wrapper {
 
     height: 300px;
@@ -32,5 +34,14 @@ export default class PartnerBadge extends Vue {
     align-items: center;
     justify-content: center;
     margin: 1rem;
+
+    img.partner-image {
+        width: 300px;
+        transition: transform @transition-time;
+
+        &:hover {
+            transform: scale(1.1);
+        }
+    }
 }
 </style>

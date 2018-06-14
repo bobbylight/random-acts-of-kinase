@@ -140,7 +140,8 @@ export default class Stats extends Vue {
             { columnId: 'smiles', columnName: 'SMILES' },
             { columnId: 'source', columnName: 'Source' },
             { columnId: 'primaryReference', columnName: 'Reference' },
-            { columnId: 'primaryReferenceUrl', columnName: 'Reference URL' }
+            { columnId: 'primaryReferenceUrl', columnName: 'Reference URL' },
+            { columnId: 'hidden', columnName: 'Hidden' },
         ];
 
         this.compoundsMissingActivityProfilesColumnInfo = [
@@ -149,17 +150,7 @@ export default class Stats extends Vue {
         ];
 
         this.compoundsMissingPublicationInfoColumnInfo = this.incompleteCompoundColumnInfo;
-
-        this.hiddenCompoundsColumnInfo = [
-            { columnId: 'compoundName', columnName: 'Compound', isCompound: true },
-            { columnId: 'chemotype', columnName: 'Chemotype' },
-            { columnId: 's10', columnName: 's(10)' },
-            { columnId: 'smiles', columnName: 'SMILES' },
-            { columnId: 'source', columnName: 'Source' },
-            { columnId: 'primaryReference', columnName: 'Reference' },
-            { columnId: 'primaryReferenceUrl', columnName: 'Reference URL' },
-            { columnId: 'hidden', columnName: 'Hidden' },
-        ];
+        this.hiddenCompoundsColumnInfo = this.incompleteCompoundColumnInfo;
     }
 }
 </script>

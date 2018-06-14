@@ -18,3 +18,6 @@ SELECT setval(pg_get_serial_sequence('feedback', 'feedback_id'),
 
 SELECT setval(pg_get_serial_sequence('partner', 'id'),
               COALESCE((SELECT MAX(id)+1 FROM :schema.partner), 1), false);
+
+SELECT setval(pg_get_serial_sequence('audit', 'id'),
+              COALESCE((SELECT MAX(id)+1 FROM :schema.audit), 1), false);

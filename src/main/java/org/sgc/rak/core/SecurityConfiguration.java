@@ -1,6 +1,7 @@
 package org.sgc.rak.core;
 
 import org.apache.commons.lang3.StringUtils;
+import org.sgc.rak.services.AuditService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +24,14 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final Environment environment;
+    private final AuditService auditService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SecurityConfiguration.class);
 
     @Autowired
-    public SecurityConfiguration(Environment environment) {
+    public SecurityConfiguration(Environment environment, AuditService auditService) {
         this.environment = environment;
+        this.auditService = auditService;
     }
 
     /**
@@ -70,7 +73,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .and()
                 .csrf()
                     // CookieCsrfTokenRepository uses the default cookie & header names as axios
-                    .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+                    .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+            .and()
+                .logout()
+                .logoutSuccessHandler(new LogoutSuccessHandler(auditService))
+                .permitAll();
         // @formatter:on
     }
 }

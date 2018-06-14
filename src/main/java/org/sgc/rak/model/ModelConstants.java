@@ -5,6 +5,14 @@ package org.sgc.rak.model;
  */
 public final class ModelConstants {
 
+    private static final int IP_ADDRESS_LENGTH_MAX = 39;
+
+    public static final int AUDIT_ACTION_MAX = 40;
+
+    public static final int AUDIT_IP_ADDRESS_LENGTH_MAX = IP_ADDRESS_LENGTH_MAX;
+
+    public static final int AUDIT_USER_NAME_MAX = 40;
+
     public static final int BLOG_POST_TITLE_LENGTH_MIN = 5;
 
     public static final int BLOG_POST_TITLE_LENGTH_MAX = 128;
@@ -23,7 +31,7 @@ public final class ModelConstants {
 
     public static final int FEEDBACK_EMAIL_LENGTH_MAX = 254;
 
-    public static final int FEEDBACK_IP_ADDRESS_LENGTH_MAX = 39;
+    public static final int FEEDBACK_IP_ADDRESS_LENGTH_MAX = IP_ADDRESS_LENGTH_MAX;
 
     public static final int FEEDBACK_TITLE_LENGTH_MIN = 5;
 

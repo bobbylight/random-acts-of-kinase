@@ -2,6 +2,7 @@ package org.sgc.rak.rest;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +25,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.util.NestedServletException;
 
 import java.util.Collections;
@@ -54,6 +56,12 @@ public class FeedbackControllerTest {
             .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
             .build();
         mapper = new ObjectMapper();
+    }
+
+    @After
+    public void tearDown() {
+        // It seems MockMvcBuilders.standaloneSetup() populates RequestContextHolder, which breaks other test classes
+        RequestContextHolder.resetRequestAttributes();
     }
 
     @Test

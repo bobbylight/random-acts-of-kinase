@@ -1,8 +1,8 @@
 package org.sgc.rak.rest;
 
 import org.sgc.rak.reps.UserRep;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
@@ -21,7 +21,7 @@ public class LoginController {
      * @param user The principal of the logged-in user.
      * @return Information about the logged-in user, or {@code null} if the user isn't logged in.
      */
-    @RequestMapping(method = RequestMethod.GET, path = "login")
+    @GetMapping(path = "login")
     public UserRep user(Principal user) {
         if (user == null) {
             return null;

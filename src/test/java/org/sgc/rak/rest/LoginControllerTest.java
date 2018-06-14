@@ -3,19 +3,22 @@ package org.sgc.rak.rest;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
 import org.sgc.rak.reps.UserRep;
 
 import java.security.Principal;
 
-public class LoginControllerTest {
+public class LoginControllerTest extends AbstractControllerTest {
 
+    @InjectMocks
     private LoginController controller;
 
     private static final String USERID = "gclooney";
 
     @Before
     public void setUp() {
-        controller = new LoginController();
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
