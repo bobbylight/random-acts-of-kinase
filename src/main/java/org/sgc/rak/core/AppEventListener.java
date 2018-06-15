@@ -10,6 +10,9 @@ import org.springframework.security.authentication.event.AuthenticationSuccessEv
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
+/**
+ * Listens for login events, both successful and unsuccessful.
+ */
 @Component
 public class AppEventListener {
 
