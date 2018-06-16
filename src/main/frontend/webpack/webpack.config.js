@@ -61,6 +61,20 @@ const config = {
     ],
     module: {
         rules: loaders
+    },
+
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                // Create a separate chunk for everything in node_modules
+                vendor: {
+                    test: /node_modules/,
+                    name: 'vendor',
+                    enforce: true,
+                    chunks: 'all'
+                }
+            }
+        }
     }
 };
 
