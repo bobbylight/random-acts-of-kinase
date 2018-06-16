@@ -22,10 +22,7 @@ const config = {
     },
     resolve: {
         extensions: [ '.ts', '.tsx', '.js', '.json', '.svg' ],
-        modules: [ 'client', 'img', 'styles', 'node_modules' ],
-        alias: {
-            'vue$': 'vue/dist/vue.esm.js'
-        }
+        modules: [ 'client', 'img', 'styles', 'node_modules' ]
     },
     mode: devBuild ? 'development' : 'production',
     // source-map doesn't seem to be working, see webpack bug reports

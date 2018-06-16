@@ -1,6 +1,6 @@
 {
   "name": "rak",
-  "version": "0.7.4",
+  "version": "0.8.0",
   "description": "The source code for randomactsofkinase.com",
   "main": "/",
   "scripts": {
@@ -17,6 +17,7 @@
   },
   "author": "Robert Futrell <robert.e.futrell@gmail.com>",
   "license": "MIT",
+  "private": true,
   "dependencies": {
     "@fortawesome/fontawesome": "1.1.8",
     "@fortawesome/fontawesome-free-brands": "5.0.13",
