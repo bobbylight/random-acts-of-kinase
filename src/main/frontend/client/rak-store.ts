@@ -1,5 +1,5 @@
 import Vuex, { Store } from 'vuex';
-import { RakState, SearchByKinaseSecondComponent, SearchFilter } from './rak';
+import { RakState, SearchByKinaseSecondComponent } from './rak';
 import Vue from 'vue';
 
 Vue.use(Vuex);

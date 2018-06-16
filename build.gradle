@@ -64,8 +64,8 @@ dependencies {
     testCompile 'org.springframework.security:spring-security-test'
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.7'
+wrapper {
+    gradleVersion = '4.8'
 }
 
 checkstyle {
