@@ -30,6 +30,14 @@ public class CompoundTest {
     }
 
     @Test
+    public void testGetSetSolubility() {
+        Compound compound = new Compound();
+        Assert.assertNull(compound.getSolubility());
+        compound.setSolubility(42d);
+        Assert.assertEquals(Double.valueOf(42), compound.getSolubility());
+    }
+
+    @Test
     public void testGetSetSmiles() {
         Compound compound = new Compound();
         Assert.assertNull(compound.getSmiles());
@@ -72,7 +80,7 @@ public class CompoundTest {
     @Test
     public void testToString() {
         String expected = "Compound[compoundName=<null>,chemotype=<null>," +
-            "s10=<null>,smiles=<null>,source=<null>,hidden=false]";
+            "s10=<null>,solubility=<null>,smiles=<null>,source=<null>,hidden=false]";
         Assert.assertEquals(expected, new Compound().toString());
     }
 }

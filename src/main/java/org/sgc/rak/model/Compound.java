@@ -30,6 +30,9 @@ public class Compound {
     @Column(name = "s_10")
     private Double s10;
 
+    @Column(name = "solubility")
+    private Double solubility;
+
     @Column(name = "smiles", length = ModelConstants.COMPOUND_SMILES_MAX)
     private String smiles;
 
@@ -67,6 +70,14 @@ public class Compound {
 
     public void setS10(Double s10) {
         this.s10 = s10;
+    }
+
+    public Double getSolubility() {
+        return solubility;
+    }
+
+    public void setSolubility(Double solubility) {
+        this.solubility = solubility;
     }
 
     public String getSmiles() {
@@ -115,6 +126,7 @@ public class Compound {
             append("compoundName", compoundName).
             append("chemotype", chemotype).
             append("s10", s10).
+            append("solubility", solubility).
             append("smiles", smiles).
             append("source", source).
             append("hidden", hidden).

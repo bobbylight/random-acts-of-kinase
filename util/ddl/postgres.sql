@@ -11,6 +11,7 @@ CREATE TABLE :schema.compound (
   reference_1 character varying(768),
   reference_1_url character varying(2048),
   hidden boolean NOT NULL DEFAULT FALSE,
+  solubility numeric,
   CONSTRAINT compound_pkey PRIMARY KEY (compound_nm)
 )
 WITH ( OIDS = FALSE );

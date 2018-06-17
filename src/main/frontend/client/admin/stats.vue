@@ -141,6 +141,7 @@ export default class Stats extends Vue {
             { columnId: 'source', columnName: 'Source' },
             { columnId: 'primaryReference', columnName: 'Reference' },
             { columnId: 'primaryReferenceUrl', columnName: 'Reference URL' },
+            { columnId: 'solubility', columnName: 'Solubility' },
             { columnId: 'hidden', columnName: 'Hidden' },
         ];
 
