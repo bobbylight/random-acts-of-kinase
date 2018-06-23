@@ -3,6 +3,11 @@ import { Route } from 'vue-router';
 
 export default class RakUtil {
 
+    static getDisplayDate(iso8601Date: string, includeTime: boolean = false): string {
+        const date: Date = new Date(iso8601Date);
+        return includeTime ? date.toLocaleString() : date.toLocaleDateString();
+    }
+
     static isActiveTab($route: Route, tabName: string): boolean {
         const tabNameRegex: RegExp = new RegExp('^' + tabName.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&'));
         console.log(`tabName: ${tabName}, tabNameRegex: ${tabNameRegex}, ` +

@@ -109,6 +109,15 @@
                             </v-list-tile-content>
                         </v-list-tile>
 
+                        <v-list-tile to="audit">
+                            <v-list-tile-action>
+                                <v-icon>fa-history</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                                <v-list-tile-title>Audit</v-list-tile-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+
                     </v-list>
                 </v-flex>
             </transition>

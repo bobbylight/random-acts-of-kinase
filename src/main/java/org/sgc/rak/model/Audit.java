@@ -17,7 +17,6 @@ public class Audit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)
-
     private Long id;
 
     @Column(name = "user_nm", nullable = false, updatable = false, length = ModelConstants.AUDIT_USER_NAME_MAX)

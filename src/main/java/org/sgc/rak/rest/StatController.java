@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  * Returns random tidbits about the data.  Accessible only by admins.
  */
 @RestController
-@RequestMapping(path = "/admin/api")
+@RequestMapping(path = "/admin/api/stats")
 public class StatController {
 
     private final CompoundService compoundService;

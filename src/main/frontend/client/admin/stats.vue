@@ -21,7 +21,7 @@
                             </div>
 
                             <div class="admin-card-button-area">
-                                <download-button url="/admin/api/incompleteCompounds"
+                                <download-button url="/admin/api/stats/incompleteCompounds"
                                         download-file-name="incomplete-compounds.csv"></download-button>
                             </div>
                         </div>
@@ -29,7 +29,7 @@
 
                     <v-card-text>
                         <CompoundsTable
-                            url="/admin/api/incompleteCompounds"
+                            url="/admin/api/stats/incompleteCompounds"
                             :columnInfo="incompleteCompoundColumnInfo"></CompoundsTable>
                     </v-card-text>
                 </v-card>
@@ -47,7 +47,7 @@
                             </div>
 
                             <div class="admin-card-button-area">
-                                <download-button url="/admin/api/compoundsMissingActivityProfiles"
+                                <download-button url="/admin/api/stats/compoundsMissingActivityProfiles"
                                      download-file-name="compounds-missing-activity-profiles.csv"></download-button>
                             </div>
                         </div>
@@ -55,7 +55,7 @@
 
                     <v-card-text>
                         <CompoundsTable
-                            url="/admin/api/compoundsMissingActivityProfiles"
+                            url="/admin/api/stats/compoundsMissingActivityProfiles"
                             :columnInfo="compoundsMissingActivityProfilesColumnInfo"></CompoundsTable>
                     </v-card-text>
                 </v-card>
@@ -73,7 +73,7 @@
                             </div>
 
                             <div class="admin-card-button-area">
-                                <download-button url="/admin/api/compoundsMissingPublicationInfo"
+                                <download-button url="/admin/api/stats/compoundsMissingPublicationInfo"
                                         download-file-name="compounds-missing-publication-info.csv"></download-button>
                             </div>
                         </div>
@@ -81,7 +81,7 @@
 
                     <v-card-text>
                         <CompoundsTable
-                            url="/admin/api/compoundsMissingPublicationInfo"
+                            url="/admin/api/stats/compoundsMissingPublicationInfo"
                             :columnInfo="compoundsMissingPublicationInfoColumnInfo"></CompoundsTable>
                     </v-card-text>
                 </v-card>
@@ -99,7 +99,7 @@
                             </div>
 
                             <div class="admin-card-button-area">
-                                <download-button url="/admin/api/hiddenCompounds"
+                                <download-button url="/admin/api/stats/hiddenCompounds"
                                                  download-file-name="hidden-compounds.csv"></download-button>
                             </div>
                         </div>
@@ -107,7 +107,7 @@
 
                     <v-card-text>
                         <CompoundsTable
-                            url="/admin/api/hiddenCompounds" :columnInfo="hiddenCompoundsColumnInfo"></CompoundsTable>
+                            url="/admin/api/stats/hiddenCompounds" :columnInfo="hiddenCompoundsColumnInfo"></CompoundsTable>
                     </v-card-text>
                 </v-card>
             </v-flex>

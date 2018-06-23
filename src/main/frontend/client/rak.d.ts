@@ -7,6 +7,17 @@ export interface ActivityProfile {
     kd: number;
 }
 
+export interface Audit {
+    id: number;
+    userName: string;
+    action: AuditAction;
+    ipAddress: string;
+    createDate: string;
+    success: boolean;
+}
+
+export type AuditAction = 'LOGIN' | 'LOGOUT';
+
 export interface BlogPost {
     id?: number;
     title: string;

@@ -1,13 +1,16 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import {
     ActivityProfile,
+    Audit,
     BlogPost,
     Compound,
-    ObjectImportRep,
     ErrorResponse,
+    Feedback,
+    ObjectImportRep,
     PagedDataRep,
-    UserRep,
-    Feedback, Partner, SearchFilter
+    Partner,
+    SearchFilter,
+    UserRep
 } from './rak';
 import rakUtil from './util';
 
@@ -106,6 +109,24 @@ export class RestApi {
 
         return this.instance.get(url)
             .then((response: AxiosResponse<PagedDataRep<ActivityProfile>>) => {
+                return response.data;
+            });
+    }
+
+    getAuditRecords(page: number, size: number, filters: any,
+                 sortParam: string): Promise<PagedDataRep<Audit>> {
+
+        let url: string = `admin/api/audits?page=${page}&size=${size}`;
+        if (filters.userName) {
+            url += `&userName=${filters.userName}`;
+        }
+
+        if (sortParam) {
+            url += `&sort=${sortParam}`;
+        }
+
+        return this.instance.get(url)
+            .then((response: AxiosResponse<PagedDataRep<Audit>>) => {
                 return response.data;
             });
     }

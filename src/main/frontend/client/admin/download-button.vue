@@ -1,5 +1,5 @@
 <template>
-    <v-tooltip right>
+    <v-tooltip bottom>
         <v-btn flat icon class="download-button" slot="activator"
                :download="downloadFileName" :href="downloadUrl">
             <v-icon>file_download</v-icon>

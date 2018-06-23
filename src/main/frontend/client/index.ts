@@ -10,14 +10,15 @@ import faCog from '@fortawesome/fontawesome-free-solid/faCog';
 import faComments from '@fortawesome/fontawesome-free-solid/faComments';
 import faDatabase from '@fortawesome/fontawesome-free-solid/faDatabase';
 import faHandshake from '@fortawesome/fontawesome-free-solid/faHandshake';
+import faHistory from '@fortawesome/fontawesome-free-solid/faHistory';
 import faNewspaper from '@fortawesome/fontawesome-free-solid/faNewspaper';
 import faQuestionCircle from '@fortawesome/fontawesome-free-solid/faQuestionCircle';
 import faTimes from '@fortawesome/fontawesome-free-solid/faTimes';
 import faUpload from '@fortawesome/fontawesome-free-solid/faUpload';
 import faUser from '@fortawesome/fontawesome-free-solid/faUser';
 import faGithub from '@fortawesome/fontawesome-free-brands/faGithub';
-fontawesome.library.add(faCog, faComments, faDatabase, faHandshake, faNewspaper, faQuestionCircle,
-    faTimes, faUpload, faUser, faGithub);
+fontawesome.library.add(faCog, faComments, faDatabase, faHandshake, faHistory, faNewspaper,
+    faQuestionCircle, faTimes, faUpload, faUser, faGithub);
 
 // Register the router hooks with their names
 // (must be done before registering any components)
@@ -70,6 +71,7 @@ import ImportKds from './admin/import-kds.vue';
 import ImportS10s from './admin/import-s10s.vue';
 import Stats from './admin/stats.vue';
 import Feedback from './admin/feedback.vue';
+import AuditHistory from './admin/audit.vue';
 import Partners from './partners.vue';
 import BlogManager from './admin/blog-manager.vue';
 import { RouteConfig } from 'vue-router/types/router';
@@ -167,6 +169,11 @@ window.onload = () => {
                     path: 'feedback',
                     name: 'feedback',
                     component: Feedback
+                },
+                {
+                    path: 'audit',
+                    name: 'audit',
+                    component: AuditHistory
                 },
                 {
                     path: '', // Default view when unknown sub-route specified

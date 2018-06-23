@@ -36,6 +36,7 @@ import { Prop } from 'vue-property-decorator';
 import deltaToHtml from './delta-to-html';
 import UserBadge from './user-badge.vue';
 import { BlogPost } from './rak';
+import rakUtil from './util';
 
 @Component({ components: { UserBadge } })
 export default class BlogPostWidget extends Vue {
@@ -43,11 +44,11 @@ export default class BlogPostWidget extends Vue {
     @Prop({ required: true })
     private post: BlogPost;
 
-    get dateString() {
-        return new Date(this.post.createDate!).toLocaleDateString();
+    get dateString(): string {
+        return rakUtil.getDisplayDate(this.post.createDate);
     }
 
-    get body() {
+    get body(): string {
         return deltaToHtml.convert(JSON.parse(this.post.body));
     }
 }
