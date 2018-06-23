@@ -98,6 +98,11 @@ export interface SearchFilter {
 
 export type SearchByKinaseSecondComponent = 'kd' | 'percentControl';
 
+export interface SelectItem {
+    text: string;
+    value: any;
+}
+
 export interface UserRep {
     userName?: string;
     lightboxImage?: string;

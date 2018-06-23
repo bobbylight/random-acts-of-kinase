@@ -1,7 +1,7 @@
 <template>
     <v-select
         class="import-filter-select"
-        :items="[ 'none', 'new', 'modified', 'unmodified' ]"
+        :items="choices"
         :disabled="disabled"
         @change="fireChangeEvent($event)"
         label="Filter"
@@ -16,12 +16,20 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
+import { SelectItem } from '../rak';
 
 @Component
 export default class ImportPreviewTableFilter extends Vue {
 
     @Prop({ required: true })
     private disabled: boolean;
+
+    private choices: SelectItem[] = [
+        { text: '(No filter)', value: 'none' },
+        { text: 'New records', value: 'new' },
+        { text: 'Modified records', value: 'modified' },
+        { text: 'Unmodified records', value: 'unmodified' }
+    ];
 
     fireChangeEvent($event: any) {
         this.$emit('change', $event);

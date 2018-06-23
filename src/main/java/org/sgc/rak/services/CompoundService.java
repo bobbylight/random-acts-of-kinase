@@ -58,7 +58,7 @@ public class CompoundService {
         String existingSource = null;
         String existingPrimaryReference = null;
         String existingPrimaryReferenceUrl = null;
-        Boolean existingHidden = Boolean.FALSE;
+        Boolean existingHidden = null; // false here makes no records "new" when previewing an import
 
         if (existing != null) {
             existingCompoundName = existing.getCompoundName();

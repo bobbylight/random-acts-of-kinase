@@ -143,8 +143,7 @@ export default class ImportPreviewTable extends Vue {
                 bValue = '';
             }
 
-            return aValue < bValue ? -1 :
-                (aValue > bValue ? 1 : 0);
+            return aValue < bValue ? -1 : (aValue > bValue ? 1 : 0);
         });
     }
 }

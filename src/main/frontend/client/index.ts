@@ -9,6 +9,7 @@ import fontawesome from '@fortawesome/fontawesome';
 import faCog from '@fortawesome/fontawesome-free-solid/faCog';
 import faComments from '@fortawesome/fontawesome-free-solid/faComments';
 import faDatabase from '@fortawesome/fontawesome-free-solid/faDatabase';
+import faFilter from '@fortawesome/fontawesome-free-solid/faFilter';
 import faHandshake from '@fortawesome/fontawesome-free-solid/faHandshake';
 import faHistory from '@fortawesome/fontawesome-free-solid/faHistory';
 import faNewspaper from '@fortawesome/fontawesome-free-solid/faNewspaper';
@@ -17,7 +18,7 @@ import faTimes from '@fortawesome/fontawesome-free-solid/faTimes';
 import faUpload from '@fortawesome/fontawesome-free-solid/faUpload';
 import faUser from '@fortawesome/fontawesome-free-solid/faUser';
 import faGithub from '@fortawesome/fontawesome-free-brands/faGithub';
-fontawesome.library.add(faCog, faComments, faDatabase, faHandshake, faHistory, faNewspaper,
+fontawesome.library.add(faCog, faComments, faDatabase, faFilter, faHandshake, faHistory, faNewspaper,
     faQuestionCircle, faTimes, faUpload, faUser, faGithub);
 
 // Register the router hooks with their names

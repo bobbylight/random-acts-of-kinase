@@ -46,7 +46,7 @@ public class Compound {
     private String primaryReferenceUrl;
 
     @Column(nullable = false)
-    private boolean hidden;
+    private Boolean hidden;
 
     public String getChemotype() {
         return chemotype;
@@ -112,11 +112,11 @@ public class Compound {
         this.primaryReferenceUrl = primaryReferenceUrl;
     }
 
-    public boolean isHidden() {
+    public Boolean isHidden() {
         return hidden;
     }
 
-    public void setHidden(boolean hidden) {
+    public void setHidden(Boolean hidden) {
         this.hidden = hidden;
     }
 
