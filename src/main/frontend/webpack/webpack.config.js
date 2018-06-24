@@ -4,7 +4,6 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackAutoInject = require('webpack-auto-inject-version');
-// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const webpack = require('webpack');
 
 const devBuild = process.env.NODE_ENV === 'dev';
@@ -77,20 +76,5 @@ const config = {
         }
     }
 };
-
-// uglify builds an artifact that throws JS errors in Chrome and Firefox.  Disable for now.
-// if (process.env.NODE_ENV === 'production') {
-//     console.log('Running uglifyjs for production build');
-//     config.plugins.push(
-//         new UglifyJsPlugin({
-//             uglifyOptions: {
-//                 compress: {
-//                     warnings: false
-//                 }
-//             },
-//             parallel: true
-//         })
-//     );
-// }
 
 module.exports = config;

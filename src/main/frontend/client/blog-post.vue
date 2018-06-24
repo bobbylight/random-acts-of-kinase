@@ -45,7 +45,7 @@ export default class BlogPostWidget extends Vue {
     private post: BlogPost;
 
     get dateString(): string {
-        return rakUtil.getDisplayDate(this.post.createDate);
+        return rakUtil.getDisplayDate(this.post.createDate!);
     }
 
     get body(): string {
