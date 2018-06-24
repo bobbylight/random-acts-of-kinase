@@ -73,8 +73,8 @@ public class CsvHttpMessageConverterTest {
 
         String expected =
             "compoundName,chemotype,s10,smiles,source,primaryReference,primaryReferenceUrl,hidden,solubility\n" +
-            "compoundA,,0.3,smilesA,,,,false,\n" +
-            "compoundB,,,smilesB,,,,false,\n";
+            "compoundA,,0.3,smilesA,,,,,\n" +
+            "compoundB,,,smilesB,,,,,\n";
         Assert.assertEquals(expected, outputMessage.getBodyAsString());
     }
 }
