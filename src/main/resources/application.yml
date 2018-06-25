@@ -19,6 +19,11 @@ server:
     enabled: true
     mime-types: text/plain,text/css,text/javascript,application/javascript
     min-response-size: 2048
+  tomcat:
+    # Required for https logout redirects to work on AWS:
+    # https://stackoverflow.com/questions/10385977/https-login-with-spring-security-redirects-to-http
+    remote-ip-header: x-forwarded-for
+    protocol-header: x-forwarded-proto
 
 ---
 
