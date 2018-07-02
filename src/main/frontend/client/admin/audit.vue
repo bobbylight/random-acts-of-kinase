@@ -80,6 +80,7 @@ export default class AuditHistory extends Vue {
             { text: 'Action', value: 'action' },
             { text: 'IP Address', value: 'ipAddress' },
             { text: 'Successful?', value: 'success' },
+            { text: 'Details', value: 'details' },
         ];
     }
 

@@ -30,7 +30,7 @@ public class Compound {
     @Column(name = "s_10")
     private Double s10;
 
-    @Column(name = "solubility")
+    @Column(name = "solubility_ug_ml")
     private Double solubility;
 
     @Column(name = "smiles", length = ModelConstants.COMPOUND_SMILES_MAX)

@@ -3,6 +3,7 @@ package org.sgc.rak.services;
 
 import org.sgc.rak.model.Audit;
 import org.sgc.rak.model.AuditAction;
+import org.sgc.rak.model.ModelConstants;
 import org.sgc.rak.repositories.AuditRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +45,7 @@ public class AuditService {
      * @param action The action performed.
      * @return The audit record created.
      * @see #createAudit(String, AuditAction, boolean)
+     * @see #createAudit(String, AuditAction, boolean, String)
      */
     public Audit createAudit(String userName, AuditAction action) {
         return createAudit(userName, action, true);
@@ -58,13 +60,31 @@ public class AuditService {
      * @param success Whether the action was successful.
      * @return The audit record created.
      * @see #createAudit(String, AuditAction)
+     * @see #createAudit(String, AuditAction, boolean, String)
      */
     public Audit createAudit(String userName, AuditAction action, boolean success) {
+        return createAudit(userName, action, success, null);
+    }
+
+    /**
+     * Creates an audit record.
+     *
+     * @param userName The user performing the action.  If this is {@code null}, and the current thread is
+     *        servicing an HTTP request, the user ID is looked up on the request.
+     * @param action The action performed.
+     * @param success Whether the action was successful.
+     * @param details Optional details about the action.
+     * @return The audit record created.
+     * @see #createAudit(String, AuditAction)
+     * @see #createAudit(String, AuditAction, boolean, String)
+     */
+    public Audit createAudit(String userName, AuditAction action, boolean success, String details) {
 
         Audit audit = new Audit();
-        audit.setUserName(userName);
+        audit.setUserName(ensureLength(userName, ModelConstants.AUDIT_USER_NAME_MAX));
         audit.setAction(action);
         audit.setSuccess(success);
+        audit.setDetails(ensureLength(details, ModelConstants.AUDIT_DETAILS_MAX));
         populateAuditFieldsFromRequest(audit);
 
         if (audit.getUserName() == null) {
@@ -72,6 +92,20 @@ public class AuditService {
         }
 
         return repository.save(audit);
+    }
+
+    /**
+     * Ensures a string is less than or equal to a given length.
+     *
+     * @param str The string to examine.  May be {@code null}.
+     * @param length The maximum length for the string.
+     * @return The possibly trimmed string, or {@code null} if the input was {@code null}.
+     */
+    private static String ensureLength(String str, int length) {
+        if (str != null && str.length() > length) {
+            str = str.substring(0, length);
+        }
+        return str;
     }
 
     /**

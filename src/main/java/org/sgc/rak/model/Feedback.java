@@ -24,21 +24,21 @@ public class Feedback {
     @Column(name = "feedback_id")
     private Long id;
 
-    @Column(name = "email", length = ModelConstants.FEEDBACK_EMAIL_LENGTH_MAX)
+    @Column(name = "email", length = ModelConstants.FEEDBACK_EMAIL_MAX)
     private String email;
 
-    @Column(length = ModelConstants.FEEDBACK_IP_ADDRESS_LENGTH_MAX)
+    @Column(length = ModelConstants.FEEDBACK_IP_ADDRESS_MAX)
     private String ipAddress;
 
-    @Column(length = ModelConstants.FEEDBACK_TITLE_LENGTH_MAX, nullable = false)
-    @Length(min = ModelConstants.FEEDBACK_TITLE_LENGTH_MIN,
-        max = ModelConstants.FEEDBACK_TITLE_LENGTH_MAX,
+    @Column(length = ModelConstants.FEEDBACK_TITLE_MAX, nullable = false)
+    @Length(min = ModelConstants.FEEDBACK_TITLE_MIN,
+        max = ModelConstants.FEEDBACK_TITLE_MAX,
         message = "The 'title' field must have at least 5 characters")
     @NotEmpty(message = "The 'title' field is required")
     private String title;
 
-    @Column(length = ModelConstants.FEEDBACK_BODY_LENGTH_MAX)
-    @Length(max = ModelConstants.FEEDBACK_BODY_LENGTH_MAX,
+    @Column(length = ModelConstants.FEEDBACK_BODY_MAX)
+    @Length(max = ModelConstants.FEEDBACK_BODY_MAX,
         message = "The 'body' field must be less than 8000 characters")
     private String body;
 

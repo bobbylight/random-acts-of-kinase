@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.sgc.rak.model.Audit;
 import org.sgc.rak.model.AuditAction;
+import org.sgc.rak.model.ModelConstants;
 import org.sgc.rak.repositories.AuditRepository;
 import org.sgc.rak.util.TestUtil;
 import org.springframework.data.domain.*;
@@ -52,6 +53,14 @@ public class AuditServiceTest {
         RequestContextHolder.resetRequestAttributes();
     }
 
+    private static String getStringOfLength(int length) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            sb.append('a');
+        }
+        return sb.toString();
+    }
+
     @Test
     public void testAuditService_createAudit_2Arg() {
         service.createAudit(USER_NAME, ACTION);
@@ -81,6 +90,25 @@ public class AuditServiceTest {
         verify(mockRepository, times(1)).save(any());
         Assert.assertEquals(AuditService.UNKNOWN_USER_NAME, audit.getUserName());
         Assert.assertNull(audit.getIpAddress());
+    }
+
+    @Test
+    public void testAuditService_createAudit_4Arg_notRequestThread() {
+
+        Audit audit = service.createAudit(null, ACTION, true, "details");
+        verify(mockRepository, times(1)).save(any());
+        Assert.assertEquals(AuditService.UNKNOWN_USER_NAME, audit.getUserName());
+        Assert.assertNull(audit.getIpAddress());
+        Assert.assertEquals("details", audit.getDetails());
+    }
+
+    @Test
+    public void testAuditService_createAudit_4Arg_tooLongDetailsIsTrimmed() {
+
+        String details = getStringOfLength(ModelConstants.AUDIT_DETAILS_MAX + 1);
+
+        Audit audit = service.createAudit(null, ACTION, true, details);
+        Assert.assertEquals(ModelConstants.AUDIT_DETAILS_MAX, audit.getDetails().length());
     }
 
     @Test

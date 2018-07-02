@@ -26,7 +26,7 @@ public class Audit {
     @Column(nullable = false, updatable = false, length = ModelConstants.AUDIT_ACTION_MAX)
     private AuditAction action;
 
-    @Column(updatable = false, length = ModelConstants.AUDIT_IP_ADDRESS_LENGTH_MAX)
+    @Column(updatable = false, length = ModelConstants.AUDIT_IP_ADDRESS_MAX)
     private String ipAddress;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -35,6 +35,9 @@ public class Audit {
 
     @Column(updatable = false)
     private Boolean success;
+
+    @Column(updatable = false, length = ModelConstants.AUDIT_DETAILS_MAX)
+    private String details;
 
     @PrePersist
     public void onCreate() {
@@ -89,6 +92,14 @@ public class Audit {
         this.success = success;
     }
 
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
     @Override
     public String toString() {
 
@@ -99,6 +110,7 @@ public class Audit {
             .append("ipAddress", ipAddress)
             .append("createDate", createDate)
             .append("success", success)
+            .append("details", details)
             .build();
     }
 }

@@ -39,6 +39,11 @@
                             </div>
 
                             <div class="compound-details-table-row">
+                                <div class="compound-details-table-cell compound-details-table-cell-header">Solubility (&#181;g/mL):</div>
+                                <div class="compound-details-table-cell">{{solubility}}</div>
+                            </div>
+
+                            <div class="compound-details-table-row">
                                 <div class="compound-details-table-cell compound-details-table-cell-header">SMILES:</div>
                                 <div class="compound-details-table-cell">{{smiles}}</div>
                             </div>
@@ -76,6 +81,7 @@ export default class CompoundDetailsCard extends Vue {
 
     private chemotype: string | null | undefined = null;
     private s10: string | null | undefined = null;
+    private solubility: number | null | undefined = null;
     private smiles: string | null | undefined = null;
     private source: string | null | undefined = null;
     private primaryReference: string | null | undefined = null;
@@ -104,6 +110,7 @@ export default class CompoundDetailsCard extends Vue {
             .then((compound: Compound) => {
                 this.chemotype = compound.chemotype;
                 this.s10 = compound.s10;
+                this.solubility = compound.solubility;
                 this.smiles = compound.smiles;
                 this.source = compound.source;
                 this.primaryReference = compound.primaryReference || compound.primaryReferenceUrl;

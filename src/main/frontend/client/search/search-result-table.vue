@@ -23,7 +23,7 @@
                         <div class="compound-desc" @click="openCompound(props.item.compoundName)">
                             <span class="compound-name">{{props.item.compoundName}}</span>
                             <br>
-                            <div class="s10">s(10): {{props.item.s10 || '?'}}</div>
+                            <div class="s10">s(10): {{getDisplayS10(props.item.s10)}}</div>
                             <div class="chemotype" v-if="props.item.chemotype">{{props.item.chemotype}}</div>
                         </div>
                     </div>
@@ -95,6 +95,10 @@ export default {
 
         getCompoundUrl: function(compoundName) {
             return `#/compound/${compoundName}`;
+        },
+
+        getDisplayS10: function(s10) {
+            return typeof s10 === 'undefined' ? '?' : s10;
         },
 
         openCompound: function(compoundName) {

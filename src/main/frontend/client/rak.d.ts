@@ -14,6 +14,7 @@ export interface Audit {
     ipAddress: string;
     createDate: string;
     success: boolean;
+    details?: string;
 }
 
 export type AuditAction = 'LOGIN' | 'LOGOUT';
@@ -30,6 +31,7 @@ export interface Compound {
     compoundName: string;
     chemotype: string;
     s10: string;
+    solubility?: number;
     smiles?: string;
     source?: string;
     primaryReference?: string;

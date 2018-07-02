@@ -24,15 +24,15 @@ public class BlogPost {
     @Column(name = "blog_post_id")
     private Long id;
 
-    @Column(length = ModelConstants.BLOG_POST_TITLE_LENGTH_MAX, nullable = false)
-    @Length(min = ModelConstants.BLOG_POST_TITLE_LENGTH_MIN,
-        max = ModelConstants.BLOG_POST_TITLE_LENGTH_MAX,
+    @Column(length = ModelConstants.BLOG_POST_TITLE_MAX, nullable = false)
+    @Length(min = ModelConstants.BLOG_POST_TITLE_MIN,
+        max = ModelConstants.BLOG_POST_TITLE_MAX,
         message = "The 'title' field must have at least 5 characters")
     @NotEmpty(message = "The 'title' field is required")
     private String title;
 
-    @Column(length = ModelConstants.BLOG_POST_BODY_LENGTH_MAX)
-    @Length(max = ModelConstants.BLOG_POST_BODY_LENGTH_MAX,
+    @Column(length = ModelConstants.BLOG_POST_BODY_MAX)
+    @Length(max = ModelConstants.BLOG_POST_BODY_MAX,
         message = "The 'body' field must be less than 1048576 characters")
     private String body;
 

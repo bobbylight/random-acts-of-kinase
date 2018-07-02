@@ -66,9 +66,16 @@ public class AuditTest {
     }
 
     @Test
+    public void testGetSetDetails() {
+        Assert.assertNull(audit.getDetails());
+        audit.setDetails("foo");
+        Assert.assertEquals("foo", audit.getDetails());
+    }
+
+    @Test
     public void testToString() {
         String expected = "Audit[id=<null>,userName=<null>,action=<null>,ipAddress=<null>,createDate=<null>," +
-            "success=<null>]";
+            "success=<null>,details=<null>]";
         Assert.assertEquals(expected, audit.toString());
     }
 }

@@ -11,7 +11,7 @@ CREATE TABLE :schema.compound (
   reference_1 character varying(768),
   reference_1_url character varying(2048),
   hidden boolean NOT NULL DEFAULT FALSE,
-  solubility numeric,
+  solubility_ug_ml numeric,
   CONSTRAINT compound_pkey PRIMARY KEY (compound_nm)
 )
 WITH ( OIDS = FALSE );
@@ -107,6 +107,7 @@ CREATE TABLE :schema.audit (
   ip_address character varying(39),
   create_dttm TIMESTAMP WITHOUT TIME ZONE NOT NULL,
   success boolean NOT NULL DEFAULT TRUE,
+  details character varying(50),
   CONSTRAINT audit_pk PRIMARY KEY (id)
 )
 WITH ( OIDS = FALSE );
