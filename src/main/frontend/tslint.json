@@ -16,6 +16,7 @@
         "deprecation": true,
         "encoding": true,
         "eofline": true,
+        "file-name-casing": [ true, "kebab-case" ],
 		"forin": false,
 		"indent": [
 			true,
@@ -82,7 +83,6 @@
         //"no-unsafe-any": true,
         "no-unsafe-finally": true,
 		"no-unused-expression": true,
-		"no-unused-variable": false, // We allow unused parameters
 		"no-use-before-declare": true,
 		"no-var-keyword": true,
 		"no-var-requires": true,
