@@ -4,7 +4,6 @@
             hide-headers
             class="search-result-table"
             :items="items"
-            :search="search"
             :pagination.sync="pagination"
             :total-items="totalItems"
             :loading="loading"
@@ -38,7 +37,7 @@ import restApi from '../rest-api';
 import Blazy from 'blazy';
 
 export default {
-    name: 'ssearch-result-table',
+    name: 'search-result-table',
     props: {
         //inhibitor: String,
         filters: {
@@ -49,7 +48,6 @@ export default {
     data: function() {
         return {
             blazy: null,
-            search: '',
             totalItems: 0,
             items: [],
             loading: true,

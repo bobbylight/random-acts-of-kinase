@@ -34,7 +34,8 @@
                                     Admin Actions
                                 </v-list-tile-content>
                                 <v-list-tile-action>
-                                    <v-btn icon @click.stop="navDrawerOpen = false">
+                                    <v-btn icon class="close-nav-drawer-button"
+                                           @click.stop="navDrawerOpen = false">
                                         <v-icon>chevron_left</v-icon>
                                     </v-btn>
                                 </v-list-tile-action>
@@ -165,9 +166,20 @@ export default class AdminHome extends Vue {
     padding-left: 0 !important;
     padding-right: 0 !important;
 
+    .page-wrapper {
+        padding: 8px;
+    }
+    .container {
+        padding: 8px;
+    }
+
     .slide-out-admin-options {
         max-width: 380px;
         background: white; // Match the list contained in it
+
+        .close-nav-drawer-button {
+            margin: -6px; // Make this icon align better with others in the drawer
+        }
     }
 }
 </style>

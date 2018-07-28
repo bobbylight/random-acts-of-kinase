@@ -32,7 +32,7 @@ export default class ActivityOrKdToggleButton extends Vue {
     min-width: initial;
     padding: 0 6px;
 
-    .btn__content {
+    .v-btn__content {
 
         padding: 0;
         font-weight: initial; // Default Material theme makes button text a little bold
@@ -47,7 +47,7 @@ export default class ActivityOrKdToggleButton extends Vue {
             }
         }
 
-        .icon.material-icons {
+        .v-icon.material-icons {
             margin-left: 0;
         }
     }

@@ -3,7 +3,6 @@
         <v-data-table
             class="compound-table"
             :items="items"
-            :search="search"
             :pagination.sync="pagination"
             :total-items="totalItems"
             :loading="loading"
@@ -50,8 +49,6 @@ export default class CompoundTable extends Vue {
 
     @Prop({ required: true })
     private columnInfo: ColumnInfo[];
-
-    private search: string = '';
 
     private totalItems: number = 0;
 

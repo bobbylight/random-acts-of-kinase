@@ -14,7 +14,7 @@
                     <v-text-field label="User name" v-model="user" ref="userNameField"></v-text-field>
                     <v-text-field label="Password" v-model="password"
                                   :append-icon="passwordVisible ? 'visibility' : 'visibility_off'"
-                                  :append-icon-cb="() => (passwordVisible = !passwordVisible)"
+                                  @click:append="passwordVisible = !passwordVisible"
                                   :type="passwordVisible ? 'password' : 'text'"></v-text-field>
                 </form>
             </v-card-text>

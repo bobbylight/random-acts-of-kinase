@@ -26,11 +26,10 @@
                 </v-flex>
 
                 <v-flex xs12>
-                    <v-text-field type="text" label="Details"
-                                  multi-line
-                                  :rules="detailsRules"
-                                  :counter="8000"
-                                  v-model="details"></v-text-field>
+                    <v-textarea label="Details"
+                                :rules="detailsRules"
+                                :counter="8000"
+                                v-model="details"></v-textarea>
                 </v-flex>
             </v-card-text>
 

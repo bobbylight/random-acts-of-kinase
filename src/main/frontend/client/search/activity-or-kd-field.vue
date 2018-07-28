@@ -56,7 +56,7 @@ export default class ActivityOrKdField extends Vue {
         const dropdown: Vue = this.$refs.dropdown as Vue;
         dropdown.$el.parentElement!.removeChild(dropdown.$el);
 
-        const suffixDiv: HTMLElement = this.$el.querySelector('.input-group--text-field__suffix') as HTMLElement;
+        const suffixDiv: HTMLElement = this.$el.querySelector('.v-text-field__suffix') as HTMLElement;
         suffixDiv.innerHTML = '';
         suffixDiv.appendChild(dropdown.$el);
     }

@@ -19,7 +19,6 @@
                     :headers="headers"
                     class="elevation-1"
                     :items="items"
-                    :search="search"
                     :pagination.sync="pagination"
                     :total-items="totalItems"
                     :loading="loading"
@@ -67,8 +66,6 @@ import BlogPostEditorModal from './blog-post-editor-modal.vue';
 
 @Component({ components: { BlogPostEditorModal, SectionHeader, BlogManagerPostNameCell, ConfirmModal } })
 export default class BlogManager extends Vue {
-
-    private search: string = '';
 
     private totalItems: number = 0;
 

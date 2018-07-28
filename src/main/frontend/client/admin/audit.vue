@@ -18,7 +18,6 @@
                     :headers="headers"
                     class="elevation-1"
                     :items="items"
-                    :search="search"
                     :pagination.sync="pagination"
                     :total-items="totalItems"
                     :loading="loading"
@@ -36,6 +35,7 @@
                                 v-model="props.item.success"
                             ></v-checkbox>
                         </td>
+                        <td>{{props.item.details}}</td>
                     </template>
                 </v-data-table>
             </v-flex>
@@ -54,8 +54,6 @@ import rakUtil from '../util';
 
 @Component({ components: { SectionHeader } })
 export default class AuditHistory extends Vue {
-
-    private search: string = '';
 
     private totalItems: number = 0;
 

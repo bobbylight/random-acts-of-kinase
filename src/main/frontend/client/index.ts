@@ -36,6 +36,7 @@ import Chart from 'chart.js';
 import Vuetify from 'vuetify/es5/components/Vuetify';
 import VAlert from 'vuetify/es5/components/VAlert';
 import VApp from 'vuetify/es5/components/VApp';
+import VAutoComplete from 'vuetify/es5/components/VAutocomplete';
 import VAvatar from 'vuetify/es5/components/VAvatar';
 import VBtn from 'vuetify/es5/components/VBtn';
 import VCard from 'vuetify/es5/components/VCard';
@@ -56,6 +57,7 @@ import VProgressCircular from 'vuetify/es5/components/VProgressCircular';
 import VProgressLinear from 'vuetify/es5/components/VProgressLinear';
 import VSelect from 'vuetify/es5/components/VSelect';
 import VTabs from 'vuetify/es5/components/VTabs';
+import VTextArea from 'vuetify/es5/components/VTextarea';
 import VTextField from 'vuetify/es5/components/VTextField';
 import VToolbar from 'vuetify/es5/components/VToolbar';
 import VTooltip from 'vuetify/es5/components/VTooltip';
@@ -84,6 +86,7 @@ Vue.use(VueChartkick, { adapter: Chart });
 Vue.use(Vuetify, {
     components: {
         VAlert,
+        VAutoComplete,
         VAvatar,
         VApp,
         VBtn,
@@ -105,6 +108,7 @@ Vue.use(Vuetify, {
         VProgressLinear,
         VSelect,
         VTabs,
+        VTextArea,
         VTextField,
         VToolbar,
         VTooltip,

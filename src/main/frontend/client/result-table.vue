@@ -4,7 +4,6 @@
             :headers="headers"
             class="compound-table"
             :items="items"
-            :search="search"
             :pagination.sync="pagination"
             :total-items="totalItems"
             :loading="loading"
@@ -67,7 +66,6 @@ export default {
     },
     data: function() {
         return {
-            search: '',
             totalItems: 0,
             items: [],
             loading: true,

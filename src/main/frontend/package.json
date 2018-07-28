@@ -1,6 +1,6 @@
 {
   "name": "rak",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "description": "The source code for randomactsofkinase.com",
   "main": "/",
   "scripts": {
@@ -31,7 +31,7 @@
     "vue-chartkick": "0.4.0",
     "vue-router": "3.0.1",
     "vue-toasted": "1.1.24",
-    "vuetify": "1.0.19",
+    "vuetify": "1.1.8",
     "vuex": "3.0.1"
   },
   "devDependencies": {

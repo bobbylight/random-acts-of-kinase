@@ -43,7 +43,6 @@
                     :items="items"
                     item-key="id"
                     select-all
-                    :search="search"
                     :pagination.sync="pagination"
                     :total-items="totalItems"
                     :loading="loading"
@@ -108,8 +107,6 @@ import rakUtil from '../util';
 export default class FeedbackManager extends Vue {
 
     private selectedFeedback: any[] = [];
-
-    private search: string = '';
 
     private totalItems: number = 0;
 
