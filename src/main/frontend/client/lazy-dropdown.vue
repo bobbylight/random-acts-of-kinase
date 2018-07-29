@@ -16,7 +16,7 @@
             browser-autocomplete="off"
             :item-text="responseLabelField"
             :item-value="responseValueField"
-            :value="curValue"
+            :model="value"
             @input="fireUpdateEvent($event)"
         ></v-autocomplete>
     </span>
@@ -88,8 +88,6 @@ export default class LazyDropdown extends Vue {
     @Prop()
     classes: string;
 
-    curValue: string = this.value;
-
     items: any[] = [];
 
     loading: boolean = false;
@@ -118,9 +116,10 @@ export default class LazyDropdown extends Vue {
 
     @Watch('search')
     onSearchChanged(newValue: string, oldValue: string) {
-        console.log('onSearchChanged called');
         newValue = newValue || '';
-        this.runQuery(newValue);
+        if (newValue !== this.value) {
+            this.runQuery(newValue);
+        }
     }
 
     private static clone<T>(obj: T): T {
