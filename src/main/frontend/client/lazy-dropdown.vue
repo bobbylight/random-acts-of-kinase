@@ -2,17 +2,20 @@
     <span :id="spanId" :class="classes">
         <v-autocomplete
             ref="select"
+            :loading="loading"
+            :items="items"
+            :search-input.sync="search"
+            cache-items
+            :open-on-click="false"
+            :hide-no-data="true"
             :id="id"
             :label="label"
             :placeholder="placeholder"
-            :loading="loading"
             :prepend-icon="icon"
             :clearable="true"
             browser-autocomplete="off"
-            :items="items"
             :item-text="responseLabelField"
             :item-value="responseValueField"
-            :search-input.sync="search"
             :value="curValue"
             @input="fireUpdateEvent($event)"
         ></v-autocomplete>
@@ -128,6 +131,7 @@ export default class LazyDropdown extends Vue {
      * Fires an "input" event stating our value has changed.  Part of implementing v-model for this component.
      */
     fireUpdateEvent(newValue: any) {
+        console.log(`Firing update event: ${newValue}`);
         this.$emit('input', newValue);
     }
 
