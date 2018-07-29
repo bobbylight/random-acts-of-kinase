@@ -69,7 +69,7 @@ export default class Home extends Vue {
 
         .words-in-image {
             color: white;
-            margin: 3rem 0 0 3rem;
+            padding: 3rem 0 0 3rem;
         }
 
         &.hidden {
