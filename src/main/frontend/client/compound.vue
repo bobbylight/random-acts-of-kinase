@@ -10,8 +10,8 @@
 
 
             <v-flex xs12 class="card-vertical-spacing">
-                <v-expansion-panel class="expansion-panel-no-left-margin">
-                    <v-expansion-panel-content value="true">
+                <v-expansion-panel class="expansion-panel-no-left-margin" :value="0">
+                    <v-expansion-panel-content>
                         <div slot="header">
                             <h3 class="headline">Table View</h3>
                         </div>
