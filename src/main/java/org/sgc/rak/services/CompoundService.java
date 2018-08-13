@@ -261,4 +261,14 @@ public class CompoundService {
             .findFirst();
         return optional.orElse(null);
     }
+
+    /**
+     * Updates a compound.
+     *
+     * @param compound The compound to update.
+     * @return The updated compound.
+     */
+    public Compound updateCompound(Compound compound) {
+        return compoundDao.save(compound);
+    }
 }

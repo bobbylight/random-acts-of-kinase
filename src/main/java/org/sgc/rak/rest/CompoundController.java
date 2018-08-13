@@ -1,6 +1,7 @@
 package org.sgc.rak.rest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.sgc.rak.exceptions.BadRequestException;
 import org.sgc.rak.exceptions.InternalServerErrorException;
 import org.sgc.rak.exceptions.NotFoundException;
 import org.sgc.rak.i18n.Messages;
@@ -40,6 +41,19 @@ class CompoundController {
         this.compoundService = compoundService;
         this.imageTranscoder = imageTranscoder;
         this.messages = messages;
+    }
+
+    /**
+     * Adds a header that tells callers the response should be downloaded as a file.
+     *
+     * @param response The response to update.
+     * @param compoundName The name of the compound requested.
+     * @param suffix The suffix of the suggested downloaded file name.
+     */
+    private static void addDownloadHeader(HttpServletResponse response, String compoundName, String suffix) {
+        String fileName = Util.sanitizeForFileName(compoundName) + "." + suffix;
+        response.setHeader("Content-Disposition",
+            "attachment; filename=\"" + fileName + "\"");
     }
 
     /**
@@ -159,9 +173,24 @@ class CompoundController {
         return resource;
     }
 
-    private static void addDownloadHeader(HttpServletResponse response, String compoundName, String suffix) {
-        String fileName = Util.sanitizeForFileName(compoundName) + "." + suffix;
-        response.setHeader("Content-Disposition",
-            "attachment; filename=\"" + fileName + "\"");
+    /**
+     * Updates a compound.
+     *
+     * @param compoundName The name of the compound to update.  This should match the compound name in the request
+     *        body.
+     * @return Information on the compound.
+     */
+    @PutMapping(path = "/{compoundName}")
+    Compound updateCompound(@PathVariable String compoundName, @RequestBody Compound compound) {
+
+        if (!compoundName.equals(compound.getCompoundName())) {
+            throw new BadRequestException(messages.get("error.compoundNameDoesntMatch"));
+        }
+
+        if (!compoundService.getCompoundExists(compoundName)) {
+            throw new NotFoundException(messages.get("error.noSuchCompound", compoundName));
+        }
+
+        return compoundService.updateCompound(compound);
     }
 }

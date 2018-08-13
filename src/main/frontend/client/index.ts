@@ -9,6 +9,7 @@ import fontawesome from '@fortawesome/fontawesome';
 import faCog from '@fortawesome/fontawesome-free-solid/faCog';
 import faComments from '@fortawesome/fontawesome-free-solid/faComments';
 import faDatabase from '@fortawesome/fontawesome-free-solid/faDatabase';
+import faEdit from '@fortawesome/fontawesome-free-solid/faEdit';
 import faFilter from '@fortawesome/fontawesome-free-solid/faFilter';
 import faHandshake from '@fortawesome/fontawesome-free-solid/faHandshake';
 import faHistory from '@fortawesome/fontawesome-free-solid/faHistory';
@@ -18,8 +19,8 @@ import faTimes from '@fortawesome/fontawesome-free-solid/faTimes';
 import faUpload from '@fortawesome/fontawesome-free-solid/faUpload';
 import faUser from '@fortawesome/fontawesome-free-solid/faUser';
 import faGithub from '@fortawesome/fontawesome-free-brands/faGithub';
-fontawesome.library.add(faCog, faComments, faDatabase, faFilter, faHandshake, faHistory, faNewspaper,
-    faQuestionCircle, faTimes, faUpload, faUser, faGithub);
+fontawesome.library.add(faCog, faComments, faDatabase, faEdit, faFilter, faHandshake, faHistory,
+    faNewspaper, faQuestionCircle, faTimes, faUpload, faUser, faGithub);
 
 // Register the router hooks with their names
 // (must be done before registering any components)
@@ -48,6 +49,7 @@ import VDialog from 'vuetify/es5/components/VDialog';
 import VDivider from 'vuetify/es5/components/VDivider';
 import VExpansionPanel from 'vuetify/es5/components/VExpansionPanel';
 import VFooter from 'vuetify/es5/components/VFooter';
+import VForm from 'vuetify/es5/components/VForm';
 import VGrid from 'vuetify/es5/components/VGrid'; // VContainer, VContent, VFlex, VGrid, VLayout, VSpacer
 import VIcon from 'vuetify/es5/components/VIcon';
 import VList from 'vuetify/es5/components/VList';
@@ -56,6 +58,7 @@ import VNavigationDrawer from 'vuetify/es5/components/VNavigationDrawer';
 import VProgressCircular from 'vuetify/es5/components/VProgressCircular';
 import VProgressLinear from 'vuetify/es5/components/VProgressLinear';
 import VSelect from 'vuetify/es5/components/VSelect';
+import VSwitch from 'vuetify/es5/components/VSwitch';
 import VTabs from 'vuetify/es5/components/VTabs';
 import VTextArea from 'vuetify/es5/components/VTextarea';
 import VTextField from 'vuetify/es5/components/VTextField';
@@ -99,6 +102,7 @@ Vue.use(Vuetify, {
         VDivider,
         VExpansionPanel,
         VFooter,
+        VForm,
         VGrid,
         VIcon,
         VList,
@@ -107,6 +111,7 @@ Vue.use(Vuetify, {
         VProgressCircular,
         VProgressLinear,
         VSelect,
+        VSwitch,
         VTabs,
         VTextArea,
         VTextField,

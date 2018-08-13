@@ -297,6 +297,16 @@ export class RestApi {
                 throw RestApi.axiosErrorToErrorResponse(error);
             });
     }
+
+    updateCompound(compound: Compound): Promise<Compound> {
+        return this.instance.put(`api/compounds/${compound.compoundName}`, compound)
+            .then((response: AxiosResponse<Compound>) => {
+                return response.data;
+            })
+            .catch((error: AxiosError) => {
+                throw RestApi.axiosErrorToErrorResponse(error);
+            });
+    }
 }
 
 export default new RestApi();

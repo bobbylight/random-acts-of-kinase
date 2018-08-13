@@ -166,9 +166,22 @@ public class CompoundDao {
     }
 
     /**
+     * Saves a single compound.
+     *
+     * @param compound The compound to save.
+     * @return The saved compound.
+     * @see #save(Iterable)
+     */
+    public Compound save(Compound compound) {
+        throw new RuntimeException("Not implemented until Spring Security is used");
+        //return compoundRepository.save(compound);
+    }
+
+    /**
      * Saves a collection of compounds.
      *
      * @param compounds The compounds to save.
+     * @see #save(Compound)
      */
     public void save(Iterable<Compound> compounds) {
         compoundRepository.saveAll(compounds);
@@ -194,7 +207,7 @@ public class CompoundDao {
             first = false;
             switch (order.getProperty()) {
 
-                // "count" is a compouted property in one of our native queries
+                // "count" is a computed property in one of our native queries
                 case "count":
                     sb.append("count ");
                     break;

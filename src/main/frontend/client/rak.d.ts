@@ -36,6 +36,7 @@ export interface Compound {
     source?: string;
     primaryReference?: string;
     primaryReferenceUrl?: string;
+    hidden?: boolean; // Note this is never sent down, but admins can hide stuff later
 }
 
 export interface ErrorResponse {

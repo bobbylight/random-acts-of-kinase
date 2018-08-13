@@ -2,7 +2,14 @@
     <v-container grid-list-md class="page-wrapper">
         <v-layout row wrap>
 
-            <section-header>Results for {{id}}</section-header>
+            <section-header>
+                Results for {{id}}
+                <div style="float: right" v-if="$store.getters.loggedIn">
+                    <v-btn flat icon @click="edit">
+                        <v-icon>fas fa-edit</v-icon>
+                    </v-btn>
+                </div>
+            </section-header>
 
             <v-flex xs12>
                 <compound-details-card :compound-name="id"></compound-details-card>
@@ -39,6 +46,10 @@
                 </v-expansion-panel>
             </v-flex>
         </v-layout>
+
+        <EditCompoundModal :compound="editCompoundData" :show="showEditCompound"
+                @close="showEditCompound = false">
+        </EditCompoundModal>
     </v-container>
 </template>
 
@@ -49,16 +60,37 @@ import { Prop } from 'vue-property-decorator';
 import SectionHeader from './header.vue';
 import ResultTable from './result-table.vue';
 import CompoundDetailsCard from './compound-details-card.vue';
+import EditCompoundModal from './edit-compound-modal.vue';
 import restApi from './rest-api';
-import { ActivityProfile, PagedDataRep } from './rak';
+import { ActivityProfile, Compound, ErrorResponse, PagedDataRep } from './rak';
+import Toaster from './toaster';
 
-@Component({ components: { CompoundDetailsCard, ResultTable, SectionHeader } })
-export default class Compound extends Vue {
+@Component({ components: { CompoundDetailsCard, ResultTable, SectionHeader, EditCompoundModal } })
+export default class CompoundView extends Vue {
 
     @Prop({ required: true })
     private id: string;
 
     private chartData: any[] | null = null;
+
+    private editCompoundData: Compound = {
+        compoundName: '',
+        chemotype: '',
+        s10: ''
+    };
+
+    private showEditCompound: boolean = false;
+
+    edit() {
+        restApi.getCompound(this.id)
+            .then((compound: Compound) => {
+                this.editCompoundData = compound;
+                this.showEditCompound = true;
+            })
+            .catch((errorResponse: ErrorResponse) => {
+                Toaster.error('Error retrieving compound information');
+            });
+    }
 
     get gridFilters(): any {
         return {

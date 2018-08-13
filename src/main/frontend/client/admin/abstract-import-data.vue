@@ -87,6 +87,11 @@ import RakUtil from '../util';
 import ImportSummary, { LoadingStatus, PreviewGridFilterType } from './import-summary.vue';
 
 /**
+ * This just so happens to align with how the service is configured.
+ */
+const MAX_UPLOAD_FILE_SIZE_IN_MB: number = 11;
+
+/**
  * A function that either imports data, or returns a preview of what an import operation would do.
  * Implementations of this function are found in <code>rest-api.ts</code>.
  */
@@ -154,6 +159,10 @@ export default class AbstractImportData extends Vue {
         return items;
     }
 
+    private static isFileTooLargeToUpload(file: File): boolean {
+        return file.size / 1024 / 1024 > MAX_UPLOAD_FILE_SIZE_IN_MB;
+    }
+
     private filterPreviewGridItems(type: PreviewGridFilterType) {
         this.previewGridItems = this.createPreviewGridItems(type);
     }
@@ -191,7 +200,19 @@ export default class AbstractImportData extends Vue {
         this.updateImportSummary();
 
         if (this.file) {
-            this.fileName = this.file!.name;
+
+            if (AbstractImportData.isFileTooLargeToUpload(this.file)) {
+                this.reset();
+                this.loading = false;
+                this.previewGridItems = [];
+                this.updateImportSummary();
+                Toaster.error(`You can't upload files larger than ${MAX_UPLOAD_FILE_SIZE_IN_MB} MB`);
+                this.file = null;
+                return;
+            }
+
+            this.fileName = this.file.name;
+
             this.importFunction(this.file, this.headerRow, false)
                 .then((importRep: ObjectImportRep) => {
                     this.importRep = importRep;
