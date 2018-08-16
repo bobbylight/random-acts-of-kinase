@@ -2,6 +2,7 @@ package org.sgc.rak.dao;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -178,8 +179,9 @@ public class CompoundDaoTest {
     }
 
     @Test
+    @Ignore("Disabled until Spring Security is enabled")
     public void testSave() {
-        compoundDao.save(null);
+        compoundDao.save((Compound)null);
         verify(compoundRepository, times(1)).saveAll(any());
     }
 

@@ -306,7 +306,7 @@ public class CompoundServiceTest {
 
         // Verify save was only performed if commit was true
         if (commit) {
-            verify(mockCompoundDao, times(1)).save(any());
+            verify(mockCompoundDao, times(1)).save(any(Iterable.class));
         }
     }
 }
