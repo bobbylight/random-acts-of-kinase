@@ -21,15 +21,15 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 @Configuration
 // https://stackoverflow.com/questions/49108156/spring-boot-2-and-migrating-oauth2-configuration
 @Order(SecurityProperties.BASIC_AUTH_ORDER - 2) //ACCESS_OVERRIDE_ORDER)
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class RakWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 
     private final Environment environment;
     private final AuditService auditService;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SecurityConfiguration.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RakWebSecurityConfigurerAdapter.class);
 
     @Autowired
-    public SecurityConfiguration(Environment environment, AuditService auditService) {
+    public RakWebSecurityConfigurerAdapter(Environment environment, AuditService auditService) {
         this.environment = environment;
         this.auditService = auditService;
     }
@@ -68,7 +68,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .httpBasic()
             .and()
                 .authorizeRequests()
-                    .antMatchers("/admin/api/**").hasRole("ADMIN")
                     .anyRequest().permitAll()
             .and()
                 .csrf()

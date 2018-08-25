@@ -11,10 +11,13 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
+
 /**
  * Returns random tidbits about the data.  Accessible only by admins.
  */
 @RestController
+@RolesAllowed("ADMIN")
 @RequestMapping(path = "/admin/api/stats")
 public class StatController {
 
