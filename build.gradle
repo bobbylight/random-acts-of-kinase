@@ -4,7 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.3.RELEASE'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.4.RELEASE'
     }
 }
 plugins {
@@ -70,7 +70,7 @@ wrapper {
 
 checkstyle {
     configFile file('config/checkstyle/checkstyle.xml')
-    toolVersion '8.11'
+    toolVersion '8.12'
 }
 
 idea {
