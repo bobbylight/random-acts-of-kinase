@@ -2,7 +2,6 @@ package org.sgc.rak.dao;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -20,6 +19,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -179,9 +179,14 @@ public class CompoundDaoTest {
     }
 
     @Test
-    @Ignore("Disabled until Spring Security is enabled")
-    public void testSave() {
+    public void testSave_single() {
         compoundDao.save((Compound)null);
+        verify(compoundRepository, times(1)).save(any());
+    }
+
+    @Test
+    public void testSave_multiple() {
+        compoundDao.save(Collections.emptyList());
         verify(compoundRepository, times(1)).saveAll(any());
     }
 

@@ -115,6 +115,7 @@ public final class TestUtil {
     public static Compound createCompound(String name) {
         Compound compound = new Compound();
         compound.setCompoundName(name);
+        compound.setHidden(false);
         return compound;
     }
 

@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.sgc.rak.exceptions.BadRequestException;
 import org.sgc.rak.exceptions.InternalServerErrorException;
 import org.sgc.rak.exceptions.NotFoundException;
 import org.sgc.rak.i18n.Messages;
@@ -201,5 +202,43 @@ public class CompoundControllerTest {
         MockHttpServletResponse response = new MockHttpServletResponse();
         Assert.assertNotNull(controller.getCompoundImageAsSvg("compoundA", response, false));
         Assert.assertNull(response.getHeader("Content-Disposition"));
+    }
+
+    @Test
+    public void testUpdateCompound_happyPath() {
+
+        String compoundName = "compoundA";
+
+        Compound compound = TestUtil.createCompound(compoundName);
+        doReturn(compound).when(mockCompoundService).updateCompound(any(Compound.class));
+
+        doReturn(true).when(mockCompoundService).getCompoundExists(eq(compoundName));
+
+        Compound updatedCompound = controller.updateCompound(compoundName, compound);
+
+        TestUtil.assertCompoundsEqual(compound, updatedCompound);
+    }
+
+    @Test(expected = BadRequestException.class)
+    public void testUpdateCompound_error_compoundNamesNotEqual() {
+
+        String compoundName = "compoundA";
+
+        Compound compound = TestUtil.createCompound(compoundName);
+
+        controller.updateCompound("compoundB", compound);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void testUpdateCompound_error_compoundDoesNotExist() {
+
+        String compoundName = "compoundA";
+
+        Compound compound = TestUtil.createCompound(compoundName);
+        doReturn(compound).when(mockCompoundService).updateCompound(any(Compound.class));
+
+        doReturn(false).when(mockCompoundService).getCompoundExists(eq(compoundName));
+
+        controller.updateCompound(compoundName, compound);
     }
 }

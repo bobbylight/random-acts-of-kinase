@@ -309,4 +309,15 @@ public class CompoundServiceTest {
             verify(mockCompoundDao, times(1)).save(any(Iterable.class));
         }
     }
+
+    @Test
+    public void testUpdateCompound() {
+
+        Compound expected = TestUtil.createCompound(COMPOUND_NAME);
+
+        doReturn(expected).when(mockCompoundDao).save(any(Compound.class));
+
+        Compound actual = service.updateCompound(expected);
+        TestUtil.assertCompoundsEqual(expected, actual);
+    }
 }

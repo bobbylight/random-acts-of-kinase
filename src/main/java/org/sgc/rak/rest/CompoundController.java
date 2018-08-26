@@ -20,6 +20,7 @@ import org.springframework.data.web.SortDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -178,8 +179,9 @@ class CompoundController {
      *
      * @param compoundName The name of the compound to update.  This should match the compound name in the request
      *        body.
-     * @return Information on the compound.
+     * @return The updated compound.
      */
+    @RolesAllowed("ADMIN")
     @PutMapping(path = "/{compoundName}")
     Compound updateCompound(@PathVariable String compoundName, @RequestBody Compound compound) {
 

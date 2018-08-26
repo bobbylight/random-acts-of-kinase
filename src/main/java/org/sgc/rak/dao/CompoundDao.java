@@ -173,8 +173,7 @@ public class CompoundDao {
      * @see #save(Iterable)
      */
     public Compound save(Compound compound) {
-        throw new RuntimeException("Not implemented until Spring Security is used");
-        //return compoundRepository.save(compound);
+        return compoundRepository.save(compound);
     }
 
     /**
