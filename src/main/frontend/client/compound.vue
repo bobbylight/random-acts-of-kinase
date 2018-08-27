@@ -5,14 +5,18 @@
             <section-header>
                 Results for {{id}}
                 <div style="float: right" v-if="$store.getters.loggedIn">
-                    <v-btn flat icon @click="edit">
-                        <v-icon>fas fa-edit</v-icon>
-                    </v-btn>
+                    <v-tooltip bottom>
+                        <v-btn flat icon @click="edit"
+                                slot="activator">
+                            <v-icon>fas fa-edit</v-icon>
+                        </v-btn>
+                        <span>Edit this compound</span>
+                    </v-tooltip>
                 </div>
             </section-header>
 
             <v-flex xs12>
-                <compound-details-card :compound-name="id"></compound-details-card>
+                <compound-details-card ref="compoundDetailsCard" :compound-name="id"></compound-details-card>
             </v-flex>
 
 
@@ -48,7 +52,7 @@
         </v-layout>
 
         <EditCompoundModal :compound="editCompoundData" :show="showEditCompound"
-                @close="showEditCompound = false">
+                @updated="compoundUpdated" @close="showEditCompound = false">
         </EditCompoundModal>
     </v-container>
 </template>
@@ -80,6 +84,10 @@ export default class CompoundView extends Vue {
     };
 
     private showEditCompound: boolean = false;
+
+    compoundUpdated(newCompound: Compound) {
+        (this.$refs.compoundDetailsCard as CompoundDetailsCard).refresh();
+    }
 
     edit() {
         restApi.getCompound(this.id)

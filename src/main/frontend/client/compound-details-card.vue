@@ -105,6 +105,15 @@ export default class CompoundDetailsCard extends Vue {
     }
 
     mounted() {
+        this.refresh();
+    }
+
+    onImageClicked() {
+        this.$store.commit('setLightboxImage', this.compoundImageUrl);
+        this.$store.commit('setLightboxTitle', this.compoundName);
+    }
+
+    refresh() {
 
         restApi.getCompound(this.compoundName)
             .then((compound: Compound) => {
@@ -119,11 +128,6 @@ export default class CompoundDetailsCard extends Vue {
             .catch((errorResponse: ErrorResponse) => {
                 Toaster.error('Error retrieving compound information');
             });
-    }
-
-    onImageClicked() {
-        this.$store.commit('setLightboxImage', this.compoundImageUrl);
-        this.$store.commit('setLightboxTitle', this.compoundName);
     }
 }
 </script>
