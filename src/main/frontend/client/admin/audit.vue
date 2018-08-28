@@ -1,6 +1,6 @@
 <template>
     <v-container grid-list-md>
-        <v-layout row wrap class="blog-manager-wrapper">
+        <v-layout row wrap class="audit-wrapper">
 
             <section-header>Audit Records</section-header>
 
@@ -31,6 +31,7 @@
                         <td>{{props.item.ipAddress}}</td>
                         <td>
                             <v-checkbox
+                                class="audit-enabled-cb"
                                 disabled
                                 v-model="props.item.success"
                             ></v-checkbox>
@@ -109,4 +110,23 @@ export default class AuditHistory extends Vue {
 </script>
 
 <style lang="less">
+.audit-wrapper {
+
+    .audit-enabled-cb {
+
+        // Center checkboxes vertically and horizontally
+        .v-input__slot {
+
+            margin-bottom: 0;
+
+            .v-input--selection-controls__input {
+                margin: 0 auto;
+            }
+        }
+
+        .v-messages { // Empty "messages" section under checkboxes with non-zero height
+            display: none;
+        }
+    }
+}
 </style>

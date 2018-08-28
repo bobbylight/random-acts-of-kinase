@@ -5,8 +5,10 @@ import org.sgc.rak.exceptions.BadRequestException;
 import org.sgc.rak.exceptions.InternalServerErrorException;
 import org.sgc.rak.exceptions.NotFoundException;
 import org.sgc.rak.i18n.Messages;
+import org.sgc.rak.model.AuditAction;
 import org.sgc.rak.model.Compound;
 import org.sgc.rak.reps.PagedDataRep;
+import org.sgc.rak.services.AuditService;
 import org.sgc.rak.services.CompoundService;
 import org.sgc.rak.util.ImageTranscoder;
 import org.sgc.rak.util.Util;
@@ -32,14 +34,17 @@ import java.io.IOException;
 class CompoundController {
 
     private final CompoundService compoundService;
+    private final AuditService auditService;
     private final ImageTranscoder imageTranscoder;
     private final Messages messages;
 
     private static final String MEDIA_TYPE_SVG = "image/svg+xml";
 
     @Autowired
-    CompoundController(CompoundService compoundService, ImageTranscoder imageTranscoder, Messages messages) {
+    CompoundController(CompoundService compoundService, AuditService auditSevice, ImageTranscoder imageTranscoder,
+                       Messages messages) {
         this.compoundService = compoundService;
+        this.auditService = auditSevice;
         this.imageTranscoder = imageTranscoder;
         this.messages = messages;
     }
@@ -193,6 +198,13 @@ class CompoundController {
             throw new NotFoundException(messages.get("error.noSuchCompound", compoundName));
         }
 
-        return compoundService.updateCompound(compound);
+        try {
+            Compound updatedCompound = compoundService.updateCompound(compound);
+            auditService.createAudit(null, AuditAction.UPDATE_COMPOUND);
+            return updatedCompound;
+        } catch (Exception e) {
+            auditService.createAudit(null, AuditAction.UPDATE_COMPOUND, false);
+            throw e;
+        }
     }
 }

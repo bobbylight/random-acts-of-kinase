@@ -7,5 +7,7 @@ public enum AuditAction {
 
     LOGIN,
 
-    LOGOUT
+    LOGOUT,
+
+    UPDATE_COMPOUND;
 }
