@@ -1,6 +1,6 @@
 <template>
     <v-container grid-list-md>
-        <v-layout row wrap class="stats-wrapper">
+        <v-layout row wrap class="feedback-wrapper">
 
             <section-header>Feedback</section-header>
 
@@ -66,7 +66,7 @@
 
                     <template slot="expand" slot-scope="props">
                         <v-card flat>
-                            <v-card-text>{{props.item.body}}</v-card-text>
+                            <v-card-text class="feedback-body">{{props.item.body}}</v-card-text>
                         </v-card>
                     </template>
                 </v-data-table>
@@ -220,3 +220,13 @@ export default class FeedbackManager extends Vue {
     }
 }
 </script>
+
+<style lang="less">
+.feedback-wrapper {
+
+    .feedback-body {
+        margin: 0 3rem;
+    }
+
+}
+</style>

@@ -9,7 +9,7 @@ public final class ModelConstants {
 
     public static final int AUDIT_ACTION_MAX = 40;
 
-    public static final int AUDIT_DETAILS_MAX = 50;
+    public static final int AUDIT_DETAILS_MAX = 500;
 
     public static final int AUDIT_IP_ADDRESS_MAX = IP_ADDRESS_MAX;
 

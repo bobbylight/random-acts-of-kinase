@@ -107,7 +107,7 @@ CREATE TABLE :schema.audit (
   ip_address character varying(39),
   create_dttm TIMESTAMP WITHOUT TIME ZONE NOT NULL,
   success boolean NOT NULL DEFAULT TRUE,
-  details character varying(50),
+  details character varying(500),
   CONSTRAINT audit_pk PRIMARY KEY (id)
 )
 WITH ( OIDS = FALSE );

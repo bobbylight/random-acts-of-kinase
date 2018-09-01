@@ -5,7 +5,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 
 /**
- * Enable Spring's per-method security configuration.  Enables use of {@code @RolesAlloed()} to control
+ * Enable Spring's per-method security configuration.  Enables use of {@code @RolesAllowed()} to control
  * who can call what controller endpoints.
  */
 @Configuration

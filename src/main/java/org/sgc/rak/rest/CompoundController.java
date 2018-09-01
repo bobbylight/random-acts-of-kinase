@@ -194,17 +194,20 @@ class CompoundController {
             throw new BadRequestException(messages.get("error.compoundNameDoesntMatch"));
         }
 
-        if (!compoundService.getCompoundExists(compoundName)) {
+        Compound currentCompound = compoundService.getCompound(compoundName);
+        if (currentCompound == null) {
             throw new NotFoundException(messages.get("error.noSuchCompound", compoundName));
         }
 
+        String details = Util.getCompoundDifference(currentCompound, compound);
+        boolean successful = false;
+
         try {
             Compound updatedCompound = compoundService.updateCompound(compound);
-            auditService.createAudit(null, AuditAction.UPDATE_COMPOUND);
+            successful = true;
             return updatedCompound;
-        } catch (Exception e) {
-            auditService.createAudit(null, AuditAction.UPDATE_COMPOUND, false);
-            throw e;
+        } finally {
+            auditService.createAudit(null, AuditAction.UPDATE_COMPOUND, successful, details);
         }
     }
 }

@@ -12,6 +12,7 @@
                     <v-flex xs12>
                         <v-text-field type="text" label="Chemotype"
                                       ref="chemotypeField"
+                                      @change="dirty = true"
                                       v-model="compoundCopy.chemotype"></v-text-field>
                     </v-flex>
 

@@ -10,6 +10,9 @@
                     See who's done what in the application.
                 </p>
 
+                <p>
+                    Click on a row to see more detail about the audit record.
+                </p>
             </v-flex>
 
             <v-flex xs12>
@@ -18,6 +21,7 @@
                     :headers="headers"
                     class="elevation-1"
                     :items="items"
+                    item-key="id"
                     :pagination.sync="pagination"
                     :total-items="totalItems"
                     :loading="loading"
@@ -25,18 +29,25 @@
                 >
 
                     <template slot="items" slot-scope="props">
-                        <td>{{getDisplayDate(props.item.createDate)}}</td>
-                        <td>{{props.item.userName}}</td>
-                        <td>{{props.item.action}}</td>
-                        <td>{{props.item.ipAddress}}</td>
-                        <td>
-                            <v-checkbox
-                                class="audit-enabled-cb"
-                                disabled
-                                v-model="props.item.success"
-                            ></v-checkbox>
-                        </td>
-                        <td>{{props.item.details}}</td>
+                        <tr @click="props.expanded = !props.expanded">
+                            <td>{{getDisplayDate(props.item.createDate)}}</td>
+                            <td>{{props.item.userName}}</td>
+                            <td>{{props.item.action}}</td>
+                            <td>{{props.item.ipAddress}}</td>
+                            <td>
+                                <v-checkbox
+                                    class="audit-enabled-cb"
+                                    disabled
+                                    v-model="props.item.success"
+                                ></v-checkbox>
+                            </td>
+                        </tr>
+                    </template>
+
+                    <template slot="expand" slot-scope="props">
+                        <v-card flat>
+                            <v-card-text class="audit-details">{{props.item.details || '(no details)'}}</v-card-text>
+                        </v-card>
                     </template>
                 </v-data-table>
             </v-flex>
@@ -78,8 +89,7 @@ export default class AuditHistory extends Vue {
             { text: 'User', value: 'userName' },
             { text: 'Action', value: 'action' },
             { text: 'IP Address', value: 'ipAddress' },
-            { text: 'Successful?', value: 'success' },
-            { text: 'Details', value: 'details' },
+            { text: 'Successful?', value: 'success' }
         ];
     }
 
@@ -127,6 +137,10 @@ export default class AuditHistory extends Vue {
         .v-messages { // Empty "messages" section under checkboxes with non-zero height
             display: none;
         }
+    }
+
+    .audit-details {
+        margin: 0 3rem;
     }
 }
 </style>

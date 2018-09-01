@@ -26,7 +26,7 @@ public class LogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
                                 Authentication authentication) throws IOException, ServletException {
 
-        // If someone clals /logout but they're not logged in (e.g. a timeout but the UI didn't refresh
+        // If someone calls /logout but they're not logged in (e.g. a timeout but the UI didn't refresh
         // for some reason, then the user manually logs out), authentication will be null.
         if (authentication != null) {
             auditService.createAudit(authentication.getName(), AuditAction.LOGOUT);

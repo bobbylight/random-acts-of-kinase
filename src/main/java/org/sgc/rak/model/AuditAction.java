@@ -5,6 +5,12 @@ package org.sgc.rak.model;
  */
 public enum AuditAction {
 
+    /**
+     * The user tried to access a resource but Spring Security returned a 403 before
+     * our controller endpoint was called.
+     */
+    ACCESS_DENIED,
+
     LOGIN,
 
     LOGOUT,

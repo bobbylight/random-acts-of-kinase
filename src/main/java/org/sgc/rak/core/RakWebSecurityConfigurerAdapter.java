@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
@@ -13,6 +14,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 /**
@@ -32,6 +34,10 @@ public class RakWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
     public RakWebSecurityConfigurerAdapter(Environment environment, AuditService auditService) {
         this.environment = environment;
         this.auditService = auditService;
+    }
+
+    private AccessDeniedHandler accessDeniedHandler(AuditService auditService) {
+        return new RakAccessDeniedHandler(auditService);
     }
 
     /**
@@ -76,7 +82,9 @@ public class RakWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
             .and()
                 .logout()
                 .logoutSuccessHandler(new LogoutSuccessHandler(auditService))
-                .permitAll();
+                .permitAll()
+            .and()
+                .exceptionHandling().accessDeniedHandler(accessDeniedHandler(auditService));
         // @formatter:on
     }
 }

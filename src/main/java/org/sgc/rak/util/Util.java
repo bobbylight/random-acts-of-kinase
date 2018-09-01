@@ -8,6 +8,10 @@ import org.sgc.rak.model.csv.KdCsvRecord;
 import org.sgc.rak.model.csv.SScoreCsvRecord;
 import org.sgc.rak.reps.ObjectImportRep;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 /**
  * Obligatory utility methods.
  */
@@ -94,6 +98,32 @@ public final class Util {
         status.setNewValue(newValue);
         status.setOldValue(existingValue);
         return status;
+    }
+
+    /**
+     * Returns a string detailing the differences between two compounds.  Useful for auditing when a user
+     * updates a compound.
+     *
+     * @param oldC The prior compound values.
+     * @param newC The new compound values.
+     * @return The string.
+     */
+    public static String getCompoundDifference(Compound oldC, Compound newC) {
+
+        List<String> differences = new ArrayList<>();
+
+        possiblyAddDifference(differences, "chemotype", oldC.getChemotype(), newC.getChemotype());
+        possiblyAddDifference(differences, "compoundName", oldC.getCompoundName(), newC.getCompoundName());
+        possiblyAddDifference(differences, "primaryReference", oldC.getPrimaryReference(), newC.getPrimaryReference());
+        possiblyAddDifference(differences, "primaryReferenceUrl", oldC.getPrimaryReferenceUrl(),
+            newC.getPrimaryReferenceUrl());
+        possiblyAddDifference(differences, "s10", oldC.getS10(), newC.getS10());
+        possiblyAddDifference(differences, "smiles", oldC.getSmiles(), newC.getSmiles());
+        possiblyAddDifference(differences, "solubility", oldC.getSolubility(), newC.getSolubility());
+        possiblyAddDifference(differences, "source", oldC.getSource(), newC.getSource());
+        possiblyAddDifference(differences, "hidden", oldC.isHidden(), newC.isHidden());
+
+        return String.join(", ", differences);
     }
 
     /**
@@ -242,6 +272,14 @@ public final class Util {
         }
 
         return retVal;
+    }
+
+    private static void possiblyAddDifference(List<String> differences, String fieldName, Object oldValue,
+                                                Object newValue) {
+        if (!Objects.equals(oldValue, newValue)) {
+            differences.add(String.format("%s: '%s' -> '%s'", fieldName, String.valueOf(oldValue),
+                String.valueOf(newValue)));
+        }
     }
 
     /**
