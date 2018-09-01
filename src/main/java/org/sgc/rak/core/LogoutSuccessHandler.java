@@ -13,6 +13,8 @@ import java.io.IOException;
 /**
  * Captures logout events.  Spring doesn't emit a logout-based {@code ApplicationEvent} so we must unfortunately
  * have this handler specifically to audit logouts.
+ *
+ * @see AppEventListener
  */
 public class LogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
 

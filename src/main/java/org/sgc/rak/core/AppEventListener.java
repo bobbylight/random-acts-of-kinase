@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 
 /**
  * Listens for login events, both successful and unsuccessful.
+ *
+ * @see LogoutSuccessHandler
  */
 @Component
 public class AppEventListener {

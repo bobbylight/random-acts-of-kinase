@@ -6,7 +6,7 @@
             :items="items"
             :search-input.sync="search"
             cache-items
-            :open-on-click="false"
+            :menu-props="{ openOnClick: false }"
             :hide-no-data="true"
             :id="id"
             :label="label"
