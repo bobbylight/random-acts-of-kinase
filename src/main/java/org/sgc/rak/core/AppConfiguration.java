@@ -7,7 +7,6 @@ import org.sgc.rak.dao.KinaseDao;
 import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.repositories.ActivityProfileRepository;
 import org.sgc.rak.rest.CsvHttpMessageConverter;
-import org.sgc.rak.services.AuditService;
 import org.sgc.rak.util.ImageTranscoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -16,7 +15,6 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 

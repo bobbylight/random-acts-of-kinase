@@ -12,6 +12,7 @@ import org.sgc.rak.exceptions.NotFoundException;
 import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.model.Compound;
 import org.sgc.rak.reps.PagedDataRep;
+import org.sgc.rak.services.AuditService;
 import org.sgc.rak.services.CompoundService;
 import org.sgc.rak.util.ImageTranscoder;
 import org.sgc.rak.util.TestUtil;
@@ -32,6 +33,9 @@ public class CompoundControllerTest {
 
     @Mock
     private CompoundService mockCompoundService;
+
+    @Mock
+    private AuditService mockAuditService;
 
     @Mock
     private ImageTranscoder mockImageTranscoder;
@@ -212,7 +216,7 @@ public class CompoundControllerTest {
         Compound compound = TestUtil.createCompound(compoundName);
         doReturn(compound).when(mockCompoundService).updateCompound(any(Compound.class));
 
-        doReturn(true).when(mockCompoundService).getCompoundExists(eq(compoundName));
+        doReturn(compound).when(mockCompoundService).getCompound(eq(compoundName));
 
         Compound updatedCompound = controller.updateCompound(compoundName, compound);
 
