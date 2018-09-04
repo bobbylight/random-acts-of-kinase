@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="visible" max-width="640px">
+    <v-dialog v-model="visible" max-width="680px">
         <v-card>
 
             <v-card-title>
@@ -12,7 +12,7 @@
                     <v-flex xs12>
                         <v-text-field type="text" label="Chemotype"
                                       ref="chemotypeField"
-                                      @change="dirty = true"
+                                      @input="dirty = true"
                                       v-model="compoundCopy.chemotype"></v-text-field>
                     </v-flex>
 
@@ -21,8 +21,8 @@
                         <v-flex xs6>
                             <v-text-field type="number" label="s(10)" class="right-aligned"
                                           :rules="s10ValidationRules" v-model="compoundCopy.s10"
-                                          @change="dirty = true"
-                                          :step="0.1" :min="0" :max="100" suffix="%">
+                                          @input="dirty = true"
+                                          :step="0.01" :min="0" :max="1">
                             </v-text-field>
                         </v-flex>
 
@@ -30,44 +30,56 @@
                             <v-text-field type="number" label="Solubility" class="right-aligned"
                                           :rules="solubilityValidationRules"
                                           v-model="compoundCopy.solubility"
-                                          @change="dirty = true"
-                                          :step="0.1" :min="0" :max="100" suffix="µg/mL">
+                                          @input="dirty = true"
+                                          :step="0.1" :min="0" :max="10000" suffix="µg/mL">
                             </v-text-field>
                         </v-flex>
                     </v-layout>
 
                     <v-flex xs12>
                         <v-text-field type="text" label="SMILES"
-                                      @change="dirty = true"
+                                      @input="dirty = true"
                                       v-model="compoundCopy.smiles"></v-text-field>
                     </v-flex>
 
                     <v-flex xs12>
                         <v-text-field type="text" label="Source"
-                                      @change="dirty = true"
+                                      @input="dirty = true"
                                       v-model="compoundCopy.source"></v-text-field>
                     </v-flex>
 
                     <v-flex xs12>
                         <v-text-field type="text" label="Primary Reference"
-                                      @change="dirty = true"
+                                      @input="dirty = true"
                                       :rules="primaryReferenceRules"
                                       v-model="compoundCopy.primaryReference"></v-text-field>
                     </v-flex>
 
                     <v-flex xs12>
                         <v-text-field type="text" label="Primary Reference URL"
-                                      @change="dirty = true"
+                                      @input="dirty = true"
                                       :rules="primaryReferenceUrlRules"
                                       v-model="compoundCopy.primaryReferenceUrl"></v-text-field>
                     </v-flex>
 
-                    <v-flex xs12>
-                        <v-switch
-                            :label="`${compoundCopy.hidden ? 'Hidden' : 'Not hidden'}`"
-                            @change="dirty = true"
-                            v-model="compoundCopy.hidden"></v-switch>
-                    </v-flex>
+                    <v-layout row align-center>
+
+                        <v-flex xs3>
+                            <v-switch
+                                class="edit-compound-hidden-switch"
+                                :label="`${compoundCopy.hidden ? 'Hidden' : 'Not hidden'}`"
+                                @change="dirty = true"
+                                v-model="compoundCopy.hidden"></v-switch>
+                        </v-flex>
+                        <v-flex xs9>
+                            <transition name="fade">
+                                <v-chip disabled color="warning" v-if="compoundCopy.hidden">
+                                    <v-icon class="pr-1">warning</v-icon>
+                                    Hidden compounds will not appear in search results except for admins
+                                </v-chip>
+                            </transition>
+                        </v-flex>
+                    </v-layout>
                 </v-form>
             </v-card-text>
 
@@ -122,7 +134,7 @@ export default class EditCompoundModal extends Vue {
             if (!parseFloat(value)) {
                 return true; // Will be caught by the rule above
             }
-            return +value >= 0 && +value <= 100 || 'Must be between 0 and 100';
+            return +value >= 0 && +value <= 1 || 'Must be between 0 and 1';
         }
     ];
 
@@ -136,7 +148,7 @@ export default class EditCompoundModal extends Vue {
             if (!parseFloat(value)) {
                 return true; // Will be caught by the rule above
             }
-            return +value >= 0 && +value <= 100 || 'Must be between 0 and 100';
+            return +value >= 0 && +value <= 10000 || 'Must be between 0 and 10000';
         }
     ];
 
@@ -240,4 +252,12 @@ export default class EditCompoundModal extends Vue {
 </script>
 
 <style lang="less">
+.edit-compound-hidden-switch {
+
+    display: inline-block;
+
+    .v-messages {
+        display: none;
+    }
+}
 </style>

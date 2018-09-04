@@ -41,10 +41,10 @@ class CompoundController {
     private static final String MEDIA_TYPE_SVG = "image/svg+xml";
 
     @Autowired
-    CompoundController(CompoundService compoundService, AuditService auditSevice, ImageTranscoder imageTranscoder,
+    CompoundController(CompoundService compoundService, AuditService auditService, ImageTranscoder imageTranscoder,
                        Messages messages) {
         this.compoundService = compoundService;
-        this.auditService = auditSevice;
+        this.auditService = auditService;
         this.imageTranscoder = imageTranscoder;
         this.messages = messages;
     }
@@ -193,6 +193,8 @@ class CompoundController {
         if (!compoundName.equals(compound.getCompoundName())) {
             throw new BadRequestException(messages.get("error.compoundNameDoesntMatch"));
         }
+
+        Util.convertEmptyStringsToNulls(compound);
 
         Compound currentCompound = compoundService.getCompound(compoundName);
         if (currentCompound == null) {
