@@ -11,6 +11,7 @@ import org.sgc.rak.reps.PagedDataRep;
 import org.sgc.rak.services.AuditService;
 import org.sgc.rak.services.CompoundService;
 import org.sgc.rak.util.ImageTranscoder;
+import org.sgc.rak.util.SuppressFBWarnings;
 import org.sgc.rak.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -136,6 +137,7 @@ class CompoundController {
      *         image is returned.
      * @see #getCompoundImageAsSvg(String, HttpServletResponse, boolean)
      */
+    @SuppressFBWarnings(value = "NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE", justification = "False positive")
     @GetMapping(path = "/images/{compoundName}", params = { "width", "height" },
         produces = { MediaType.IMAGE_PNG_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE })
     public ResponseEntity<Resource> getCompoundImageAsPng(@PathVariable String compoundName,
