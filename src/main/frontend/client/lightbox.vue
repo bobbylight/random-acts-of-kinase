@@ -1,7 +1,7 @@
 <template>
     <transition name="fade">
-        <div class="lightbox overlay"
-             :class="{ 'overlay--active': show }"
+        <div class="lightbox v-overlay"
+             :class="{ 'v-overlay--active': show }"
              @click="hide"
              v-if="show">
 
@@ -116,7 +116,7 @@ export default class Lightbox extends Vue {
 .lightbox {
 
     // Note: We rely on background, opacity, and layout styles to come from
-    // vuetify's overlay and overlay--active.  So yes, we're a little fragile.
+    // vuetify's v-overlay and v-overlay--active.  So yes, we're a little fragile.
 
     display: flex;
     justify-content: center;

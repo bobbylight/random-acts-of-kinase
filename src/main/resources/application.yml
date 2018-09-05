@@ -7,6 +7,11 @@ spring:
     contentnegotiation:
       favor-parameter: true
       parameter-name: format
+  resources:
+    cache:
+      cachecontrol:
+        # Value, in seconds, Spring Security specifies for static resources' Cache-Control max-age
+        max-age: 28800
   servlet:
     multipart:
       # See also .ebextensions/nginx/conf.d/02_max_upload_size.conf

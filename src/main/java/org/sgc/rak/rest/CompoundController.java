@@ -19,12 +19,15 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.SortDefault;
+import org.springframework.http.CacheControl;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * REST API for compound information.
@@ -39,6 +42,8 @@ class CompoundController {
     private final Messages messages;
 
     private static final String MEDIA_TYPE_SVG = "image/svg+xml";
+
+    private static final CacheControl ICON_CACHE_CONTROL_HEADER = CacheControl.maxAge(8, TimeUnit.HOURS);
 
     @Autowired
     CompoundController(CompoundService compoundService, AuditService auditService, ImageTranscoder imageTranscoder,
@@ -133,11 +138,12 @@ class CompoundController {
      */
     @GetMapping(path = "/images/{compoundName}", params = { "width", "height" },
         produces = { MediaType.IMAGE_PNG_VALUE, MediaType.APPLICATION_OCTET_STREAM_VALUE })
-    public Resource getCompoundImageAsPng(@PathVariable String compoundName, HttpServletResponse response,
-                                          @RequestParam float width, @RequestParam float height,
-                                          @RequestParam(defaultValue = "false") boolean download) {
+    public ResponseEntity<Resource> getCompoundImageAsPng(@PathVariable String compoundName,
+                                                          HttpServletResponse response,
+                                                          @RequestParam float width, @RequestParam float height,
+                                                          @RequestParam(defaultValue = "false") boolean download) {
 
-        Resource resource = getCompoundImageAsSvg(compoundName, response, download);
+        Resource resource = getCompoundImageAsSvg(compoundName, response, download).getBody();
 
         byte[] bytes;
         try {
@@ -150,7 +156,10 @@ class CompoundController {
             addDownloadHeader(response, compoundName, "png");
         }
 
-        return new ByteArrayResource(bytes);
+        // Spring Security defaults to no-cache everything.  This overrides its default cache headers
+        return ResponseEntity.ok()
+            .cacheControl(ICON_CACHE_CONTROL_HEADER)
+            .body(new ByteArrayResource(bytes));
     }
 
     /**
@@ -164,8 +173,9 @@ class CompoundController {
      * @see #getCompoundImageAsPng(String, HttpServletResponse, float, float, boolean)
      */
     @GetMapping(path = "/images/{compoundName}", produces = MEDIA_TYPE_SVG)
-    public Resource getCompoundImageAsSvg(@PathVariable String compoundName, HttpServletResponse response,
-                                          @RequestParam(defaultValue = "false") boolean download) {
+    public ResponseEntity<Resource> getCompoundImageAsSvg(@PathVariable String compoundName,
+                                                          HttpServletResponse response,
+                                                          @RequestParam(defaultValue = "false") boolean download) {
 
         Resource resource = new ClassPathResource("/static/img/smiles/" + compoundName + ".svg");
         if (!resource.exists()) {
@@ -176,7 +186,10 @@ class CompoundController {
             addDownloadHeader(response, compoundName, "svg");
         }
 
-        return resource;
+        // Spring Security defaults to no-cache everything.  This overrides its default cache headers
+        return ResponseEntity.ok()
+            .cacheControl(ICON_CACHE_CONTROL_HEADER)
+            .body(resource);
     }
 
     /**
