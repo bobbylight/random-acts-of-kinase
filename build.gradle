@@ -4,7 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.4.RELEASE'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.5.RELEASE'
     }
 }
 plugins {
@@ -21,7 +21,7 @@ apply plugin: 'findbugs'
 apply plugin: 'checkstyle'
 
 group = 'org.sgc'
-version = '1.0.0-SNAPSHOT'
+version = '1.0.1-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -65,7 +65,7 @@ dependencies {
 }
 
 wrapper {
-    gradleVersion = '4.9'
+    gradleVersion = '4.10'
 }
 
 checkstyle {
