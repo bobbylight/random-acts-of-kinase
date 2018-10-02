@@ -31,12 +31,12 @@ export default class ImportCompounds extends Vue {
     value: File | null;
 
     onDragOver(e: DragEvent) {
-        e.dataTransfer.dropEffect = 'copy';
+        e.dataTransfer!.dropEffect = 'copy';
     }
 
     onDrop(e: DragEvent) {
 
-        const files: FileList = e.dataTransfer.files;
+        const files: FileList = e.dataTransfer!.files;
         if (files.length === 0) {
             Toaster.error('The dropped item is not a file');
         }
