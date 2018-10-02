@@ -208,6 +208,7 @@ public class UtilTest {
         existing.setS10(0.3);
         existing.setPrimaryReference("referenceA");
         existing.setPrimaryReferenceUrl("urlA");
+        existing.setHidden(true);
 
         Compound newCompound = new Compound();
         newCompound.setCompoundName("compoundA");
@@ -217,6 +218,7 @@ public class UtilTest {
         newCompound.setS10(0.4);
         newCompound.setPrimaryReference("referenceB");
         newCompound.setPrimaryReferenceUrl("urlB");
+        newCompound.setHidden(false);
 
         Compound result = Util.patchCompound(existing, newCompound);
 
@@ -227,6 +229,7 @@ public class UtilTest {
         Assert.assertEquals(0.4, result.getS10(), 0.01);
         Assert.assertEquals("referenceB", result.getPrimaryReference());
         Assert.assertEquals("urlB", result.getPrimaryReferenceUrl());
+        Assert.assertFalse(result.isHidden());
     }
 
     @Test
@@ -240,6 +243,7 @@ public class UtilTest {
         existing.setS10(0.3);
         existing.setPrimaryReference("referenceA");
         existing.setPrimaryReferenceUrl("urlA");
+        existing.setHidden(true);
 
         Compound newCompound = new Compound();
         newCompound.setCompoundName("compoundA");
@@ -253,6 +257,7 @@ public class UtilTest {
         Assert.assertEquals(0.3, result.getS10(), 0.01);
         Assert.assertEquals("referenceA", result.getPrimaryReference());
         Assert.assertEquals("urlA", result.getPrimaryReferenceUrl());
+        Assert.assertTrue(result.isHidden());
     }
 
     @Test

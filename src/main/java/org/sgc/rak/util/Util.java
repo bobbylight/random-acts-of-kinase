@@ -271,6 +271,9 @@ public final class Util {
             retVal.setPrimaryReferenceUrl(existing.getPrimaryReferenceUrl());
         }
 
+        retVal.setHidden(newCompound.isHidden() != null ? newCompound.isHidden() :
+            existing.isHidden());
+
         return retVal;
     }
 
