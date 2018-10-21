@@ -4,7 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.5.RELEASE'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.6.RELEASE'
     }
 }
 plugins {
@@ -21,7 +21,7 @@ apply plugin: 'findbugs'
 apply plugin: 'checkstyle'
 
 group = 'org.sgc'
-version = '1.0.1-SNAPSHOT'
+version = '1.1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -70,7 +70,7 @@ wrapper {
 
 checkstyle {
     configFile file('config/checkstyle/checkstyle.xml')
-    toolVersion '8.12'
+    toolVersion '8.13'
 }
 
 idea {

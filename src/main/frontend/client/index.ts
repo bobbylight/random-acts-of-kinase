@@ -83,10 +83,10 @@ import BlogManager from './admin/blog-manager.vue';
 import { RouteConfig } from 'vue-router/types/router';
 
 Vue.use(VueRouter);
-Vue.use(Toasted);
+Vue.use(Toasted as any); // cast to any until vue-toasted #82 is fixed
 Vue.use(VueChartkick, { adapter: Chart });
-// Vue.use(Vuetify);
 Vue.use(Vuetify, {
+
     components: {
         VAlert,
         VAutocomplete,
