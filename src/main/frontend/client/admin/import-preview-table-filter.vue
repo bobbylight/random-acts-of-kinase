@@ -6,7 +6,7 @@
         @change="fireChangeEvent($event)"
         label="Filter"
         single-line
-        auto
+        menu-props="auto"
         prepend-icon="fa-filter"
         hide-details
     ></v-select>

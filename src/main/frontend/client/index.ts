@@ -34,37 +34,54 @@ import VueChartkick from 'vue-chartkick';
 import Chart from 'chart.js';
 
 // import Vuetify from 'vuetify';
-import Vuetify from 'vuetify/es5/components/Vuetify';
-import VAlert from 'vuetify/es5/components/VAlert';
-import VApp from 'vuetify/es5/components/VApp';
-import VAutocomplete from 'vuetify/es5/components/VAutocomplete';
-import VAvatar from 'vuetify/es5/components/VAvatar';
-import VBtn from 'vuetify/es5/components/VBtn';
-import VCard from 'vuetify/es5/components/VCard';
-import VCheckbox from 'vuetify/es5/components/VCheckbox';
-import VChip from 'vuetify/es5/components/VChip';
-import VDataIterator from 'vuetify/es5/components/VDataIterator';
-import VDataTable from 'vuetify/es5/components/VDataTable';
-import VDialog from 'vuetify/es5/components/VDialog';
-import VDivider from 'vuetify/es5/components/VDivider';
-import VExpansionPanel from 'vuetify/es5/components/VExpansionPanel';
-import VFooter from 'vuetify/es5/components/VFooter';
-import VForm from 'vuetify/es5/components/VForm';
-import VGrid from 'vuetify/es5/components/VGrid'; // VContainer, VContent, VFlex, VGrid, VLayout, VSpacer
-import VIcon from 'vuetify/es5/components/VIcon';
-import VList from 'vuetify/es5/components/VList';
-import VMenu from 'vuetify/es5/components/VMenu';
-import VNavigationDrawer from 'vuetify/es5/components/VNavigationDrawer';
-import VProgressCircular from 'vuetify/es5/components/VProgressCircular';
-import VProgressLinear from 'vuetify/es5/components/VProgressLinear';
-import VSelect from 'vuetify/es5/components/VSelect';
-import VSwitch from 'vuetify/es5/components/VSwitch';
-import VTabs from 'vuetify/es5/components/VTabs';
-import VTextarea from 'vuetify/es5/components/VTextarea';
-import VTextField from 'vuetify/es5/components/VTextField';
-import VToolbar from 'vuetify/es5/components/VToolbar';
-import VTooltip from 'vuetify/es5/components/VTooltip';
-import transitions from 'vuetify/es5/components/transitions';
+import Vuetify, {
+    VAlert,
+    VApp,
+    VAutocomplete,
+    VAvatar,
+    VBtn,
+    VCard,
+    VCardActions,
+    VCardText,
+    VCardTitle,
+    VCheckbox,
+    VChip,
+    VContainer,
+    VContent,
+    VDataIterator,
+    VDataTable,
+    VDialog,
+    VDivider,
+    VExpansionPanel,
+    VExpansionPanelContent,
+    VFabTransition,
+    VFlex,
+    VFooter,
+    VForm,
+    VIcon,
+    VLayout,
+    VList,
+    VListGroup,
+    VListTileAction,
+    VListTileContent,
+    VListTile,
+    VListTileTitle,
+    VMenu,
+    VNavigationDrawer,
+    VProgressCircular,
+    VProgressLinear,
+    VSelect,
+    VSpacer,
+    VSwitch,
+    VTabs,
+    VTextarea,
+    VTextField,
+    VToolbar,
+    VToolbarItems,
+    VToolbarTitle,
+    VTooltip
+    //transitions
+} from 'vuetify/lib';
 
 import Home from './home.vue';
 import Search from './search/search.vue';
@@ -94,30 +111,46 @@ Vue.use(Vuetify, {
         VApp,
         VBtn,
         VCard,
+        VCardActions,
+        VCardText,
+        VCardTitle,
         VCheckbox,
         VChip,
+        VContainer,
+        VContent,
         VDataIterator,
         VDataTable,
         VDialog,
         VDivider,
         VExpansionPanel,
+        VExpansionPanelContent,
+        VFabTransition,
+        VFlex,
         VFooter,
         VForm,
-        VGrid,
         VIcon,
+        VLayout,
         VList,
+        VListGroup,
+        VListTileAction,
+        VListTileContent,
+        VListTile,
+        VListTileTitle,
         VMenu,
         VNavigationDrawer,
         VProgressCircular,
         VProgressLinear,
         VSelect,
+        VSpacer,
         VSwitch,
         VTabs,
         VTextarea,
         VTextField,
         VToolbar,
-        VTooltip,
-        transitions
+        VToolbarItems,
+        VToolbarTitle,
+        VTooltip
+        //transitions
     }
 });
 
