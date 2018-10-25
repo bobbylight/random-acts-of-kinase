@@ -5,112 +5,43 @@
             <section-header>Missing Data</section-header>
 
             <v-flex xs12>
-
                 <p>
                     The following reports show areas where our data is incomplete.
                     Each table can be exported in CSV format.
                 </p>
-
-                <v-card class="top-card-padding">
-
-                    <v-card-title primary-title>
-                        <div class="title-content">
-                            <div>
-                                <h3 class="headline">Incomplete Compounds</h3>
-                                <div>Compounds without a SMILES string or s(10)</div>
-                            </div>
-
-                            <div class="admin-card-button-area">
-                                <download-button url="/admin/api/stats/incompleteCompounds"
-                                        download-file-name="incomplete-compounds.csv"></download-button>
-                            </div>
-                        </div>
-                    </v-card-title>
-
-                    <v-card-text>
-                        <CompoundsTable
-                            url="/admin/api/stats/incompleteCompounds"
-                            :columnInfo="incompleteCompoundColumnInfo"></CompoundsTable>
-                    </v-card-text>
-                </v-card>
             </v-flex>
 
-            <v-flex xs12>
+            <stats-compound-table
+                title="Incomplete Compounds"
+                subtitle="Compounds without a SMILES string or s(10)"
+                table-url="/admin/api/stats/incompleteCompounds"
+                download-file-name="incomplete-compounds.csv"
+                :table-column-info="incompleteCompoundColumnInfo">
+            </stats-compound-table>
 
-                <v-card class="not-top-card-padding">
+            <stats-compound-table
+                title="Compounds Missing Activity Profiles"
+                subtitle="Compounds missing some activity profiles"
+                table-url="/admin/api/stats/compoundsMissingActivityProfiles"
+                download-file-name="compounds-missing-activity-profiles.csv"
+                :table-column-info="compoundsMissingActivityProfilesColumnInfo">
+            </stats-compound-table>
 
-                    <v-card-title primary-title>
-                        <div class="title-content">
-                            <div>
-                                <h3 class="headline">Compounds Missing Activity Profiles</h3>
-                                <div>Compounds missing some activity profiles</div>
-                            </div>
+            <stats-compound-table
+                title="Compounds Missing Publication Info"
+                subtitle="Compounds missing either a publication name or URL"
+                table-url="/admin/api/stats/compoundsMissingPublicationInfo"
+                download-file-name="compounds-missing-publication-info.csv"
+                :table-column-info="compoundsMissingPublicationInfoColumnInfo">
+            </stats-compound-table>
 
-                            <div class="admin-card-button-area">
-                                <download-button url="/admin/api/stats/compoundsMissingActivityProfiles"
-                                     download-file-name="compounds-missing-activity-profiles.csv"></download-button>
-                            </div>
-                        </div>
-                    </v-card-title>
-
-                    <v-card-text>
-                        <CompoundsTable
-                            url="/admin/api/stats/compoundsMissingActivityProfiles"
-                            :columnInfo="compoundsMissingActivityProfilesColumnInfo"></CompoundsTable>
-                    </v-card-text>
-                </v-card>
-            </v-flex>
-
-            <v-flex xs12>
-
-                <v-card class="not-top-card-padding">
-
-                    <v-card-title primary-title>
-                        <div class="title-content">
-                            <div>
-                                <h3 class="headline">Compounds Missing Publication Info</h3>
-                                <div>Compounds missing either a publication name or URL</div>
-                            </div>
-
-                            <div class="admin-card-button-area">
-                                <download-button url="/admin/api/stats/compoundsMissingPublicationInfo"
-                                        download-file-name="compounds-missing-publication-info.csv"></download-button>
-                            </div>
-                        </div>
-                    </v-card-title>
-
-                    <v-card-text>
-                        <CompoundsTable
-                            url="/admin/api/stats/compoundsMissingPublicationInfo"
-                            :columnInfo="compoundsMissingPublicationInfoColumnInfo"></CompoundsTable>
-                    </v-card-text>
-                </v-card>
-            </v-flex>
-
-            <v-flex xs12>
-
-                <v-card class="not-top-card-padding">
-
-                    <v-card-title primary-title>
-                        <div class="title-content">
-                            <div>
-                                <h3 class="headline">Hidden Compounds</h3>
-                                <div>Compounds hidden in the main application</div>
-                            </div>
-
-                            <div class="admin-card-button-area">
-                                <download-button url="/admin/api/stats/hiddenCompounds"
-                                                 download-file-name="hidden-compounds.csv"></download-button>
-                            </div>
-                        </div>
-                    </v-card-title>
-
-                    <v-card-text>
-                        <CompoundsTable
-                            url="/admin/api/stats/hiddenCompounds" :columnInfo="hiddenCompoundsColumnInfo"></CompoundsTable>
-                    </v-card-text>
-                </v-card>
-            </v-flex>
+            <stats-compound-table
+                title="Hidden Compounds"
+                subtitle="Compounds hidden in the main application"
+                table-url="/admin/api/stats/hiddenCompounds"
+                download-file-name="hidden-compounds.csv"
+                :table-column-info="hiddenCompoundsColumnInfo">
+            </stats-compound-table>
 
         </v-layout>
     </v-container>
@@ -119,11 +50,11 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import CompoundsTable, { ColumnInfo } from './compounds-table.vue';
-import DownloadButton from './download-button.vue';
+import StatsCompoundTable from './stats-compound-table.vue';
+import { ColumnInfo } from './compounds-table.vue';
 import SectionHeader from '../header.vue';
 
-@Component({ components: { CompoundsTable, DownloadButton, SectionHeader } })
+@Component({ components: { StatsCompoundTable, SectionHeader } })
 export default class Stats extends Vue {
 
     private incompleteCompoundColumnInfo: ColumnInfo[];
@@ -155,19 +86,3 @@ export default class Stats extends Vue {
     }
 }
 </script>
-
-<style lang="less">
-.not-top-card-padding {
-    margin-top: 1rem;
-}
-.title-content {
-    position: relative;
-    width: 100%;
-
-    .admin-card-button-area {
-        position: absolute;
-        top: 0;
-        right: 0;
-    }
-}
-</style>

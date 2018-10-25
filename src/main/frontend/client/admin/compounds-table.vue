@@ -29,6 +29,7 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop, Watch } from 'vue-property-decorator';
 import axios, { AxiosResponse } from 'axios';
+import debounce from 'debounce';
 import { PagedDataRep } from '../rak';
 
 export interface ColumnInfo {
@@ -62,6 +63,10 @@ export default class CompoundTable extends Vue {
         return `#/compound/${compoundName}`;
     }
 
+    created() {
+        this.debouncedReloadTable = debounce(this.debouncedReloadTable, 750);
+    }
+
     private get createHeaders() {
 
         const headers: any = [];
@@ -77,6 +82,16 @@ export default class CompoundTable extends Vue {
         });
 
         return headers;
+    }
+
+    /**
+     * A debounced call to <code>reloadTable()</code>.  We must do this because you
+     * cannot debounce a watch function (somehow it's "too late") so we have to be a
+     * little indirect to ensure debouncing.
+     */
+    private debouncedReloadTable(newUrl: string) {
+        console.log(`Reloading table due to url change to: ${newUrl}`);
+        return this.reloadTable();
     }
 
     /**
@@ -121,6 +136,11 @@ export default class CompoundTable extends Vue {
         // Note this triggers an unnecessary second query until
         // https://github.com/vuetifyjs/vuetify/issues/3585 is fixed
         return this.reloadTable();
+    }
+
+    @Watch('url')
+    private onUrlChanged(newValue: string) {
+        return this.debouncedReloadTable(newValue);
     }
 }
 </script>
