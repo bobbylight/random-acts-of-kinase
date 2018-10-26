@@ -116,7 +116,9 @@ export default class CompoundTable extends Vue {
 
         const sort: string = sortBy ? `${sortBy},${descending ? 'desc' : 'asc'}` : '';
 
-        let url: string = `${this.url}?page=${page - 1}&size=${rowsPerPage}`;
+        const firstParamChar: string = this.url.indexOf('?') > -1 ? '&' : '?';
+
+        let url: string = `${this.url}${firstParamChar}page=${page - 1}&size=${rowsPerPage}`;
         if (sort) {
             url += `&sort=${sort}`;
         }

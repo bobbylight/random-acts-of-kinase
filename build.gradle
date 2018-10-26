@@ -137,6 +137,9 @@ tasks.withType(FindBugs) {
 }
 
 bootRun {
+
+    jvmArgs = [ '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=10356' ]
+
     if (System.getProperty('spring.profiles.active') == null) {
         println 'Defaulting to dev Spring profile'
         System.setProperty('spring.profiles.active', 'dev')

@@ -112,7 +112,7 @@ public class CompoundService {
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
      * @see #getCompoundsByCompoundName(String, Pageable)
-     * @see #getIncompleteCompounds(Pageable)
+     * @see #getIncompleteCompounds(String, Pageable)
      */
     public Page<Compound> getCompounds(Pageable pageInfo) {
         return compoundDao.getCompounds(pageInfo);
@@ -169,48 +169,56 @@ public class CompoundService {
     /**
      * Returns information about compounds that are missing activity profiles.
      *
+     * @param compound A part of a compound name.  If specified, only compounds
+     *        whose name contains this substring (ignoring case) will be returned.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
-     * @see #getCompoundsMissingPublicationInfo(Pageable)
-     * @see #getIncompleteCompounds(Pageable)
+     * @see #getCompoundsMissingPublicationInfo(String, Pageable)
+     * @see #getIncompleteCompounds(String, Pageable)
      */
-    public Page<CompoundCountPair> getCompoundsMissingActivityProfiles(Pageable pageInfo) {
-        return compoundDao.getCompoundsMissingActivityProfiles(pageInfo);
+    public Page<CompoundCountPair> getCompoundsMissingActivityProfiles(String compound, Pageable pageInfo) {
+        return compoundDao.getCompoundsMissingActivityProfiles(compound, pageInfo);
     }
 
     /**
      * Returns information about compounds that are missing one or more publication information fields.
      *
+     * @param compound A part of a compound name.  If specified, only compounds
+     *        whose name contains this substring (ignoring case) will be returned.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
-     * @see #getCompoundsMissingActivityProfiles(Pageable)
-     * @see #getIncompleteCompounds(Pageable)
+     * @see #getCompoundsMissingActivityProfiles(String, Pageable)
+     * @see #getIncompleteCompounds(String, Pageable)
      */
-    public Page<Compound> getCompoundsMissingPublicationInfo(Pageable pageInfo) {
-        return compoundDao.getCompoundsMissingPublicationInfo(pageInfo);
+    public Page<Compound> getCompoundsMissingPublicationInfo(String compound, Pageable pageInfo) {
+        return compoundDao.getCompoundsMissingPublicationInfo(compound, pageInfo);
     }
 
     /**
      * Returns information about compounds that are hidden.
      *
+     * @param compound A part of a compound name.  If specified, only compounds
+     *        whose name contains this substring (ignoring case) will be returned.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
      */
-    public Page<Compound> getHiddenCompounds(Pageable pageInfo) {
-        return compoundDao.getHiddenCompounds(pageInfo);
+    public Page<Compound> getHiddenCompounds(String compound, Pageable pageInfo) {
+        return compoundDao.getHiddenCompounds(compound, pageInfo);
     }
 
     /**
      * Returns information about compounds without SMILES strings or s(10) values.
      *
+     * @param compound A part of a compound name.  If specified, only compounds
+     *        whose name contains this substring (ignoring case) will be returned.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
      * @see #getCompounds(Pageable)
-     * @see #getCompoundsMissingActivityProfiles(Pageable)
-     * @see #getCompoundsMissingPublicationInfo(Pageable)
+     * @see #getCompoundsMissingActivityProfiles(String, Pageable)
+     * @see #getCompoundsMissingPublicationInfo(String, Pageable)
      */
-    public Page<Compound> getIncompleteCompounds(Pageable pageInfo) {
-        return compoundDao.getIncompleteCompounds(pageInfo);
+    public Page<Compound> getIncompleteCompounds(String compound, Pageable pageInfo) {
+        return compoundDao.getIncompleteCompounds(compound, pageInfo);
     }
 
     /**

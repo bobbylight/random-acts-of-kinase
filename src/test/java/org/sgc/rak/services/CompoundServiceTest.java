@@ -191,9 +191,9 @@ public class CompoundServiceTest {
         Pageable pageable = PageRequest.of(3, 2);
 
         PageImpl<Compound> page = new PageImpl<>(compounds, pageable, 100);
-        doReturn(page).when(mockCompoundDao).getCompoundsMissingPublicationInfo(any(Pageable.class));
+        doReturn(page).when(mockCompoundDao).getCompoundsMissingPublicationInfo(any(), any(Pageable.class));
 
-        Page<Compound> actualResponse = service.getCompoundsMissingPublicationInfo(pageable);
+        Page<Compound> actualResponse = service.getCompoundsMissingPublicationInfo(null, pageable);
         Assert.assertEquals(2, actualResponse.getNumberOfElements());
         Assert.assertEquals(100, actualResponse.getTotalElements());
         Assert.assertEquals(50, actualResponse.getTotalPages());
@@ -215,9 +215,9 @@ public class CompoundServiceTest {
         Pageable pageable = PageRequest.of(3, 2);
 
         PageImpl<CompoundCountPair> page = new PageImpl<>(pairs, pageable, 100);
-        doReturn(page).when(mockCompoundDao).getCompoundsMissingActivityProfiles(any(Pageable.class));
+        doReturn(page).when(mockCompoundDao).getCompoundsMissingActivityProfiles(any(), any(Pageable.class));
 
-        Page<CompoundCountPair> actualResponse = service.getCompoundsMissingActivityProfiles(pageable);
+        Page<CompoundCountPair> actualResponse = service.getCompoundsMissingActivityProfiles(null, pageable);
         Assert.assertEquals(2, actualResponse.getNumberOfElements());
         Assert.assertEquals(100, actualResponse.getTotalElements());
         Assert.assertEquals(50, actualResponse.getTotalPages());
@@ -241,9 +241,9 @@ public class CompoundServiceTest {
         Pageable pageable = PageRequest.of(3, 2);
 
         PageImpl<Compound> page = new PageImpl<>(compounds, pageable, 100);
-        doReturn(page).when(mockCompoundDao).getHiddenCompounds(any(Pageable.class));
+        doReturn(page).when(mockCompoundDao).getHiddenCompounds(any(), any(Pageable.class));
 
-        Page<Compound> actualResponse = service.getHiddenCompounds(pageable);
+        Page<Compound> actualResponse = service.getHiddenCompounds(null, pageable);
         Assert.assertEquals(2, actualResponse.getNumberOfElements());
         Assert.assertEquals(100, actualResponse.getTotalElements());
         Assert.assertEquals(50, actualResponse.getTotalPages());
@@ -266,9 +266,9 @@ public class CompoundServiceTest {
         Pageable pageable = PageRequest.of(3, 2);
 
         PageImpl<Compound> page = new PageImpl<>(compounds, pageable, 100);
-        doReturn(page).when(mockCompoundDao).getIncompleteCompounds(any(Pageable.class));
+        doReturn(page).when(mockCompoundDao).getIncompleteCompounds(any(), any(Pageable.class));
 
-        Page<Compound> actualResponse = service.getIncompleteCompounds(pageable);
+        Page<Compound> actualResponse = service.getIncompleteCompounds(null, pageable);
         Assert.assertEquals(2, actualResponse.getNumberOfElements());
         Assert.assertEquals(100, actualResponse.getTotalElements());
         Assert.assertEquals(50, actualResponse.getTotalPages());

@@ -37,11 +37,31 @@ public class UtilTest {
     }
 
     @Test
+    public void testConvertEmptyStringsToNulls_kdCsvRecord() {
+
+        KdCsvRecord kd = new KdCsvRecord();
+        kd.setDiscoverxGeneSymbol(" ");
+        kd.setEntrezGeneSymbol("  ");
+        kd.setModifier("");
+
+        Util.convertEmptyStringsToNulls(kd);
+        Assert.assertNull(kd.getDiscoverxGeneSymbol());
+        Assert.assertNull(kd.getEntrezGeneSymbol());
+        Assert.assertNull(kd.getModifier());
+    }
+
+    @Test
     public void testCreateFieldStatus() {
         ObjectImportRep.FieldStatus status = Util.createFieldStatus("name", "newValue", "oldValue");
         Assert.assertEquals("name", status.getFieldName());
         Assert.assertEquals("newValue", status.getNewValue());
         Assert.assertEquals("oldValue", status.getOldValue());
+    }
+
+    @Test
+    public void testEscapeForLike() {
+        Assert.assertEquals("foo", Util.escapeForLike("foo"));
+        Assert.assertEquals("54\\% \\_", Util.escapeForLike("54% _"));
     }
 
     @Test

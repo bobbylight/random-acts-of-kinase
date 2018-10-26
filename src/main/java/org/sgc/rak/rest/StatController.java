@@ -31,50 +31,61 @@ public class StatController {
     /**
      * Returns information about compounds that are missing activity profiles.
      *
+     * @param compound A part of a compound name.  If specified, only compounds
+     *        whose name contains this substring (ignoring case) will be returned.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
      */
     @GetMapping(path = "/compoundsMissingActivityProfiles",
         produces = { MediaType.APPLICATION_JSON_VALUE, "text/csv" })
-    PagedDataRep<CompoundCountPair> getCompoundsMissingActivityProfiles(
+    PagedDataRep<CompoundCountPair> getCompoundsMissingActivityProfiles(@RequestParam(required = false) String compound,
             @SortDefault("compoundName") Pageable pageInfo) {
-        Page<CompoundCountPair> page = compoundService.getCompoundsMissingActivityProfiles(pageInfo);
+        Page<CompoundCountPair> page = compoundService.getCompoundsMissingActivityProfiles(compound, pageInfo);
         return pageToPagedDataRep(page, pageInfo.getPageSize());
     }
 
     /**
      * Returns information about compounds that are missing activity profiles.
      *
+     * @param compound A part of a compound name.  If specified, only compounds
+     *        whose name contains this substring (ignoring case) will be returned.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
      */
     @GetMapping(path = "/compoundsMissingPublicationInfo", produces = { MediaType.APPLICATION_JSON_VALUE, "text/csv" })
-    PagedDataRep<Compound> getCompoundsMissingPublicationInfo(@SortDefault("compoundName") Pageable pageInfo) {
-        Page<Compound> page = compoundService.getCompoundsMissingPublicationInfo(pageInfo);
+    PagedDataRep<Compound> getCompoundsMissingPublicationInfo(@RequestParam(required = false) String compound,
+                                                              @SortDefault("compoundName") Pageable pageInfo) {
+        Page<Compound> page = compoundService.getCompoundsMissingPublicationInfo(compound, pageInfo);
         return pageToPagedDataRep(page, pageInfo.getPageSize());
     }
 
     /**
      * Returns information about compounds that are hidden.
      *
+     * @param compound A part of a compound name.  If specified, only compounds
+     *        whose name contains this substring (ignoring case) will be returned.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
      */
     @GetMapping(path = "/hiddenCompounds", produces = { MediaType.APPLICATION_JSON_VALUE, "text/csv" })
-    PagedDataRep<Compound> getHiddenCompounds(@SortDefault("compoundName") Pageable pageInfo) {
-        Page<Compound> page = compoundService.getHiddenCompounds(pageInfo);
+    PagedDataRep<Compound> getHiddenCompounds(@RequestParam(required = false) String compound,
+                                              @SortDefault("compoundName") Pageable pageInfo) {
+        Page<Compound> page = compoundService.getHiddenCompounds(compound, pageInfo);
         return pageToPagedDataRep(page, pageInfo.getPageSize());
     }
 
     /**
      * Returns information about compounds without SMILES strings or s(10) values, possibly filtered.
      *
+     * @param compound A part of a compound name.  If specified, only compounds
+     *        whose name contains this substring (ignoring case) will be returned.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
      */
     @GetMapping(path = "/incompleteCompounds", produces = { MediaType.APPLICATION_JSON_VALUE, "text/csv" })
-    PagedDataRep<Compound> getIncompleteCompounds(@SortDefault("compoundName") Pageable pageInfo) {
-        Page<Compound> page = compoundService.getIncompleteCompounds(pageInfo);
+    PagedDataRep<Compound> getIncompleteCompounds(@RequestParam(required = false) String compound,
+                                                  @SortDefault("compoundName") Pageable pageInfo) {
+        Page<Compound> page = compoundService.getIncompleteCompounds(compound, pageInfo);
         return pageToPagedDataRep(page, pageInfo.getPageSize());
     }
 

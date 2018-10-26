@@ -75,7 +75,7 @@ public final class Util {
         }
 
         if (StringUtils.isBlank(kdCsvRecord.getEntrezGeneSymbol())) {
-            kdCsvRecord.setModifier(null);
+            kdCsvRecord.setEntrezGeneSymbol(null);
         }
 
         if (StringUtils.isBlank(kdCsvRecord.getModifier())) {
@@ -98,6 +98,17 @@ public final class Util {
         status.setNewValue(newValue);
         status.setOldValue(existingValue);
         return status;
+    }
+
+    /**
+     * Prepares a text string to be used in a 'like' SQL statement; that is, {@code %} and {@code _} are
+     * escaped.
+     *
+     * @param text The text to prepare.
+     * @return The escaped version of the text.
+     */
+    public static String escapeForLike(String text) {
+        return text.replace("%", "\\%").replace("_", "\\_");
     }
 
     /**

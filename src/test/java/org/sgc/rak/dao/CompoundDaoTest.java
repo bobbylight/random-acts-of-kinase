@@ -72,7 +72,7 @@ public class CompoundDaoTest {
         Compound compound2 = TestUtil.createCompound("compoundB");
         Page<Compound> expectedPage = new PageImpl<>(Arrays.asList(compound1, compound2));
         //doReturn(expectedPage).when(compoundRepository).findAll(any(Pageable.class));
-        doReturn(expectedPage).when(compoundRepository).findByHidden(eq(false), any(Pageable.class));
+        doReturn(expectedPage).when(compoundRepository).findAll(any(), any(Pageable.class));
 
         Pageable pageInfo = PageRequest.of(0, 20);
         Page<Compound> actualPage = compoundDao.getCompounds(pageInfo);
@@ -120,13 +120,12 @@ public class CompoundDaoTest {
         Compound compound1 = TestUtil.createCompound("compoundA");
         Compound compound2 = TestUtil.createCompound("compoundB");
         Page<Compound> expectedPage = new PageImpl<>(Arrays.asList(compound1, compound2));
-        doReturn(expectedPage).when(compoundRepository)
-            .getCompoundsByPrimaryReferenceIsNullOrPrimaryReferenceUrlIsNull(any(Pageable.class));
+        doReturn(expectedPage).when(compoundRepository).findAll(any(), any(Pageable.class));
 
         Sort sort = Sort.by(new Sort.Order(Sort.Direction.ASC, "compoundName"),
             new Sort.Order(Sort.Direction.ASC, "count"));
         Pageable pageInfo = PageRequest.of(0, 20, sort);
-        Page<Compound> actualPage = compoundDao.getCompoundsMissingPublicationInfo(pageInfo);
+        Page<Compound> actualPage = compoundDao.getCompoundsMissingPublicationInfo("foo", pageInfo);
 
         comparePages(expectedPage, actualPage);
     }
@@ -151,7 +150,7 @@ public class CompoundDaoTest {
         Sort sort = Sort.by(new Sort.Order(Sort.Direction.ASC, "compoundName"),
             new Sort.Order(Sort.Direction.ASC, "count"));
         Pageable pageInfo = PageRequest.of(0, 20, sort);
-        Page<CompoundCountPair> actualPage = compoundDao.getCompoundsMissingActivityProfiles(pageInfo);
+        Page<CompoundCountPair> actualPage = compoundDao.getCompoundsMissingActivityProfiles("foo", pageInfo);
 
         Assert.assertEquals(expectedResult.size(), actualPage.getNumberOfElements());
         Assert.assertEquals(601, actualPage.getTotalElements());
@@ -170,10 +169,10 @@ public class CompoundDaoTest {
         Compound compound1 = TestUtil.createCompound("compoundA");
         Compound compound2 = TestUtil.createCompound("compoundB");
         Page<Compound> expectedPage = new PageImpl<>(Arrays.asList(compound1, compound2));
-        doReturn(expectedPage).when(compoundRepository).findBySmilesIsNullOrS10IsNull(any(Pageable.class));
+        doReturn(expectedPage).when(compoundRepository).findAll(any(), any(Pageable.class));
 
         Pageable pageInfo = PageRequest.of(0, 20);
-        Page<Compound> actualPage = compoundDao.getIncompleteCompounds(pageInfo);
+        Page<Compound> actualPage = compoundDao.getIncompleteCompounds("foo", pageInfo);
 
         comparePages(expectedPage, actualPage);
     }

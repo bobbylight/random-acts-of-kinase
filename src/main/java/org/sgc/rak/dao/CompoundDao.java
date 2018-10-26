@@ -1,8 +1,10 @@
 package org.sgc.rak.dao;
 
+import org.apache.commons.lang3.StringUtils;
 import org.sgc.rak.model.Compound;
 import org.sgc.rak.model.CompoundCountPair;
 import org.sgc.rak.repositories.CompoundRepository;
+import org.sgc.rak.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -13,6 +15,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.sgc.rak.util.QuerySpecifications.hasNullFields;
+import static org.sgc.rak.util.QuerySpecifications.isHidden;
 
 /**
  * DAO for manipulating compounds.
@@ -55,8 +60,7 @@ public class CompoundDao {
      * @see #getCompoundsByCompoundNameContainsIgnoreCase(String, Pageable)
      */
     public Page<Compound> getCompounds(Pageable pageInfo) {
-//        return compoundRepository.findAll(pageInfo);
-        return compoundRepository.findByHidden(false, pageInfo);
+        return compoundRepository.findAll(isHidden(null, false), pageInfo);
     }
 
     public List<Compound> getCompounds(List<String> compoundNames) {
@@ -79,11 +83,13 @@ public class CompoundDao {
     /**
      * Returns information about compounds that are missing activity profiles.
      *
+     * @param compound A part of a compound name.  If specified, only compounds
+     *        whose name contains this substring (ignoring case) will be returned.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
      */
     @SuppressWarnings("MagicNumber")
-    public Page<CompoundCountPair> getCompoundsMissingActivityProfiles(Pageable pageInfo) {
+    public Page<CompoundCountPair> getCompoundsMissingActivityProfiles(String compound, Pageable pageInfo) {
 
         // TODO: kinaseRepository.getAnalyzedKinaseCount();
         long kinaseCount = 468; //kinaseRepository.count();
@@ -99,7 +105,11 @@ public class CompoundDao {
             "         from kinase_activity_profile group by kinase_activity_profile.compound_nm\n" +
             "   ) countTable\n" +
             "   on compound.compound_nm = countTable.compound_nm\n" +
-            "      where count is null or count < ?\n");
+            "      where (count is null or count < ?)\n");
+
+        if (StringUtils.isNotBlank(compound)) {
+            sb.append("      and upper(compound.compound_nm) like upper(?)\n");
+        }
 
         if (pageInfo.getSort() != null) {
             sb.append(' ').append(sortToOrderBy(pageInfo.getSort()));
@@ -110,8 +120,13 @@ public class CompoundDao {
 
         Query query = entityManager.createNativeQuery(sql);
         query.setParameter(1, kinaseCount);
-        query.setParameter(2, pageInfo.getOffset());
-        query.setParameter(3, pageInfo.getPageSize());
+
+        int index = 2;
+        if (StringUtils.isNotBlank(compound)) {
+            query.setParameter(index++, '%' + Util.escapeForLike(compound) + '%');
+        }
+        query.setParameter(index++, pageInfo.getOffset());
+        query.setParameter(index, pageInfo.getPageSize());
 
         @SuppressWarnings("unchecked")
         List<Object[]> objResult = query.getResultList();
@@ -126,10 +141,19 @@ public class CompoundDao {
             "         from kinase_activity_profile group by kinase_activity_profile.compound_nm\n" +
             "   ) countTable\n" +
             "   on compound.compound_nm = countTable.compound_nm\n" +
-            "   where apCount is null or apCount < ?";
+            "   where (apCount is null or apCount < ?)";
+
+        if (StringUtils.isNotBlank(compound)) {
+            sql += "\n   and upper(compound.compound_nm) like upper(?)";
+        }
 
         query = entityManager.createNativeQuery(sql);
         query.setParameter(1, kinaseCount);
+
+        if (StringUtils.isNotBlank(compound)) {
+            query.setParameter(2, '%' + Util.escapeForLike(compound) + '%');
+        }
+
         long total = ((Number)query.getSingleResult()).longValue();
 
         return new PageImpl<>(compoundCountPairs, pageInfo, total);
@@ -138,31 +162,37 @@ public class CompoundDao {
     /**
      * Returns information about compounds that are missing publication information.
      *
+     * @param compound A part of a compound name.  If specified, only compounds
+     *        whose name contains this substring (ignoring case) will be returned.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
      */
-    public Page<Compound> getCompoundsMissingPublicationInfo(Pageable pageInfo) {
-        return compoundRepository.getCompoundsByPrimaryReferenceIsNullOrPrimaryReferenceUrlIsNull(pageInfo);
+    public Page<Compound> getCompoundsMissingPublicationInfo(String compound, Pageable pageInfo) {
+        return compoundRepository.findAll(hasNullFields(compound, "primaryReference", "primaryReferenceUrl"), pageInfo);
     }
 
     /**
      * Returns information about compounds that are hidden.
      *
+     * @param compound A part of a compound name.  If specified, only compounds
+     *        whose name contains this substring (ignoring case) will be returned.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
      */
-    public Page<Compound> getHiddenCompounds(Pageable pageInfo) {
-        return compoundRepository.findByHidden(true, pageInfo);
+    public Page<Compound> getHiddenCompounds(String compound, Pageable pageInfo) {
+        return compoundRepository.findAll(isHidden(compound, true), pageInfo);
     }
 
     /**
      * Returns information on compounds without SMILES strings or s(10) values.
      *
+     * @param compound A part of a compound name.  If specified, only compounds
+     *        whose name contains this substring (ignoring case) will be returned.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
      */
-    public Page<Compound> getIncompleteCompounds(Pageable pageInfo) {
-        return compoundRepository.findBySmilesIsNullOrS10IsNull(pageInfo);
+    public Page<Compound> getIncompleteCompounds(String compound, Pageable pageInfo) {
+        return compoundRepository.findAll(hasNullFields(compound, "smiles", "s10"), pageInfo);
     }
 
     /**

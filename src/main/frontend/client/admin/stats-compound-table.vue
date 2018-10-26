@@ -11,17 +11,17 @@
                     </div>
 
                     <div class="admin-card-button-area">
-                        <v-text-field label="Filter by name" class="stats-filter-field d-inline-block"
+                        <v-text-field label="Filter by compound" class="stats-filter-field d-inline-block"
                                       @input="computeFullUrl"
                                       v-model="compoundNameFilter"></v-text-field>
                         <download-button :url="fullUrl"
-                                         :download-file-name="downloadFileName"></download-button>
+                                         :download-file-name="tweakedDownloadFileName"></download-button>
                     </div>
                 </div>
             </v-card-title>
 
             <v-card-text>
-                <CompoundsTable :url="fullUrl" :columnInfo="tableColumnInfo"></CompoundsTable>
+                <compounds-table :url="fullUrl" :columnInfo="tableColumnInfo"></compounds-table>
             </v-card-text>
         </v-card>
     </v-flex>
@@ -55,17 +55,31 @@ export default class StatsCompoundTable extends Vue {
 
     private compoundNameFilter: string = '';
     private fullUrl: string = '';
+    private tweakedDownloadFileName: string = '';
 
     created() {
         this.computeFullUrl();
     }
 
     computeFullUrl() {
+
         let url: string = this.tableUrl;
+        this.tweakedDownloadFileName = this.downloadFileName;
+
         if (this.compoundNameFilter && this.compoundNameFilter.trim().length) {
-            url += `?name=${encodeURIComponent(this.compoundNameFilter.trim())}`;
+            url += `?compound=${encodeURIComponent(this.compoundNameFilter.trim())}`;
+            this.updateDownloadFileNameForFiltering();
         }
         this.fullUrl = url;
+    }
+
+    private updateDownloadFileNameForFiltering() {
+
+        const lastDot: number = this.tweakedDownloadFileName.lastIndexOf('.');
+        if (lastDot > -1) {
+            this.tweakedDownloadFileName = this.tweakedDownloadFileName.substring(0, lastDot) + '-filtered' +
+                this.tweakedDownloadFileName.substring(lastDot);
+        }
     }
 }
 </script>

@@ -44,9 +44,9 @@ public class StatControllerTest {
         Pageable pageable = PageRequest.of(3, 2);
 
         PageImpl<CompoundCountPair> page = new PageImpl<>(pairs, pageable, 100);
-        doReturn(page).when(mockCompoundService).getCompoundsMissingActivityProfiles(any(Pageable.class));
+        doReturn(page).when(mockCompoundService).getCompoundsMissingActivityProfiles(any(), any(Pageable.class));
 
-        PagedDataRep<CompoundCountPair> actualResponse = controller.getCompoundsMissingActivityProfiles(pageable);
+        PagedDataRep<CompoundCountPair> actualResponse = controller.getCompoundsMissingActivityProfiles(null, pageable);
         Assert.assertEquals(6, actualResponse.getStart());
         Assert.assertEquals(2, actualResponse.getCount());
         Assert.assertEquals(100, actualResponse.getTotal());
@@ -70,9 +70,9 @@ public class StatControllerTest {
         Pageable pageable = PageRequest.of(3, 2);
 
         PageImpl<Compound> page = new PageImpl<>(compounds, pageable, 100);
-        doReturn(page).when(mockCompoundService).getCompoundsMissingPublicationInfo(any(Pageable.class));
+        doReturn(page).when(mockCompoundService).getCompoundsMissingPublicationInfo(any(), any(Pageable.class));
 
-        PagedDataRep<Compound> actualResponse = controller.getCompoundsMissingPublicationInfo(pageable);
+        PagedDataRep<Compound> actualResponse = controller.getCompoundsMissingPublicationInfo(null, pageable);
         Assert.assertEquals(6, actualResponse.getStart());
         Assert.assertEquals(2, actualResponse.getCount());
         Assert.assertEquals(100, actualResponse.getTotal());
@@ -93,9 +93,9 @@ public class StatControllerTest {
         Pageable pageable = PageRequest.of(3, 2);
 
         PageImpl<Compound> page = new PageImpl<>(compounds, pageable, 100);
-        doReturn(page).when(mockCompoundService).getHiddenCompounds(any(Pageable.class));
+        doReturn(page).when(mockCompoundService).getHiddenCompounds(any(), any(Pageable.class));
 
-        PagedDataRep<Compound> actualResponse = controller.getHiddenCompounds(pageable);
+        PagedDataRep<Compound> actualResponse = controller.getHiddenCompounds(null, pageable);
         Assert.assertEquals(6, actualResponse.getStart());
         Assert.assertEquals(2, actualResponse.getCount());
         Assert.assertEquals(100, actualResponse.getTotal());
@@ -116,9 +116,9 @@ public class StatControllerTest {
         Pageable pageable = PageRequest.of(3, 2);
 
         PageImpl<Compound> page = new PageImpl<>(compounds, pageable, 100);
-        doReturn(page).when(mockCompoundService).getIncompleteCompounds(any(Pageable.class));
+        doReturn(page).when(mockCompoundService).getIncompleteCompounds(any(), any(Pageable.class));
 
-        PagedDataRep<Compound> actualResponse = controller.getIncompleteCompounds(pageable);
+        PagedDataRep<Compound> actualResponse = controller.getIncompleteCompounds(null, pageable);
         Assert.assertEquals(6, actualResponse.getStart());
         Assert.assertEquals(2, actualResponse.getCount());
         Assert.assertEquals(100, actualResponse.getTotal());
