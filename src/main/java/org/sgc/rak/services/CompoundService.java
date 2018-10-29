@@ -109,25 +109,14 @@ public class CompoundService {
     /**
      * Returns compound information.
      *
+     * @param compoundNamePart A part of a compound name.  This may be {@code null} to omit filtering
+     *        by compound name.
      * @param pageInfo How to sort the data and what page of the data to return.
+     * @param includeHidden Whether hidden compounds should be included in the result.
      * @return The list of compounds.
-     * @see #getCompoundsByCompoundName(String, Pageable)
-     * @see #getIncompleteCompounds(String, Pageable)
      */
-    public Page<Compound> getCompounds(Pageable pageInfo) {
-        return compoundDao.getCompounds(pageInfo);
-    }
-
-    /**
-     * Returns compounds whose names contains a given substring, ignoring case.
-     *
-     * @param compoundNamePart A pert of a compound name.
-     * @param pageInfo How to sort the data and what page of the data to return.
-     * @return The list of compounds.
-     * @see #getCompounds(Pageable)
-     */
-    public Page<Compound> getCompoundsByCompoundName(String compoundNamePart, Pageable pageInfo) {
-        return compoundDao.getCompoundsByCompoundNameContainsIgnoreCase(compoundNamePart, pageInfo);
+    public Page<Compound> getCompounds(String compoundNamePart, Pageable pageInfo, boolean includeHidden) {
+        return compoundDao.getCompounds(compoundNamePart, pageInfo, includeHidden);
     }
 
     public Page<Compound> getCompoundsByKinaseAndActivity(String kinase, double activity, Pageable pageInfo) {
@@ -213,7 +202,7 @@ public class CompoundService {
      *        whose name contains this substring (ignoring case) will be returned.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of compounds.
-     * @see #getCompounds(Pageable)
+     * @see #getCompounds(String, Pageable, boolean)
      * @see #getCompoundsMissingActivityProfiles(String, Pageable)
      * @see #getCompoundsMissingPublicationInfo(String, Pageable)
      */

@@ -2,6 +2,7 @@ package org.sgc.rak.rest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.sgc.rak.exceptions.BadRequestException;
+import org.sgc.rak.exceptions.ForbiddenException;
 import org.sgc.rak.exceptions.InternalServerErrorException;
 import org.sgc.rak.exceptions.NotFoundException;
 import org.sgc.rak.i18n.Messages;
@@ -35,7 +36,7 @@ import java.util.concurrent.TimeUnit;
  */
 @RestController
 @RequestMapping("/api/compounds")
-class CompoundController {
+class CompoundController extends AbstractRakController {
 
     private final CompoundService compoundService;
     private final AuditService auditService;
@@ -81,6 +82,11 @@ class CompoundController {
         if (compound == null) {
             throw new NotFoundException(messages.get("error.noSuchCompound", compoundName));
         }
+
+        if (compound.isHidden() && !isAdmin()) {
+            throw new ForbiddenException(messages.get("error.unauthorizedToViewCompound", compoundName));
+        }
+
         return compound;
     }
 
@@ -99,10 +105,11 @@ class CompoundController {
                                 @RequestParam(required = false) Double kd,
                                 @SortDefault("compoundName") Pageable pageInfo) {
 
+        boolean isAdmin = isAdmin();
         Page<Compound> page;
 
         if (StringUtils.isNotBlank(compound)) {
-            page = compoundService.getCompoundsByCompoundName(compound, pageInfo);
+            page = compoundService.getCompounds(compound, pageInfo, isAdmin);
         }
         else if (StringUtils.isNotBlank(kinase) && activity != null) {
             page = compoundService.getCompoundsByKinaseAndActivity(kinase, activity, pageInfo);
@@ -111,7 +118,7 @@ class CompoundController {
             page = compoundService.getCompoundsByKinaseAndKd(kinase, kd, pageInfo);
         }
         else {
-            page = compoundService.getCompounds(pageInfo);
+            page = compoundService.getCompounds(null, pageInfo, isAdmin);
         }
 
         long start = page.getNumber() * pageInfo.getPageSize();

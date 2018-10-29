@@ -126,12 +126,7 @@
             <v-container grid-list-md fill-height class="page-wrapper">
                 <v-layout row wrap fill-height justify-center>
 
-                    <div class="no-access" v-if="!this.$store.getters.loggedIn">
-
-                        <h1>You don't have access to this information :(</h1>
-
-                        <router-link :to="{ name: 'home' }">Get out of here</router-link>
-                    </div>
+                    <unauthorized v-if="!this.$store.getters.loggedIn"/>
 
                     <div v-if="this.$store.getters.loggedIn" style="width:100%">
                         <transition name="fade">
@@ -149,8 +144,9 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
+import unauthorized from './unauthorized.vue';
 
-@Component
+@Component({ components: { unauthorized } })
 export default class AdminHome extends Vue {
 
     private navDrawerOpen: boolean = true;

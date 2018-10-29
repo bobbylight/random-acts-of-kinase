@@ -21,7 +21,7 @@ public final class QuerySpecifications {
     }
 
     /**
-     * Returns a specification that looks for any {@code Compound}s matching the following criteria:
+     * Returns a specification that looks for any {@code Compound}s matching the following criteria.
      *
      * <ol>
      *     <li>If part of a compound name is specified, any matching compounds must contain that
@@ -90,6 +90,39 @@ public final class QuerySpecifications {
                         builder.like(builder.upper(root.get("compoundName")),
                             '%' + Util.escapeForLike(compoundNamePart.toUpperCase()) + '%')
                     );
+                }
+
+                return predicate;
+            }
+        };
+    }
+
+    /**
+     * Returns a specification that looks for any {@code Compound}s matching the given criteria.
+     *
+     * @param compoundNamePart The optional part of a compound name that must be matched, ignoring case.
+     *        This may be {@code null}.
+     * @param includeHidden Whether to include hidden compounds in the response.
+     * @return The specification.
+     */
+    public static Specification<Compound> standardSearch(String compoundNamePart, boolean includeHidden) {
+
+        return new Specification<Compound>() {
+
+            @Nullable
+            @Override
+            public Predicate toPredicate(Root<Compound> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
+
+                Predicate predicate = null;
+
+                if (StringUtils.isNotBlank(compoundNamePart)) {
+                    predicate = builder.like(builder.upper(root.get("compoundName")),
+                            '%' + Util.escapeForLike(compoundNamePart.toUpperCase()) + '%');
+                }
+
+                if (!includeHidden) {
+                    Predicate noHiddenPredicate = builder.isFalse(root.get("hidden"));
+                    predicate = predicate == null ? noHiddenPredicate : builder.and(predicate, noHiddenPredicate);
                 }
 
                 return predicate;

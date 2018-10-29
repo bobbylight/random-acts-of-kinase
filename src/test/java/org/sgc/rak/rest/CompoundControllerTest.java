@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.sgc.rak.exceptions.BadRequestException;
+import org.sgc.rak.exceptions.ForbiddenException;
 import org.sgc.rak.exceptions.InternalServerErrorException;
 import org.sgc.rak.exceptions.NotFoundException;
 import org.sgc.rak.i18n.Messages;
@@ -70,6 +71,18 @@ public class CompoundControllerTest {
         controller.getCompound("compoundA");
     }
 
+    @Test(expected = ForbiddenException.class)
+    public void testGetCompound_forbidden() {
+
+        Compound compound = TestUtil.createCompound(COMPOUND_NAME);
+        compound.setHidden(true);
+        doReturn(compound).when(mockCompoundService).getCompound(anyString());
+
+        doReturn(compound).when(mockCompoundService).getCompound(anyString());
+
+        controller.getCompound("compoundA");
+    }
+
     @Test
     public void testGetCompounds_firstPage_nullCompoundKinaseKdAndActivity() {
 
@@ -79,7 +92,8 @@ public class CompoundControllerTest {
         List<Compound> expectedResults = Collections.singletonList(expectedCompound);
 
         PageImpl<Compound> expectedPage = new PageImpl<>(expectedResults, pr, 1);
-        doReturn(expectedPage).when(mockCompoundService).getCompounds(any(Pageable.class));
+        doReturn(expectedPage).when(mockCompoundService).getCompounds(any(), any(Pageable.class),
+            anyBoolean());
 
         PagedDataRep<Compound> compounds = controller.getCompounds(null, null, null, null, pr);
         Assert.assertEquals(0, compounds.getStart());
@@ -97,7 +111,7 @@ public class CompoundControllerTest {
         List<Compound> expectedResults = Collections.singletonList(expectedCompound);
 
         PageImpl<Compound> expectedPage = new PageImpl<>(expectedResults, pr, 21);
-        doReturn(expectedPage).when(mockCompoundService).getCompounds(any(Pageable.class));
+        doReturn(expectedPage).when(mockCompoundService).getCompounds(any(), any(Pageable.class), anyBoolean());
 
         PagedDataRep<Compound> compounds = controller.getCompounds(null, null, null, null, pr);
         Assert.assertEquals(20, compounds.getStart());
@@ -115,8 +129,8 @@ public class CompoundControllerTest {
         List<Compound> expectedResults = Collections.singletonList(expectedCompound);
 
         PageImpl<Compound> expectedPage = new PageImpl<>(expectedResults, pr, 1);
-        doReturn(expectedPage).when(mockCompoundService).getCompoundsByCompoundName(
-            eq(COMPOUND_NAME), any(Pageable.class));
+        doReturn(expectedPage).when(mockCompoundService).getCompounds(
+            eq(COMPOUND_NAME), any(Pageable.class), anyBoolean());
 
         PagedDataRep<Compound> compounds = controller.getCompounds(COMPOUND_NAME, null, null, null, pr);
         Assert.assertEquals(0, compounds.getStart());

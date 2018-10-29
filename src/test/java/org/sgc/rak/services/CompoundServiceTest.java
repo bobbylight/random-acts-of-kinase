@@ -78,9 +78,9 @@ public class CompoundServiceTest {
 
         List<Compound> expectedCompounds = Collections.singletonList(TestUtil.createCompound(COMPOUND_NAME));
         PageImpl<Compound> expectedPage = new PageImpl<>(expectedCompounds, pr, 1);
-        doReturn(expectedPage).when(mockCompoundDao).getCompounds(any(Pageable.class));
+        doReturn(expectedPage).when(mockCompoundDao).getCompounds(any(), any(Pageable.class), anyBoolean());
 
-        Page<Compound> actualCompounds = service.getCompounds(pr);
+        Page<Compound> actualCompounds = service.getCompounds(null, pr, true);
         Assert.assertEquals(1, actualCompounds.getNumberOfElements());
         Assert.assertEquals(1, actualCompounds.getTotalElements());
         Assert.assertEquals(1, actualCompounds.getTotalPages());
@@ -97,10 +97,9 @@ public class CompoundServiceTest {
 
         List<Compound> expectedCompounds = Collections.singletonList(TestUtil.createCompound(COMPOUND_NAME));
         PageImpl<Compound> expectedPage = new PageImpl<>(expectedCompounds, pr, 1);
-        doReturn(expectedPage).when(mockCompoundDao).getCompoundsByCompoundNameContainsIgnoreCase(anyString(),
-            any(Pageable.class));
+        doReturn(expectedPage).when(mockCompoundDao).getCompounds(anyString(), any(Pageable.class), anyBoolean());
 
-        Page<Compound> actualCompounds = service.getCompoundsByCompoundName("foo", pr);
+        Page<Compound> actualCompounds = service.getCompounds("foo", pr, true);
         Assert.assertEquals(1, actualCompounds.getNumberOfElements());
         Assert.assertEquals(1, actualCompounds.getTotalElements());
         Assert.assertEquals(1, actualCompounds.getTotalPages());

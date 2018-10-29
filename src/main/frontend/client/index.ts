@@ -5,22 +5,24 @@ import 'app.less';
 import '../node_modules/vuetify/dist/vuetify.min.css';
 import '../node_modules/quill/assets/snow.styl';
 
-import fontawesome from '@fortawesome/fontawesome';
-import faCog from '@fortawesome/fontawesome-free-solid/faCog';
-import faComments from '@fortawesome/fontawesome-free-solid/faComments';
-import faDatabase from '@fortawesome/fontawesome-free-solid/faDatabase';
-import faEdit from '@fortawesome/fontawesome-free-solid/faEdit';
-import faFilter from '@fortawesome/fontawesome-free-solid/faFilter';
-import faHandshake from '@fortawesome/fontawesome-free-solid/faHandshake';
-import faHistory from '@fortawesome/fontawesome-free-solid/faHistory';
-import faNewspaper from '@fortawesome/fontawesome-free-solid/faNewspaper';
-import faQuestionCircle from '@fortawesome/fontawesome-free-solid/faQuestionCircle';
-import faTimes from '@fortawesome/fontawesome-free-solid/faTimes';
-import faUpload from '@fortawesome/fontawesome-free-solid/faUpload';
-import faUser from '@fortawesome/fontawesome-free-solid/faUser';
-import faGithub from '@fortawesome/fontawesome-free-brands/faGithub';
-fontawesome.library.add(faCog, faComments, faDatabase, faEdit, faFilter, faHandshake, faHistory,
-    faNewspaper, faQuestionCircle, faTimes, faUpload, faUser, faGithub);
+import { library, dom } from '@fortawesome/fontawesome-svg-core';
+import { faCog,
+    faComments,
+    faDatabase,
+    faEdit,
+    faFilter,
+    faHandshake,
+    faHistory,
+    faMask,
+    faNewspaper,
+    faQuestionCircle,
+    faTimes,
+    faUpload,
+    faUser } from '@fortawesome/free-solid-svg-icons';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
+library.add(faCog, faComments, faDatabase, faEdit, faFilter, faHandshake, faHistory,
+    faMask, faNewspaper, faQuestionCircle, faTimes, faUpload, faUser, faGithub);
+dom.watch();
 
 // Register the router hooks with their names
 // (must be done before registering any components)

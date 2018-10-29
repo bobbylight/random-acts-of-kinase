@@ -230,8 +230,8 @@ export default class EditCompoundModal extends Vue {
     onSubmit() {
 
         restApi.updateCompound(this.compoundCopy)
-            .then(() => {
-                this.$emit('updated');
+            .then((newCompound: Compound) => {
+                this.$emit('updated', newCompound);
                 this.$emit('close');
                 Toaster.success('Compound updated');
                 this.visible = false;

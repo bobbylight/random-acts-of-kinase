@@ -75,7 +75,7 @@ public class CompoundDaoTest {
         doReturn(expectedPage).when(compoundRepository).findAll(any(), any(Pageable.class));
 
         Pageable pageInfo = PageRequest.of(0, 20);
-        Page<Compound> actualPage = compoundDao.getCompounds(pageInfo);
+        Page<Compound> actualPage = compoundDao.getCompounds(null, pageInfo, true);
 
         comparePages(expectedPage, actualPage);
     }
@@ -95,23 +95,6 @@ public class CompoundDaoTest {
         List<Compound> actualList = compoundDao.getCompounds(compoundNames);
 
         compareLists(expectedList, actualList);
-    }
-
-    @Test
-    public void testGetCompoundsByCompoundNameStartsWithIgnoreCase() {
-
-        String namePart = "comp";
-
-        Compound compound1 = TestUtil.createCompound("compoundA");
-        Compound compound2 = TestUtil.createCompound("compoundB");
-        Page<Compound> expectedPage = new PageImpl<>(Arrays.asList(compound1, compound2));
-        doReturn(expectedPage).when(compoundRepository).getCompoundsByCompoundNameContainsIgnoreCaseAndHiddenFalse(
-            eq(namePart), any(Pageable.class));
-
-        Pageable pageInfo = PageRequest.of(0, 20);
-        Page<Compound> actualPage = compoundDao.getCompoundsByCompoundNameContainsIgnoreCase(namePart, pageInfo);
-
-        comparePages(expectedPage, actualPage);
     }
 
     @Test
@@ -161,6 +144,20 @@ public class CompoundDaoTest {
             Assert.assertEquals(expected.getCompoundName(), actual.getCompoundName());
             Assert.assertEquals(expected.getCount(), actual.getCount());
         }
+    }
+
+    @Test
+    public void testGetHiddenCompounds() {
+
+        Compound compound1 = TestUtil.createCompound("compoundA");
+        Compound compound2 = TestUtil.createCompound("compoundB");
+        Page<Compound> expectedPage = new PageImpl<>(Arrays.asList(compound1, compound2));
+        doReturn(expectedPage).when(compoundRepository).findAll(any(), any(Pageable.class));
+
+        Pageable pageInfo = PageRequest.of(0, 20);
+        Page<Compound> actualPage = compoundDao.getHiddenCompounds("foo", pageInfo);
+
+        comparePages(expectedPage, actualPage);
     }
 
     @Test

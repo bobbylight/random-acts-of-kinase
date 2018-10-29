@@ -25,6 +25,12 @@
                             <div class="s10">s(10): {{getDisplayS10(props.item.s10)}}</div>
                             <div class="chemotype" v-if="props.item.chemotype">{{props.item.chemotype}}</div>
                         </div>
+                        <div v-if="props.item.hidden" class="hidden-compound-icon">
+                            <v-tooltip right>
+                                <v-icon slot="activator">fa-mask</v-icon>
+                                <span>Only admins can see this compound</span>
+                            </v-tooltip>
+                        </div>
                     </div>
                 </td>
             </template>
@@ -208,7 +214,21 @@ export default {
             transition: transform @transition-time;
 
             &:hover {
-                transform: scale(1.2);
+                transform: scale(1.1);
+            }
+        }
+    }
+
+    .hidden-compound-icon {
+        height: 100%;
+        vertical-align: top;
+        display: inline-block;
+        margin-top: 0.5rem;
+
+        .v-icon {
+            color: rgba(0, 0, 0, 0.2);
+            &:hover {
+                color: rgba(0, 0, 0 0.3);
             }
         }
     }

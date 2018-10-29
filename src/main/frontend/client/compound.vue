@@ -1,6 +1,7 @@
 <template>
     <v-container grid-list-md class="page-wrapper">
-        <v-layout row wrap>
+
+        <v-layout row wrap v-if="authorized">
 
             <section-header>
                 Results for {{id}}
@@ -16,7 +17,7 @@
             </section-header>
 
             <v-flex xs12>
-                <compound-details-card ref="compoundDetailsCard" :compound-name="id"></compound-details-card>
+                <compound-details-card ref="compoundDetailsCard" :compound="compound"></compound-details-card>
             </v-flex>
 
 
@@ -51,7 +52,11 @@
             </v-flex>
         </v-layout>
 
-        <EditCompoundModal :compound="editCompoundData" :show="showEditCompound"
+        <v-layout row wrap v-if="!authorized">
+            <unauthorized/>
+        </v-layout>
+
+        <EditCompoundModal :compound="compound" :show="showEditCompound"
                 @updated="compoundUpdated" @close="showEditCompound = false">
         </EditCompoundModal>
     </v-container>
@@ -67,37 +72,33 @@ import CompoundDetailsCard from './compound-details-card.vue';
 import EditCompoundModal from './edit-compound-modal.vue';
 import restApi from './rest-api';
 import { ActivityProfile, Compound, ErrorResponse, PagedDataRep } from './rak';
+import unauthorized from './admin/unauthorized.vue';
 import Toaster from './toaster';
 
-@Component({ components: { CompoundDetailsCard, ResultTable, SectionHeader, EditCompoundModal } })
+@Component({ components: { CompoundDetailsCard, ResultTable, SectionHeader, EditCompoundModal, unauthorized } })
 export default class CompoundView extends Vue {
 
     @Prop({ required: true })
     private id: string;
 
-    private chartData: any[] | null = null;
-
-    private editCompoundData: Compound = {
+    private compound: Compound | null = {
         compoundName: '',
         chemotype: '',
         s10: ''
     };
 
+    private chartData: any[] | null = null;
+
     private showEditCompound: boolean = false;
+    private authorized: boolean = true;
 
     compoundUpdated(newCompound: Compound) {
-        (this.$refs.compoundDetailsCard as CompoundDetailsCard).refresh();
+        //(this.$refs.compoundDetailsCard as CompoundDetailsCard).refresh();
+        this.compound = newCompound;
     }
 
     edit() {
-        restApi.getCompound(this.id)
-            .then((compound: Compound) => {
-                this.editCompoundData = compound;
-                this.showEditCompound = true;
-            })
-            .catch((errorResponse: ErrorResponse) => {
-                Toaster.error('Error retrieving compound information');
-            });
+        this.showEditCompound = true;
     }
 
     get gridFilters(): any {
@@ -112,25 +113,34 @@ export default class CompoundView extends Vue {
 
         const sort: any = null;
 
-        return restApi.getActivityProfiles(0, 10000, this.gridFilters, sort)
-            .then((allData: PagedDataRep<ActivityProfile>) => {
-                const activityProfiles: ActivityProfile[] = allData.data;
-                this.chartData = activityProfiles
-                    .filter((profile: ActivityProfile) => {
-                        return profile.percentControl < 100;
-                    })
-                    .sort((a: ActivityProfile, b: ActivityProfile) => {
-                        if (b.percentControl < a.percentControl) {
-                            return -1;
-                        }
-                        return b.percentControl > a.percentControl ? 1 : 0;
-                    })
-                    .map((profile: ActivityProfile) => {
-                        return [
-                            profile.kinase.discoverxGeneSymbol,
-                            profile.percentControl
-                        ];
+        restApi.getCompound(this.id)
+            .then((compound: Compound) => {
+
+                this.compound = compound;
+
+                return restApi.getActivityProfiles(0, 10000, this.gridFilters, sort)
+                    .then((allData: PagedDataRep<ActivityProfile>) => {
+                        const activityProfiles: ActivityProfile[] = allData.data;
+                        this.chartData = activityProfiles
+                            .filter((profile: ActivityProfile) => {
+                                return profile.percentControl < 100;
+                            })
+                            .sort((a: ActivityProfile, b: ActivityProfile) => {
+                                if (b.percentControl < a.percentControl) {
+                                    return -1;
+                                }
+                                return b.percentControl > a.percentControl ? 1 : 0;
+                            })
+                            .map((profile: ActivityProfile) => {
+                                return [
+                                    profile.kinase.discoverxGeneSymbol,
+                                    profile.percentControl
+                                ];
+                            });
                     });
+            })
+            .catch((errorResponse: ErrorResponse) => {
+                this.authorized = false;
             });
     }
 }

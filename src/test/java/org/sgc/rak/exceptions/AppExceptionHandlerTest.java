@@ -70,12 +70,12 @@ public class AppExceptionHandlerTest {
     }
 
     @Test
-    public void testRestException() {
+    public void testHandleRestException() {
 
         WebRequest mockRequest = Mockito.mock(WebRequest.class);
         BadRequestException e = new BadRequestException("bad request");
 
-        ResponseEntity<Object> response = exceptionHandler.restException(mockRequest, e);
+        ResponseEntity<Object> response = exceptionHandler.handleRestException(mockRequest, e);
 
         Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }

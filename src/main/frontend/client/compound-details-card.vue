@@ -10,7 +10,8 @@
 
                     <v-flex xs3 pt-0>
                         <v-tooltip bottom>
-                            <img :src="compoundImageUrl"
+                            <img v-if="compoundImageUrl"
+                                 :src="compoundImageUrl"
                                  class="compound-image"
                                  @click="onImageClicked"
                                  width="200" height="200"
@@ -25,32 +26,32 @@
 
                             <div class="compound-details-table-row">
                                 <div class="compound-details-table-cell compound-details-table-cell-header">Compound:</div>
-                                <div class="compound-details-table-cell">{{compoundName}}</div>
+                                <div class="compound-details-table-cell">{{compound.compoundName}}</div>
                             </div>
 
                             <div class="compound-details-table-row">
                                 <div class="compound-details-table-cell compound-details-table-cell-header">Chemotype:</div>
-                                <div class="compound-details-table-cell">{{chemotype}}</div>
+                                <div class="compound-details-table-cell">{{compound.chemotype}}</div>
                             </div>
 
                             <div class="compound-details-table-row">
                                 <div class="compound-details-table-cell compound-details-table-cell-header">s(10):</div>
-                                <div class="compound-details-table-cell">{{s10}}</div>
+                                <div class="compound-details-table-cell">{{compound.s10}}</div>
                             </div>
 
                             <div class="compound-details-table-row">
                                 <div class="compound-details-table-cell compound-details-table-cell-header">Solubility (&#181;g/mL):</div>
-                                <div class="compound-details-table-cell">{{solubility}}</div>
+                                <div class="compound-details-table-cell">{{compound.solubility}}</div>
                             </div>
 
                             <div class="compound-details-table-row">
                                 <div class="compound-details-table-cell compound-details-table-cell-header">SMILES:</div>
-                                <div class="compound-details-table-cell">{{smiles}}</div>
+                                <div class="compound-details-table-cell">{{compound.smiles}}</div>
                             </div>
 
                             <div class="compound-details-table-row">
                                 <div class="compound-details-table-cell compound-details-table-cell-header">Source:</div>
-                                <div class="compound-details-table-cell">{{source}}</div>
+                                <div class="compound-details-table-cell">{{compound.source}}</div>
                             </div>
 
                             <div class="compound-details-table-row">
@@ -77,57 +78,38 @@ import Toaster from './toaster';
 export default class CompoundDetailsCard extends Vue {
 
     @Prop({ required: true })
-    private compoundName: string;
+    private compound: Compound;
 
-    private chemotype: string | null | undefined = null;
-    private s10: string | null | undefined = null;
-    private solubility: number | null | undefined = null;
-    private smiles: string | null | undefined = null;
-    private source: string | null | undefined = null;
-    private primaryReference: string | null | undefined = null;
-    private primaryReferenceUrl: string | null | undefined = null;
+    private compoundName: string | null | undefined = null;
 
-    get compoundImageUrl() {
-        return `api/compounds/images/${this.compoundName}`;
+    get compoundImageUrl(): string | null {
+        if (this.compound && this.compound.compoundName) {
+            return `api/compounds/images/${this.compound.compoundName}`;
+        }
+        return null;
     }
 
     get reference() {
 
-        if (this.primaryReference) {
-            if (this.primaryReferenceUrl) {
-                return `<a href="${this.primaryReferenceUrl}" target="_blank" ` +
-                    `rel="noopener noreferrer">${this.primaryReference}</a>`;
+        if (this.compound.primaryReference) {
+            if (this.compound.primaryReferenceUrl) {
+                return `<a href="${this.compound.primaryReferenceUrl}" target="_blank" ` +
+                    `rel="noopener noreferrer">${this.compound.primaryReference}</a>`;
             }
-            return this.primaryReference;
+            return this.compound.primaryReference;
         }
 
         return '';
     }
 
     mounted() {
-        this.refresh();
+        // Just to avoid an NPE if an error occurs when rendering this component.
+        this.compoundName = this.compound ? this.compound.compoundName : 'unknown';
     }
 
     onImageClicked() {
         this.$store.commit('setLightboxImage', this.compoundImageUrl);
         this.$store.commit('setLightboxTitle', this.compoundName);
-    }
-
-    refresh() {
-
-        restApi.getCompound(this.compoundName)
-            .then((compound: Compound) => {
-                this.chemotype = compound.chemotype;
-                this.s10 = compound.s10;
-                this.solubility = compound.solubility;
-                this.smiles = compound.smiles;
-                this.source = compound.source;
-                this.primaryReference = compound.primaryReference || compound.primaryReferenceUrl;
-                this.primaryReferenceUrl = compound.primaryReferenceUrl;
-            })
-            .catch((errorResponse: ErrorResponse) => {
-                Toaster.error('Error retrieving compound information');
-            });
     }
 }
 </script>
@@ -149,7 +131,7 @@ export default class CompoundDetailsCard extends Vue {
             transition: transform @transition-time;
 
             &:hover {
-                transform: scale(1.2);
+                transform: scale(1.1);
             }
         }
     }

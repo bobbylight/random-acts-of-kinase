@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 import static org.sgc.rak.util.QuerySpecifications.hasNullFields;
 import static org.sgc.rak.util.QuerySpecifications.isHidden;
+import static org.sgc.rak.util.QuerySpecifications.standardSearch;
 
 /**
  * DAO for manipulating compounds.
@@ -55,29 +56,17 @@ public class CompoundDao {
     /**
      * Returns compound information.
      *
+     * @param compoundNamePart A pert of a compound name.
      * @param pageInfo How to sort the data and what page of the data to return.
+     * @param includeHidden Whether hidden compounds should be included in the result.
      * @return The list of compounds.
-     * @see #getCompoundsByCompoundNameContainsIgnoreCase(String, Pageable)
      */
-    public Page<Compound> getCompounds(Pageable pageInfo) {
-        return compoundRepository.findAll(isHidden(null, false), pageInfo);
+    public Page<Compound> getCompounds(String compoundNamePart, Pageable pageInfo, boolean includeHidden) {
+        return compoundRepository.findAll(standardSearch(compoundNamePart, includeHidden), pageInfo);
     }
 
     public List<Compound> getCompounds(List<String> compoundNames) {
         return compoundRepository.findByCompoundNameInIgnoreCase(compoundNames);
-    }
-
-    /**
-     * Returns compounds whose names contain a given substring, ignoring case.
-     *
-     * @param compoundNamePart A pert of a compound name.
-     * @param pageInfo How to sort the data and what page of the data to return.
-     * @return The list of compounds.
-     * @see #getCompounds(Pageable)
-     */
-    public Page<Compound> getCompoundsByCompoundNameContainsIgnoreCase(String compoundNamePart, Pageable pageInfo) {
-        return compoundRepository.getCompoundsByCompoundNameContainsIgnoreCaseAndHiddenFalse(
-            compoundNamePart, pageInfo);
     }
 
     /**
