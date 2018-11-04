@@ -73,7 +73,6 @@ import EditCompoundModal from './edit-compound-modal.vue';
 import restApi from './rest-api';
 import { ActivityProfile, Compound, ErrorResponse, PagedDataRep } from './rak';
 import unauthorized from './admin/unauthorized.vue';
-import Toaster from './toaster';
 
 @Component({ components: { CompoundDetailsCard, ResultTable, SectionHeader, EditCompoundModal, unauthorized } })
 export default class CompoundView extends Vue {

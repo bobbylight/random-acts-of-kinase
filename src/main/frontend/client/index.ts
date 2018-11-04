@@ -88,6 +88,7 @@ import Vuetify, {
 import Home from './home.vue';
 import Search from './search/search.vue';
 import Blog from './blog.vue';
+import NetworkTab from './network-tab.vue';
 import Compound from './compound.vue';
 import Admin from './admin/admin.vue';
 import ImportCompounds from './admin/import-compounds.vue';
@@ -175,6 +176,11 @@ window.onload = () => {
             path: '/blog',
             name: 'blog',
             component: Blog
+        },
+        {
+            path: '/network',
+            name: 'network',
+            component: NetworkTab
         },
         {
             path: '/admin',

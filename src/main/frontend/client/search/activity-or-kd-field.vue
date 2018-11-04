@@ -28,7 +28,6 @@ export default class ActivityOrKdField extends Vue {
     private step: number = 0.1;
     private min: number = 0.1;
     private max: number = 100;
-    private suffix: string = '%';
 
     private numericValidationRules: any[] = [
 
@@ -91,7 +90,7 @@ export default class ActivityOrKdField extends Vue {
             this.label = 'Kd';
             this.fieldValue = this.filters.kd;
             this.step = this.min = 1;
-            this.max = 500;
+            this.max = 10000;
         }
     }
 }

@@ -15,6 +15,10 @@
                 News
             </v-btn>
 
+            <v-btn flat v-bind:class="{ 'active-toolbar-item': isActiveTab('/network') }" @click="setActiveTab('network')">
+                Network
+            </v-btn>
+
             <v-btn flat v-bind:class="{ 'active-toolbar-item': isActiveTab('/admin') }"
                    @click="setActiveTab($store.state.lastAdminRouteName)" v-if="$store.getters.loggedIn">
                 Admin

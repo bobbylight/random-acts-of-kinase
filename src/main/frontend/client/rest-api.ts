@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosPromise, AxiosRequestConfig, AxiosResponse } from 'axios';
 import {
     ActivityProfile,
     Audit,
@@ -110,6 +110,32 @@ export class RestApi {
         return this.instance.get(url)
             .then((response: AxiosResponse<PagedDataRep<ActivityProfile>>) => {
                 return response.data;
+            });
+    }
+
+    getAllActivityProfiles(compoundNames: string[], filters: any): Promise<ActivityProfile[]> {
+
+        const max: number = 100;
+        const promises: AxiosPromise<any>[] = [];
+
+        compoundNames.forEach((compoundName: string) => {
+            let url: string = `api/activityProfiles?size=${max}&compound=${compoundName}`;
+            if (filters.activity) {
+                url += `&activity=${filters.activity}`;
+            }
+            promises.push(axios.get(url));
+        });
+
+        return axios.all(promises)
+            .then((response: AxiosResponse<PagedDataRep<ActivityProfile>>[]) => {
+                const allActivityProfiles: ActivityProfile[] = response[0].data.data;
+                for (let i: number = 1; i < response.length; i++) {
+                    allActivityProfiles.push.apply(allActivityProfiles, response[i].data.data);
+                }
+                return allActivityProfiles;
+            })
+            .catch((error: AxiosError) => {
+                throw RestApi.axiosErrorToErrorResponse(error);
             });
     }
 
