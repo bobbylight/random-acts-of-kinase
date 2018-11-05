@@ -156,7 +156,7 @@ public class ActivityProfileControllerTest {
         PageImpl<ActivityProfile> expectedPage = new PageImpl<>(kapList);
 
         doReturn(expectedPage).when(mockActivityProfileService)
-            .getActivityProfiles(any(Pageable.class));
+            .getActivityProfiles(any(), any(), any(), any(Pageable.class));
 
         try {
             mockMvc.perform(MockMvcRequestBuilders.get("/api/activityProfiles")
@@ -181,7 +181,7 @@ public class ActivityProfileControllerTest {
         PageImpl<ActivityProfile> expectedPage = new PageImpl<>(kapList);
 
         doReturn(expectedPage).when(mockActivityProfileService)
-            .getActivityProfilesForCompound(eq(COMPOUND_NAME), any(Pageable.class));
+            .getActivityProfiles(eq(COMPOUND_NAME), any(), any(), any(Pageable.class));
 
         try {
             mockMvc.perform(MockMvcRequestBuilders.get("/api/activityProfiles")
@@ -212,7 +212,7 @@ public class ActivityProfileControllerTest {
         PageImpl<ActivityProfile> expectedPage = new PageImpl<>(kapList);
 
         doReturn(expectedPage).when(mockActivityProfileService)
-            .getActivityProfilesForKinaseAndPercentControl(eq(42L), anyDouble(), any(Pageable.class));
+            .getActivityProfiles(any(), eq(42L), anyDouble(), any(Pageable.class));
 
         try {
             mockMvc.perform(MockMvcRequestBuilders.get("/api/activityProfiles")
@@ -244,8 +244,7 @@ public class ActivityProfileControllerTest {
         PageImpl<ActivityProfile> expectedPage = new PageImpl<>(kapList);
 
         doReturn(expectedPage).when(mockActivityProfileService)
-            .getActivityProfilesForCompoundAndKinaseAndPercentControl(eq(COMPOUND_NAME), eq(42L), anyDouble(),
-                any(Pageable.class));
+            .getActivityProfiles(eq(COMPOUND_NAME), eq(42L), anyDouble(), any(Pageable.class));
 
         try {
             mockMvc.perform(MockMvcRequestBuilders.get("/api/activityProfiles")

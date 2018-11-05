@@ -48,20 +48,12 @@ class ActivityProfileController {
                                     @SortDefault.SortDefaults({ @SortDefault("kd"), @SortDefault("percentControl") })
                                     Pageable pageInfo) {
 
-        // Kinase and activity are a pair; you can't filter with just one
-        if (StringUtils.isEmpty(kinaseDiscoverx) && activity != null) {
-            throw new BadRequestException(messages.get("error.missingDependentSearchParam", "activity", "kinase"));
-        }
-        if (StringUtils.isNotEmpty(kinaseDiscoverx) && activity == null) {
-            throw new BadRequestException(messages.get("error.missingDependentSearchParam", "kinase", "activity"));
-        }
-
         // Activity must be between 0 and 1
-        if (activity != null && (activity > 1 || activity <= 0)) {
+        if (activity != null && (activity > 100 || activity < 0)) {
             throw new BadRequestException(messages.get("error.actvityOutOfRange"));
         }
 
-        long kinaseId = -1;
+        Long kinaseId = null;
         if (StringUtils.isNotEmpty(kinaseDiscoverx)) {
             Kinase kinase = kinaseService.getKinase(kinaseDiscoverx);
             if (kinase == null) {
@@ -70,26 +62,7 @@ class ActivityProfileController {
             kinaseId = kinase.getId();
         }
 
-        Page<ActivityProfile> page;
-
-        if (StringUtils.isEmpty(compound)) {
-            if (StringUtils.isEmpty(kinaseDiscoverx)) {
-                page = activityProfileService.getActivityProfiles(pageInfo);
-            }
-            else {
-                page = activityProfileService.getActivityProfilesForKinaseAndPercentControl(kinaseId, activity,
-                    pageInfo);
-            }
-        }
-        else {
-            if (StringUtils.isEmpty(kinaseDiscoverx)) {
-                page = activityProfileService.getActivityProfilesForCompound(compound, pageInfo);
-            }
-            else {
-                page = activityProfileService.getActivityProfilesForCompoundAndKinaseAndPercentControl(compound,
-                    kinaseId, activity, pageInfo);
-            }
-        }
+        Page<ActivityProfile> page = activityProfileService.getActivityProfiles(compound, kinaseId, activity, pageInfo);
 
         long start = page.getNumber() * pageInfo.getPageSize();
         long total = page.getTotalElements();

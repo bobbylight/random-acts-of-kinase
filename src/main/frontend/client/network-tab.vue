@@ -54,7 +54,7 @@
 
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
-                                    <v-btn color="primary" @click="rerender">
+                                    <v-btn :disabled="formInvalid" color="primary" @click="rerender">
                                         Rerender
                                     </v-btn>
                                 </v-card-actions>
@@ -92,18 +92,18 @@ import CompoundNetwork from './compound-network.vue';
 import restApi from './rest-api';
 import { Compound, PagedDataRep, SearchFilter } from './rak';
 
-
 @Component({ components: { SectionHeader, CompoundNetwork } })
 export default class CompoundNetworkTab extends Vue {
 
     private loading: boolean = false;
-    private percentControl: string = '';
+    private percentControl: string = '20';
     private kd: string = '';
     private filters: any = {};
     private compounds: Compound[] = [];
     private networkCompounds: Compound[] = [];
     private search: string = '';
     private selectedCompounds: Compound[] = [];
+    private formIncomplete: boolean = false;
 
     private numericValidationRules(max: number): any[] {
 
@@ -125,6 +125,14 @@ export default class CompoundNetworkTab extends Vue {
     private static isEmpty(text: string): boolean {
         // text might be a number
         return !text || !text.trim || !text.trim().length;
+    }
+
+    mounted() {
+        // Set initial values
+        this.filters = {
+            activity: this.percentControl,
+            kd: this.kd
+        };
     }
 
     @Watch('search')

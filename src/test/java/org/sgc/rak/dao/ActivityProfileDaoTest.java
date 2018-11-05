@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.*;
 
@@ -67,65 +68,16 @@ public class ActivityProfileDaoTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testGetActivityProfiles_pageable() {
 
         ActivityProfile profile = new ActivityProfile();
         profile.setCompoundName(COMPOUND_NAME);
         Page<ActivityProfile> expectedPage = new PageImpl<>(Collections.singletonList(profile));
-        doReturn(expectedPage).when(mockRepository).findAll(any(Pageable.class));
+        doReturn(expectedPage).when(mockRepository).findAll(any(Specification.class), any(Pageable.class));
 
         Pageable pageInfo = PageRequest.of(0, 20);
-        Page<ActivityProfile> actualPage = activityProfileDao.getActivityProfiles(pageInfo);
-
-        comparePages(expectedPage, actualPage);
-    }
-
-    @Test
-    public void testGetActivityProfilesByCompoundNameIgnoreCase() {
-
-        ActivityProfile profile = new ActivityProfile();
-        profile.setCompoundName(COMPOUND_NAME);
-        Page<ActivityProfile> expectedPage = new PageImpl<>(Collections.singletonList(profile));
-        doReturn(expectedPage).when(mockRepository)
-            .getActivityProfilesByCompoundNameIgnoreCase(eq(COMPOUND_NAME), any());
-
-        Pageable pageInfo = PageRequest.of(0, 20);
-        Page<ActivityProfile> actualPage = activityProfileDao
-            .getActivityProfilesByCompoundNameIgnoreCase(COMPOUND_NAME, pageInfo);
-
-        comparePages(expectedPage, actualPage);
-    }
-
-    @Test
-    public void testGetActivityProfilesByCompoundNameIgnoreCaseAndKinaseIgnoreCaseAndPercentControl() {
-
-        ActivityProfile profile = new ActivityProfile();
-        profile.setCompoundName(COMPOUND_NAME);
-        Page<ActivityProfile> expectedPage = new PageImpl<>(Collections.singletonList(profile));
-        doReturn(expectedPage).when(mockRepository)
-            .getActivityProfilesByCompoundNameIgnoreCaseAndKinaseIdAndPercentControlLessThanEqual(
-                eq(COMPOUND_NAME), anyLong(), anyDouble(), any());
-
-        Pageable pageInfo = PageRequest.of(0, 20);
-        Page<ActivityProfile> actualPage = activityProfileDao
-            .getActivityProfilesByCompoundNameIgnoreCaseAndKinaseIgnoreCaseAndPercentControl(
-                COMPOUND_NAME, 1L, 0, pageInfo);
-
-        comparePages(expectedPage, actualPage);
-    }
-
-    @Test
-    public void testGetActivityProfilesByKinaseIgnoreCaseAndPercentControl() {
-
-        ActivityProfile profile = new ActivityProfile();
-        profile.setCompoundName(COMPOUND_NAME);
-        Page<ActivityProfile> expectedPage = new PageImpl<>(Collections.singletonList(profile));
-        doReturn(expectedPage).when(mockRepository)
-            .getActivityProfilesByKinaseIdAndPercentControlLessThanEqual(anyLong(), anyDouble(), any());
-
-        Pageable pageInfo = PageRequest.of(0, 20);
-        Page<ActivityProfile> actualPage = activityProfileDao
-            .getActivityProfilesByKinaseIgnoreCaseAndPercentControl(1L, 0, pageInfo);
+        Page<ActivityProfile> actualPage = activityProfileDao.getActivityProfiles(null, null, null, pageInfo);
 
         comparePages(expectedPage, actualPage);
     }

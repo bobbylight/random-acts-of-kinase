@@ -90,62 +90,25 @@ public class ActivityProfileService {
     }
 
     /**
-     * Returns kinase activity profile information.
-     *
-     * @param pageInfo How to sort the data and what page of the data to return.
-     * @return The list of kinase activity profiles.
-     * @see #getActivityProfilesForCompound(String, Pageable)
-     */
-    public Page<ActivityProfile> getActivityProfiles(Pageable pageInfo) {
-        return activityProfileDao.getActivityProfiles(pageInfo);
-    }
-
-    /**
-     * Returns kinase activity profiles for a given compound/inhibitor.
-     *
-     * @param compoundName The compound name.  Case is ignored.  If this compound does not exist, an exception
-     *        is thrown.
-     * @param pageInfo How to sort the data and what page of the data to return.
-     * @return The list of kinase activity profiles.
-     * @see #getActivityProfiles(Pageable)
-     */
-    public Page<ActivityProfile> getActivityProfilesForCompound(String compoundName, Pageable pageInfo) {
-
-        if (!compoundService.getCompoundExists(compoundName)) {
-            throw new BadRequestException(messages.get("error.noSuchCompound", compoundName));
-        }
-
-        return activityProfileDao.getActivityProfilesByCompoundNameIgnoreCase(compoundName, pageInfo);
-    }
-
-    /**
      * Returns kinase activity profiles for a given compound/inhibitor, kinase and activity.
      *
-     * @param compoundName The compound name.  Case is ignored.
-     * @param kinase The kinase.  Case is ignored.
-     * @param activity The activity of the reaction.
+     * @param compoundName The compound name.  Case is ignored.  This may be {@code null} if the returned
+     *        list should not be restricted to a particular compound.
+     * @param kinaseId The kinase involved in the activity profile.  This may be {@code null} to not limit
+     *        the search to one particular kinase.
+     * @param percentControl The value that the percent control of the activity profile must be less than or
+     *        equal to. This may be {@code null} to not restrict by percent control.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of kinase activity profiles.
-     * @see #getActivityProfiles(Pageable)
      */
-    public Page<ActivityProfile> getActivityProfilesForCompoundAndKinaseAndPercentControl(
-            String compoundName, long kinase, double activity, Pageable pageInfo) {
+    public Page<ActivityProfile> getActivityProfiles(String compoundName, Long kinaseId, Double percentControl,
+                                                     Pageable pageInfo) {
 
-        if (!compoundService.getCompoundExists(compoundName)) {
+        if (compoundName != null && !compoundService.getCompoundExists(compoundName)) {
             throw new BadRequestException(messages.get("error.noSuchCompound", compoundName));
         }
 
-        //kinaseService.getKinase(kinase); // Throw exception if kinase not found
-
-        return activityProfileDao.getActivityProfilesByCompoundNameIgnoreCaseAndKinaseIgnoreCaseAndPercentControl(
-            compoundName, kinase, activity, pageInfo);
-    }
-
-    public Page<ActivityProfile> getActivityProfilesForKinaseAndPercentControl(long kinase,
-                                                                             double activity, Pageable pageInfo) {
-        //kinaseService.getKinase(kinase); // Throw exception if kinase not found
-        return activityProfileDao.getActivityProfilesByKinaseIgnoreCaseAndPercentControl(kinase,
-            activity, pageInfo);
+        return activityProfileDao.getActivityProfiles(compoundName, kinaseId, percentControl, pageInfo);
     }
 
     /**

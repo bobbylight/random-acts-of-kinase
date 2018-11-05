@@ -1,6 +1,7 @@
 package org.sgc.rak.util;
 
 import org.apache.commons.lang3.StringUtils;
+import org.sgc.rak.model.ActivityProfile;
 import org.sgc.rak.model.Compound;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.Nullable;
@@ -10,6 +11,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.Arrays;
+import java.util.Locale;
 
 /**
  * Specifications used to simplify JPA repository queries.
@@ -18,6 +20,48 @@ public final class QuerySpecifications {
 
     private QuerySpecifications() {
         // Do nothing (comment for Sonar)
+    }
+
+    /**
+     * Returns a specification that looks for any {@code ActivityProfile}s matching the given criteria.
+     *
+     * @param compoundName The compound name.  Case is ignored.  This may be {@code null} if the returned
+     *        list should not be restricted to a particular compound.
+     * @param kinaseId The kinase involved in the activity profile.  This may be {@code null} to not limit
+     *        the search to one particular kinase.
+     * @param percentControl The value that the percent control of the activity profile must be less than or
+     *        equal to. This may be {@code null} to not restrict by percent control.
+     * @return The specification.
+     */
+    public static Specification<ActivityProfile> activityProfilesMatching(String compoundName, Long kinaseId,
+                                                                          Double percentControl) {
+
+        return new Specification<ActivityProfile>() {
+
+            @Nullable
+            @Override
+            public Predicate toPredicate(Root<ActivityProfile> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
+
+                Predicate predicate = null;
+
+                if (StringUtils.isNotBlank(compoundName)) {
+                    predicate = builder.like(builder.lower(root.get("compoundName")),
+                        compoundName.toLowerCase(Locale.US));
+                }
+
+                if (kinaseId != null) {
+                    Predicate kinasePredicate = builder.equal(root.get("kinase").get("id"), kinaseId);
+                    predicate = predicate == null ? kinasePredicate : builder.and(predicate, kinasePredicate);
+                }
+
+                if (percentControl != null) {
+                    Predicate pcPredicate = builder.le(root.get("percentControl"), percentControl);
+                    predicate = predicate == null ? pcPredicate : builder.and(predicate, pcPredicate);
+                }
+
+                return predicate;
+            }
+        };
     }
 
     /**
@@ -53,8 +97,8 @@ public final class QuerySpecifications {
                 if (StringUtils.isNotBlank(compoundNamePart)) {
                     predicate = builder.and(
                         predicate,
-                        builder.like(builder.upper(root.get("compoundName")),
-                            '%' + Util.escapeForLike(compoundNamePart.toUpperCase()) + '%')
+                        builder.like(builder.lower(root.get("compoundName")),
+                            '%' + Util.escapeForLike(compoundNamePart.toLowerCase()) + '%')
                     );
                 }
 
@@ -87,8 +131,8 @@ public final class QuerySpecifications {
                 if (StringUtils.isNotBlank(compoundNamePart)) {
                     predicate = builder.and(
                         predicate,
-                        builder.like(builder.upper(root.get("compoundName")),
-                            '%' + Util.escapeForLike(compoundNamePart.toUpperCase()) + '%')
+                        builder.like(builder.lower(root.get("compoundName")),
+                            '%' + Util.escapeForLike(compoundNamePart.toLowerCase()) + '%')
                     );
                 }
 
@@ -116,8 +160,8 @@ public final class QuerySpecifications {
                 Predicate predicate = null;
 
                 if (StringUtils.isNotBlank(compoundNamePart)) {
-                    predicate = builder.like(builder.upper(root.get("compoundName")),
-                            '%' + Util.escapeForLike(compoundNamePart.toUpperCase()) + '%');
+                    predicate = builder.like(builder.lower(root.get("compoundName")),
+                            '%' + Util.escapeForLike(compoundNamePart.toLowerCase()) + '%');
                 }
 
                 if (!includeHidden) {

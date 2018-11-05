@@ -49,16 +49,17 @@ public class ActivityProfileServiceTest {
     }
 
     @Test
-    public void testGetActivityProfiles() {
+    public void testGetActivityProfiles_noFilterParams() {
 
         Sort sort = Sort.by(Sort.Order.desc("createDate"));
         PageRequest pr = PageRequest.of(0, 20, sort);
 
         List<ActivityProfile> expectedProfiles = Collections.singletonList(TestUtil.createActivityProfile(42L));
         PageImpl<ActivityProfile> expectedPage = new PageImpl<>(expectedProfiles, pr, 1);
-        doReturn(expectedPage).when(mockActivityProfileDao).getActivityProfiles(any(Pageable.class));
+        doReturn(expectedPage).when(mockActivityProfileDao).getActivityProfiles(any(), any(), any(),
+            any(Pageable.class));
 
-        Page<ActivityProfile> actualProfiles = service.getActivityProfiles(pr);
+        Page<ActivityProfile> actualProfiles = service.getActivityProfiles(null, null, null, pr);
         Assert.assertEquals(1, actualProfiles.getNumberOfElements());
         Assert.assertEquals(1, actualProfiles.getTotalElements());
         Assert.assertEquals(1, actualProfiles.getTotalPages());
@@ -68,7 +69,7 @@ public class ActivityProfileServiceTest {
     }
 
     @Test
-    public void testGetActivityProfilesForCompound_happyPath() {
+    public void testGetActivityProfiles_compound_happyPath() {
 
         doReturn(true).when(mockCompoundService).getCompoundExists(eq(COMPOUND_NAME));
 
@@ -77,10 +78,10 @@ public class ActivityProfileServiceTest {
 
         List<ActivityProfile> expectedProfiles = Collections.singletonList(TestUtil.createActivityProfile(42L));
         PageImpl<ActivityProfile> expectedPage = new PageImpl<>(expectedProfiles, pr, 1);
-        doReturn(expectedPage).when(mockActivityProfileDao).getActivityProfilesByCompoundNameIgnoreCase(
-            eq(COMPOUND_NAME), any(Pageable.class));
+        doReturn(expectedPage).when(mockActivityProfileDao).getActivityProfiles(eq(COMPOUND_NAME), any(), any(),
+            any(Pageable.class));
 
-        Page<ActivityProfile> actualProfiles = service.getActivityProfilesForCompound(COMPOUND_NAME, pr);
+        Page<ActivityProfile> actualProfiles = service.getActivityProfiles(COMPOUND_NAME, null, null, pr);
         Assert.assertEquals(1, actualProfiles.getNumberOfElements());
         Assert.assertEquals(1, actualProfiles.getTotalElements());
         Assert.assertEquals(1, actualProfiles.getTotalPages());
@@ -90,18 +91,18 @@ public class ActivityProfileServiceTest {
     }
 
     @Test(expected = BadRequestException.class)
-    public void testGetActivityProfilesForCompound_error_noSuchCompound() {
+    public void testGetActivityProfiles_compound_error_noSuchCompound() {
 
         doReturn(false).when(mockCompoundService).getCompoundExists(eq(COMPOUND_NAME));
 
         Sort sort = Sort.by(Sort.Order.desc("createDate"));
         PageRequest pr = PageRequest.of(0, 20, sort);
 
-        service.getActivityProfilesForCompound(COMPOUND_NAME, pr);
+        service.getActivityProfiles(COMPOUND_NAME, null, null, pr);
     }
 
     @Test
-    public void testGetActivityProfilesForCompoundAndKinaseAndPercentControl_happyPath() {
+    public void testGetActivityProfiles_compoundKinaseAndPercentControl_happyPath() {
 
         doReturn(true).when(mockCompoundService).getCompoundExists(eq(COMPOUND_NAME));
 
@@ -110,12 +111,10 @@ public class ActivityProfileServiceTest {
 
         List<ActivityProfile> expectedProfiles = Collections.singletonList(TestUtil.createActivityProfile(42L));
         PageImpl<ActivityProfile> expectedPage = new PageImpl<>(expectedProfiles, pr, 1);
-        doReturn(expectedPage).when(mockActivityProfileDao)
-            .getActivityProfilesByCompoundNameIgnoreCaseAndKinaseIgnoreCaseAndPercentControl(
-                eq(COMPOUND_NAME), anyLong(), anyDouble(), any(Pageable.class));
+        doReturn(expectedPage).when(mockActivityProfileDao).getActivityProfiles(eq(COMPOUND_NAME), anyLong(),
+            anyDouble(), any(Pageable.class));
 
-        Page<ActivityProfile> actualProfiles = service.getActivityProfilesForCompoundAndKinaseAndPercentControl(
-            COMPOUND_NAME, 42, 0.3, pr);
+        Page<ActivityProfile> actualProfiles = service.getActivityProfiles(COMPOUND_NAME, 42L, 0.3, pr);
         Assert.assertEquals(1, actualProfiles.getNumberOfElements());
         Assert.assertEquals(1, actualProfiles.getTotalElements());
         Assert.assertEquals(1, actualProfiles.getTotalPages());
@@ -125,28 +124,28 @@ public class ActivityProfileServiceTest {
     }
 
     @Test(expected = BadRequestException.class)
-    public void testGetActivityProfilesForCompoundAndKinaseAndPercentControl_error_noSuchCompound() {
+    public void testGetActivityProfiles_compoundKinasePercentControl_error_noSuchCompound() {
 
         doReturn(false).when(mockCompoundService).getCompoundExists(eq(COMPOUND_NAME));
 
         Sort sort = Sort.by(Sort.Order.desc("createDate"));
         PageRequest pr = PageRequest.of(0, 20, sort);
 
-        service.getActivityProfilesForCompoundAndKinaseAndPercentControl(COMPOUND_NAME, 32, 0.3, pr);
+        service.getActivityProfiles(COMPOUND_NAME, 32L, 0.3, pr);
     }
 
     @Test
-    public void testGetActivityProfilesForKinaseAndPercentControl_happyPath() {
+    public void testGetActivityProfiles_kinasePercentControl_happyPath() {
 
         Sort sort = Sort.by(Sort.Order.desc("createDate"));
         PageRequest pr = PageRequest.of(0, 20, sort);
 
         List<ActivityProfile> expectedProfiles = Collections.singletonList(TestUtil.createActivityProfile(42L));
         PageImpl<ActivityProfile> expectedPage = new PageImpl<>(expectedProfiles, pr, 1);
-        doReturn(expectedPage).when(mockActivityProfileDao).getActivityProfilesByKinaseIgnoreCaseAndPercentControl(
-                anyLong(), anyDouble(), any(Pageable.class));
+        doReturn(expectedPage).when(mockActivityProfileDao).getActivityProfiles(any(), anyLong(), anyDouble(),
+            any(Pageable.class));
 
-        Page<ActivityProfile> actualProfiles = service.getActivityProfilesForKinaseAndPercentControl(42, 0.3, pr);
+        Page<ActivityProfile> actualProfiles = service.getActivityProfiles(null, 42L, 0.3, pr);
         Assert.assertEquals(1, actualProfiles.getNumberOfElements());
         Assert.assertEquals(1, actualProfiles.getTotalElements());
         Assert.assertEquals(1, actualProfiles.getTotalPages());

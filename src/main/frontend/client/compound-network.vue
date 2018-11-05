@@ -1,5 +1,8 @@
 <template>
-    <div ref="networkDiv" class="compound-network"></div>
+    <div class="compound-network-wrapper">
+        <loading-mask v-if="loading"></loading-mask>
+        <div v-show="!loading" ref="networkDiv"></div>
+    </div>
 </template>
 
 <script lang="ts">
@@ -10,8 +13,9 @@ import { Color, Data, DataSet, Edge, Network, Node, Options } from 'vis';
 import restApi from './rest-api';
 import { ActivityProfile, Compound, ErrorResponse } from './rak';
 import Toaster from './toaster';
+import LoadingMask from './loading-mask.vue';
 
-@Component
+@Component({ components: { LoadingMask } })
 export default class CompoundNetwork extends Vue {
 
     @Prop({ required: true })
@@ -19,6 +23,8 @@ export default class CompoundNetwork extends Vue {
 
     @Prop({ required: true })
     private filters: any;
+
+    private loading: boolean = false;
 
     private compoundColor: Color = {
         border: '#b0b09f',
@@ -41,101 +47,109 @@ export default class CompoundNetwork extends Vue {
             return;
         }
 
+        this.loading = true;
+
         const compoundNames: string[] = this.compounds.map((compound: Compound) => {
             return compound.compoundName;
         });
 
-        restApi.getAllActivityProfiles(compoundNames, this.filters)
-            .then((activityProfiles: ActivityProfile[]) => {
+        setTimeout(() => {
+            restApi.getAllActivityProfiles(compoundNames, this.filters)
+                .then((activityProfiles: ActivityProfile[]) => {
 
-                const matchingProfiles: ActivityProfile[] = activityProfiles
-                    .filter((profile: ActivityProfile) => {
-                        return profile.percentControl < 50;
-                    })
-                    .sort((a: ActivityProfile, b: ActivityProfile) => {
-                        if (b.percentControl < a.percentControl) {
-                            return -1;
-                        }
-                        return b.percentControl > a.percentControl ? 1 : 0;
+                    const matchingProfiles: ActivityProfile[] = activityProfiles
+                        .sort((a: ActivityProfile, b: ActivityProfile) => {
+                            if (b.percentControl < a.percentControl) {
+                                return -1;
+                            }
+                            return b.percentControl > a.percentControl ? 1 : 0;
+                        });
+
+                    //// Keep network more responsive by showing only top 100 matches for now
+                    //if (matchingProfiles.length > 51) {
+                    //    matchingProfiles.length = 51;
+                    //}
+
+                    const nameToNodeMap: any = {};
+
+                    // Start with nodes for each compound
+                    const items: Node[] = [];
+                    compoundNames.forEach((compoundName: string) => {
+                        const image: string = `api/compounds/images/${compoundName}?width=44&height=44`;
+                        items.push({
+                            id: items.length + 1, label: compoundName,
+                            image: image, color: this.compoundColor
+                        });
+                        nameToNodeMap[ compoundName ] = items.length;
                     });
 
-                //// Keep network more responsive by showing only top 100 matches for now
-                //if (matchingProfiles.length > 51) {
-                //    matchingProfiles.length = 51;
-                //}
+                    // Add a node for each kinase
+                    const edges: Edge[] = [];
+                    matchingProfiles.forEach((ap: ActivityProfile) => {
 
-                const nameToNodeMap: any = {};
+                        const discoverx: string = ap.kinase.discoverxGeneSymbol;
+                        let kinaseNodeIndex: number = nameToNodeMap[ discoverx ] || -1;
 
-                // Start with nodes for each compound
-                const items: Node[] = [];
-                compoundNames.forEach((compoundName: string) => {
-                    const image: string = `api/compounds/images/${compoundName}?width=44&height=44`;
-                    items.push({ id: items.length + 1, label: compoundName,
-                            image: image, color: this.compoundColor });
-                    nameToNodeMap[compoundName] = items.length;
-                });
-
-                // Add a node for each kinase
-                const edges: Edge[] = [];
-                matchingProfiles.forEach((ap: ActivityProfile) => {
-
-                    const discoverx: string = ap.kinase.discoverxGeneSymbol;
-                    let kinaseNodeIndex: number = nameToNodeMap[discoverx] || -1;
-
-                    if (kinaseNodeIndex === -1) {
-                        const image: string = `img/molecule.svg`;
-                        items.push({
-                            id: items.length + 1, label: discoverx,
-                            image: image, color: this.kinaseColor
-                        });
-                        kinaseNodeIndex = nameToNodeMap[discoverx] = items.length;
-                    }
-
-                    edges.push({ from: nameToNodeMap[ap.compoundName], to: kinaseNodeIndex });
-                });
-
-                const nodes: DataSet<Node> = new DataSet<Node>(items);
-                const edgeData: DataSet<Edge> = new DataSet<Edge>(edges);
-
-                // create a network
-                const container: HTMLElement = this.$refs.networkDiv as HTMLElement;
-
-                // provide the data in the vis format
-                const data: Data = {
-                    nodes: nodes,
-                    edges: edgeData
-                };
-                const options: Options = {
-                    nodes: {
-                        shape: 'circularImage',
-                        size: 48,
-                        borderWidth: 3
-                    },
-                    edges: {
-                        color: '#d0d0d0',
-                        value: 8
-                    },
-                    layout: {
-                        improvedLayout: false
-                    },
-                    physics: {
-                        repulsion: {
-                            nodeDistance: 200
+                        if (kinaseNodeIndex === -1) {
+                            const image: string = `img/molecule.svg`;
+                            items.push({
+                                id: items.length + 1, label: discoverx,
+                                image: image, color: this.kinaseColor
+                            });
+                            kinaseNodeIndex = nameToNodeMap[ discoverx ] = items.length;
                         }
-                    }
-                };
 
-                const network: Network = new Network(container, data, options);
+                        edges.push({ from: nameToNodeMap[ ap.compoundName ], to: kinaseNodeIndex });
+                    });
 
-                network.on('oncontext', (params: any) => {
-                    params.event.preventDefault();
-                    console.log(`Selected nodes: ${network.getSelectedNodes()}, ` +
-                        `selected edges: ${network.getSelectedEdges()}`);
+                    const nodes: DataSet<Node> = new DataSet<Node>(items);
+                    const edgeData: DataSet<Edge> = new DataSet<Edge>(edges);
+
+                    // create a network
+                    const container: HTMLElement = this.$refs.networkDiv as HTMLElement;
+
+                    // provide the data in the vis format
+                    const data: Data = {
+                        nodes: nodes,
+                        edges: edgeData
+                    };
+                    const options: Options = {
+                        nodes: {
+                            shape: 'circularImage',
+                            size: 48,
+                            borderWidth: 3
+                        },
+                        edges: {
+                            color: '#d0d0d0',
+                            value: 8
+                        },
+                        layout: {
+                            improvedLayout: false
+                        },
+                        physics: {
+                            repulsion: {
+                                nodeDistance: 200
+                            }
+                        }
+                    };
+
+                    this.loading = false;
+
+                    setTimeout(() => {
+                        const network: Network = new Network(container, data, options);
+
+                        network.on('oncontext', (params: any) => {
+                            params.event.preventDefault();
+                            console.log(`Selected nodes: ${network.getSelectedNodes()}, ` +
+                                `selected edges: ${network.getSelectedEdges()}`);
+                        });
+                    }, 0);
+                })
+                .catch((e: ErrorResponse) => {
+                    this.loading = false;
+                    Toaster.error(e.message);
                 });
-            })
-            .catch((e: ErrorResponse) => {
-                Toaster.error(e.message);
-            });
+        }, 3000);
     }
 
     @Watch('compounds')
