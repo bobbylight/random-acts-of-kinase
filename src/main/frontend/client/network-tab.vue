@@ -1,7 +1,7 @@
 <template>
     <v-container grid-list-md class="page-wrapper">
 
-        <v-layout row wrap class="compound-network-wrapper">
+        <v-layout row wrap class="network-tab-wrapper">
 
             <section-header>Network</section-header>
 
@@ -18,6 +18,7 @@
                                                 :items="compounds"
                                                 :search-input.sync="search"
                                                 v-model="selectedCompounds"
+                                                @change="selectedCompoundsChanged"
                                                 cache-items
                                                 hide-no-data
                                                 hide-details
@@ -103,7 +104,7 @@ export default class CompoundNetworkTab extends Vue {
     private networkCompounds: Compound[] = [];
     private search: string = '';
     private selectedCompounds: Compound[] = [];
-    private formIncomplete: boolean = false;
+    private formInvalid: boolean = true;
 
     private numericValidationRules(max: number): any[] {
 
@@ -146,6 +147,7 @@ export default class CompoundNetworkTab extends Vue {
         this.selectedCompounds = this.selectedCompounds.filter((c2: Compound) => {
             return c2.compoundName !== compound.compoundName;
         });
+        this.formInvalid = !this.selectedCompounds.length;
     }
 
     rerender() {
@@ -154,6 +156,16 @@ export default class CompoundNetworkTab extends Vue {
             activity: this.percentControl,
             kd: this.kd
         };
+    }
+
+    /**
+     * Fires when new values are added.  Values being removed by x-ing out a Chip do not
+     * call this method; see removeCompound() for that code path.
+     *
+     * @param newValue The new array of selected compounds.
+     */
+    selectedCompoundsChanged(newValue: Compound[]) {
+        this.formInvalid = !newValue.length;
     }
 
     private updateDropdown() {

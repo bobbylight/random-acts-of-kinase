@@ -1,7 +1,8 @@
 <template functional>
     <div class="loading-mask">
         <v-progress-circular
-            :size="50"
+            :size="64"
+            :width="8"
             color="amber"
             indeterminate
         ></v-progress-circular>
