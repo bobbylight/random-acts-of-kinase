@@ -6,79 +6,104 @@
             <section-header>Network</section-header>
 
             <v-flex xs12 class="card-vertical-spacing">
-                <v-expansion-panel class="expansion-panel-no-left-margin" :value="0">
-                    <v-expansion-panel-content>
-                        <div slot="header">
-                            <h3 class="headline">Network Properties</h3>
-                        </div>
-                        <v-card>
-                            <v-card-text>
+                <v-card class="expansion-panel-no-left-margin">
+                    <actionable-card-title title="Compound Network"
+                            sub-title="View compounds and activity profiles in a network diagram">
+                        <v-tooltip right>
+                            <v-menu
+                                slot="activator"
+                                :close-on-content-click="false"
+                            >
+                                <v-btn fab flat slot="activator">
+                                    <v-icon>settings</v-icon>
+                                </v-btn>
 
-                                <v-autocomplete :loading="loading"
-                                                :items="compounds"
-                                                :search-input.sync="search"
-                                                v-model="selectedCompounds"
-                                                @change="selectedCompoundsChanged"
-                                                cache-items
-                                                hide-no-data
-                                                hide-details
-                                                label="Compounds"
-                                                chips
-                                                item-text="compoundName"
-                                                :return-object="true"
-                                                multiple>
-                                    <template slot="selection" slot-scope="data">
-                                        <v-chip :selected="data.selected"
-                                                close
-                                                class="chip--select-multi"
-                                                @input="removeCompound(data.item)">
-                                            {{ data.item.compoundName }}
-                                        </v-chip>
-                                    </template>
-                                </v-autocomplete>
+                                <v-card class="network-properties-popup">
+                                    <v-card-title class="network-properties-popup-title">
+                                        <div class="headline">Network Properties</div>
+                                    </v-card-title>
+                                    <v-card-text class="network-properties-popup-content">
+                                        <v-container grid-list-md class="network-properties-popup-container">
+                                            <v-layout row wrap>
+                                                <v-flex xs12>
+                                                    <v-switch
+                                                        :label="`${physicsEnabled ? 'Physics' : 'No physics'}`"
+                                                        v-model="physicsEnabled"></v-switch>
+                                                </v-flex>
+                                                <v-flex xs12>
+                                                    Other network properties will go here.
+                                                </v-flex>
+                                            </v-layout>
+                                        </v-container>
+                                    </v-card-text>
+                                </v-card>
+                            </v-menu>
+                            <span>Network Properties</span>
+                        </v-tooltip>
+                    </actionable-card-title>
+                    <v-card-text>
+                        <v-layout row wrap>
 
-                                <v-layout row>
-                                    <v-flex xs6>
-                                        <v-text-field type="number" label="% Control" class="search-field right-aligned"
-                                                      :rules="numericValidationRules(100)" v-model="percentControl"
-                                                      :step="1" :min="0" :max="100" suffix="%">
-                                        </v-text-field>
-                                    </v-flex>
-                                    <v-flex xs6>
-                                        <v-text-field :disabled="true"
-                                                      type="number" label="Kd" class="search-field right-aligned"
-                                                      :rules="numericValidationRules(10000)" v-model="kd"
-                                                      :step="1" :min="0" :max="10000" suffix="nM">
-                                        </v-text-field>
-                                    </v-flex>
-                                </v-layout>
+                            <v-flex xs12 px-4>
+                                <v-form ref="form" lazy-validation>
+                                    <v-autocomplete :loading="loading"
+                                                    :items="compounds"
+                                                    :search-input.sync="search"
+                                                    v-model="selectedCompounds"
+                                                    @change="selectedCompoundsChanged"
+                                                    cache-items
+                                                    hide-no-data
+                                                    label="Compounds"
+                                                    chips
+                                                    item-text="compoundName"
+                                                    :return-object="true"
+                                                    multiple
+                                                    :rules="compoundDropdownRules()">
+                                        <template slot="selection" slot-scope="data">
+                                            <v-chip :selected="data.selected"
+                                                    close
+                                                    class="chip--select-multi"
+                                                    @input="removeCompound(data.item)">
+                                                {{ data.item.compoundName }}
+                                            </v-chip>
+                                        </template>
+                                    </v-autocomplete>
+                                </v-form>
+                            </v-flex>
+                        </v-layout>
 
+                        <v-layout row wrap>
+                            <v-flex xs6 px-4>
+                                <v-slider :min="1" v-model="percentControl"
+                                          :validate-on-blur="true"
+                                          :thumb-label="true" label="% Control"></v-slider>
+                            </v-flex>
+                            <v-flex xs6 px-4>
+                                <v-text-field :disabled="true"
+                                              type="number" label="Kd" class="search-field right-aligned"
+                                              :rules="numericValidationRules(10000)" v-model="kd"
+                                              :step="1" :min="0" :max="10000" suffix="nM">
+                                </v-text-field>
+                            </v-flex>
+
+
+                            <v-flex xs12 px-4>
                                 <v-card-actions>
                                     <v-spacer></v-spacer>
                                     <v-btn :disabled="formInvalid" color="primary" @click="rerender">
                                         Rerender
                                     </v-btn>
                                 </v-card-actions>
-                            </v-card-text>
-                        </v-card>
-                    </v-expansion-panel-content>
-                </v-expansion-panel>
-            </v-flex>
+                            </v-flex>
 
-            <v-flex xs12 class="card-vertical-spacing">
-                <v-expansion-panel class="expansion-panel-no-left-margin" :value="0">
-                    <v-expansion-panel-content>
-                        <div slot="header">
-                            <h3 class="headline">Network View</h3>
-                        </div>
-                        <v-card>
-                            <v-card-text>
+                            <v-flex xs12>
                                 <compound-network :compounds="networkCompounds"
-                                                  :filters="filters"></compound-network>
-                            </v-card-text>
-                        </v-card>
-                    </v-expansion-panel-content>
-                </v-expansion-panel>
+                                                  :physics-enabled="physicsEnabled"
+                                                  :percent-control="percentControl"></compound-network>
+                            </v-flex>
+                        </v-layout>
+                    </v-card-text>
+                </v-card>
             </v-flex>
         </v-layout>
     </v-container>
@@ -92,21 +117,34 @@ import SectionHeader from './header.vue';
 import CompoundNetwork from './compound-network.vue';
 import restApi from './rest-api';
 import { Compound, PagedDataRep, SearchFilter } from './rak';
+import ActionableCardTitle from './actionable-card-title.vue';
 
-@Component({ components: { SectionHeader, CompoundNetwork } })
+const MAX_COMPOUND_COUNT: number = 6;
+
+@Component({ components: { ActionableCardTitle, SectionHeader, CompoundNetwork } })
 export default class CompoundNetworkTab extends Vue {
 
     private loading: boolean = false;
     private percentControl: string = '20';
     private kd: string = '';
-    private filters: any = {};
     private compounds: Compound[] = [];
     private networkCompounds: Compound[] = [];
     private search: string = '';
     private selectedCompounds: Compound[] = [];
     private formInvalid: boolean = true;
+    private physicsEnabled: boolean = true;
 
-    private numericValidationRules(max: number): any[] {
+    private compoundDropdownRules(): Function[] {
+
+        return [
+
+            (value: Compound[]) => {
+                return value.length <= MAX_COMPOUND_COUNT || `Can't render more than ${MAX_COMPOUND_COUNT} compounds`;
+            }
+        ];
+    }
+
+    private numericValidationRules(max: number): Function[] {
 
         return [
 
@@ -128,14 +166,6 @@ export default class CompoundNetworkTab extends Vue {
         return !text || !text.trim || !text.trim().length;
     }
 
-    mounted() {
-        // Set initial values
-        this.filters = {
-            activity: this.percentControl,
-            kd: this.kd
-        };
-    }
-
     @Watch('search')
     private onSearchChanged(newVal: string) {
         if (newVal) {
@@ -147,15 +177,14 @@ export default class CompoundNetworkTab extends Vue {
         this.selectedCompounds = this.selectedCompounds.filter((c2: Compound) => {
             return c2.compoundName !== compound.compoundName;
         });
-        this.formInvalid = !this.selectedCompounds.length;
+        // form.validate() needs one update cycle to see new value of this.selectedCompounds
+        setInterval(() => {
+            this.updateSubmitButtonState();
+        }, 0);
     }
 
     rerender() {
         this.networkCompounds = this.selectedCompounds.slice();
-        this.filters = {
-            activity: this.percentControl,
-            kd: this.kd
-        };
     }
 
     /**
@@ -165,7 +194,12 @@ export default class CompoundNetworkTab extends Vue {
      * @param newValue The new array of selected compounds.
      */
     selectedCompoundsChanged(newValue: Compound[]) {
-        this.formInvalid = !newValue.length;
+        this.updateSubmitButtonState();
+    }
+
+    private updateSubmitButtonState() {
+        console.log('Updating submit button...');
+        this.formInvalid = !(this.$refs.form as any).validate();
     }
 
     private updateDropdown() {
@@ -189,3 +223,23 @@ export default class CompoundNetworkTab extends Vue {
     }
 }
 </script>
+
+<style lang="less">
+.network-properties-popup {
+
+    z-index: 100;
+
+    .network-properties-popup-title {
+        padding-bottom: 0;
+    }
+
+    .network-properties-popup-content {
+
+        padding: 0;
+
+        .network-properties-popup-container {
+            padding-top: 0;
+        }
+    }
+}
+</style>

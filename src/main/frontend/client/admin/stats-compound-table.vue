@@ -3,22 +3,13 @@
 
         <v-card class="stats-missing-data-card-padding">
 
-            <v-card-title primary-title>
-                <div class="title-content">
-                    <div>
-                        <h3 class="headline">{{title}}</h3>
-                        <div>{{subtitle}}</div>
-                    </div>
-
-                    <div class="admin-card-button-area">
-                        <v-text-field label="Filter by compound" class="stats-filter-field d-inline-block"
-                                      @input="computeFullUrl"
-                                      v-model="compoundNameFilter"></v-text-field>
-                        <download-button :url="fullUrl"
-                                         :download-file-name="tweakedDownloadFileName"></download-button>
-                    </div>
-                </div>
-            </v-card-title>
+            <actionable-card-title :title="title" :sub-title="subtitle">
+                <v-text-field label="Filter by compound" class="stats-filter-field d-inline-block"
+                              @input="computeFullUrl"
+                              v-model="compoundNameFilter"></v-text-field>
+                <download-button :url="fullUrl"
+                                 :download-file-name="tweakedDownloadFileName"></download-button>
+            </actionable-card-title>
 
             <v-card-text>
                 <compounds-table :url="fullUrl" :columnInfo="tableColumnInfo"></compounds-table>
@@ -34,8 +25,9 @@ import CompoundsTable, { ColumnInfo } from './compounds-table.vue';
 import DownloadButton from './download-button.vue';
 import SectionHeader from '../header.vue';
 import { Prop } from 'vue-property-decorator';
+import ActionableCardTitle from '../actionable-card-title.vue';
 
-@Component({ components: { CompoundsTable, DownloadButton, SectionHeader } })
+@Component({ components: { ActionableCardTitle, CompoundsTable, DownloadButton, SectionHeader } })
 export default class StatsCompoundTable extends Vue {
 
     @Prop({ required: true })
@@ -87,19 +79,5 @@ export default class StatsCompoundTable extends Vue {
 <style lang="less">
 .stats-missing-data-card-padding {
     margin-top: 1rem;
-}
-.title-content {
-    position: relative;
-    width: 100%;
-
-    .admin-card-button-area {
-        position: absolute;
-        top: 0;
-        right: 0;
-
-        .stats-filter-field {
-            margin-right: 1rem;
-        }
-    }
 }
 </style>

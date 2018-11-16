@@ -90,8 +90,8 @@ export class RestApi {
         rakUtil.programmaticallyClickLink(url);
     }
 
-    getActivityProfiles(page: number, size: number, filters: any,
-                        sortParam: string): Promise<PagedDataRep<ActivityProfile>> {
+    getActivityProfiles(page: number, size: number, filters: any = {},
+                        sortParam: string | null = null): Promise<PagedDataRep<ActivityProfile>> {
 
         let url: string = `api/activityProfiles?page=${page}&size=${size}`;
         if (filters.inhibitor) {
@@ -113,7 +113,7 @@ export class RestApi {
             });
     }
 
-    getAllActivityProfiles(compoundNames: string[], filters: any): Promise<ActivityProfile[]> {
+    getAllActivityProfiles(compoundNames: string[], filters: any = {}): Promise<ActivityProfile[]> {
 
         const max: number = 100;
         const promises: AxiosPromise<any>[] = [];
