@@ -68,36 +68,6 @@ public class ActivityProfileControllerTest {
     }
 
     @Test(expected = BadRequestException.class)
-    public void testGetActivityProfiles_kinaseWithoutActivity() throws Exception {
-
-        try {
-            mockMvc.perform(MockMvcRequestBuilders.get("/api/activityProfiles")
-                .param("kinaseDiscoverx", KINASE_DISCOVERX)
-                .param("compound", COMPOUND_NAME)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-            ).andExpect(MockMvcResultMatchers.status().isOk());
-        } catch (NestedServletException e) {
-            throw (Exception)e.getCause();
-        }
-    }
-
-    @Test(expected = BadRequestException.class)
-    public void testGetActivityProfiles_activityWithoutKinase() throws Exception {
-
-        try {
-            mockMvc.perform(MockMvcRequestBuilders.get("/api/activityProfiles")
-                .param("activity", "3")
-                .param("compound", COMPOUND_NAME)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-            );
-        } catch (NestedServletException e) {
-            throw (Exception)e.getCause();
-        }
-    }
-
-    @Test(expected = BadRequestException.class)
     public void testGetActivityProfiles_activityLessThanZero() throws Exception {
 
         try {

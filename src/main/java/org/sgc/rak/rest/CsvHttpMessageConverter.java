@@ -17,6 +17,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Stream;
 
 import org.sgc.rak.reps.PagedDataRep;
+import org.sgc.rak.util.SuppressFBWarnings;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.MediaType;
@@ -85,6 +86,7 @@ public final class CsvHttpMessageConverter extends AbstractGenericHttpMessageCon
     }
 
     @Override
+    @SuppressFBWarnings("RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE") // False positive
     protected void writeInternal(Object instance, Type type, HttpOutputMessage outputMessage) throws IOException {
 
         // Not sure if type will ever be null for us, and if it is, what should we do?

@@ -71,7 +71,7 @@ export default class RichTextEditor extends Vue {
             [ 'clean' ], // Remove formatting
         ];
 
-        this.$el.style.height = this.height;
+        (this.$el as HTMLElement).style.height = this.height;
 
         this.editor = new Quill(this.$el, {
             modules: { toolbar: toolbarOptions },

@@ -38,6 +38,10 @@ class ActivityProfileController {
      *
      * @param compound A compound name.  If specified, only activity profiles about
      *        this compound/inhibitor will be returned.
+     * @param kinaseDiscoverx The kinase involved in the activity profile.  This may be {@code null} to not limit
+     *        the search to one particular kinase.
+     * @param activity The value that the percent control of the activity profile must be less than or
+     *        equal to. This may be {@code null} to not restrict by percent control.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of kinase activity profiles.
      */
