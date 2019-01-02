@@ -14,7 +14,12 @@ const store: Store<RakState> = new Store({
             kinase: '',
             activity: '',
             kd: '',
-            activityOrKd: 'percentControl'
+            activityOrKd: 'percentControl' as SearchByKinaseSecondComponent
+        },
+        nanoBretFilters: {
+            inhibitor: '',
+            kinase: '',
+            ic50: 1000
         },
         lastAdminRouteName: 'import-compounds'
     },
@@ -42,6 +47,15 @@ const store: Store<RakState> = new Store({
         },
         setFilterType(state: RakState, type: SearchByKinaseSecondComponent) {
             state.filters.activityOrKd = type;
+        },
+        setNanoBretFilterByInhibitor(state: RakState, inhibitor: string) {
+            state.nanoBretFilters.inhibitor = inhibitor;
+        },
+        setNanoBretFilterByKinase(state: RakState, kinase: string) {
+            state.nanoBretFilters.kinase = kinase;
+        },
+        setNanoBretFilterByIc50(state: RakState, ic50: number) {
+            state.nanoBretFilters.ic50 = ic50;
         },
         setLastAdminRouteName(state: RakState, routeName: string) {
             state.lastAdminRouteName = routeName;

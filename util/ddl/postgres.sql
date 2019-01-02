@@ -36,6 +36,7 @@ WITH ( OIDS = FALSE );
 CREATE INDEX kinase_discoverx_gene_symbol_idx ON :schema.kinase (discoverx_gene_symbol);
 CREATE INDEX kinase_discoverx_gene_symbol_lower_idx ON :schema.kinase (lower(discoverx_gene_symbol));
 
+
 DROP TABLE IF EXISTS :schema.kinase_activity_profile CASCADE;
 CREATE TABLE :schema.kinase_activity_profile (
   id serial,
@@ -45,9 +46,9 @@ CREATE TABLE :schema.kinase_activity_profile (
   compound_concentration integer,
   kd numeric,
   CONSTRAINT kinase_activity_profile_pkey PRIMARY KEY (id),
-  CONSTRAINT compoundfk FOREIGN KEY (compound_nm)
+  CONSTRAINT kinase_activity_profile_compound_fk FOREIGN KEY (compound_nm)
   REFERENCES :schema.compound (compound_nm) ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT kinasefk FOREIGN KEY (kinase)
+  CONSTRAINT kinase_activity_profile_kinase_fk FOREIGN KEY (kinase)
   REFERENCES :schema.kinase (id) ON UPDATE NO ACTION ON DELETE NO ACTION
 )
 WITH ( OIDS = FALSE );
@@ -56,6 +57,25 @@ CREATE INDEX kinase_activity_profile_compound_nm_idx ON :schema.kinase_activity_
 CREATE INDEX kinase_activity_profile_compound_nm_lower_idx ON :schema.kinase_activity_profile (lower(compound_nm));
 CREATE INDEX kinase_activity_profile_kinase_idx on :schema.kinase_activity_profile (kinase);
 CREATE INDEX kinase_activity_profile_percent_control_idx on :schema.kinase_activity_profile (percent_control);
+
+
+DROP TABLE IF EXISTS :schema.nanobret_activity_profile CASCADE;
+CREATE TABLE :schema.nanobret_activity_profile (
+  id serial,
+  compound_nm character varying(100) NOT NULL,
+  kinase integer NOT NULL,
+  ic50 numeric,
+  CONSTRAINT nanobret_activity_profile_pkey PRIMARY KEY (id),
+  CONSTRAINT nanobret_activity_profile_compound_fk FOREIGN KEY (compound_nm)
+  REFERENCES :schema.compound (compound_nm) ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT nanobret_activity_profile_kinase_fk FOREIGN KEY (kinase)
+  REFERENCES :schema.kinase (id) ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH ( OIDS = FALSE );
+
+CREATE INDEX nanobret_activity_profile_compound_nm_idx ON :schema.nanobret_activity_profile (compound_nm);
+CREATE INDEX nanobret_activity_profile_compound_nm_lower_idx ON :schema.nanobret_activity_profile (lower(compound_nm));
+CREATE INDEX nanobret_activity_profile_kinase_idx on :schema.nanobret_activity_profile (kinase);
 
 
 DROP TABLE IF EXISTS :schema.blog_post CASCADE;

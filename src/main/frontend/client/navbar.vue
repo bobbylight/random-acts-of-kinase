@@ -11,6 +11,10 @@
                 Search
             </v-btn>
 
+            <v-btn flat v-bind:class="{ 'active-toolbar-item': isActiveTab('/nanoBretSearch') }" @click="setActiveTab('nanoBretSearch')">
+                NanoBRET
+            </v-btn>
+
             <v-btn flat v-bind:class="{ 'active-toolbar-item': isActiveTab('/blog') }" @click="setActiveTab('blog')">
                 News
             </v-btn>

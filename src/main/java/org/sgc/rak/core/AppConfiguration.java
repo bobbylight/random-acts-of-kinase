@@ -4,8 +4,10 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import org.sgc.rak.dao.ActivityProfileDao;
 import org.sgc.rak.dao.CompoundDao;
 import org.sgc.rak.dao.KinaseDao;
+import org.sgc.rak.dao.NanoBretActivityProfileDao;
 import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.repositories.ActivityProfileRepository;
+import org.sgc.rak.repositories.NanoBretActivityProfileRepository;
 import org.sgc.rak.rest.CsvHttpMessageConverter;
 import org.sgc.rak.util.ImageTranscoder;
 import org.springframework.context.annotation.Bean;
@@ -68,5 +70,10 @@ public class AppConfiguration implements WebMvcConfigurer {
         ResourceBundleMessageSource source = new ResourceBundleMessageSource();
         source.setBasename("org.sgc.rak.i18n.Messages");
         return new Messages(source);
+    }
+
+    @Bean
+    public NanoBretActivityProfileDao nanoBretActivityProfileDao(NanoBretActivityProfileRepository repository) {
+        return new NanoBretActivityProfileDao(repository);
     }
 }

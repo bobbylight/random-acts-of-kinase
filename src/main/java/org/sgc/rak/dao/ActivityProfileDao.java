@@ -26,7 +26,7 @@ public class ActivityProfileDao {
      * Fetches all kinase activity profiles that match one of a number of compound name/discoverx pairs.
      *
      * @param compoundNames The compound names to check for.  This should be the same length as {@code discoverxes}.
-     * @param discoerxes The discoverx gene symbols to check for.  This hsould be the same length as
+     * @param discoerxes The discoverx gene symbols to check for.  This should be the same length as
      *        {@code compoundNames}.
      * @return The found activity profiles.  This may be empty, but will never be {@code null}.
      */

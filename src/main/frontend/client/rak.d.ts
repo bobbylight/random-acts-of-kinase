@@ -66,6 +66,12 @@ export interface Kinase {
     discoverxUrl: string;
 }
 
+export interface NanoBretSearchFilter {
+    inhibitor: string;
+    kinase: string;
+    ic50: number;
+}
+
 export interface ObjectImportRep {
     fieldStatuses: FieldStatus[][];
 }
@@ -88,6 +94,7 @@ export interface RakState {
     lightboxImage: string | null;
     lightboxTitle: string | undefined;
     filters: SearchFilter;
+    nanoBretFilters: NanoBretSearchFilter;
     lastAdminRouteName: string;
 }
 

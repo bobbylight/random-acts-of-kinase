@@ -51,7 +51,7 @@ export default class Search extends Vue {
     }
 
     @Watch('filters', { deep: true })
-    private onKinaseFilterChanged(newFilter: string) {
+    private onFiltersChanged(newFilter: string) {
         // We don't give these values defaults initially so they only show up if a kinase is selected
         if (this.filters.activityOrKd === 'percentControl' && !this.filters.activity) {
             console.log('Defaulting activity to 10');
@@ -75,28 +75,3 @@ export default class Search extends Vue {
     }
 }
 </script>
-
-<style lang="less">
-@import '../../styles/app-variables';
-
-.search-wrapper {
-
-    height: 100%;
-    background: white;
-
-    .search-part-layout {
-        max-width: @max-width;
-    }
-
-    .search-filter-wrapper {
-
-        background: #f5f5f5;
-        border-bottom: 1px solid lightgray;
-        padding: 2rem 6rem;
-
-        .ui.header {
-            margin-top: 0;
-        }
-    }
-}
-</style>

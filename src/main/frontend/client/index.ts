@@ -89,6 +89,7 @@ import Vuetify, {
 
 import Home from './home.vue';
 import Search from './search/search.vue';
+import NanoBretSearch from './nanobret/nanobret-search.vue';
 import Blog from './blog.vue';
 import NetworkTab from './network-tab.vue';
 import Compound from './compound.vue';
@@ -175,6 +176,11 @@ window.onload = () => {
             path: '/search',
             name: 'search',
             component: Search
+        },
+        {
+            path: '/nanoBretSearch',
+            name: 'nanoBretSearch',
+            component: NanoBretSearch
         },
         {
             path: '/blog',

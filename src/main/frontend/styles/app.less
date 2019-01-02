@@ -39,3 +39,25 @@ ul {
         text-decoration: underline;
     }
 }
+
+// We have more than one search component that uses these styles
+.search-wrapper {
+
+    height: 100%;
+    background: white;
+
+    .search-part-layout {
+        max-width: @max-width;
+    }
+
+    .search-filter-wrapper {
+
+        background: #f5f5f5;
+        border-bottom: 1px solid lightgray;
+        padding: 2rem 6rem;
+
+        .ui.header {
+            margin-top: 0;
+        }
+    }
+}

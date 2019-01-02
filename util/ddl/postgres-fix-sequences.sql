@@ -10,6 +10,9 @@ SELECT setval(pg_get_serial_sequence('kinase', 'id'),
 SELECT setval(pg_get_serial_sequence('kinase_activity_profile', 'id'),
               COALESCE((SELECT MAX(id)+1 FROM :schema.kinase_activity_profile), 1), false);
 
+SELECT setval(pg_get_serial_sequence('nanobret_activity_profile', 'id'),
+              COALESCE((SELECT MAX(id)+1 FROM :schema.nanobret_activity_profile), 1), false);
+
 SELECT setval(pg_get_serial_sequence('blog_post', 'blog_post_id'),
               COALESCE((SELECT MAX(blog_post_id)+1 FROM :schema.blog_post), 1), false);
 
