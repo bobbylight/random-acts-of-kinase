@@ -30,6 +30,14 @@ public class KinaseTest {
     }
 
     @Test
+    public void testGetSetNanosynGeneSymbol() {
+        Kinase kinase = new Kinase();
+        Assert.assertNull(kinase.getNanosynGeneSymbol());
+        kinase.setNanosynGeneSymbol("foo");
+        Assert.assertEquals("foo", kinase.getNanosynGeneSymbol());
+    }
+
+    @Test
     public void testGetSetDiscoverxUrl() {
         Kinase kinase = new Kinase();
         Assert.assertNull(kinase.getDiscoverxUrl());
@@ -39,7 +47,8 @@ public class KinaseTest {
 
     @Test
     public void testToString() {
-        String expected = "Kinase[id=0,discoverxGeneSymbol=<null>,entrezGeneSymbol=<null>,discoverxUrl=<null>]";
+        String expected = "Kinase[id=0,discoverxGeneSymbol=<null>,entrezGeneSymbol=<null>," +
+            "nanosynGeneSymbol=<null>,discoverxUrl=<null>]";
         Assert.assertEquals(expected, new Kinase().toString());
     }
 }

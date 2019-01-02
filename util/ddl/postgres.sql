@@ -24,8 +24,9 @@ CREATE INDEX compound_hidden_idx on :schema.compound (hidden);
 DROP TABLE IF EXISTS :schema.kinase CASCADE;
 CREATE TABLE :schema.kinase (
   id serial,
-  discoverx_gene_symbol character varying(100) NOT NULL,
+  discoverx_gene_symbol character varying(100),
   entrez_gene_symbol character varying(100) NOT NULL,
+  nanosyn_gene_symbol character varying(100),
   discoverx_url varchar(2048) UNIQUE NOT NULL,
   CONSTRAINT kinase_pkey PRIMARY KEY (id),
   CONSTRAINT kinase_discoverx_gene_symbol_entrez_gene_symbol_key UNIQUE (discoverx_gene_symbol, entrez_gene_symbol)
