@@ -119,40 +119,34 @@ public class CompoundService {
         return compoundDao.getCompounds(compoundNamePart, pageInfo, includeHidden);
     }
 
-    public Page<Compound> getCompoundsByKinaseAndActivity(String kinase, double activity, Pageable pageInfo) {
+    public Page<Compound> getCompoundsByKinaseAndActivity(String kinaseEntrez, double activity, Pageable pageInfo) {
 
-        Kinase kinase2 = kinaseService.getKinase(kinase);
-        if (kinase2 == null) {
-            throw new NotFoundException(messages.get("error.noSuchKinase", kinase));
-        }
-        long kinaseId = kinase2.getId();
+        List<Long> kinaseIds = getKinaseRecordIds(kinaseEntrez);
 
         Page<ActivityProfile> profiles = activityProfileRepository.
-            getActivityProfilesByKinaseIdAndPercentControlLessThanEqual(kinaseId, activity, pageInfo);
+            getActivityProfilesByKinaseIdInAndPercentControlLessThanEqual(kinaseIds, activity, pageInfo);
 
-        List<String> compoundNames = profiles.getContent().stream().map(ActivityProfile::getCompoundName)
-            .collect(Collectors.toList());
-
-        List<Compound> compounds = compoundDao.getCompounds(compoundNames);
+        List<Compound> compounds = getCompoundsFromActivityProfiles(profiles);
         return new PageImpl<>(compounds, pageInfo, profiles.getTotalElements());
     }
 
-    public Page<Compound> getCompoundsByKinaseAndKd(String kinase, double kd, Pageable pageInfo) {
+    public Page<Compound> getCompoundsByKinaseAndKd(String kinaseEntrez, double kd, Pageable pageInfo) {
 
-        Kinase kinase2 = kinaseService.getKinase(kinase);
-        if (kinase2 == null) {
-            throw new NotFoundException(messages.get("error.noSuchKinase", kinase));
-        }
-        long kinaseId = kinase2.getId();
+        List<Long> kinaseIds = getKinaseRecordIds(kinaseEntrez);
 
         Page<ActivityProfile> profiles = activityProfileRepository.
-            getActivityProfilesByKinaseIdAndKdLessThanEqual(kinaseId, kd, pageInfo);
+            getActivityProfilesByKinaseIdInAndKdLessThanEqual(kinaseIds, kd, pageInfo);
+
+        List<Compound> compounds = getCompoundsFromActivityProfiles(profiles);
+        return new PageImpl<>(compounds, pageInfo, profiles.getTotalElements());
+    }
+
+    private List<Compound> getCompoundsFromActivityProfiles(Page<ActivityProfile> profiles) {
 
         List<String> compoundNames = profiles.getContent().stream().map(ActivityProfile::getCompoundName)
             .collect(Collectors.toList());
 
-        List<Compound> compounds = compoundDao.getCompounds(compoundNames);
-        return new PageImpl<>(compounds, pageInfo, profiles.getTotalElements());
+        return compoundDao.getCompounds(compoundNames);
     }
 
     /**
@@ -208,6 +202,18 @@ public class CompoundService {
      */
     public Page<Compound> getIncompleteCompounds(String compound, Pageable pageInfo) {
         return compoundDao.getIncompleteCompounds(compound, pageInfo);
+    }
+
+    private List<Long> getKinaseRecordIds(String kinaseEntrez) {
+
+        List<Kinase> kinaseRecords = kinaseService.getKinase(kinaseEntrez);
+        if (kinaseRecords.isEmpty()) {
+            throw new NotFoundException(messages.get("error.noSuchKinase", kinaseEntrez));
+        }
+
+        return kinaseRecords.stream()
+            .map(Kinase::getId)
+            .collect(Collectors.toList());
     }
 
     /**

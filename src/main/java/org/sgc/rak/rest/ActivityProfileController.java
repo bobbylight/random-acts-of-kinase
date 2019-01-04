@@ -14,6 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.SortDefault;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * REST API for kinase activity profile information.
  */
@@ -38,7 +41,7 @@ class ActivityProfileController {
      *
      * @param compound A compound name.  If specified, only activity profiles about
      *        this compound/inhibitor will be returned.
-     * @param kinaseDiscoverx The kinase involved in the activity profile.  This may be {@code null} to not limit
+     * @param kinaseEntrez The kinase involved in the activity profile.  This may be {@code null} to not limit
      *        the search to one particular kinase.
      * @param activity The value that the percent control of the activity profile must be less than or
      *        equal to. This may be {@code null} to not restrict by percent control.
@@ -47,7 +50,7 @@ class ActivityProfileController {
      */
     @RequestMapping(method = RequestMethod.GET)
     PagedDataRep<ActivityProfile> getActivityProfiles(@RequestParam(required = false) String compound,
-                                    @RequestParam(required = false) String kinaseDiscoverx,
+                                    @RequestParam(required = false, name = "kinase") String kinaseEntrez,
                                     @RequestParam(required = false) Double activity,
                                     @SortDefault.SortDefaults({ @SortDefault("kd"), @SortDefault("percentControl") })
                                     Pageable pageInfo) {
@@ -57,16 +60,19 @@ class ActivityProfileController {
             throw new BadRequestException(messages.get("error.actvityOutOfRange"));
         }
 
-        Long kinaseId = null;
-        if (StringUtils.isNotEmpty(kinaseDiscoverx)) {
-            Kinase kinase = kinaseService.getKinase(kinaseDiscoverx);
-            if (kinase == null) {
-                throw new BadRequestException(messages.get("error.noSuchKinase", kinaseDiscoverx));
+        List<Long> kinaseIds = null;
+        if (StringUtils.isNotEmpty(kinaseEntrez)) {
+            List<Kinase> kinases = kinaseService.getKinase(kinaseEntrez);
+            if (kinases.isEmpty()) {
+                throw new BadRequestException(messages.get("error.noSuchKinase", kinaseEntrez));
             }
-            kinaseId = kinase.getId();
+            kinaseIds = kinases.stream()
+                .map(Kinase::getId)
+                .collect(Collectors.toList());
         }
 
-        Page<ActivityProfile> page = activityProfileService.getActivityProfiles(compound, kinaseId, activity, pageInfo);
+        Page<ActivityProfile> page = activityProfileService.getActivityProfiles(compound, kinaseIds,
+            activity, pageInfo);
 
         long start = page.getNumber() * pageInfo.getPageSize();
         long total = page.getTotalElements();

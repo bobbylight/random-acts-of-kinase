@@ -5,6 +5,8 @@ import org.sgc.rak.model.*;
 import org.sgc.rak.model.csv.ActivityProfileCsvRecord;
 import org.sgc.rak.model.csv.KdCsvRecord;
 
+import java.util.List;
+
 /**
  * Utility methods for unit tests.
  */
@@ -63,6 +65,15 @@ public final class TestUtil {
         Assert.assertEquals(expected.getId(), actual.getId());
         Assert.assertEquals(expected.getDiscoverxGeneSymbol(), actual.getDiscoverxGeneSymbol());
         Assert.assertEquals(expected.getEntrezGeneSymbol(), actual.getEntrezGeneSymbol());
+    }
+
+    public static void assertKinasesEqual(List<Kinase> expected, List<Kinase> actual) {
+
+        Assert.assertEquals(expected.size(), actual.size());
+
+        for (int i = 0; i < expected.size(); i++) {
+            assertKinasesEqual(expected.get(i), actual.get(i));
+        }
     }
 
     public static void assertPartnersEqual(Partner expected, Partner actual) {

@@ -63,6 +63,7 @@ export interface Kinase {
     id: number;
     discoverxGeneSymbol: string;
     entrezGeneSymbol: string;
+    nanosynGeneSymbol: string;
     discoverxUrl: string;
 }
 

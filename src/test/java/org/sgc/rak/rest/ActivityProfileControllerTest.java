@@ -29,9 +29,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyDouble;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doReturn;
 
 public class ActivityProfileControllerTest {
@@ -51,7 +49,8 @@ public class ActivityProfileControllerTest {
     private MockMvc mockMvc;
 
     private static final String COMPOUND_NAME = "compoundA";
-    private static final String KINASE_DISCOVERX = "kinase";
+    private static final String KINASE_DISCOVERX = "kinaseDiscoverx";
+    private static final String KINASE_ENTREZ = "kinaseEntrez";
 
     @Before
     public void setUp() {
@@ -88,7 +87,7 @@ public class ActivityProfileControllerTest {
 
         try {
             mockMvc.perform(MockMvcRequestBuilders.get("/api/activityProfiles")
-                .param("kinaseDiscoverx", KINASE_DISCOVERX)
+                .param("kinase", KINASE_ENTREZ)
                 .param("activity", "2")
                 .param("compound", COMPOUND_NAME)
                 .accept(MediaType.APPLICATION_JSON)
@@ -102,11 +101,11 @@ public class ActivityProfileControllerTest {
     @Test(expected = BadRequestException.class)
     public void testGetActivityProfiles_noSuchKinase() throws Exception {
 
-        doReturn(null).when(mockKinaseService).getKinase(eq(KINASE_DISCOVERX));
+        doReturn(Collections.emptyList()).when(mockKinaseService).getKinase(eq(KINASE_ENTREZ));
 
         try {
             mockMvc.perform(MockMvcRequestBuilders.get("/api/activityProfiles")
-                .param("kinaseDiscoverx", KINASE_DISCOVERX)
+                .param("kinase", KINASE_ENTREZ)
                 .param("activity", "1")
                 .param("compound", COMPOUND_NAME)
                 .accept(MediaType.APPLICATION_JSON)
@@ -171,10 +170,9 @@ public class ActivityProfileControllerTest {
     @Test
     public void testGetActivityProfiles_happyPath_kinaseAndPercentControl() throws Exception {
 
-        Kinase kinase = new Kinase();
-        kinase.setId(42L);
-        kinase.setDiscoverxGeneSymbol(KINASE_DISCOVERX);
-        doReturn(kinase).when(mockKinaseService).getKinase(eq(KINASE_DISCOVERX));
+        Kinase kinase = TestUtil.createKinase(42L, KINASE_DISCOVERX, KINASE_ENTREZ);
+        List<Kinase> kinaseList = Collections.singletonList(kinase);
+        doReturn(kinaseList).when(mockKinaseService).getKinase(eq(KINASE_ENTREZ));
 
         List<ActivityProfile> kapList = Collections.singletonList(
             TestUtil.createActivityProfile(33L)
@@ -182,11 +180,11 @@ public class ActivityProfileControllerTest {
         PageImpl<ActivityProfile> expectedPage = new PageImpl<>(kapList);
 
         doReturn(expectedPage).when(mockActivityProfileService)
-            .getActivityProfiles(any(), eq(42L), anyDouble(), any(Pageable.class));
+            .getActivityProfiles(any(), anyList(), anyDouble(), any(Pageable.class));
 
         try {
             mockMvc.perform(MockMvcRequestBuilders.get("/api/activityProfiles")
-                .param("kinaseDiscoverx", KINASE_DISCOVERX)
+                .param("kinase", KINASE_ENTREZ)
                 .param("activity", "1")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -203,23 +201,23 @@ public class ActivityProfileControllerTest {
     @Test
     public void testGetActivityProfiles_happyPath_compoundAndKinaseAndPercentControl() throws Exception {
 
-        Kinase kinase = new Kinase();
-        kinase.setId(42L);
-        kinase.setDiscoverxGeneSymbol(KINASE_DISCOVERX);
-        doReturn(kinase).when(mockKinaseService).getKinase(eq(KINASE_DISCOVERX));
+        Kinase kinase = TestUtil.createKinase(42L, KINASE_DISCOVERX, KINASE_ENTREZ);
+        List<Kinase> kinaseList = Collections.singletonList(kinase);
+        doReturn(kinaseList).when(mockKinaseService).getKinase(eq(KINASE_ENTREZ));
 
         List<ActivityProfile> kapList = Collections.singletonList(
             TestUtil.createActivityProfile(33L)
         );
         PageImpl<ActivityProfile> expectedPage = new PageImpl<>(kapList);
 
+        List<Long> kinaseIds = Collections.singletonList(42L);
         doReturn(expectedPage).when(mockActivityProfileService)
-            .getActivityProfiles(eq(COMPOUND_NAME), eq(42L), anyDouble(), any(Pageable.class));
+            .getActivityProfiles(eq(COMPOUND_NAME), eq(kinaseIds), anyDouble(), any(Pageable.class));
 
         try {
             mockMvc.perform(MockMvcRequestBuilders.get("/api/activityProfiles")
                 .param("compound", COMPOUND_NAME)
-                .param("kinaseDiscoverx", KINASE_DISCOVERX)
+                .param("kinase", KINASE_ENTREZ)
                 .param("activity", "1")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)

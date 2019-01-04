@@ -39,37 +39,28 @@ public class KinaseServiceTest {
     }
 
     @Test
-    public void testGetKinase() {
+    public void testGetKinase_entrezName() {
 
         Kinase kinase = TestUtil.createKinase(DISCOVERX, ENTREZ);
-        doReturn(kinase).when(mockKinaseDao).getKinase(eq(DISCOVERX));
+        List<Kinase> expected = Collections.singletonList(kinase);
+        doReturn(expected).when(mockKinaseDao).getKinases(eq(ENTREZ));
 
-        Kinase actual = service.getKinase(DISCOVERX);
+        List<Kinase> actual = service.getKinase(ENTREZ);
+        TestUtil.assertKinasesEqual(expected, actual);
+    }
+
+    @Test
+    public void testGetKinaseByDiscoverx() {
+
+        Kinase kinase = TestUtil.createKinase(DISCOVERX, ENTREZ);
+        doReturn(kinase).when(mockKinaseDao).getKinaseByDiscoverx(eq(DISCOVERX));
+
+        Kinase actual = service.getKinaseByDiscoverx(DISCOVERX);
         TestUtil.assertKinasesEqual(kinase, actual);
     }
 
     @Test
-    public void testGetKinases_discoverxFilterSupplied() {
-
-        Sort sort = Sort.by(Sort.Order.desc("discoverxGeneSymbol"));
-        PageRequest pr = PageRequest.of(0, 20, sort);
-
-        List<Kinase> expectedKinases = Collections.singletonList(TestUtil.createKinase(DISCOVERX, ENTREZ));
-        PageImpl<Kinase> expectedPage = new PageImpl<>(expectedKinases, pr, 1);
-        doReturn(expectedPage).when(mockKinaseDao).getKinasesByDiscoverxGeneSymbolStartingWith(
-            eq(DISCOVERX), any(Pageable.class));
-
-        Page<Kinase> actualKinases = service.getKinases(DISCOVERX, pr);
-        Assert.assertEquals(1, actualKinases.getNumberOfElements());
-        Assert.assertEquals(1, actualKinases.getTotalElements());
-        Assert.assertEquals(1, actualKinases.getTotalPages());
-        for (int i = 0; i < expectedKinases.size(); i++) {
-            TestUtil.assertKinasesEqual(expectedKinases.get(i), actualKinases.getContent().get(i));
-        }
-    }
-
-    @Test
-    public void testGetKinases_noDiscoverxFilter() {
+    public void testGetKinases_pageable() {
 
         Sort sort = Sort.by(Sort.Order.desc("discoverxGeneSymbol"));
         PageRequest pr = PageRequest.of(0, 20, sort);
@@ -79,6 +70,26 @@ public class KinaseServiceTest {
         doReturn(expectedPage).when(mockKinaseDao).getKinases(any(Pageable.class));
 
         Page<Kinase> actualKinases = service.getKinases(null, pr);
+        Assert.assertEquals(1, actualKinases.getNumberOfElements());
+        Assert.assertEquals(1, actualKinases.getTotalElements());
+        Assert.assertEquals(1, actualKinases.getTotalPages());
+        for (int i = 0; i < expectedKinases.size(); i++) {
+            TestUtil.assertKinasesEqual(expectedKinases.get(i), actualKinases.getContent().get(i));
+        }
+    }
+
+    @Test
+    public void testGetKinasesByEntrezGeneSymbolStartingWith() {
+
+        Sort sort = Sort.by(Sort.Order.desc("entrezGeneSymbol"));
+        PageRequest pr = PageRequest.of(0, 20, sort);
+
+        List<Kinase> expectedKinases = Collections.singletonList(TestUtil.createKinase(DISCOVERX, ENTREZ));
+        PageImpl<Kinase> expectedPage = new PageImpl<>(expectedKinases, pr, 1);
+        doReturn(expectedPage).when(mockKinaseDao).getKinasesByEntrezGeneSymbolStartingWith(
+            eq(ENTREZ), any(Pageable.class));
+
+        Page<Kinase> actualKinases = service.getKinases(ENTREZ, pr);
         Assert.assertEquals(1, actualKinases.getNumberOfElements());
         Assert.assertEquals(1, actualKinases.getTotalElements());
         Assert.assertEquals(1, actualKinases.getTotalPages());

@@ -34,6 +34,7 @@
                         {{props.item.kinase.discoverxGeneSymbol}}</a>
                 </td>
                 <td>{{props.item.kinase.entrezGeneSymbol}}</td>
+                <td>{{props.item.kinase.nanosynGeneSymbol}}</td>
                 <td>{{props.item.kd}}</td>
             </template>
         </v-data-table>
@@ -51,8 +52,9 @@ export default {
                 { text: 'Compound', value: 'compoundName' },
                 { text: '% Control', value: 'percentControl', align: 'right' },
                 { text: 'Concentration (nM)', value: 'compoundConcentration', align: 'right' },
-                { text: 'DiscX Gene Symbol', value: 'kinase.discoverxGeneSymbol' },
-                { text: 'Entrez Gene Symbol', value: 'kinase.entrezGeneSymbol' },
+                { text: 'Kinase DiscoverX', value: 'kinase.discoverxGeneSymbol' },
+                { text: 'Kinase Entrez', value: 'kinase.entrezGeneSymbol' },
+                { text: 'Kinase Nanosyn', value: 'kinase.nanosynGeneSymbol' },
                 { text: 'K<sub>d</sub>', value: 'kd' }
             ];
         }

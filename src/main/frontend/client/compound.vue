@@ -132,7 +132,7 @@ export default class CompoundView extends Vue {
                             })
                             .map((profile: ActivityProfile) => {
                                 return [
-                                    profile.kinase.discoverxGeneSymbol,
+                                    profile.kinase.entrezGeneSymbol,
                                     profile.percentControl
                                 ];
                             });

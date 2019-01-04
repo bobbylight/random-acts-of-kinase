@@ -11,6 +11,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -27,16 +28,16 @@ public final class QuerySpecifications {
      *
      * @param compoundName The compound name.  Case is ignored.  This may be {@code null} if the returned
      *        list should not be restricted to a particular compound.
-     * @param kinaseId The kinase involved in the activity profile.  This may be {@code null} to not limit
+     * @param kinaseIds The kinase involved in the activity profile.  This may be {@code null} to not limit
      *        the search to one particular kinase.
      * @param percentControl The value that the percent control of the activity profile must be less than or
      *        equal to. This may be {@code null} to not restrict by percent control.
      * @return The specification.
      */
-    public static Specification<ActivityProfile> activityProfilesMatching(String compoundName, Long kinaseId,
+    public static Specification<ActivityProfile> activityProfilesMatching(String compoundName, List<Long> kinaseIds,
                                                                           Double percentControl) {
 
-        return new Specification<ActivityProfile>() {
+        return new Specification<>() {
 
             @Nullable
             @Override
@@ -49,9 +50,12 @@ public final class QuerySpecifications {
                         compoundName.toLowerCase(Locale.US));
                 }
 
-                if (kinaseId != null) {
-                    Predicate kinasePredicate = builder.equal(root.get("kinase").get("id"), kinaseId);
-                    predicate = predicate == null ? kinasePredicate : builder.and(predicate, kinasePredicate);
+                if (kinaseIds != null && !kinaseIds.isEmpty()) {
+                    CriteriaBuilder.In<Object> inPredicate = builder.in(root.get("kinase"));
+                    for (Long kinaseId : kinaseIds) {
+                        inPredicate.value(kinaseId);
+                    }
+                    predicate = predicate == null ? inPredicate : builder.and(predicate, inPredicate);
                 }
 
                 if (percentControl != null) {

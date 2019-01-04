@@ -227,18 +227,18 @@ export default class CompoundNetwork extends Vue {
         const edges: CompoundNetworkEdge[] = [];
         matchingProfiles.forEach((ap: ActivityProfile) => {
 
-            const discoverx: string = ap.kinase.discoverxGeneSymbol;
+            const entrez: string = ap.kinase.entrezGeneSymbol;
 
-            if (!items.filter((item: CompoundOrActivityProfileNode) => { return item.id === discoverx; }).length) {
+            if (!items.filter((item: CompoundOrActivityProfileNode) => { return item.id === entrez; }).length) {
                 const image: string = `img/target.svg`;
                 items.push({
                     data: { activityProfile: ap },
-                    id: discoverx, label: discoverx,
+                    id: entrez, label: entrez,
                     image: image, color: this.kinaseColor
                 });
             }
 
-            edges.push({ from: ap.compoundName, to: discoverx,
+            edges.push({ from: ap.compoundName, to: entrez,
                 value: ap.percentControl,
                 activityProfile: ap,
                 title: `<table><tr><td>% Control:</td><td>${ap.percentControl}</td></tr>` +

@@ -15,8 +15,8 @@
                                    label="Or by kinase and IC50"
                                    name="kinase" url="api/kinases"
                                    :queryParams="kinaseQueryParams"
-                                   filterParamName="discoverx"
-                                   responseLabelField="discoverxGeneSymbol"
+                                   filterParamName="entrez"
+                                   responseLabelField="entrezGeneSymbol"
                                    responseValueField="responseValueField"
                                    :transform="kinaseResponseTransformer"></lazy-dropdown>
                 </v-flex>
@@ -58,10 +58,10 @@ export default class NanoBretSearchFilters extends Vue {
 
     private kinaseResponseTransformer(response: PagedDataRep<Kinase>): any[] {
         const choices: any[] = response.data.map((kinase: Kinase) => {
-            const discoverx: string = kinase.discoverxGeneSymbol;
-            return { discoverxGeneSymbol: discoverx, responseValueField: discoverx };
+            const entrez: string = kinase.entrezGeneSymbol;
+            return { entrezGeneSymbol: entrez, responseValueField: entrez };
         });
-        //choices.unshift({ discoverxGeneSymbol: '', responseValueField: '' });
+        //choices.unshift({ entrezGeneSymbol: '', responseValueField: '' });
         return choices;
     }
 }

@@ -111,10 +111,11 @@ public class ActivityProfileServiceTest {
 
         List<ActivityProfile> expectedProfiles = Collections.singletonList(TestUtil.createActivityProfile(42L));
         PageImpl<ActivityProfile> expectedPage = new PageImpl<>(expectedProfiles, pr, 1);
-        doReturn(expectedPage).when(mockActivityProfileDao).getActivityProfiles(eq(COMPOUND_NAME), anyLong(),
+        doReturn(expectedPage).when(mockActivityProfileDao).getActivityProfiles(eq(COMPOUND_NAME), anyList(),
             anyDouble(), any(Pageable.class));
 
-        Page<ActivityProfile> actualProfiles = service.getActivityProfiles(COMPOUND_NAME, 42L, 0.3, pr);
+        List<Long> kinaseIds = Collections.singletonList(42L);
+        Page<ActivityProfile> actualProfiles = service.getActivityProfiles(COMPOUND_NAME, kinaseIds, 0.3, pr);
         Assert.assertEquals(1, actualProfiles.getNumberOfElements());
         Assert.assertEquals(1, actualProfiles.getTotalElements());
         Assert.assertEquals(1, actualProfiles.getTotalPages());
@@ -131,7 +132,8 @@ public class ActivityProfileServiceTest {
         Sort sort = Sort.by(Sort.Order.desc("createDate"));
         PageRequest pr = PageRequest.of(0, 20, sort);
 
-        service.getActivityProfiles(COMPOUND_NAME, 32L, 0.3, pr);
+        List<Long> kinaseIds = Collections.singletonList(42L);
+        service.getActivityProfiles(COMPOUND_NAME, kinaseIds, 0.3, pr);
     }
 
     @Test
@@ -142,10 +144,11 @@ public class ActivityProfileServiceTest {
 
         List<ActivityProfile> expectedProfiles = Collections.singletonList(TestUtil.createActivityProfile(42L));
         PageImpl<ActivityProfile> expectedPage = new PageImpl<>(expectedProfiles, pr, 1);
-        doReturn(expectedPage).when(mockActivityProfileDao).getActivityProfiles(any(), anyLong(), anyDouble(),
+        doReturn(expectedPage).when(mockActivityProfileDao).getActivityProfiles(any(), anyList(), anyDouble(),
             any(Pageable.class));
 
-        Page<ActivityProfile> actualProfiles = service.getActivityProfiles(null, 42L, 0.3, pr);
+        List<Long> kinaseIds = Collections.singletonList(42L);
+        Page<ActivityProfile> actualProfiles = service.getActivityProfiles(null, kinaseIds, 0.3, pr);
         Assert.assertEquals(1, actualProfiles.getNumberOfElements());
         Assert.assertEquals(1, actualProfiles.getTotalElements());
         Assert.assertEquals(1, actualProfiles.getTotalPages());
@@ -181,9 +184,9 @@ public class ActivityProfileServiceTest {
         // Mocks required during csv rep => activity profile conversion
         doReturn(true).when(mockCompoundService).getCompoundExists(anyString());
         Kinase kinase = TestUtil.createKinase("discoverxA", "entrezA");
-        doReturn(kinase).when(mockKinaseService).getKinase(eq(kinase.getDiscoverxGeneSymbol()));
+        doReturn(kinase).when(mockKinaseService).getKinaseByDiscoverx(eq(kinase.getDiscoverxGeneSymbol()));
         kinase = TestUtil.createKinase("discoverxB", "entrezB");
-        doReturn(kinase).when(mockKinaseService).getKinase(eq(kinase.getDiscoverxGeneSymbol()));
+        doReturn(kinase).when(mockKinaseService).getKinaseByDiscoverx(eq(kinase.getDiscoverxGeneSymbol()));
 
         ObjectImportRep importRep = service.importActivityProfiles(records, commit);
         List<List<ObjectImportRep.FieldStatus>> fieldStatuses = importRep.getFieldStatuses();
@@ -239,7 +242,7 @@ public class ActivityProfileServiceTest {
         // Mocks required during csv rep => activity profile conversion
         doReturn(false).when(mockCompoundService).getCompoundExists(anyString());
         Kinase kinase = TestUtil.createKinase("discoverxA", "entrezA");
-        doReturn(kinase).when(mockKinaseService).getKinase(eq(kinase.getDiscoverxGeneSymbol()));
+        doReturn(Collections.singletonList(kinase)).when(mockKinaseService).getKinase(eq(kinase.getEntrezGeneSymbol()));
 
         service.importActivityProfiles(records, true);
     }
@@ -289,9 +292,9 @@ public class ActivityProfileServiceTest {
         // Mocks required during csv rep => activity profile conversion
         doReturn(true).when(mockCompoundService).getCompoundExists(anyString());
         Kinase kinase = TestUtil.createKinase("discoverxA", "entrezA");
-        doReturn(kinase).when(mockKinaseService).getKinase(eq(kinase.getDiscoverxGeneSymbol()));
+        doReturn(kinase).when(mockKinaseService).getKinaseByDiscoverx(eq(kinase.getDiscoverxGeneSymbol()));
         kinase = TestUtil.createKinase("discoverxB", "entrezB");
-        doReturn(kinase).when(mockKinaseService).getKinase(eq(kinase.getDiscoverxGeneSymbol()));
+        doReturn(kinase).when(mockKinaseService).getKinaseByDiscoverx(eq(kinase.getDiscoverxGeneSymbol()));
 
         ObjectImportRep importRep = service.importKdValues(records, commit);
         List<List<ObjectImportRep.FieldStatus>> fieldStatuses = importRep.getFieldStatuses();
@@ -345,7 +348,8 @@ public class ActivityProfileServiceTest {
         // Mocks required during csv rep => activity profile conversion
         doReturn(false).when(mockCompoundService).getCompoundExists(anyString());
         Kinase kinase = TestUtil.createKinase("discoverxA", "entrezA");
-        doReturn(kinase).when(mockKinaseService).getKinase(eq(records.get(0).getDiscoverxGeneSymbol()));
+        doReturn(Collections.singletonList(kinase)).when(mockKinaseService).getKinase(eq(records.get(0)
+            .getEntrezGeneSymbol()));
 
         service.importKdValues(records, true);
     }

@@ -23,16 +23,16 @@ public class ActivityProfileDao {
     }
 
     /**
-     * Fetches all kinase activity profiles that match one of a number of compound name/discoverx pairs.
+     * Fetches all kinase activity profiles that match one of a number of compound name/entrez pairs.
      *
      * @param compoundNames The compound names to check for.  This should be the same length as {@code discoverxes}.
-     * @param discoerxes The discoverx gene symbols to check for.  This should be the same length as
+     * @param discoverxes The discoverx gene symbols to check for.  This should be the same length as
      *        {@code compoundNames}.
      * @return The found activity profiles.  This may be empty, but will never be {@code null}.
      */
-    public Set<ActivityProfile> getActivityProfiles(List<String> compoundNames, List<String> discoerxes) {
+    public Set<ActivityProfile> getActivityProfiles(List<String> compoundNames, List<String> discoverxes) {
 
-        if (compoundNames.size() != discoerxes.size()) {
+        if (compoundNames.size() != discoverxes.size()) {
             throw new IllegalStateException("List of compound names and discoverx gene symbols aren't the same length");
         }
 
@@ -41,7 +41,7 @@ public class ActivityProfileDao {
         for (int i = 0; i < compoundNames.size(); i++) {
 
             String compoundName = compoundNames.get(i);
-            String discoverx = discoerxes.get(i);
+            String discoverx = discoverxes.get(i);
 
             Optional<ActivityProfile> possibleProfile = activityProfileRepository
                 .findByCompoundNameAndKinaseDiscoverxGeneSymbol(compoundName, discoverx);
@@ -56,16 +56,16 @@ public class ActivityProfileDao {
      *
      * @param compoundName The compound name.  Case is ignored.  This may be {@code null} if the returned
      *        list should not be restricted to a particular compound.
-     * @param kinaseId The kinase involved in the activity profile.  This may be {@code null} to not limit
+     * @param kinaseIds The kinase involved in the activity profile.  This may be {@code null} to not limit
      *        the search to one particular kinase.
      * @param percentControl The value that the percent control of the activity profile must be less than or
      *        equal to. This may be {@code null} to not restrict by percent control.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of kinase activity profiles.
      */
-    public Page<ActivityProfile> getActivityProfiles(String compoundName, Long kinaseId, Double percentControl,
+    public Page<ActivityProfile> getActivityProfiles(String compoundName, List<Long> kinaseIds, Double percentControl,
                                                      Pageable pageInfo) {
-        return activityProfileRepository.findAll(activityProfilesMatching(compoundName, kinaseId, percentControl),
+        return activityProfileRepository.findAll(activityProfilesMatching(compoundName, kinaseIds, percentControl),
             pageInfo);
     }
 

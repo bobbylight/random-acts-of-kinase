@@ -49,7 +49,7 @@ public class ActivityProfileService {
                 csvRep.getCompoundName()));
         }
 
-        Kinase kinase = kinaseService.getKinase(csvRep.getDiscoverxGeneSymbol());
+        Kinase kinase = kinaseService.getKinaseByDiscoverx(csvRep.getDiscoverxGeneSymbol());
         if (kinase == null) {
             throw new BadRequestException(messages.get("error.importReferencesUnknownKinase",
                 csvRep.getDiscoverxGeneSymbol()));
@@ -94,21 +94,21 @@ public class ActivityProfileService {
      *
      * @param compoundName The compound name.  Case is ignored.  This may be {@code null} if the returned
      *        list should not be restricted to a particular compound.
-     * @param kinaseId The kinase involved in the activity profile.  This may be {@code null} to not limit
+     * @param kinaseIds The kinase involved in the activity profile.  This may be {@code null} to not limit
      *        the search to one particular kinase.
      * @param percentControl The value that the percent control of the activity profile must be less than or
      *        equal to. This may be {@code null} to not restrict by percent control.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of kinase activity profiles.
      */
-    public Page<ActivityProfile> getActivityProfiles(String compoundName, Long kinaseId, Double percentControl,
+    public Page<ActivityProfile> getActivityProfiles(String compoundName, List<Long> kinaseIds, Double percentControl,
                                                      Pageable pageInfo) {
 
         if (compoundName != null && !compoundService.getCompoundExists(compoundName)) {
             throw new BadRequestException(messages.get("error.noSuchCompound", compoundName));
         }
 
-        return activityProfileDao.getActivityProfiles(compoundName, kinaseId, percentControl, pageInfo);
+        return activityProfileDao.getActivityProfiles(compoundName, kinaseIds, percentControl, pageInfo);
     }
 
     /**
@@ -218,7 +218,7 @@ public class ActivityProfileService {
                 csvRep.getCompoundName()));
         }
 
-        Kinase kinase = kinaseService.getKinase(csvRep.getDiscoverxGeneSymbol());
+        Kinase kinase = kinaseService.getKinaseByDiscoverx(csvRep.getDiscoverxGeneSymbol());
         if (kinase == null) {
             throw new BadRequestException(messages.get("error.importReferencesUnknownKinase",
                 csvRep.getDiscoverxGeneSymbol()));

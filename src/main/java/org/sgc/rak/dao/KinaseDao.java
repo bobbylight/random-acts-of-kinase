@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 /**
  * DAO for manipulating kinases.
  */
@@ -20,8 +22,18 @@ public class KinaseDao {
      * @param discoverx The discoverx gene symbol.  Case is ignored.
      * @return The kinase, or {@code null} if no such kinase is known.
      */
-    public Kinase getKinase(String discoverx) {
+    public Kinase getKinaseByDiscoverx(String discoverx) {
         return kinaseRepository.findOneByDiscoverxGeneSymbolIgnoreCase(discoverx);
+    }
+
+    /**
+     * Returns information on a kinase by its entrez gene symbol.
+     *
+     * @param entrez The entrez gene symbol.  Case is ignored.
+     * @return The kinase, or an empty list if no such kinase is known.
+     */
+    public List<Kinase> getKinases(String entrez) {
+        return kinaseRepository.findByEntrezGeneSymbolIgnoreCase(entrez);
     }
 
     /**
@@ -37,14 +49,14 @@ public class KinaseDao {
     /**
      * Returns kinase information.
      *
-     * @param discoverx If non-{@code null}, only kinases whose discoverx gene
+     * @param entrez If non-{@code null}, only kinases whose entrez gene
      *        symbols start with this string (ignoring case) are returned.
      * @param pageInfo How to sort the data and what page of the data to return.
      * @return The list of kinases.
      */
-    public Page<Kinase> getKinasesByDiscoverxGeneSymbolStartingWith(
-            String discoverx, Pageable pageInfo) {
-        return kinaseRepository.getKinasesByDiscoverxGeneSymbolStartsWithIgnoreCase(
-            discoverx, pageInfo);
+    public Page<Kinase> getKinasesByEntrezGeneSymbolStartingWith(
+            String entrez, Pageable pageInfo) {
+        return kinaseRepository.getKinasesByEntrezGeneSymbolStartsWithIgnoreCase(
+            entrez, pageInfo);
     }
 }

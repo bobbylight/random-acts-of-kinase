@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -24,8 +25,9 @@ public interface ActivityProfileRepository extends PagingAndSortingRepository<Ac
             getActivityProfilesByCompoundNameIgnoreCaseAndKinaseIdAndPercentControlLessThanEqual(
         String compoundName, long kinase, double activity, Pageable pageInfo);
 
-    Page<ActivityProfile> getActivityProfilesByKinaseIdAndPercentControlLessThanEqual(long kinase,
-                                                                                  double activity, Pageable pageInfo);
+    Page<ActivityProfile> getActivityProfilesByKinaseIdInAndPercentControlLessThanEqual(List<Long> kinases,
+                                                                                double activity, Pageable pageInfo);
 
-    Page<ActivityProfile> getActivityProfilesByKinaseIdAndKdLessThanEqual(long kinase, double kd, Pageable pageInfo);
+    Page<ActivityProfile> getActivityProfilesByKinaseIdInAndKdLessThanEqual(List<Long> kinases, double kd,
+                                                                            Pageable pageInfo);
 }

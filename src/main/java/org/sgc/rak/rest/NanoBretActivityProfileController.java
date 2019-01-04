@@ -3,11 +3,9 @@ package org.sgc.rak.rest;
 import org.apache.commons.lang3.StringUtils;
 import org.sgc.rak.exceptions.BadRequestException;
 import org.sgc.rak.i18n.Messages;
-import org.sgc.rak.model.ActivityProfile;
 import org.sgc.rak.model.Kinase;
 import org.sgc.rak.model.NanoBretActivityProfile;
 import org.sgc.rak.reps.PagedDataRep;
-import org.sgc.rak.services.ActivityProfileService;
 import org.sgc.rak.services.KinaseService;
 import org.sgc.rak.services.NanoBretActivityProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * REST API for NanoBRET activity profile information.
@@ -46,7 +46,7 @@ class NanoBretActivityProfileController {
      *
      * @param compound A compound name.  If specified, only activity profiles about
      *        this compound/inhibitor will be returned.
-     * @param kinaseDiscoverx The kinase involved in the activity profile.  This may be {@code null} to not limit
+     * @param kinaseEntrez The kinase involved in the activity profile.  This may be {@code null} to not limit
      *        the search to one particular kinase.
      * @param ic50 The value that the ict50 must be less than or equal to. This may be {@code null} to not restrict
      *             by ic50.
@@ -55,7 +55,7 @@ class NanoBretActivityProfileController {
      */
     @RequestMapping(method = RequestMethod.GET)
     PagedDataRep<NanoBretActivityProfile> getActivityProfiles(@RequestParam(required = false) String compound,
-              @RequestParam(required = false) String kinaseDiscoverx,
+              @RequestParam(required = false) String kinaseEntrez,
               @RequestParam(required = false) Double ic50,
               @SortDefault.SortDefaults({ @SortDefault("kd"), @SortDefault("percentControl") }) Pageable pageInfo) {
 
@@ -64,16 +64,18 @@ class NanoBretActivityProfileController {
             throw new BadRequestException(messages.get("error.ic50OutOfRange"));
         }
 
-        Long kinaseId = null;
-        if (StringUtils.isNotEmpty(kinaseDiscoverx)) {
-            Kinase kinase = kinaseService.getKinase(kinaseDiscoverx);
-            if (kinase == null) {
-                throw new BadRequestException(messages.get("error.noSuchKinase", kinaseDiscoverx));
+        List<Long> kinaseIds = null;
+        if (StringUtils.isNotEmpty(kinaseEntrez)) {
+            List<Kinase> kinases = kinaseService.getKinase(kinaseEntrez);
+            if (kinases.isEmpty()) {
+                throw new BadRequestException(messages.get("error.noSuchKinase", kinaseEntrez));
             }
-            kinaseId = kinase.getId();
+            kinaseIds = kinases.stream()
+                .map(Kinase::getId)
+                .collect(Collectors.toList());
         }
 
-//        Page<NanoBretActivityProfile> page = activityProfileService.getActivityProfiles(compound, kinaseId, ic50, pageInfo);
+//        Page<NanoBretActivityProfile> page = activityProfileService.getActivityProfiles(compound, kinaseIds, ic50, pageInfo);
         Page<NanoBretActivityProfile> page = new PageImpl<>(Collections.emptyList(), pageInfo, 0);
 
         long start = page.getNumber() * pageInfo.getPageSize();

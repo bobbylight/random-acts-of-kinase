@@ -100,7 +100,7 @@ class CompoundController extends AbstractRakController {
      */
     @GetMapping
     PagedDataRep<Compound> getCompounds(@RequestParam(required = false) String compound,
-                                @RequestParam(required = false) String kinase,
+                                @RequestParam(required = false, name = "kinase") String kinaseEntrez,
                                 @RequestParam(required = false) Double activity,
                                 @RequestParam(required = false) Double kd,
                                 @SortDefault("compoundName") Pageable pageInfo) {
@@ -111,11 +111,11 @@ class CompoundController extends AbstractRakController {
         if (StringUtils.isNotBlank(compound)) {
             page = compoundService.getCompounds(compound, pageInfo, isAdmin);
         }
-        else if (StringUtils.isNotBlank(kinase) && activity != null) {
-            page = compoundService.getCompoundsByKinaseAndActivity(kinase, activity, pageInfo);
+        else if (StringUtils.isNotBlank(kinaseEntrez) && activity != null) {
+            page = compoundService.getCompoundsByKinaseAndActivity(kinaseEntrez, activity, pageInfo);
         }
-        else if (StringUtils.isNotBlank(kinase) && kd != null) {
-            page = compoundService.getCompoundsByKinaseAndKd(kinase, kd, pageInfo);
+        else if (StringUtils.isNotBlank(kinaseEntrez) && kd != null) {
+            page = compoundService.getCompoundsByKinaseAndKd(kinaseEntrez, kd, pageInfo);
         }
         else {
             page = compoundService.getCompounds(null, pageInfo, isAdmin);

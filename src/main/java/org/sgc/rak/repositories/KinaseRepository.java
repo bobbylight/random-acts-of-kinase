@@ -5,12 +5,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import java.util.List;
+
 /**
  * JPA repository for kinases.
  */
 public interface KinaseRepository extends PagingAndSortingRepository<Kinase, String> {
 
+    List<Kinase> findByEntrezGeneSymbolIgnoreCase(String entrez);
+
     Kinase findOneByDiscoverxGeneSymbolIgnoreCase(String discoverx);
 
-    Page<Kinase> getKinasesByDiscoverxGeneSymbolStartsWithIgnoreCase(String prefix, Pageable pageInfo);
+    Page<Kinase> getKinasesByEntrezGeneSymbolStartsWithIgnoreCase(String prefix, Pageable pageInfo);
 }
