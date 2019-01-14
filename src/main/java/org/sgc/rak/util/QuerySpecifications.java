@@ -37,7 +37,7 @@ public final class QuerySpecifications {
     public static Specification<ActivityProfile> activityProfilesMatching(String compoundName, List<Long> kinaseIds,
                                                                           Double percentControl) {
 
-        return new Specification<>() {
+        return new Specification<ActivityProfile>() {
 
             @Nullable
             @Override

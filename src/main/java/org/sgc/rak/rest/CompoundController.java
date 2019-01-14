@@ -105,6 +105,9 @@ class CompoundController extends AbstractRakController {
                                 @RequestParam(required = false) Double kd,
                                 @SortDefault("compoundName") Pageable pageInfo) {
 
+        // Force all varchar sorts to be case-insensitive.  This does not affect non-varchar fields
+        pageInfo = Util.getCaseInsensitivePageable(pageInfo);
+
         boolean isAdmin = isAdmin();
         Page<Compound> page;
 

@@ -27,14 +27,14 @@ CREATE TABLE :schema.kinase (
   discoverx_gene_symbol character varying(100),
   entrez_gene_symbol character varying(100) NOT NULL,
   nanosyn_gene_symbol character varying(100),
-  discoverx_url varchar(2048) UNIQUE NOT NULL,
+  discoverx_url varchar(2048) UNIQUE,
   CONSTRAINT kinase_pkey PRIMARY KEY (id),
   CONSTRAINT kinase_discoverx_gene_symbol_entrez_gene_symbol_key UNIQUE (discoverx_gene_symbol, entrez_gene_symbol)
 )
 WITH ( OIDS = FALSE );
 
-CREATE INDEX kinase_discoverx_gene_symbol_idx ON :schema.kinase (discoverx_gene_symbol);
-CREATE INDEX kinase_discoverx_gene_symbol_lower_idx ON :schema.kinase (lower(discoverx_gene_symbol));
+CREATE INDEX kinase_entrez_gene_symbol_idx ON :schema.kinase (entrez_gene_symbol);
+CREATE INDEX kinase_entrez_gene_symbol_lower_idx ON :schema.kinase (lower(entrez_gene_symbol));
 
 
 DROP TABLE IF EXISTS :schema.kinase_activity_profile CASCADE;

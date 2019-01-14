@@ -7,10 +7,14 @@ import org.sgc.rak.model.csv.ActivityProfileCsvRecord;
 import org.sgc.rak.model.csv.KdCsvRecord;
 import org.sgc.rak.model.csv.SScoreCsvRecord;
 import org.sgc.rak.reps.ObjectImportRep;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Obligatory utility methods.
@@ -109,6 +113,19 @@ public final class Util {
      */
     public static String escapeForLike(String text) {
         return text.replace("%", "\\%").replace("_", "\\_");
+    }
+
+    /**
+     * Returns a copy of a page request with any varchar column sortings made case-insensitive.
+     * We do this because Spring's default is case sensitive.  Non-varchar column sortings are
+     * not affected.
+     *
+     * @param pageInfo The page request, as made by the user.
+     * @return The same request, with any varchar sortings made case-insensitive.
+     */
+    public static Pageable getCaseInsensitivePageable(Pageable pageInfo) {
+        return PageRequest.of(pageInfo.getPageNumber(), pageInfo.getPageSize(),
+            Sort.by(pageInfo.getSort().get().map(Sort.Order::ignoreCase).collect(Collectors.toList())));
     }
 
     /**
