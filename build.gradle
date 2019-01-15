@@ -4,7 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.1.1.RELEASE'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.1.2.RELEASE'
         classpath 'gradle.plugin.com.github.spotbugs:spotbugs-gradle-plugin:1.6.6'
     }
 }
@@ -67,7 +67,7 @@ dependencies {
 }
 
 wrapper {
-    gradleVersion = '5.0'
+    gradleVersion = '5.1.1'
 }
 
 //checkstyle {
