@@ -4,7 +4,9 @@ import org.junit.Assert;
 import org.sgc.rak.model.*;
 import org.sgc.rak.model.csv.ActivityProfileCsvRecord;
 import org.sgc.rak.model.csv.KdCsvRecord;
+import org.sgc.rak.model.csv.NanoBretActivityProfileCsvRecord;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -157,6 +159,42 @@ public final class TestUtil {
         rep.setEntrezGeneSymbol(entrez);
         rep.setModifier(modifier);
         rep.setKd(kd);
+        return rep;
+    }
+
+    public static NanoBretActivityProfile createNanoBretActivityProfile(String compoundName, Date date,
+                                String comment, String nluc, Double ic50, int compoundConcentration,
+                                String discoverx, String entrez, NanoBretActivityProfileModifier modifier,
+                                double percentInhibition, int points) {
+        NanoBretActivityProfile rep = new NanoBretActivityProfile();
+        rep.setDate(date);
+        rep.setComment(comment);
+        rep.setNlucOrientation(nluc);
+        rep.setIc50(ic50);
+        rep.setConcentration(compoundConcentration);
+        rep.setCompoundName(compoundName);
+        rep.setKinase(createKinase(discoverx, entrez));
+        rep.setModifier(modifier);
+        rep.setPercentInhibition(percentInhibition);
+        rep.setPoints(points);
+        return rep;
+    }
+
+    public static NanoBretActivityProfileCsvRecord createNanoBretActivityProfileCsvRecord(String compoundName,
+                                  String date, String comment, String nluc, Double ic50, int compoundConcentration,
+                                  String discoverx, NanoBretActivityProfileModifier modifier, double percentInhibition,
+                                  int points) {
+        NanoBretActivityProfileCsvRecord rep = new NanoBretActivityProfileCsvRecord();
+        rep.setDate(date);
+        rep.setComment(comment);
+        rep.setNlucOrientation(nluc);
+        rep.setIc50(ic50);
+        rep.setCompoundConcentration(compoundConcentration);
+        rep.setCompoundName(compoundName);
+        rep.setDiscoverxGeneSymbol(discoverx);
+        rep.setModifier(modifier);
+        rep.setPercentInhibition(percentInhibition);
+        rep.setPoints(points);
         return rep;
     }
 

@@ -262,6 +262,11 @@ export class RestApi {
         return this.importCsvDataImpl('admin/api/kdValues', file, headerRow, commit);
     }
 
+    importNanoBret(file: File, headerRow: boolean, commit: boolean = true): Promise<ObjectImportRep> {
+        alert('Uploading NanoBRET data is not yet implemented.');
+        return this.importCsvDataImpl('admin/api/nanoBRET', file, headerRow, commit);
+    }
+
     importS10s(file: File, headerRow: boolean, commit: boolean = true): Promise<ObjectImportRep> {
         return this.importCsvDataImpl('admin/api/sScores', file, headerRow, commit);
     }

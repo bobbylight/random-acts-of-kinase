@@ -12,10 +12,12 @@ import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.model.Compound;
 import org.sgc.rak.model.csv.ActivityProfileCsvRecord;
 import org.sgc.rak.model.csv.KdCsvRecord;
+import org.sgc.rak.model.csv.NanoBretActivityProfileCsvRecord;
 import org.sgc.rak.model.csv.SScoreCsvRecord;
 import org.sgc.rak.reps.ObjectImportRep;
 import org.sgc.rak.services.ActivityProfileService;
 import org.sgc.rak.services.CompoundService;
+import org.sgc.rak.services.NanoBretActivityProfileService;
 import org.sgc.rak.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +40,7 @@ public class ImportController {
 
     private final CompoundService compoundService;
     private final ActivityProfileService activityProfileService;
+    private final NanoBretActivityProfileService nanoBretActivityProfileService;
 
     private final Messages messages;
 
@@ -45,9 +48,11 @@ public class ImportController {
 
     @Autowired
     ImportController(CompoundService compoundService, ActivityProfileService activityProfileService,
+                     NanoBretActivityProfileService nanoBretActivityProfileService,
                      Messages messages) {
         this.compoundService = compoundService;
         this.activityProfileService = activityProfileService;
+        this.nanoBretActivityProfileService = nanoBretActivityProfileService;
         this.messages = messages;
     }
 
@@ -179,6 +184,40 @@ public class ImportController {
 
         List<KdCsvRecord> kdValues = loadFromCsv(file, headerRow, KdCsvRecord.class, schema);
         return activityProfileService.importKdValues(kdValues, commit);
+    }
+
+    /**
+     * Imports a CSV file of nanoBRET activity profiles.  The data is merged/patched into the existing activity profile
+     * data; that is, new activity profiles are added, and existing activity profiles have their non-null/empty values
+     * merged into the existing record.
+     *
+     * @param file The CSV NanoBRET activity profile data from SGC employees.
+     * @param headerRow Whether the CSV data contains a header row.
+     * @param commit Whether the upsert should be committed (vs. a dry run with just the results returned).
+     * @return The result of the operation.
+     */
+    @RequestMapping(method = RequestMethod.PATCH, path = "nanoBretActivityProfiles")
+    @ResponseStatus(HttpStatus.OK)
+    ObjectImportRep importNanoBretActivityProfiles(@RequestPart("file") MultipartFile file,
+                                                   @RequestParam(defaultValue = "true") boolean headerRow,
+                                                   @RequestParam(defaultValue = "true") boolean commit) {
+
+        CsvSchema schema = CsvSchema.builder()
+            .addColumn("compoundName", CsvSchema.ColumnType.STRING)
+            .addColumn("entrezGeneSymbol", CsvSchema.ColumnType.STRING)
+            .addColumn("nlucOrientation", CsvSchema.ColumnType.STRING)
+            .addColumn("modifier", CsvSchema.ColumnType.STRING)
+            .addColumn("ic50", CsvSchema.ColumnType.NUMBER)
+            .addColumn("percentInhibition", CsvSchema.ColumnType.NUMBER)
+            .addColumn("compoundConcentration", CsvSchema.ColumnType.NUMBER)
+            .addColumn("points", CsvSchema.ColumnType.NUMBER)
+            .addColumn("comment", CsvSchema.ColumnType.STRING)
+            .addColumn("date", CsvSchema.ColumnType.STRING)
+            .build();
+
+        List<NanoBretActivityProfileCsvRecord> activityProfiles = loadFromCsv(file, headerRow,
+            NanoBretActivityProfileCsvRecord.class, schema);
+        return nanoBretActivityProfileService.importNanoBretActivityProfiles(activityProfiles, commit);
     }
 
     /**

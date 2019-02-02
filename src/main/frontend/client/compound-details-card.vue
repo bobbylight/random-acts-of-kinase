@@ -151,6 +151,7 @@ export default class CompoundDetailsCard extends Vue {
 
                 &.compound-details-table-cell-header {
                     font-weight: bold;
+                    white-space: nowrap;
                 }
             }
         }

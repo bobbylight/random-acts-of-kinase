@@ -185,16 +185,16 @@ export default {
         }
 
         &:hover {
-            background-color: #f8f8f8;
+            background-color: #fafafa;//#f8f8f8;
 
             .compound-name {
-                color: #8080a0;
+                color: #1976D2;//#8080a0;
             }
             .chemotype {
-                color: #8080a0;
+                color: #42A5F5;//#8080a0;
             }
             .s10 {
-                color: #8080a0;
+                color: #42A5F5;//#8080a0;
             }
         }
 

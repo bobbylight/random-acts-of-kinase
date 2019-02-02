@@ -2,13 +2,14 @@ package org.sgc.rak.util;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.sgc.rak.model.ActivityProfile;
-import org.sgc.rak.model.Compound;
-import org.sgc.rak.model.Kinase;
+import org.sgc.rak.model.*;
 import org.sgc.rak.model.csv.ActivityProfileCsvRecord;
 import org.sgc.rak.model.csv.KdCsvRecord;
+import org.sgc.rak.model.csv.NanoBretActivityProfileCsvRecord;
 import org.sgc.rak.model.csv.SScoreCsvRecord;
 import org.sgc.rak.reps.ObjectImportRep;
+
+import java.util.Date;
 
 public class UtilTest {
 
@@ -51,6 +52,22 @@ public class UtilTest {
     }
 
     @Test
+    public void testConvertEmptyStringsToNulls_nanoBretActivityProfile() {
+
+        NanoBretActivityProfileCsvRecord csvRecord = new NanoBretActivityProfileCsvRecord();
+        csvRecord.setDiscoverxGeneSymbol("");
+        csvRecord.setNlucOrientation("");
+        csvRecord.setComment("");
+        csvRecord.setDate("");
+
+        Util.convertEmptyStringsToNulls(csvRecord);
+        Assert.assertNull(csvRecord.getDiscoverxGeneSymbol());
+        Assert.assertNull(csvRecord.getNlucOrientation());
+        Assert.assertNull(csvRecord.getComment());
+        Assert.assertNull(csvRecord.getDate());
+    }
+
+    @Test
     public void testCreateFieldStatus() {
         ObjectImportRep.FieldStatus status = Util.createFieldStatus("name", "newValue", "oldValue");
         Assert.assertEquals("name", status.getFieldName());
@@ -62,6 +79,12 @@ public class UtilTest {
     public void testEscapeForLike() {
         Assert.assertEquals("foo", Util.escapeForLike("foo"));
         Assert.assertEquals("54\\% \\_", Util.escapeForLike("54% _"));
+    }
+
+    @Test
+    public void testNanoBretCsvDateToRealDate_happyPath() throws Exception {
+        Date date = Util.createNanoBretDataDateFormat().parse("81_02_06");
+        Assert.assertEquals(date, Util.nanoBretCsvDateToRealDate("1981_02_06"));
     }
 
     @Test
@@ -278,6 +301,70 @@ public class UtilTest {
         Assert.assertEquals("referenceA", result.getPrimaryReference());
         Assert.assertEquals("urlA", result.getPrimaryReferenceUrl());
         Assert.assertTrue(result.isHidden());
+    }
+
+    @Test
+    public void testPatchNanoBretActivityProfile_nonNullValuesOverwritePriorValues() {
+
+        Kinase existingKinase = new Kinase();
+        existingKinase.setId(3);
+        existingKinase.setDiscoverxGeneSymbol("existingDiscoverx");
+
+        Date date = new Date(0);
+        NanoBretActivityProfile existing = TestUtil.createNanoBretActivityProfile("compoundA", date,
+            "commentA", "nlucA", 0d, 0, "discoverxA", "entrezA",
+            NanoBretActivityProfileModifier.GREATER_THAN, 0d, 0);
+
+        NanoBretActivityProfileCsvRecord newProfile = new NanoBretActivityProfileCsvRecord();
+        newProfile.setComment("commentNew");
+        newProfile.setCompoundConcentration(4);
+        newProfile.setCompoundName("compoundA");
+        newProfile.setDate(Util.realDateToNanoBretCsvDate(date));
+        newProfile.setDiscoverxGeneSymbol("existingDiscoverx");
+        newProfile.setIc50(50d);
+        newProfile.setNlucOrientation("nlucNew");
+        newProfile.setPercentInhibition(50d);
+        newProfile.setPoints(50);
+
+        NanoBretActivityProfile result = Util.patchNanoBretActivityProfile(existing, newProfile);
+
+        // New values for these fields overwrite prior values
+        Assert.assertEquals("commentNew", result.getComment());
+        Assert.assertEquals(4, result.getConcentration().intValue());
+        Assert.assertEquals(date, result.getDate());
+        Assert.assertEquals(50d, result.getIc50(), 0.0001);
+        Assert.assertEquals("nlucNew", result.getNlucOrientation());
+        Assert.assertEquals(50d, result.getPercentInhibition(), 0.0001);
+        Assert.assertEquals(50, result.getPoints().intValue());
+    }
+
+    @Test
+    public void testPatchNanoBretActivityProfile_nullValuesDontOverwriteNonNullValues() {
+
+        Kinase existingKinase = new Kinase();
+        existingKinase.setId(3);
+        existingKinase.setDiscoverxGeneSymbol("existingDiscoverx");
+
+        Date date = new Date(0);
+        NanoBretActivityProfile existing = TestUtil.createNanoBretActivityProfile("compoundA", date,
+            "commentA", "nlucA", 1d, 1, "discoverxA", "entrezA",
+            NanoBretActivityProfileModifier.GREATER_THAN, 1d, 1);
+
+        NanoBretActivityProfileCsvRecord newProfile = new NanoBretActivityProfileCsvRecord();
+        newProfile.setCompoundName("compoundA");
+        newProfile.setDate(Util.realDateToNanoBretCsvDate(date));
+        newProfile.setDiscoverxGeneSymbol("existingDiscoverx");
+
+        NanoBretActivityProfile result = Util.patchNanoBretActivityProfile(existing, newProfile);
+
+        // New values for these fields overwrite prior values
+        Assert.assertEquals("commentA", result.getComment());
+        Assert.assertEquals(1, result.getConcentration().intValue());
+        Assert.assertEquals(date, result.getDate());
+        Assert.assertEquals(1d, result.getIc50(), 0.0001);
+        Assert.assertEquals("nlucA", result.getNlucOrientation());
+        Assert.assertEquals(1d, result.getPercentInhibition(), 0.0001);
+        Assert.assertEquals(1, result.getPoints().intValue());
     }
 
     @Test

@@ -76,6 +76,12 @@
                                 </v-list-tile-content>
                             </v-list-tile>
 
+                            <v-list-tile to="import-nanobret">
+                                <v-list-tile-content>
+                                    <v-list-tile-title>Import NanoBRET</v-list-tile-title>
+                                </v-list-tile-content>
+                            </v-list-tile>
+
                             <v-list-tile to="import-s10s">
                                 <v-list-tile-content>
                                     <v-list-tile-title>Import s(10)s</v-list-tile-title>
@@ -175,6 +181,10 @@ export default class AdminHome extends Vue {
 
         .close-nav-drawer-button {
             margin: -6px; // Make this icon align better with others in the drawer
+        }
+
+        a:hover {
+            text-decoration: none;
         }
     }
 }

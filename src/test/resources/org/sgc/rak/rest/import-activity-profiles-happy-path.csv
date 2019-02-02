@@ -1,4 +1,4 @@
-compoundName,discoverxGeneSymbol,entrezGeneSymbol,percentControl,compoundConcentration
+compoundName,discoverxGeneSymbol,discoverxGeneSymbol,percentControl,compoundConcentration
 compoundA,discoverxA,entrezA,4,4
 compoundB,discoverxB,entrezB,5,5
 compoundC,discoverxC,entrezC,5,6

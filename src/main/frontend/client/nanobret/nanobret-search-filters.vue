@@ -16,7 +16,7 @@
                                    name="kinase" url="api/kinases"
                                    :queryParams="kinaseQueryParams"
                                    filterParamName="entrez"
-                                   responseLabelField="entrezGeneSymbol"
+                                   responseLabelField="discoverxGeneSymbol"
                                    responseValueField="responseValueField"
                                    :transform="kinaseResponseTransformer"></lazy-dropdown>
                 </v-flex>
@@ -58,10 +58,10 @@ export default class NanoBretSearchFilters extends Vue {
 
     private kinaseResponseTransformer(response: PagedDataRep<Kinase>): any[] {
         const choices: any[] = response.data.map((kinase: Kinase) => {
-            const entrez: string = kinase.entrezGeneSymbol;
-            return { entrezGeneSymbol: entrez, responseValueField: entrez };
+            const entrez: string = kinase.discoverxGeneSymbol;
+            return { discoverxGeneSymbol: entrez, responseValueField: entrez };
         });
-        //choices.unshift({ entrezGeneSymbol: '', responseValueField: '' });
+        //choices.unshift({ discoverxGeneSymbol: '', responseValueField: '' });
         return choices;
     }
 }

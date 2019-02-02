@@ -47,6 +47,10 @@ public final class ModelConstants {
 
     public static final int KINASE_NANOSYN_GENE_SYMBOL_MAX = 100;
 
+    public static final int NANOBRET_ACTIVITY_PROFILE_NLUC_ORIENTATION_MAX = 10;
+
+    public static final int NANOBRET_ACTIVITY_PROFILE_COMMENT_MAX = 512;
+
     public static final int PARTNER_IMAGE_MAX = 80;
 
     public static final int PARTNER_NAME_MAX = 64;

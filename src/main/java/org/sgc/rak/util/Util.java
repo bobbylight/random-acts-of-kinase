@@ -3,17 +3,19 @@ package org.sgc.rak.util;
 import org.apache.commons.lang3.StringUtils;
 import org.sgc.rak.model.ActivityProfile;
 import org.sgc.rak.model.Compound;
+import org.sgc.rak.model.NanoBretActivityProfile;
 import org.sgc.rak.model.csv.ActivityProfileCsvRecord;
 import org.sgc.rak.model.csv.KdCsvRecord;
+import org.sgc.rak.model.csv.NanoBretActivityProfileCsvRecord;
 import org.sgc.rak.model.csv.SScoreCsvRecord;
 import org.sgc.rak.reps.ObjectImportRep;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -88,6 +90,32 @@ public final class Util {
     }
 
     /**
+     * Converts any fields that are empty strings into {@code null}.
+     *
+     * @param activityProfile The activity profile to examine.
+     */
+    public static void convertEmptyStringsToNulls(NanoBretActivityProfileCsvRecord activityProfile) {
+
+        // Compound name is not checked
+
+        if (StringUtils.isBlank(activityProfile.getDiscoverxGeneSymbol())) {
+            activityProfile.setDiscoverxGeneSymbol(null);
+        }
+
+        if (StringUtils.isBlank(activityProfile.getNlucOrientation())) {
+            activityProfile.setNlucOrientation(null);
+        }
+
+        if (StringUtils.isBlank(activityProfile.getComment())) {
+            activityProfile.setComment(null);
+        }
+
+        if (StringUtils.isBlank(activityProfile.getDate())) {
+            activityProfile.setDate(null);
+        }
+    }
+
+    /**
      * Creates a field status representing a field value and how it changed.
      *
      * @param name The field name.
@@ -102,6 +130,18 @@ public final class Util {
         status.setNewValue(newValue);
         status.setOldValue(existingValue);
         return status;
+    }
+
+    /**
+     * Creates the (non-threadsafe) date format used when reading and writing dates to the
+     * backend from nanoBRET files.
+     *
+     * @return The date format.
+     */
+    static SimpleDateFormat createNanoBretDataDateFormat() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yy_MM_dd");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return sdf;
     }
 
     /**
@@ -164,6 +204,23 @@ public final class Util {
     private static boolean isValidFileNameChar(char ch) {
         return Character.isLetterOrDigit(ch) ||
             VALID_NON_LETTER_NON_DIGIT_FILENAME_CHARS.indexOf(ch) != -1;
+    }
+
+    /**
+     * Returns the date associated with a string of the form {@code YY_MM_DD}, which is what is used in
+     * nanoBRET CSV imports.
+     *
+     * @param csvDate The CSV date.
+     * @return The date object.
+     * @see #realDateToNanoBretCsvDate(Date)
+     */
+    public static Date nanoBretCsvDateToRealDate(String csvDate) {
+
+        try {
+            return createNanoBretDataDateFormat().parse(csvDate);
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Invalid date string: " + csvDate);
+        }
     }
 
     /**
@@ -305,12 +362,110 @@ public final class Util {
         return retVal;
     }
 
+    /**
+     * Creates and returns a new nanoBRET activity profile that is essentially a patch of {@code newProfile}'s fields
+     * into {@code existing}.  That is, the returned nanoBRET activity profile will have any non-{@code null} property
+     * values from the new profile, and for any {@code null} property values, it will have the existing profile's
+     * values.
+     *
+     * @param existing The existing nanoBRET activity profile.
+     * @param newProfile The new nanoBRET activity profile, whose non-{@code null}/empty values should be merged into
+     *        the result.
+     * @return The result of the patch/merge operation.
+     */
+    public static NanoBretActivityProfile patchNanoBretActivityProfile(NanoBretActivityProfile existing,
+                                                                       NanoBretActivityProfileCsvRecord newProfile) {
+
+        NanoBretActivityProfile retVal = new NanoBretActivityProfile();
+        retVal.setId(existing.getId());
+
+        // It's assumed that the two activity profiles having the same compound, kinase and date was previously verified
+        retVal.setCompoundName(existing.getCompoundName());
+        retVal.setKinase(existing.getKinase());
+        retVal.setDate(existing.getDate());
+
+        if (newProfile.getNlucOrientation() != null) {
+            retVal.setNlucOrientation(newProfile.getNlucOrientation());
+        }
+        else {
+            retVal.setNlucOrientation(existing.getNlucOrientation());
+        }
+
+        if (newProfile.getModifier() != null) {
+            retVal.setModifier(newProfile.getModifier());
+        }
+        else {
+            retVal.setModifier(existing.getModifier());
+        }
+
+        if (newProfile.getIc50() != null) {
+            retVal.setIc50(newProfile.getIc50());
+        }
+        else {
+            retVal.setIc50(existing.getIc50());
+        }
+
+        if (newProfile.getPercentInhibition() != null) {
+            retVal.setPercentInhibition(newProfile.getPercentInhibition());
+        }
+        else {
+            retVal.setPercentInhibition(existing.getPercentInhibition());
+        }
+
+        if (newProfile.getCompoundConcentration() != null) {
+            retVal.setConcentration(newProfile.getCompoundConcentration());
+        }
+        else {
+            retVal.setConcentration(existing.getConcentration());
+        }
+
+        if (newProfile.getPoints() != null) {
+            retVal.setPoints(newProfile.getPoints());
+        }
+        else {
+            retVal.setPoints(existing.getPoints());
+        }
+
+        if (newProfile.getComment() != null) {
+            retVal.setComment(newProfile.getComment());
+        }
+        else {
+            retVal.setComment(existing.getComment());
+        }
+
+        if (newProfile.getDate() != null) {
+            retVal.setDate(Util.nanoBretCsvDateToRealDate(newProfile.getDate()));
+        }
+        else {
+            retVal.setDate(existing.getDate());
+        }
+
+        return retVal;
+    }
+
     private static void possiblyAddDifference(List<String> differences, String fieldName, Object oldValue,
                                                 Object newValue) {
         if (!Objects.equals(oldValue, newValue)) {
             differences.add(String.format("%s: '%s' -> '%s'", fieldName, String.valueOf(oldValue),
                 String.valueOf(newValue)));
         }
+    }
+
+    /**
+     * Returns a string representation of a date consistent with the format used in nanoBRET CSV imports,
+     * i.e. {@code YY_MM_DD}.
+     *
+     * @param date The date, which may be {@code null}.
+     * @return The string version of the date, or {@code null} if the date is {@code null}.
+     * @see #nanoBretCsvDateToRealDate(String)
+     */
+    public static String realDateToNanoBretCsvDate(Date date) {
+
+        if (date == null) {
+            return null;
+        }
+
+        return createNanoBretDataDateFormat().format(date);
     }
 
     /**

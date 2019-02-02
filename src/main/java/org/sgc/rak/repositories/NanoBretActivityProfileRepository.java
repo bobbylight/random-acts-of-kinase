@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
+import java.util.Date;
 import java.util.Optional;
 
 /**
@@ -14,8 +15,8 @@ import java.util.Optional;
 public interface NanoBretActivityProfileRepository extends PagingAndSortingRepository<NanoBretActivityProfile, String>,
         JpaSpecificationExecutor<NanoBretActivityProfile> {
 
-    Optional<NanoBretActivityProfile> findByCompoundNameAndKinaseDiscoverxGeneSymbol(String compoundName,
-                                                                             String discoverx);
+    Optional<NanoBretActivityProfile> findByCompoundNameAndKinaseDiscoverxGeneSymbolAndDate(String compoundName,
+                                                                                            String entrez, Date date);
 
     Page<NanoBretActivityProfile> getActivityProfilesByCompoundNameIgnoreCase(String compoundName,
                                                                       Pageable pageInfo);

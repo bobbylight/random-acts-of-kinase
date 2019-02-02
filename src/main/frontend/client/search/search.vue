@@ -5,7 +5,7 @@
             <v-layout row wrap justify-center>
                 <v-flex xs12 class="search-part-layout">
 
-                    <h1>Search Compounds</h1>
+                    <div class="headline primary--text">Search Compounds</div>
 
                     <search-filters></search-filters>
                 </v-flex>

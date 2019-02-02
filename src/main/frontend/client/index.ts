@@ -163,6 +163,7 @@ Vue.use(Vuetify, {
 });
 
 import store from './rak-store';
+import ImportNanoBRET from './admin/import-nanobret.vue';
 
 window.onload = () => {
 
@@ -210,6 +211,11 @@ window.onload = () => {
                     path: 'import-kds',
                     name: 'import-kds',
                     component: ImportKds
+                },
+                {
+                    path: 'import-nanobret',
+                    name: 'import-nanobret',
+                    component: ImportNanoBRET
                 },
                 {
                     path: 'import-s10s',

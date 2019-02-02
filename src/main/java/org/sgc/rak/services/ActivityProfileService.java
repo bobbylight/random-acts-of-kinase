@@ -259,8 +259,8 @@ public class ActivityProfileService {
     private static ActivityProfile possiblyGetActivityProfile(Set<ActivityProfile> profiles,
                                                               String compoundName, String discoverx) {
         Optional<ActivityProfile> optional = profiles.stream()
-            .filter(c -> compoundName.equals(c.getCompoundName()) &&
-                        discoverx.equals(c.getKinase().getDiscoverxGeneSymbol()))
+            .filter(kap -> compoundName.equals(kap.getCompoundName()) &&
+                        discoverx.equals(kap.getKinase().getDiscoverxGeneSymbol()))
             .findFirst();
         return optional.orElse(null);
     }

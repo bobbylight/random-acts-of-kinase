@@ -47,9 +47,9 @@ CREATE TABLE :schema.kinase_activity_profile (
   kd numeric,
   CONSTRAINT kinase_activity_profile_pkey PRIMARY KEY (id),
   CONSTRAINT kinase_activity_profile_compound_fk FOREIGN KEY (compound_nm)
-  REFERENCES :schema.compound (compound_nm) ON UPDATE NO ACTION ON DELETE NO ACTION,
+    REFERENCES :schema.compound (compound_nm) ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT kinase_activity_profile_kinase_fk FOREIGN KEY (kinase)
-  REFERENCES :schema.kinase (id) ON UPDATE NO ACTION ON DELETE NO ACTION
+    REFERENCES :schema.kinase (id) ON UPDATE NO ACTION ON DELETE NO ACTION
 )
 WITH ( OIDS = FALSE );
 
@@ -64,12 +64,20 @@ CREATE TABLE :schema.nanobret_activity_profile (
   id serial,
   compound_nm character varying(100) NOT NULL,
   kinase integer NOT NULL,
-  ic50 numeric,
+  nluc_orientation character varying(10) NOT NULL,
+  modifier character varying(1) NOT NULL,
+  ic50 numeric NOT NULL,
+  nanobret_percent_inhibition numeric NOT NULL,
+  concentration integer NOT NULL,
+  points integer NOT NULL,
+  comment character varying(512),
+  run_date date NOT NULL,
   CONSTRAINT nanobret_activity_profile_pkey PRIMARY KEY (id),
   CONSTRAINT nanobret_activity_profile_compound_fk FOREIGN KEY (compound_nm)
-  REFERENCES :schema.compound (compound_nm) ON UPDATE NO ACTION ON DELETE NO ACTION,
+    REFERENCES :schema.compound (compound_nm) ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT nanobret_activity_profile_kinase_fk FOREIGN KEY (kinase)
-  REFERENCES :schema.kinase (id) ON UPDATE NO ACTION ON DELETE NO ACTION
+    REFERENCES :schema.kinase (id) ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT nanobret_activity_profile_daily_run_key UNIQUE (compound_nm, kinase, run_date)
 )
 WITH ( OIDS = FALSE );
 
