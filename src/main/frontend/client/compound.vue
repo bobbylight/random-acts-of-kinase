@@ -122,7 +122,7 @@ export default class CompoundView extends Vue {
                         const activityProfiles: ActivityProfile[] = allData.data;
                         this.chartData = activityProfiles
                             .filter((profile: ActivityProfile) => {
-                                return profile.percentControl < 100;
+                                return profile.percentControl <= 100;
                             })
                             .sort((a: ActivityProfile, b: ActivityProfile) => {
                                 if (b.percentControl < a.percentControl) {
@@ -132,7 +132,7 @@ export default class CompoundView extends Vue {
                             })
                             .map((profile: ActivityProfile) => {
                                 return [
-                                    profile.kinase.entrezGeneSymbol,
+                                    profile.kinase.discoverxGeneSymbol,
                                     profile.percentControl
                                 ];
                             });

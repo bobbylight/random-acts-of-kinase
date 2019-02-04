@@ -25,7 +25,7 @@ const config = {
     },
     mode: devBuild ? 'development' : 'production',
     // source-map doesn't seem to be working, see webpack bug reports
-    devtool: devBuild ? 'cheap-eval-source-map' : undefined,//'source-map',
+    devtool: devBuild ? 'eval-source-map' : undefined,//'source-map',
     plugins: [
         new VueLoaderPlugin(),
         new CopyWebpackPlugin([

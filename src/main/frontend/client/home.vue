@@ -14,11 +14,19 @@
                     disease-relevant proteins and help speed the creation of new medicines for patients.
                 </div>
                 <div class="pt-3">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                    aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                    culpa qui officia deserunt mollit anim id est laborum.
+                    The human genome contains hundreds of dark kinases that are poorly characterized and for which
+                    little is known about their role in human disease. SGC-UNC scientists have championed a method of
+                    studying the biology of dark kinases, called chemogenomics. The approach utilizes ATP-competitive
+                    kinase inhibitors that show cross-activity on multiple kinases. The most useful 'narrow-spectrum'
+                    inhibitors have activity on 2 to 10 kinases. SGC-UNC scientists have assembled a large matrix of
+                    these narrow-spectrum kinase inhibitors into a chemogenomic set to probe the cell biology of the
+                    dark kinases.
+                </div>
+                <div class="pt-3">
+                    KCGS has been designed to replace PKIS and PKIS2, supplies of which have been depleted. KCGS has
+                    improved coverage of the human kinome and contains no promiscuous compounds, thereby facilitating
+                    the annotation of phenotypic data and hypothesis generation. KCGS is now available from the SGC and
+                    you can find the activity data we collected on the inhibitors using the search tab.
                 </div>
             </v-flex>
         </v-layout>
@@ -27,7 +35,10 @@
             <v-flex xs8 lg6>
                 <h1>About This Tool</h1>
                 <div class="pt-3">
-                    Random Acts of Kinase allows you to...
+                    Random Acts of Kinase allows you to search for compound activity data collected on compounds in
+                    KCGS. If you have any feedback or questions, please contact
+                    <a href="mailto:SGC-UNC@unc.edu">SGC-UNC@unc.edu</a>. To request a physical copy of the set please
+                    go to <a href="https://www.sgc-unc.org/request-kcgs/">https://www.sgc-unc.org/request-kcgs/</a>.
                 </div>
             </v-flex>
         </v-layout>
