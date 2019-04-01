@@ -139,12 +139,31 @@ export class RestApi {
             });
     }
 
-    getAuditRecords(page: number, size: number, filters: any,
-                 sortParam: string): Promise<PagedDataRep<Audit>> {
+    getAuditRecords(page: number, size: number, filters: any, sortParam: string): Promise<PagedDataRep<Audit>> {
 
         let url: string = `admin/api/audits?page=${page}&size=${size}`;
         if (filters.userName) {
-            url += `&userName=${filters.userName}`;
+            url += `&user=${filters.userName}`;
+        }
+        if (filters.action) {
+            url += `&action=${filters.action}`;
+        }
+        if (filters.ipAddress) {
+            url += `&ipAddress=${filters.ipAddress}`;
+        }
+
+        if (filters.success === 'yes') {
+            url += '&success=true';
+        }
+        else if (filters.success === 'no') {
+            url += '&success=false';
+        }
+
+        if (filters.fromDate) {
+            url += `&fromDate=${filters.fromDate}`;
+        }
+        if (filters.toDate) {
+            url += `&toDate=${filters.toDate}`;
         }
 
         if (sortParam) {

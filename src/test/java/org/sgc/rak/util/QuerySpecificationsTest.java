@@ -5,8 +5,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sgc.rak.core.Application;
 import org.sgc.rak.model.ActivityProfile;
+import org.sgc.rak.model.Audit;
+import org.sgc.rak.model.AuditAction;
 import org.sgc.rak.model.Compound;
 import org.sgc.rak.repositories.ActivityProfileRepository;
+import org.sgc.rak.repositories.AuditRepository;
 import org.sgc.rak.repositories.CompoundRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -17,7 +20,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.Instant;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import static org.sgc.rak.util.QuerySpecifications.*;
@@ -37,6 +42,9 @@ public class QuerySpecificationsTest {
 
     @Autowired
     private ActivityProfileRepository apRepository;
+
+    @Autowired
+    private AuditRepository auditRepository;
 
     private static PageRequest createPageRequest(int page, int size, String sortBy) {
 
@@ -104,6 +112,43 @@ public class QuerySpecificationsTest {
 
         // No activity profiles with compoundA and % control 0.2 or less
         Assert.assertEquals(0, actual.getNumberOfElements());
+    }
+
+    @Test
+    public void testAuditRecordsMatching_happyPath_allNullParams() {
+
+        PageRequest pr = createPageRequest(0, 20, "createDate:desc");
+        Page<Audit> actual = auditRepository.findAll(auditRecordsMatching(null, null, null, null,
+            null, null), pr);
+
+        Assert.assertEquals(2, actual.getNumberOfElements());
+        Assert.assertEquals("capplegate", actual.getContent().get(0).getUserName());
+        Assert.assertEquals("gclooney", actual.getContent().get(1).getUserName());
+    }
+
+    @Test
+    public void testAuditRecordsMatching_happyPath_allNonNullParams() {
+
+        PageRequest pr = createPageRequest(0, 20, "createDate:desc");
+        Page<Audit> actual = auditRepository.findAll(auditRecordsMatching("gclooney", AuditAction.LOGIN, "1.2.3.4",
+            true, new Date(0), new Date()), pr);
+
+        Assert.assertEquals(1, actual.getNumberOfElements());
+        Assert.assertEquals("gclooney", actual.getContent().get(0).getUserName());
+    }
+
+    @Test
+    public void testAuditRecordsMatching_happyPath_identicalToAndFromDayMatchesRecordsOnThatDay() {
+
+        Date fromDate = Date.from(Instant.parse("2019-02-06T00:00:00Z")); // Matches "day" part of the date in CSV file
+        Date toDate = Date.from(Instant.parse("2019-02-06T23:59:59Z")); // Matches "day" part of the date in CSV file
+
+        PageRequest pr = createPageRequest(0, 20, "createDate:desc");
+        Page<Audit> actual = auditRepository.findAll(auditRecordsMatching(null, null, null,
+            null, fromDate, toDate), pr);
+
+        Assert.assertEquals(1, actual.getNumberOfElements());
+        Assert.assertEquals("gclooney", actual.getContent().get(0).getUserName());
     }
 
     @Test

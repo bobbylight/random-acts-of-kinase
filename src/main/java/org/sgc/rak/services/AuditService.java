@@ -5,6 +5,7 @@ import org.sgc.rak.model.Audit;
 import org.sgc.rak.model.AuditAction;
 import org.sgc.rak.model.ModelConstants;
 import org.sgc.rak.repositories.AuditRepository;
+import org.sgc.rak.util.QuerySpecifications;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 /**
  * Service for manipulating audit records.
@@ -26,7 +28,7 @@ public class AuditService {
      * The user name stored in the database when the user name could not be determined (or a user was not logged
      * in).
      */
-    public static final String UNKNOWN_USER_NAME = "<unknown>";
+    static final String UNKNOWN_USER_NAME = "<unknown>";
 
     private final AuditRepository repository;
 
@@ -112,10 +114,19 @@ public class AuditService {
      * Returns audit records.
      *
      * @param pageInfo How to sort the data and what page of the data to return.
+     * @param user If specified, filter on user names starting with this prefix, ignoring case.  May be {@code null}.
+     * @param action If specified, filter on this action type.  May be {@code null}.
+     * @param ipAddress If specified, filter on IP address starting with this prefix, ignoring case.  May be
+     *                  {@code null}.
+     * @param success Whether the action was successful.  May be {@code null} to denote to ignore this property.
+     * @param fromDate The starting date from which to fetch audits.  May be {@code null}.
+     * @param toDate The ending date to which to fetch audits.  May be {@code null}.
      * @return The list of audit records.
      */
-    public Page<Audit> getAudits(Pageable pageInfo) {
-        return repository.findAll(pageInfo);
+    public Page<Audit> getAudits(Pageable pageInfo, String user, AuditAction action, String ipAddress,
+                                 Boolean success, Date fromDate, Date toDate) {
+        return repository.findAll(QuerySpecifications.auditRecordsMatching(user, action, ipAddress, success,
+            fromDate, toDate), pageInfo);
     }
 
     /**

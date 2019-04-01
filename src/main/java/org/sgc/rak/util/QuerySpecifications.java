@@ -2,6 +2,8 @@ package org.sgc.rak.util;
 
 import org.apache.commons.lang3.StringUtils;
 import org.sgc.rak.model.ActivityProfile;
+import org.sgc.rak.model.Audit;
+import org.sgc.rak.model.AuditAction;
 import org.sgc.rak.model.Compound;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.lang.Nullable;
@@ -11,6 +13,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -61,6 +64,64 @@ public final class QuerySpecifications {
                 if (percentControl != null) {
                     Predicate pcPredicate = builder.le(root.get("percentControl"), percentControl);
                     predicate = predicate == null ? pcPredicate : builder.and(predicate, pcPredicate);
+                }
+
+                return predicate;
+            }
+        };
+    }
+
+    /**
+     * Returns a specification that looks for any {@code Audit} records matching the given criteria.
+     *
+     * @param user The start of a user name to filter on.  Case is ignored.  This may be {@code null} or empty string
+     *        to not filter on user.
+     * @param action An action to filter on.  This may be {@code null} to not filter on action.
+     * @param ipAddress The start of an IP address to filter on.  Case is ignored.  This may be {@code null} or empty
+     *        string to not filter on IP address.
+     * @param success Whether the action was successful.  May be {@code null} to denote to ignore this property.
+     * @param fromDate The starting date from which to fetch audits.  May be {@code null}.
+     * @param toDate The ending date to which to fetch audits.  May be {@code null}.
+     * @return The specification.
+     */
+    public static Specification<Audit> auditRecordsMatching(String user, AuditAction action, String ipAddress,
+                                                            Boolean success, Date fromDate, Date toDate) {
+
+        return new Specification<Audit>() {
+
+            @Nullable
+            @Override
+            public Predicate toPredicate(Root<Audit> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
+
+                Predicate predicate = null;
+
+                if (StringUtils.isNotBlank(user)) {
+                    predicate = builder.like(builder.lower(root.get("userName")), user.toLowerCase(Locale.US) + "%");
+                }
+
+                if (action != null) { // Exact matches because no good way to do startsWith for enums
+                    Predicate actionPredicate = builder.equal(root.get("action"), action);
+                    predicate = predicate == null ? actionPredicate : builder.and(predicate, actionPredicate);
+                }
+
+                if (StringUtils.isNotBlank(ipAddress)) {
+                    Predicate ipPredicate = builder.like(root.get("ipAddress"), ipAddress + "%");
+                    predicate = predicate == null ? ipPredicate : builder.and(predicate, ipPredicate);
+                }
+
+                if (success != null) {
+                    Predicate successPredicate = builder.equal(root.get("success"), success);
+                    predicate = predicate == null ? successPredicate : builder.and(predicate, successPredicate);
+                }
+
+                if (fromDate != null) {
+                    Predicate datePredicate = builder.greaterThanOrEqualTo(root.get("createDate"), fromDate);
+                    predicate = predicate == null ? datePredicate : builder.and(predicate, datePredicate);
+                }
+
+                if (toDate != null) {
+                    Predicate datePredicate = builder.lessThanOrEqualTo(root.get("createDate"), toDate);
+                    predicate = predicate == null ? datePredicate : builder.and(predicate, datePredicate);
                 }
 
                 return predicate;

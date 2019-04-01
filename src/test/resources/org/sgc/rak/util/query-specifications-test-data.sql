@@ -1,3 +1,8 @@
+insert into audit(user_nm, action, ip_address, create_dttm, success, details) values
+  ('gclooney', 'LOGIN', '1.2.3.4', '2019-02-06T17:42:00Z', true, NULL),
+  ('capplegate', 'UPDATE_COMPOUND', '5.6.7.8', '2019-08-03T00:00:00Z', false, NULL)
+;
+
 insert into compound (compound_nm, chemotype, smiles, s_10, hidden) values
   ('compoundC', 'chemotypeC', 'smilesC', 0.3, false),
   ('compoundB', 'chemotypeB', NULL, 0.4, true),

@@ -17,39 +17,151 @@
 
             <v-flex xs12>
 
-                <v-data-table
-                    :headers="headers"
-                    class="elevation-1"
-                    :items="items"
-                    item-key="id"
-                    :pagination.sync="pagination"
-                    :total-items="totalItems"
-                    :loading="loading"
-                    :rows-per-page-items='[ 20, 50, 100 ]'
-                >
+                <v-card>
 
-                    <template slot="items" slot-scope="props">
-                        <tr @click="props.expanded = !props.expanded">
-                            <td>{{getDisplayDate(props.item.createDate)}}</td>
-                            <td>{{props.item.userName}}</td>
-                            <td>{{props.item.action}}</td>
-                            <td>{{props.item.ipAddress}}</td>
-                            <td>
-                                <v-checkbox
-                                    class="audit-enabled-cb"
-                                    disabled
-                                    v-model="props.item.success"
-                                ></v-checkbox>
-                            </td>
-                        </tr>
-                    </template>
+                    <v-card-title class="headline audit-filter-title">Filters</v-card-title>
 
-                    <template slot="expand" slot-scope="props">
-                        <v-card flat>
-                            <v-card-text class="audit-details">{{props.item.details || '(no details)'}}</v-card-text>
-                        </v-card>
-                    </template>
-                </v-data-table>
+                    <v-card-text>
+
+                        <v-layout row wrap class="audit-filters-wrapper">
+
+                            <v-flex xs6 class="audit-filter">
+                                <v-text-field label="User"
+                                              @input="debouncedReloadTable"
+                                              prepend-icon="fa-user"
+                                              hide-details
+                                              clearable
+                                              v-model="userFilter"></v-text-field>
+                            </v-flex>
+
+                            <v-flex xs6 class="audit-filter">
+                                <v-select
+                                    label="Action"
+                                    required
+                                    :items="actions"
+                                    v-model="actionFilter"
+                                    prepend-icon="fa-exclamation"
+                                    hide-details
+                                    @input="debouncedReloadTable"
+                                ></v-select>
+                            </v-flex>
+
+                            <v-flex xs6 class="audit-filter">
+                                <v-text-field label="IP Address"
+                                              @input="debouncedReloadTable"
+                                              prepend-icon="fa-map-marker-alt"
+                                              hide-details
+                                              clearable
+                                              v-model="ipAddressFilter"></v-text-field>
+                            </v-flex>
+
+                            <v-flex xs6 class="audit-filter">
+                                <v-select
+                                    label="Successful"
+                                    required
+                                    :items="[ { text: 'Any', value: 'any' }, { text: 'Yes', value: 'yes' }, { text: 'No', value: 'no' } ]"
+                                    v-model="successFilter"
+                                    prepend-icon="done"
+                                    hide-details
+                                    @input="debouncedReloadTable"
+                                ></v-select>
+                            </v-flex>
+
+                            <v-flex xs6 class="audit-filter">
+                                <v-menu
+                                    v-model="showFromDate"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    lazy
+                                    transition="scale-transition"
+                                    offset-y
+                                    full-width
+                                    min-width="290px"
+                                >
+                                    <template v-slot:activator="{ on }">
+                                        <v-text-field
+                                            v-model="fromDateFilter"
+                                            label="From Date (inclusive, UTC)"
+                                            prepend-icon="event"
+                                            readonly
+                                            hide-details
+                                            clearable
+                                            v-on="on"
+                                            @input="debouncedReloadTable"
+                                        ></v-text-field>
+                                    </template>
+                                    <v-date-picker v-model="fromDateFilter"
+                                                   min="2018-01-01"
+                                                   :max="toDateFilter || maxAllowedDate"
+                                                   @input="showFromDate = false; debouncedReloadTable()"></v-date-picker>
+                                </v-menu>
+                            </v-flex>
+
+                            <v-flex xs6 class="audit-filter">
+                                <v-menu
+                                    v-model="showToDate"
+                                    :close-on-content-click="false"
+                                    :nudge-right="40"
+                                    lazy
+                                    transition="scale-transition"
+                                    offset-y
+                                    full-width
+                                    min-width="290px"
+                                >
+                                    <template v-slot:activator="{ on }">
+                                        <v-text-field
+                                            v-model="toDateFilter"
+                                            label="To Date (inclusive, UTC)"
+                                            prepend-icon="event"
+                                            readonly
+                                            hide-details
+                                            clearable
+                                            v-on="on"
+                                            @input="debouncedReloadTable"
+                                        ></v-text-field>
+                                    </template>
+                                    <v-date-picker v-model="toDateFilter"
+                                                   :min="fromDateFilter"
+                                                   :max="maxAllowedDate"
+                                                   @input="showToDate = false; debouncedReloadTable()"></v-date-picker>
+                                </v-menu>
+                            </v-flex>
+                        </v-layout>
+
+                        <v-data-table
+                            :headers="headers"
+                            :items="items"
+                            item-key="id"
+                            :pagination.sync="pagination"
+                            :total-items="totalItems"
+                            :loading="loading"
+                            :rows-per-page-items='[ 20, 50, 100 ]'
+                        >
+
+                            <template slot="items" slot-scope="props">
+                                <tr @click="props.expanded = !props.expanded">
+                                    <td>{{getDisplayDate(props.item.createDate)}}</td>
+                                    <td>{{props.item.userName}}</td>
+                                    <td>{{getAuditActionLabel(props.item.action)}}</td>
+                                    <td>{{props.item.ipAddress}}</td>
+                                    <td>
+                                        <v-checkbox
+                                            class="audit-enabled-cb"
+                                            disabled
+                                            v-model="props.item.success"
+                                        ></v-checkbox>
+                                    </td>
+                                </tr>
+                            </template>
+
+                            <template slot="expand" slot-scope="props">
+                                <v-card flat>
+                                    <v-card-text class="audit-details">{{props.item.details || '(no details)'}}</v-card-text>
+                                </v-card>
+                            </template>
+                        </v-data-table>
+                    </v-card-text>
+                </v-card>
             </v-flex>
         </v-layout>
     </v-container>
@@ -61,8 +173,10 @@ import Component from 'vue-class-component';
 import { Watch } from 'vue-property-decorator';
 import { Audit, PagedDataRep } from '../rak';
 import SectionHeader from '../header.vue';
+import AuditActions from './audit-actions.ts';
 import restApi from '../rest-api';
 import rakUtil from '../util';
+import debounce from 'debounce';
 
 @Component({ components: { SectionHeader } })
 export default class AuditHistory extends Vue {
@@ -77,6 +191,35 @@ export default class AuditHistory extends Vue {
         sortBy: 'createDate',
         descending: true
     };
+
+    private actions: any = [];
+    private maxAllowedDate: string = '';
+
+    private actionFilter: string = '';
+    private ipAddressFilter: string = '';
+    private userFilter: string = '';
+    private successFilter: string = 'any';
+    private fromDateFilter: string = '';
+    private showFromDate: boolean = false;
+    private toDateFilter: string = '';
+    private showToDate: boolean = false;
+
+    created() {
+
+        this.actions = AuditActions.getLabelValues();
+        this.maxAllowedDate = new Date().toISOString();
+        this.maxAllowedDate = this.maxAllowedDate.substring(0, this.maxAllowedDate.indexOf('T'));
+
+        this.debouncedReloadTable = debounce(this.debouncedReloadTable, 750);
+    }
+
+    private debouncedReloadTable() {
+        return this.reloadTable();
+    }
+
+    getAuditActionLabel(action: string): string {
+        return AuditActions.getLabel(action);
+    }
 
     getDisplayDate(iso8601Date: string): string {
         return rakUtil.getDisplayDate(iso8601Date, true);
@@ -101,7 +244,16 @@ export default class AuditHistory extends Vue {
 
         const sort: string = sortBy ? `${sortBy},${descending ? 'desc' : 'asc'}` : '';
 
-        return restApi.getAuditRecords(page - 1, 20, {}, sort)
+        const filters: any = {
+            userName: this.userFilter,
+            action: this.actionFilter,
+            ipAddress: this.ipAddressFilter,
+            success: this.successFilter,
+            fromDate: this.fromDateFilter ? this.fromDateFilter : null,
+            toDate: this.toDateFilter ? this.toDateFilter : null
+        };
+
+        return restApi.getAuditRecords(page - 1, 20, filters, sort)
             .then((pagedData: PagedDataRep<Audit>) => {
                 this.items = pagedData.data;
                 this.totalItems = pagedData.total;
@@ -121,6 +273,18 @@ export default class AuditHistory extends Vue {
 
 <style lang="less">
 .audit-wrapper {
+
+    .audit-filter-title {
+        padding-bottom: 0;
+    }
+
+    .audit-filters-wrapper {
+        padding: 0 2rem 2rem 2rem;
+
+        .audit-filter {
+            padding: 0 1rem !important;
+        }
+    }
 
     .audit-enabled-cb {
 

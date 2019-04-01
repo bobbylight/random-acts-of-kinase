@@ -9,6 +9,9 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.sgc.rak.exceptions.BadRequestException;
+import org.sgc.rak.exceptions.ErrorResponse;
+import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.model.Audit;
 import org.sgc.rak.model.AuditAction;
 import org.sgc.rak.reps.PagedDataRep;
@@ -25,6 +28,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.util.NestedServletException;
 
 import java.util.Collections;
 import java.util.List;
@@ -36,6 +40,9 @@ public class AuditControllerTest {
 
     @Mock
     private AuditService mockService;
+
+    @Mock
+    private Messages mockMessages;
 
     @InjectMocks
     private AuditController controller;
@@ -61,15 +68,17 @@ public class AuditControllerTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testGetAudits() throws Exception {
+    public void testGetAudits_happyPath() throws Exception {
 
         PageRequest pr = PageRequest.of(0, 20);
 
         List<Audit> audits = Collections.singletonList(TestUtil.createAudit("gclooney", AuditAction.LOGIN, true));
         PageImpl<Audit> expectedPage = new PageImpl<>(audits, pr, 1);
-        doReturn(expectedPage).when(mockService).getAudits(any(Pageable.class));
+        doReturn(expectedPage).when(mockService).getAudits(any(Pageable.class), any(), any(), any(), any(), any(), any());
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/admin/api/audits")
+            .param("fromDate", "2019-01-01")
+            .param("toDate", "2019-01-01")
             .accept(MediaType.APPLICATION_JSON)
         ).andExpect(MockMvcResultMatchers.status().isOk()
         ).andReturn();
@@ -84,6 +93,25 @@ public class AuditControllerTest {
         Assert.assertEquals(1, actualPosts.getCount());
         for (int i = 0; i < audits.size(); i++) {
             TestUtil.assertAuditsEqual(audits.get(i), actualPosts.getData().get(i));
+        }
+    }
+
+    @Test(expected = BadRequestException.class)
+    public void testGetAudits_error_invalidDateParameter() throws Throwable {
+
+        PageRequest pr = PageRequest.of(0, 20);
+
+        List<Audit> audits = Collections.singletonList(TestUtil.createAudit("gclooney", AuditAction.LOGIN, true));
+        PageImpl<Audit> expectedPage = new PageImpl<>(audits, pr, 1);
+        doReturn(expectedPage).when(mockService).getAudits(any(Pageable.class), any(), any(), any(), any(), any(), any());
+
+        try {
+            mockMvc.perform(MockMvcRequestBuilders.get("/admin/api/audits")
+                .param("fromDate", "xxx")
+                .accept(MediaType.APPLICATION_JSON)
+            );
+        } catch (NestedServletException nse) {
+            throw nse.getCause();
         }
     }
 }

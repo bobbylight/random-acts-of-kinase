@@ -10,9 +10,11 @@ import { faCog,
     faComments,
     faDatabase,
     faEdit,
+    faExclamation,
     faFilter,
     faHandshake,
     faHistory,
+    faMapMarkerAlt,
     faMask,
     faNewspaper,
     faQuestionCircle,
@@ -20,8 +22,8 @@ import { faCog,
     faUpload,
     faUser } from '@fortawesome/free-solid-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
-library.add(faCog, faComments, faDatabase, faEdit, faFilter, faHandshake, faHistory,
-    faMask, faNewspaper, faQuestionCircle, faTimes, faUpload, faUser, faGithub);
+library.add(faCog, faComments, faDatabase, faEdit, faExclamation, faFilter, faHandshake, faHistory,
+    faMapMarkerAlt, faMask, faNewspaper, faQuestionCircle, faTimes, faUpload, faUser, faGithub);
 dom.watch();
 
 // Register the router hooks with their names
@@ -52,6 +54,7 @@ import Vuetify, {
     VContent,
     VDataIterator,
     VDataTable,
+    VDatePicker,
     VDialog,
     VDivider,
     VExpansionPanel,
@@ -126,6 +129,7 @@ Vue.use(Vuetify, {
         VContent,
         VDataIterator,
         VDataTable,
+        VDatePicker,
         VDialog,
         VDivider,
         VExpansionPanel,

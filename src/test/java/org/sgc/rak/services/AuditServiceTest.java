@@ -13,6 +13,7 @@ import org.sgc.rak.model.ModelConstants;
 import org.sgc.rak.repositories.AuditRepository;
 import org.sgc.rak.util.TestUtil;
 import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -119,9 +120,9 @@ public class AuditServiceTest {
 
         List<Audit> posts = Collections.singletonList(TestUtil.createAudit(USER_NAME, ACTION, true));
         PageImpl<Audit> expectedPage = new PageImpl<>(posts, pr, 1);
-        doReturn(expectedPage).when(mockRepository).findAll(any(Pageable.class));
+        doReturn(expectedPage).when(mockRepository).findAll(any(Specification.class), any(Pageable.class));
 
-        Page<Audit> actualPosts = service.getAudits(pr);
+        Page<Audit> actualPosts = service.getAudits(pr, null, null, null, null, null, null);
         Assert.assertEquals(1, actualPosts.getNumberOfElements());
         Assert.assertEquals(1, actualPosts.getTotalElements());
         Assert.assertEquals(1, actualPosts.getTotalPages());

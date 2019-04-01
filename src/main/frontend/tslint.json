@@ -134,6 +134,7 @@
 			}
 		],
         "unified-signatures": true,
+        "unnecessary-else": true,
         "use-default-type-parameter": true,
 		"use-isnan": true,
 		"variable-name": [
