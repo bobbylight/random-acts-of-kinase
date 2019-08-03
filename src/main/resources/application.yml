@@ -1,6 +1,12 @@
 spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            # Prevent Hibernate from logging harmless exception - https://github.com/spring-projects/spring-boot/issues/12007
+            non_contextual_creation: true
   profiles:
     active: dev-postgres
   mvc:

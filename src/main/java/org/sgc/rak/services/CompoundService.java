@@ -3,11 +3,9 @@ package org.sgc.rak.services;
 import org.sgc.rak.dao.CompoundDao;
 import org.sgc.rak.exceptions.NotFoundException;
 import org.sgc.rak.i18n.Messages;
-import org.sgc.rak.model.Compound;
-import org.sgc.rak.model.CompoundCountPair;
-import org.sgc.rak.model.Kinase;
-import org.sgc.rak.model.ActivityProfile;
+import org.sgc.rak.model.*;
 import org.sgc.rak.repositories.ActivityProfileRepository;
+import org.sgc.rak.repositories.NanoBretActivityProfileRepository;
 import org.sgc.rak.reps.ObjectImportRep;
 import org.sgc.rak.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +29,18 @@ public class CompoundService {
     private final CompoundDao compoundDao;
     private final KinaseService kinaseService;
     private final ActivityProfileRepository activityProfileRepository;
+    private final NanoBretActivityProfileRepository nanoBretActivityProfileRepository;
     private final Messages messages;
 
     @Autowired
     public CompoundService(CompoundDao compoundDao, KinaseService kinaseService,
-                           ActivityProfileRepository activityProfileRepository, Messages messages) {
+                           ActivityProfileRepository activityProfileRepository,
+                           NanoBretActivityProfileRepository nanoBretActivityProfileRepository,
+                           Messages messages) {
         this.compoundDao = compoundDao;
         this.kinaseService = kinaseService;
         this.activityProfileRepository = activityProfileRepository;
+        this.nanoBretActivityProfileRepository = nanoBretActivityProfileRepository;
         this.messages = messages;
     }
 
@@ -130,6 +132,17 @@ public class CompoundService {
         return new PageImpl<>(compounds, pageInfo, profiles.getTotalElements());
     }
 
+    public Page<Compound> getCompoundsByKinaseAndIc50(String kinaseEntrez, double ic50, Pageable pageInfo) {
+
+        List<Long> kinaseIds = getKinaseRecordIds(kinaseEntrez);
+
+        Page<NanoBretActivityProfile> profiles = nanoBretActivityProfileRepository.
+            getActivityProfilesByKinaseIdInAndIc50LessThanEqual(kinaseIds, ic50, pageInfo);
+
+        List<Compound> compounds = getCompoundsFromNanoBretActivityProfiles(profiles);
+        return new PageImpl<>(compounds, pageInfo, profiles.getTotalElements());
+    }
+
     public Page<Compound> getCompoundsByKinaseAndKd(String kinaseEntrez, double kd, Pageable pageInfo) {
 
         List<Long> kinaseIds = getKinaseRecordIds(kinaseEntrez);
@@ -144,6 +157,14 @@ public class CompoundService {
     private List<Compound> getCompoundsFromActivityProfiles(Page<ActivityProfile> profiles) {
 
         List<String> compoundNames = profiles.getContent().stream().map(ActivityProfile::getCompoundName)
+            .collect(Collectors.toList());
+
+        return compoundDao.getCompounds(compoundNames);
+    }
+
+    private List<Compound> getCompoundsFromNanoBretActivityProfiles(Page<NanoBretActivityProfile> profiles) {
+
+        List<String> compoundNames = profiles.getContent().stream().map(NanoBretActivityProfile::getCompoundName)
             .collect(Collectors.toList());
 
         return compoundDao.getCompounds(compoundNames);

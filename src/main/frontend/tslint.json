@@ -107,6 +107,7 @@
 		"radix": true,
 		"restrict-plus-operands": false, // Allow concatenating strings with numbers
 		"semicolon": true,
+        "strict-comparisons": true,
         "strict-type-predicates": true,
         "trailing-comma": [
             true,

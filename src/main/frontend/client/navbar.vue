@@ -91,11 +91,17 @@ export default class Navbar extends Vue {
     }
 
     private close($event: string) {
+
         const index: number = this.openCompounds.indexOf($event);
         if (index > -1) {
             this.openCompounds.splice(index, 1);
         }
-        const tabNameRegex: RegExp = new RegExp($event + '$');
+
+        // Characters that we allow in a compound name, but would break our regex chec for the
+        // "previous" tab below
+        const regexSafeCompoundName: string = $event.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+        const tabNameRegex: RegExp = new RegExp(regexSafeCompoundName + '$');
         if (this.$route.fullPath && !!decodeURIComponent(this.$route.fullPath).match(tabNameRegex)) {
             console.log('Going back');
             this.$router.back();

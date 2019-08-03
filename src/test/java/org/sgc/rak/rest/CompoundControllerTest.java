@@ -95,7 +95,7 @@ public class CompoundControllerTest {
         doReturn(expectedPage).when(mockCompoundService).getCompounds(any(), any(Pageable.class),
             anyBoolean());
 
-        PagedDataRep<Compound> compounds = controller.getCompounds(null, null, null, null, pr);
+        PagedDataRep<Compound> compounds = controller.getCompounds(null, null, null, null, null, pr);
         Assert.assertEquals(0, compounds.getStart());
         Assert.assertEquals(1, compounds.getCount());
         Assert.assertEquals(1, compounds.getTotal());
@@ -113,7 +113,7 @@ public class CompoundControllerTest {
         PageImpl<Compound> expectedPage = new PageImpl<>(expectedResults, pr, 21);
         doReturn(expectedPage).when(mockCompoundService).getCompounds(any(), any(Pageable.class), anyBoolean());
 
-        PagedDataRep<Compound> compounds = controller.getCompounds(null, null, null, null, pr);
+        PagedDataRep<Compound> compounds = controller.getCompounds(null, null, null, null, null, pr);
         Assert.assertEquals(20, compounds.getStart());
         Assert.assertEquals(1, compounds.getCount());
         Assert.assertEquals(21, compounds.getTotal());
@@ -132,7 +132,7 @@ public class CompoundControllerTest {
         doReturn(expectedPage).when(mockCompoundService).getCompounds(
             eq(COMPOUND_NAME), any(Pageable.class), anyBoolean());
 
-        PagedDataRep<Compound> compounds = controller.getCompounds(COMPOUND_NAME, null, null, null, pr);
+        PagedDataRep<Compound> compounds = controller.getCompounds(COMPOUND_NAME, null, null, null, null, pr);
         Assert.assertEquals(0, compounds.getStart());
         Assert.assertEquals(1, compounds.getCount());
         Assert.assertEquals(1, compounds.getTotal());
@@ -151,7 +151,7 @@ public class CompoundControllerTest {
         doReturn(expectedPage).when(mockCompoundService).getCompoundsByKinaseAndActivity(eq("kinase"), anyDouble(),
             any(Pageable.class));
 
-        PagedDataRep<Compound> compounds = controller.getCompounds(null, "kinase", 0.8, null, pr);
+        PagedDataRep<Compound> compounds = controller.getCompounds(null, "kinase", 0.8, null, null, pr);
         Assert.assertEquals(0, compounds.getStart());
         Assert.assertEquals(1, compounds.getCount());
         Assert.assertEquals(1, compounds.getTotal());
@@ -170,7 +170,7 @@ public class CompoundControllerTest {
         doReturn(expectedPage).when(mockCompoundService).getCompoundsByKinaseAndKd(eq("kinase"), anyDouble(),
             any(Pageable.class));
 
-        PagedDataRep<Compound> compounds = controller.getCompounds(null, "kinase", null, 42d, pr);
+        PagedDataRep<Compound> compounds = controller.getCompounds(null, "kinase", null, 42d, null, pr);
         Assert.assertEquals(0, compounds.getStart());
         Assert.assertEquals(1, compounds.getCount());
         Assert.assertEquals(1, compounds.getTotal());

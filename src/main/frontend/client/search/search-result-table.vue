@@ -61,25 +61,12 @@ export default {
         };
     },
     watch: {
-        'filters.inhibitor': function(newFilter) {
-            console.log('inhibitor changed');
-            this.reloadTable();
-        },
-        'filters.kinase': function(newFilter) {
-            console.log('kinase changed');
-            this.reloadTable();
-        },
-        'filters.activity': function(newFilter) {
-            console.log('activity changed');
-            this.reloadTable();
-        },
-        'filters.kd': function(newFilter) {
-            console.log('Kd changed');
-            this.reloadTable();
-        },
-        'filters.activityOrKd': function(newValue) {
-            console.log('activityOrKd changed');
-            this.reloadTable();
+        filters: {
+            handler(newValue) {
+                console.log('Filterable property changed');
+                this.reloadTable();
+            },
+            deep: true
         },
 
         pagination: {

@@ -113,6 +113,7 @@ public class AuditServiceTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testGetAudits() {
 
         Sort sort = Sort.by(Sort.Order.desc("createDate"));

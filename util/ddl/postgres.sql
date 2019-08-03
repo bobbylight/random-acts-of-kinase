@@ -21,6 +21,16 @@ CREATE INDEX compound_compound_nm_lower_idx ON :schema.compound (lower(compound_
 CREATE INDEX compound_hidden_idx on :schema.compound (hidden);
 
 
+CREATE VIEW :schema.compound_with_kinase_activity_profile as
+  SELECT * from :schema.compound
+  WHERE compound_nm IN (SELECT DISTINCT compound_nm FROM :schema.kinase_activity_profile);
+
+
+CREATE VIEW :schema.compound_with_nanobret_activity_profile as
+  SELECT * from :schema.compound
+  WHERE compound_nm IN (SELECT DISTINCT compound_nm FROM :schema.nanobret_activity_profile);
+
+
 DROP TABLE IF EXISTS :schema.kinase CASCADE;
 CREATE TABLE :schema.kinase (
   id serial,

@@ -291,6 +291,7 @@ public class CompoundServiceTest {
         testImportCompoundsImpl(true);
     }
 
+    @SuppressWarnings("unchecked")
     private void testImportCompoundsImpl(boolean commit) {
 
         List<Compound> compounds = Arrays.asList(

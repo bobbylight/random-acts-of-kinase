@@ -103,6 +103,7 @@ class CompoundController extends AbstractRakController {
                                 @RequestParam(required = false, name = "kinase") String kinaseEntrez,
                                 @RequestParam(required = false) Double activity,
                                 @RequestParam(required = false) Double kd,
+                                @RequestParam(required = false) Double ic50,
                                 @SortDefault("compoundName") Pageable pageInfo) {
 
         // Force all varchar sorts to be case-insensitive.  This does not affect non-varchar fields
@@ -119,6 +120,9 @@ class CompoundController extends AbstractRakController {
         }
         else if (StringUtils.isNotBlank(kinaseEntrez) && kd != null) {
             page = compoundService.getCompoundsByKinaseAndKd(kinaseEntrez, kd, pageInfo);
+        }
+        else if (StringUtils.isNotBlank(kinaseEntrez) && ic50 != null) {
+            page = compoundService.getCompoundsByKinaseAndIc50(kinaseEntrez, ic50, pageInfo);
         }
         else {
             page = compoundService.getCompounds(null, pageInfo, isAdmin);
