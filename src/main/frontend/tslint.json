@@ -1,156 +1,174 @@
 {
-	"rules": {
-		"adjacent-overload-signatures": false,
-		"align": [
-			true,
-			"statements"
-		],
-		"arrow-parens": true,
-		"ban": false,
+    "rules": {
+        "adjacent-overload-signatures": false,
+        "align": [ true, "statements" ],
+        "arrow-parens": true,
+        "ban": false,
         "ban-comma-operator": true,
-		//"class-name": true,
-		"comment-format": false,//[ true, "check-space" ],
+        //"class-name": true,
+        "comment-format": false,
+        //[ true, "check-space" ],
         //"completed-docs": [ true, "classes", "enums", "functions", "interfaces" ],
-		"curly": true,
-        "cyclomatic-complexity": [ true, 10 ],
+        "curly": true,
+        "cyclomatic-complexity": [
+            true,
+            10
+        ],
         "deprecation": true,
         "encoding": true,
         "eofline": true,
-        "file-name-casing": [ true, "kebab-case" ],
-		"forin": false,
-		"indent": [
-			true,
-			"spaces"
-		],
-		"jsdoc-format": true,
-		"label-position": true,
-		"linebreak-style": [ true, "LF" ],
-		"max-file-line-count": [ true, 500 ],
-		"max-line-length": [
-			true,
-			140
-		],
+        "file-name-casing": [
+            true,
+            "kebab-case"
+        ],
+        "forin": false,
+        "indent": [
+            true,
+            "spaces"
+        ],
+        "jsdoc-format": true,
+        "label-position": true,
+        "linebreak-style": [
+            true,
+            "LF"
+        ],
+        "max-file-line-count": [
+            true,
+            500
+        ],
+        "max-line-length": [
+            true,
+            140
+        ],
         "member-access": false,
-		"member-ordering": false, //[ true, { "order": "fields-first" } ],
-		"new-parens": true,
+        "member-ordering": false,
+        //[ true, { "order": "fields-first" } ],
+        "new-parens": true,
         "no-angle-bracket-type-assertion": true,
         //"no-any": true,
-		"no-arg": true,
+        "no-arg": true,
         "no-bitwise": true,
         "no-boolean-literal-compare": true,
         "no-conditional-assignment": true,
         //"no-consecutive-blank-lines": true, // TODO: Reenable when vue file parsing works - https://github.com/palantir/tslint/issues/2099
-        "no-console": false, //[ true, "log", "debug", "info", "warn", "error" ],
-		"no-construct": true,
+        "no-console": false,
+        //[ true, "log", "debug", "info", "warn", "error" ],
+        "no-construct": true,
         "no-constructor-vars": false,
-		"no-debugger": true,
+        "no-debugger": true,
         "no-duplicate-imports": true,
         "no-duplicate-super": true,
-		"no-duplicate-variable": true,
+        "no-duplicate-variable": true,
         "no-dynamic-delete": true,
-		"no-empty": false,
+        "no-empty": false,
         "no-empty-interface": true,
-		"no-eval": true,
-		"no-for-in-array": true,
+        "no-eval": true,
+        "no-for-in-array": true,
         //"no-implicit-dependencies": [ true, "dev" ],
         //"no-import-side-effect": false,
-		"no-inferrable-types": false,
-		"no-internal-module": false,
-		"no-invalid-template-strings": true,
+        "no-inferrable-types": false,
+        "no-internal-module": false,
+        "no-invalid-template-strings": true,
         "no-invalid-this": false,
         "no-irregular-whitespace": true,
         "no-magic-numbers": false,
-		"no-mergeable-namespace": true,
+        "no-mergeable-namespace": true,
         "no-misused-new": true,
         "no-namespace": true,
         "no-null-keyword": false,
-		"no-parameter-properties": true,
+        "no-parameter-properties": true,
         "no-redundant-jsdoc": false,
         "no-reference": true,
-		"no-require-imports": false,
+        "no-require-imports": false,
         "no-return-await": true,
-		"no-shadowed-variable": false,
-		"no-sparse-arrays": true,
-		"no-string-literal": true,
-        "no-submodule-imports": false, // Possibly explore true later
+        "no-shadowed-variable": false,
+        "no-sparse-arrays": true,
+        "no-string-literal": true,
+        "no-submodule-imports": false,
+        // Possibly explore true later
         "no-switch-case-fall-through": false,
         "no-this-assignment": true,
-		"no-trailing-whitespace": true,
+        "no-trailing-whitespace": true,
         //"no-unbound-method": true,
-        "no-unnecessary-class": false, // Possibly explore later
+        "no-unnecessary-class": false,
+        // Possibly explore later
         "no-unnecessary-qualifier": true,
         "no-unnecessary-type-assertion": true,
         //"no-unsafe-any": true,
         "no-unsafe-finally": true,
-		"no-unused-expression": true,
-		"no-use-before-declare": true,
-		"no-var-keyword": true,
-		"no-var-requires": true,
-		"object-literal-sort-keys": false,
-		"one-line": [
-			true,
-			"check-open-brace",
-			"check-catch",
+        "no-unused-expression": true,
+        "no-use-before-declare": false,
+        // This rule is deprecated
+        "no-var-keyword": true,
+        "no-var-requires": true,
+        "object-literal-sort-keys": false,
+        "one-line": [
+            true,
+            "check-open-brace",
+            "check-catch",
             "check-finally",
-			"check-whitespace"
-		],
-		"only-arrow-functions": true,
+            "check-whitespace"
+        ],
+        //"only-arrow-functions": true, // TODO: Enable when we convert to 100% typescript
         "prefer-conditional-expression": true,
         "prefer-const": true,
         "prefer-readonly": true,
         "prefer-while": true,
-		"quotemark": [
-			true,
-			"single",
-			"avoid-escape"
-		],
-		"radix": true,
-		"restrict-plus-operands": false, // Allow concatenating strings with numbers
-		"semicolon": true,
-        "strict-comparisons": true,
+        "quotemark": [
+            true,
+            "single",
+            "avoid-escape"
+        ],
+        "radix": true,
+        "restrict-plus-operands": false,
+        // Allow concatenating strings with numbers
+        "semicolon": true,
+        //"strict-comparisons": true,
         "strict-type-predicates": true,
         "trailing-comma": [
             true,
-            { "singleline": "never" }
+            {
+                "singleline": "never"
+            }
         ],
-		"triple-equals": [
-			true,
-			"allow-null-check"
-		],
-		"typedef": [
-			true,
-			"parameter",
-			"property-declaration",
-			"variable-declaration",
-			"member-variable-declaration"
-		],
-		"typedef-whitespace": [
-			true,
-			{
-				"call-signature": "nospace",
-				"index-signature": "nospace",
-				"parameter": "nospace",
-				"property-declaration": "nospace",
-				"variable-declaration": "nospace"
-			}
-		],
+        "triple-equals": [
+            true,
+            "allow-null-check"
+        ],
+        "typedef": [
+            true,
+            "parameter",
+            "property-declaration",
+            "variable-declaration",
+            "member-variable-declaration"
+        ],
+        "typedef-whitespace": [
+            true,
+            {
+                "call-signature": "nospace",
+                "index-signature": "nospace",
+                "parameter": "nospace",
+                "property-declaration": "nospace",
+                "variable-declaration": "nospace"
+            }
+        ],
         "unified-signatures": true,
         "unnecessary-else": true,
         "use-default-type-parameter": true,
-		"use-isnan": true,
-		"variable-name": [
-			true,
-			"check-format",
-			"ban-keywords"
-		],
-		"whitespace": [
-			true,
-			"check-branch",
-			"check-decl",
-			"check-module",
-			"check-operator",
-			"check-separator",
-			"check-type"
-		]
-	}
+        "use-isnan": true,
+        "variable-name": [
+            true,
+            "check-format",
+            "ban-keywords"
+        ],
+        "whitespace": [
+            true,
+            "check-branch",
+            "check-decl",
+            "check-module",
+            "check-operator",
+            "check-separator",
+            "check-type"
+        ]
+    }
 }

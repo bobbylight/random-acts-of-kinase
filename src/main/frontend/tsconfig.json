@@ -1,26 +1,56 @@
 {
-    "compilerOptions": {
+  "compilerOptions": {
 
-        "allowJs": false,
-        "allowUnreachableCode": false,
-        "allowUnusedLabels": false,
-        "declaration": false,
-        "forceConsistentCasingInFileNames": true,
-        //"noImplicitAny": true,
-        "noImplicitReturns": true,
-        //"noUnusedLocals": true,
-        //"noUnusedParameters": true,
-        "preserveConstEnums": true,
-        "removeComments": false,
-        "strictNullChecks": true,
+      "allowJs": false,
+      "allowUnreachableCode": false,
+      "allowUnusedLabels": false,
+      "declaration": false,
+      "forceConsistentCasingInFileNames": true,
+      //"noImplicitAny": true,
+      "noImplicitReturns": true,
+      //"noUnusedLocals": true,
+      //"noUnusedParameters": true,
+      "preserveConstEnums": true,
+      "removeComments": false,
+      "strictNullChecks": true,
 
-        // Some of these are required for vue to work
-        "allowSyntheticDefaultImports": true,
-        "target": "es5",
-        "module": "es2015",
-        "moduleResolution": "node",
-        "experimentalDecorators": true, // Allow TypeScript classes via typescript-class-components
+      // Some of these are required for vue to work
+      "allowSyntheticDefaultImports": true,
+      "target": "es5",
+      "module": "es2015",
+      "moduleResolution": "node",
+      "experimentalDecorators": true, // Allow TypeScript classes via typescript-class-components
 
-        "sourceMap": true
-    }
+      "sourceMap": true,
+    "jsx": "preserve",
+    "importHelpers": true,
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "types": [
+      "webpack-env",
+      "mocha",
+      "chai"
+    ],
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    },
+    "lib": [
+      "esnext",
+      "dom",
+      "dom.iterable",
+      "scripthost"
+    ]
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "tests/**/*.ts",
+    "tests/**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
