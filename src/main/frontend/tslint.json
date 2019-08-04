@@ -84,21 +84,18 @@
         "no-shadowed-variable": false,
         "no-sparse-arrays": true,
         "no-string-literal": true,
-        "no-submodule-imports": false,
-        // Possibly explore true later
+        "no-submodule-imports": false, // Possibly explore true later
         "no-switch-case-fall-through": false,
         "no-this-assignment": true,
         "no-trailing-whitespace": true,
         //"no-unbound-method": true,
-        "no-unnecessary-class": false,
-        // Possibly explore later
+        "no-unnecessary-class": false, // Possibly explore later
         "no-unnecessary-qualifier": true,
         "no-unnecessary-type-assertion": true,
         //"no-unsafe-any": true,
         "no-unsafe-finally": true,
         "no-unused-expression": true,
-        "no-use-before-declare": false,
-        // This rule is deprecated
+        "no-use-before-declare": false, // This rule is deprecated
         "no-var-keyword": true,
         "no-var-requires": true,
         "object-literal-sort-keys": false,
@@ -120,8 +117,7 @@
             "avoid-escape"
         ],
         "radix": true,
-        "restrict-plus-operands": false,
-        // Allow concatenating strings with numbers
+        "restrict-plus-operands": false, // Allow concatenating strings with numbers
         "semicolon": true,
         //"strict-comparisons": true,
         "strict-type-predicates": true,
