@@ -82,8 +82,6 @@ export default class CompoundDetailsCard extends Vue {
     @Prop({ required: true })
     private readonly compound: Compound;
 
-    private compoundName: string | null | undefined = null;
-
     get compoundImageUrl(): string | null {
         if (this.compound && this.compound.compoundName) {
             return `api/compounds/images/${this.compound.compoundName}`;
@@ -104,14 +102,9 @@ export default class CompoundDetailsCard extends Vue {
         return '';
     }
 
-    mounted() {
-        // Just to avoid an NPE if an error occurs when rendering this component.
-        this.compoundName = this.compound ? this.compound.compoundName : 'unknown';
-    }
-
     onImageClicked() {
         this.$store.commit('setLightboxImage', this.compoundImageUrl);
-        this.$store.commit('setLightboxTitle', this.compoundName);
+        this.$store.commit('setLightboxTitle', this.compound ? this.compound.compoundName : 'Unknown');
     }
 }
 </script>
