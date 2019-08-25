@@ -5,7 +5,7 @@
 
             <section-header>Network</section-header>
 
-            <v-flex xs12 class="card-vertical-spacing">
+            <v-flex xs12>
                 <v-card class="expansion-panel-no-left-margin">
                     <actionable-card-title title="Compound Network"
                             sub-title="View compounds and activity profiles in a network diagram">

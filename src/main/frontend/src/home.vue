@@ -74,7 +74,6 @@ export default class Home extends Vue {
         background-image: url(/img/drew-hays-206414-unsplash-small.jpg);
         min-height: 600px;
 
-        background-attachment: fixed;
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
