@@ -1,9 +1,12 @@
 <template>
     <v-tooltip bottom>
-        <v-btn flat icon class="download-button" slot="activator"
-               :download="downloadFileName" :href="downloadUrl">
-            <v-icon>file_download</v-icon>
-        </v-btn>
+        <template v-slot:activator="{ on }">
+            <v-btn text icon class="download-button" slot="activator"
+                   :download="downloadFileName" :href="downloadUrl"
+                   v-on="on">
+                <v-icon>file_download</v-icon>
+            </v-btn>
+        </template>
         <span>Download</span>
     </v-tooltip>
 </template>
@@ -32,5 +35,9 @@ export default class DownloadButton extends Vue {
 <style lang="less">
 a.download-button {
     margin: 0;
+
+    &:hover {
+        text-decoration: none;
+    }
 }
 </style>

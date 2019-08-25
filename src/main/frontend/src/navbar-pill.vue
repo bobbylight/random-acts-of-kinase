@@ -1,6 +1,6 @@
 <template>
     <div class="navbar-pill-wrapper">
-        <v-btn flat class="navbar-pill" v-bind:class="{ active: isActiveTab() }" @click="navigate">
+        <v-btn text class="navbar-pill" v-bind:class="{ active: isActiveTab() }" @click="navigate">
             {{compound}}
         </v-btn>
         <span class="close-icon" @click="close">
@@ -79,6 +79,7 @@ export default class NavbarPill extends Vue {
         text-overflow: ellipsis;
         overflow: hidden;
         white-space: nowrap;
+        height: inherit !important;
 
         &:hover, &.active {
             background: rgba(255, 255, 255, 0.15) !important;

@@ -1,7 +1,7 @@
 <template>
     <tr class="blog-manager-row">
         <td class="blog-manager-cell">
-            <div class="subheading">
+            <div class="subtitle-1">
                 <a @click="editPost(post.id)">
                     {{post.title}}
                 </a>

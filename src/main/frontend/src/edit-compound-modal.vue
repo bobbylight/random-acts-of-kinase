@@ -88,10 +88,10 @@
                 <v-btn color="primary"
                        :disabled="!dirty || !valid"
                        @click="onSubmit">Update</v-btn>
-                <v-btn flat
+                <v-btn text
                        :disabled="!dirty"
                        @click="resetForm">Reset</v-btn>
-                <v-btn flat color="primary"
+                <v-btn text color="primary"
                        @click="visible = false">Cancel</v-btn>
             </v-card-actions>
         </v-card>

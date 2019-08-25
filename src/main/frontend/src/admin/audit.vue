@@ -72,7 +72,6 @@
                                     v-model="showFromDate"
                                     :close-on-content-click="false"
                                     :nudge-right="40"
-                                    lazy
                                     transition="scale-transition"
                                     offset-y
                                     full-width
@@ -102,7 +101,6 @@
                                     v-model="showToDate"
                                     :close-on-content-click="false"
                                     :nudge-right="40"
-                                    lazy
                                     transition="scale-transition"
                                     offset-y
                                     full-width
@@ -132,32 +130,36 @@
                             :headers="headers"
                             :items="items"
                             item-key="id"
-                            :pagination.sync="pagination"
-                            :total-items="totalItems"
+                            :items-per-page="tableOptions.itemsPerPage"
+                            :server-items-length="totalItems"
+                            :options.sync="tableOptions"
                             :loading="loading"
-                            :rows-per-page-items='[ 20, 50, 100 ]'
+                            multi-sort
+                            show-expand
+                            :single-expand="true"
+                            :footer-props="{ 'items-per-page-options': [ 20, 50, 100 ] }"
                         >
 
-                            <template slot="items" slot-scope="props">
-                                <tr @click="props.expanded = !props.expanded">
-                                    <td>{{getDisplayDate(props.item.createDate)}}</td>
-                                    <td>{{props.item.userName}}</td>
-                                    <td>{{getAuditActionLabel(props.item.action)}}</td>
-                                    <td>{{props.item.ipAddress}}</td>
-                                    <td>
-                                        <v-checkbox
-                                            class="audit-enabled-cb"
-                                            disabled
-                                            v-model="props.item.success"
-                                        ></v-checkbox>
-                                    </td>
-                                </tr>
+                            <template v-slot:item.createDate="{ item }">
+                                {{getDisplayDate(item.createDate)}}
                             </template>
 
-                            <template slot="expand" slot-scope="props">
-                                <v-card flat>
-                                    <v-card-text class="audit-details">{{props.item.details || '(no details)'}}</v-card-text>
-                                </v-card>
+                            <template v-slot:item.action="{ item }">
+                                {{getAuditActionLabel(item.action)}}
+                            </template>
+
+                            <template v-slot:item.success="{ item }">
+                                <v-checkbox
+                                    class="audit-enabled-cb"
+                                    disabled
+                                    v-model="item.success"
+                                ></v-checkbox>
+                            </template>
+
+                            <template v-slot:expanded-item="{ item, headers }">
+                                <td :colspan="headers.length">
+                                    <span class="audit-details">{{item.details || '(no details)'}}</span>
+                                </td>
                             </template>
                         </v-data-table>
                     </v-card-text>
@@ -171,7 +173,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Watch } from 'vue-property-decorator';
-import { Audit, PagedDataRep } from '../rak';
+import { Audit, PagedDataRep, VueDataTableOptions } from '../rak';
 import SectionHeader from '../header.vue';
 import AuditActions from './audit-actions';
 import restApi from '../rest-api';
@@ -187,11 +189,6 @@ export default class AuditHistory extends Vue {
 
     private loading: boolean = true;
 
-    pagination: any = {
-        sortBy: 'createDate',
-        descending: true
-    };
-
     private actions: any = [];
     private maxAllowedDate: string = '';
 
@@ -203,6 +200,16 @@ export default class AuditHistory extends Vue {
     showFromDate: boolean = false;
     toDateFilter: string = '';
     showToDate: boolean = false;
+    tableOptions: VueDataTableOptions = {
+        page: 0,
+        itemsPerPage: 20,
+        sortBy: [ 'createDate' ],
+        sortDesc: [ true ],
+        groupBy: [],
+        groupDesc: [],
+        multiSort: true,
+        mustSort: false
+    };
 
     created() {
 
@@ -236,13 +243,24 @@ export default class AuditHistory extends Vue {
         ];
     }
 
+    mounted() {
+        this.reloadTable();
+    }
+
     reloadTable() {
 
         this.loading = true;
+        const options: VueDataTableOptions = this.tableOptions;
 
-        const { sortBy, descending, page, rowsPerPage } = this.pagination;
-
-        const sort: string = sortBy ? `${sortBy},${descending ? 'desc' : 'asc'}` : '';
+        let sort: string = '';
+        for (let i: number = 0; i < options.sortBy.length; i++) {
+            const sortCol: string = options.sortBy[i];
+            const sortDir: string = options.sortDesc[i] ? 'desc' : 'asc';
+            sort += `${sortCol},${sortDir}`;
+            if (i < options.sortBy.length - 1) {
+                sort += ':';
+            }
+        }
 
         const filters: any = {
             userName: this.userFilter,
@@ -253,7 +271,7 @@ export default class AuditHistory extends Vue {
             toDate: this.toDateFilter ? this.toDateFilter : null
         };
 
-        return restApi.getAuditRecords(page - 1, 20, filters, sort)
+        return restApi.getAuditRecords(options.page - 1, options.itemsPerPage, filters, sort)
             .then((pagedData: PagedDataRep<Audit>) => {
                 this.items = pagedData.data;
                 this.totalItems = pagedData.total;
@@ -262,10 +280,8 @@ export default class AuditHistory extends Vue {
             });
     }
 
-    @Watch('pagination')
-    private onPaginationHandlerChanged(newValue: any) {
-        // Note this triggers an unnecessary second query until
-        // https://github.com/vuetifyjs/vuetify/issues/3585 is fixed
+    @Watch('tableOptions')
+    private onTablePagingOrSortingChanged(newOptions: VueDataTableOptions) {
         return this.reloadTable();
     }
 }

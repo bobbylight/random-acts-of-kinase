@@ -2,8 +2,8 @@
     <v-card-title>
         <div class="title-content">
             <div>
-                <div class="headline">{{title}}</div>
-                <div v-if="subTitle">{{subTitle}}</div>
+                <div>{{title}}</div>
+                <div class="actionable-card-subtitle" v-if="subTitle">{{subTitle}}</div>
             </div>
             <div class="admin-card-button-area">
                 <slot></slot>
@@ -33,6 +33,10 @@ export default class ActionableCardTitle extends Vue {
 
     position: relative;
     width: 100%;
+
+    .actionable-card-subtitle {
+        font-size: initial;
+    }
 
     .admin-card-button-area {
 

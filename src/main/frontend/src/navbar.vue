@@ -1,30 +1,30 @@
 <template>
 
-    <v-toolbar app absolute dark class="rak-navbar">
+    <v-app-bar app absolute dark class="rak-navbar">
 
         <v-toolbar-title class="toolbar-title-fix" @click="setActiveTab('home')">
             <img src="/img/molecule-white.svg" width="50" height="50" class="navbar-image">
         </v-toolbar-title>
 
         <v-toolbar-items>
-            <v-btn flat v-bind:class="{ 'active-toolbar-item': isActiveTab('/search') }" @click="setActiveTab('search')">
+            <v-btn text v-bind:class="{ 'active-toolbar-item': isActiveTab('/search') }" @click="setActiveTab('search')">
                 Search
             </v-btn>
 
-            <v-btn flat v-bind:class="{ 'active-toolbar-item': isActiveTab('/nanoBretSearch') }"
+            <v-btn text v-bind:class="{ 'active-toolbar-item': isActiveTab('/nanoBretSearch') }"
                    @click="setActiveTab('nanoBretSearch')" v-if="$store.getters.loggedIn">
                 NanoBRET
             </v-btn>
 
-            <v-btn flat v-bind:class="{ 'active-toolbar-item': isActiveTab('/blog') }" @click="setActiveTab('blog')">
+            <v-btn text v-bind:class="{ 'active-toolbar-item': isActiveTab('/blog') }" @click="setActiveTab('blog')">
                 News
             </v-btn>
 
-            <v-btn flat v-bind:class="{ 'active-toolbar-item': isActiveTab('/network') }" @click="setActiveTab('network')">
+            <v-btn text v-bind:class="{ 'active-toolbar-item': isActiveTab('/network') }" @click="setActiveTab('network')">
                 Network
             </v-btn>
 
-            <v-btn flat v-bind:class="{ 'active-toolbar-item': isActiveTab('/admin') }"
+            <v-btn text v-bind:class="{ 'active-toolbar-item': isActiveTab('/admin') }"
                    @click="setActiveTab($store.state.lastAdminRouteName)" v-if="$store.getters.loggedIn">
                 Admin
             </v-btn>
@@ -36,30 +36,32 @@
         <v-spacer></v-spacer>
 
         <span v-if="$store.getters.loggedIn" class="user-name">{{$store.state.user}}</span>
-        <v-btn flat icon large @click="showLogin = true" title="Login" aria-label="Login"
+        <v-btn text icon large @click="showLogin = true" title="Login" aria-label="Login"
                 v-if="!$store.getters.loggedIn">
             <v-icon>fa-user</v-icon>
         </v-btn>
         <v-menu bottom left v-if="$store.getters.loggedIn">
-            <v-btn flat icon large slot="activator">
-                <v-icon>fa-user</v-icon>
-            </v-btn>
+            <template v-slot:activator="{ on }">
+                <v-btn text icon large v-on="on">
+                    <v-icon>fa-user</v-icon>
+                </v-btn>
+            </template>
             <v-list>
-                <v-list-tile @click="logout">
-                    <v-list-tile-title>Log Out</v-list-tile-title>
-                </v-list-tile>
+                <v-list-item @click="logout">
+                    <v-list-item-title>Log Out</v-list-item-title>
+                </v-list-item>
             </v-list>
         </v-menu>
-        <v-btn flat icon large @click="showPartners" title="Partners" aria-label="Partners">
+        <v-btn text icon large @click="showPartners" title="Partners" aria-label="Partners">
             <v-icon>fa-handshake</v-icon>
         </v-btn>
-        <v-btn flat icon large @click="showFeedback = true" title="Feedback" aria-label="Feedback">
+        <v-btn text icon large @click="showFeedback = true" title="Feedback" aria-label="Feedback">
             <v-icon>fa-comments</v-icon>
         </v-btn>
 
         <login-modal :show="showLogin" @close="showLogin = false"></login-modal>
         <feedback-modal :show="showFeedback" @close="showFeedback = false"></feedback-modal>
-    </v-toolbar>
+    </v-app-bar>
 
 </template>
 

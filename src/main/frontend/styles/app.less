@@ -1,6 +1,6 @@
 @import 'app-variables';
 
-body {
+html, body {
     font-family: Roboto, sans-serif; // Match .application for stuff outside like toasters
 }
 
@@ -59,6 +59,14 @@ ul {
         .ui.header {
             margin-top: 0;
         }
+    }
+}
+
+.v-data-table tbody tr.expanded.expanded__content {
+    box-shadow: none;
+    td {
+        padding-left: 0;
+        padding-right: 0;
     }
 }
 

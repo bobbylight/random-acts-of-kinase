@@ -24,7 +24,7 @@
                 <v-btn color="primary" type="submit" form="login-form" :disabled="!user || !password">
                     Log In
                 </v-btn>
-                <v-btn flat color="primary" @click="onCancel">
+                <v-btn text color="primary" @click="onCancel">
                     Cancel
                 </v-btn>
             </v-card-actions>

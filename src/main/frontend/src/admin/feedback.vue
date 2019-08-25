@@ -19,17 +19,17 @@
 
             </v-flex>
 
-            <v-flex xs12>
+            <v-flex xs12 class="feedback-button-section">
 
-                <v-btn @click="onReply" :disabled="isReplyDisabled()">
+                <v-btn class="feedback-button" @click="onReply" :disabled="isReplyDisabled()">
                     Reply
                 </v-btn>
 
-                <v-btn @click="onCreateTicket" :disabled="loading || selectedFeedback.length !== 1">
+                <v-btn class="feedback-button" @click="onCreateTicket" :disabled="loading || selectedFeedback.length !== 1">
                     Create GitHub ticket
                 </v-btn>
 
-                <v-btn @click="onDelete" :disabled="loading || selectedFeedback.length === 0">
+                <v-btn class="feedback-button" @click="onDelete" :disabled="loading || selectedFeedback.length === 0">
                     Delete
                 </v-btn>
             </v-flex>
@@ -42,32 +42,36 @@
                     v-model="selectedFeedback"
                     :items="items"
                     item-key="id"
-                    select-all
-                    :pagination.sync="pagination"
-                    :total-items="totalItems"
+                    show-select
+                    :server-items-length="totalItems"
+                    :options.sync="tableOptions"
                     :loading="loading"
-                    :rows-per-page-items='[ 10, 20, 50 ]'
+                    multi-sort
+                    show-expand
+                    :single-expand="true"
+                    :footer-props="{ 'items-per-page-options': [ 10, 20, 50 ] }"
                 >
 
-                    <template slot="items" slot-scope="props">
-                        <tr @click="props.expanded = !props.expanded">
-                            <td>
-                                <v-checkbox
-                                    primary
-                                    hide-details
-                                    v-model="props.selected"
-                                ></v-checkbox>
-                            </td>
-                            <td v-html="linkifyEmail(props.item)"></td>
-                            <td>{{props.item.title}}</td>
-                            <td>{{new Date(props.item.createDate).toLocaleString()}}</td>
-                        </tr>
+                    <template v-slot:item.selected="{ item }">
+                        <v-checkbox
+                            primary
+                            hide-details
+                            v-model="item.selected"
+                        ></v-checkbox>
                     </template>
 
-                    <template slot="expand" slot-scope="props">
-                        <v-card flat>
-                            <v-card-text class="feedback-body">{{props.item.body}}</v-card-text>
-                        </v-card>
+                    <template v-slot:item.email="{ item }">
+                        <span v-html="linkifyEmail(item)"></span>
+                    </template>
+
+                    <template v-slot:item.createDate="{ item }">
+                        {{new Date(item.createDate).toLocaleString()}}
+                    </template>
+
+                    <template v-slot:expanded-item="{ item, headers }">
+                        <td :colspan="headers.length">
+                            <span class="feedback-body">{{item.body || '(no feedback data)'}}</span>
+                        </td>
                     </template>
                 </v-data-table>
             </v-flex>
@@ -85,7 +89,7 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="primary" @click.stop="deleteSelectedFeedback">Yes</v-btn>
-                    <v-btn color="primary" flat @click.stop="showConfirmDeleteModal = false">No</v-btn>
+                    <v-btn color="primary" text @click.stop="showConfirmDeleteModal = false">No</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -97,7 +101,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import SectionHeader from '../header.vue';
-import { ErrorResponse, Feedback, PagedDataRep } from '../rak';
+import { ErrorResponse, Feedback, PagedDataRep, VueDataTableOptions } from '../rak';
 import { Watch } from 'vue-property-decorator';
 import restApi from '../rest-api';
 import Toaster from '../toaster';
@@ -116,9 +120,15 @@ export default class FeedbackManager extends Vue {
 
     private showConfirmDeleteModal: boolean = false;
 
-    private readonly pagination: any = {
-        sortBy: 'createDate',
-        descending: true
+    tableOptions: VueDataTableOptions = {
+        page: 0,
+        itemsPerPage: 20,
+        sortBy: [ 'createDate' ],
+        sortDesc: [ true ],
+        groupBy: [],
+        groupDesc: [],
+        multiSort: true,
+        mustSort: false
     };
 
     get headers(): any[] /*VTableHeader[]*/ {
@@ -198,12 +208,19 @@ export default class FeedbackManager extends Vue {
     reloadTable() {
 
         this.loading = true;
+        const options: VueDataTableOptions = this.tableOptions;
 
-        const { sortBy, descending, page, rowsPerPage } = this.pagination;
+        let sort: string = '';
+        for (let i: number = 0; i < options.sortBy.length; i++) {
+            const sortCol: string = options.sortBy[i];
+            const sortDir: string = options.sortDesc[i] ? 'desc' : 'asc';
+            sort += `${sortCol},${sortDir}`;
+            if (i < options.sortBy.length - 1) {
+                sort += ':';
+            }
+        }
 
-        const sort: string = sortBy ? `${sortBy},${descending ? 'desc' : 'asc'}` : '';
-
-        return restApi.getFeedback(page - 1, 10000, {}, sort)
+        return restApi.getFeedback(options.page - 1, 10000, {}, sort)
             .then((pagedData: PagedDataRep<Feedback>) => {
                 this.items = pagedData.data;
                 this.totalItems = pagedData.total;
@@ -212,10 +229,8 @@ export default class FeedbackManager extends Vue {
             });
     }
 
-    @Watch('pagination')
-    private onPaginationHandlerChanged(newValue: any) {
-        // Note this triggers an unnecessary second query until
-        // https://github.com/vuetifyjs/vuetify/issues/3585 is fixed
+    @Watch('tableOptions')
+    private onTablePagingOrSortingChanged(newOptions: VueDataTableOptions) {
         return this.reloadTable();
     }
 }
@@ -223,6 +238,16 @@ export default class FeedbackManager extends Vue {
 
 <style lang="less">
 .feedback-wrapper {
+
+    .feedback-button-section {
+
+        margin-bottom: 0.5rem;
+
+        .feedback-button {
+            margin-left: 0.5rem;
+            margin-right: 0.5rem;
+        }
+    }
 
     .feedback-body {
         margin: 0 3rem;

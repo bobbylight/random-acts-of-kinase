@@ -10,34 +10,37 @@
                     <actionable-card-title title="Compound Network"
                             sub-title="View compounds and activity profiles in a network diagram">
                         <v-tooltip right>
-                            <v-menu
-                                slot="activator"
-                                :close-on-content-click="false"
-                            >
-                                <v-btn fab flat slot="activator">
-                                    <v-icon>settings</v-icon>
-                                </v-btn>
+                            <template v-slot:activator="{ on }">
+                                <v-menu
+                                    :close-on-content-click="false"
+                                >
+                                    <template v-slot:activator="{ on: on2 }">
+                                        <v-btn fab text v-on="{ ...on, ...on2 }">
+                                            <v-icon>settings</v-icon>
+                                        </v-btn>
+                                    </template>
 
-                                <v-card class="network-properties-popup">
-                                    <v-card-title class="network-properties-popup-title">
-                                        <div class="headline">Network Properties</div>
-                                    </v-card-title>
-                                    <v-card-text class="network-properties-popup-content">
-                                        <v-container grid-list-md class="network-properties-popup-container">
-                                            <v-layout row wrap>
-                                                <v-flex xs12>
-                                                    <v-switch
-                                                        :label="`${physicsEnabled ? 'Physics' : 'No physics'}`"
-                                                        v-model="physicsEnabled"></v-switch>
-                                                </v-flex>
-                                                <v-flex xs12>
-                                                    Other network properties will go here.
-                                                </v-flex>
-                                            </v-layout>
-                                        </v-container>
-                                    </v-card-text>
-                                </v-card>
-                            </v-menu>
+                                    <v-card class="network-properties-popup">
+                                        <v-card-title class="network-properties-popup-title">
+                                            <div class="headline">Network Properties</div>
+                                        </v-card-title>
+                                        <v-card-text class="network-properties-popup-content">
+                                            <v-container grid-list-md class="network-properties-popup-container">
+                                                <v-layout row wrap>
+                                                    <v-flex xs12>
+                                                        <v-switch
+                                                            :label="`${physicsEnabled ? 'Physics' : 'No physics'}`"
+                                                            v-model="physicsEnabled"></v-switch>
+                                                    </v-flex>
+                                                    <v-flex xs12>
+                                                        Other network properties will go here.
+                                                    </v-flex>
+                                                </v-layout>
+                                            </v-container>
+                                        </v-card-text>
+                                    </v-card>
+                                </v-menu>
+                            </template>
                             <span>Network Properties</span>
                         </v-tooltip>
                     </actionable-card-title>
@@ -57,10 +60,11 @@
                                                     chips
                                                     item-text="compoundName"
                                                     :return-object="true"
+                                                    autocomplete="off"
                                                     multiple
                                                     :rules="compoundDropdownRules()">
                                         <template slot="selection" slot-scope="data">
-                                            <v-chip :selected="data.selected"
+                                            <v-chip :input-value="data.selected"
                                                     close
                                                     class="chip--select-multi"
                                                     @input="removeCompound(data.item)">
@@ -75,6 +79,8 @@
                         <v-layout row wrap>
                             <v-flex xs6 px-4>
                                 <v-slider :min="1" v-model="percentControl"
+                                          class="network-slider"
+                                          hide-details
                                           :validate-on-blur="true"
                                           :thumb-label="true" label="% Control"></v-slider>
                             </v-flex>
@@ -225,6 +231,10 @@ export default class CompoundNetworkTab extends Vue {
 </script>
 
 <style lang="less">
+.network-slider {
+    margin-top: 16px;
+}
+
 .network-properties-popup {
 
     z-index: 100;

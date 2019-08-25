@@ -118,3 +118,14 @@ export interface UserRep {
     userName?: string;
     lightboxImage?: string;
 }
+
+export interface VueDataTableOptions {
+    page: number;
+    itemsPerPage: number;
+    sortBy: string[];
+    sortDesc: boolean[];
+    groupBy: string[];
+    groupDesc: boolean[];
+    multiSort: boolean;
+    mustSort: boolean;
+}

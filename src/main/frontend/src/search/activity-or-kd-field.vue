@@ -2,6 +2,7 @@
     <div>
         <v-text-field type="number" :label="label" class="search-field right-aligned"
                       :rules="numericValidationRules" v-model="fieldValue" @input="onFieldValueChanged"
+                      autocomplete="off"
                       :step="step" :min="min" :max="max" suffix="%">
         </v-text-field>
         <activity-or-kd-toggle-button ref="dropdown"></activity-or-kd-toggle-button>

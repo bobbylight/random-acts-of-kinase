@@ -13,9 +13,9 @@
             style="max-width: 600px"
         >
             <v-list>
-                <v-list-tile @click="">
-                    <v-list-tile-title>Menu item 1</v-list-tile-title>
-                </v-list-tile>
+                <v-list-item @click="">
+                    <v-list-item-title>Menu item 1</v-list-item-title>
+                </v-list-item>
             </v-list>
         </v-menu>
     </div>
@@ -238,11 +238,19 @@ export default class CompoundNetwork extends Vue {
                 });
             }
 
+            const kdVal: string = ap.kd ? (ap.kd >= 10000 ? '>= 10000' : '' + ap.kd) : 'Unknown';
+
+            let title: string = `<table><tr><td>% Control:</td><td>${ap.percentControl}</td></tr>` +
+                `<tr><td>Kd:</td><td>${kdVal}</td></tr>`;
+            if (ap.kinase.discoverxGeneSymbol !== ap.kinase.entrezGeneSymbol) {
+                title += `<tr><td>Mutant:</td><td>${ap.kinase.discoverxGeneSymbol}</td></tr>`;
+            }
+            title += '</table>';
+
             edges.push({ from: ap.compoundName, to: entrez,
                 value: ap.percentControl,
                 activityProfile: ap,
-                title: `<table><tr><td>% Control:</td><td>${ap.percentControl}</td></tr>` +
-                    `<tr><td>Kd:</td><td>${ap.kd}</td></tr></table>` });
+                title });
         });
 
         // A DataView filters based on percent control and/or Kd

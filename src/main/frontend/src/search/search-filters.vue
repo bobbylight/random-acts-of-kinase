@@ -3,6 +3,7 @@
 
         <v-flex xs12>
             <v-text-field type="text" label="Search by compound" class="search-field"
+                          autocomplete="off"
                           v-model="filters.inhibitor"></v-text-field>
         </v-flex>
 

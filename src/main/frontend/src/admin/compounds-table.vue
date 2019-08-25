@@ -3,21 +3,25 @@
         <v-data-table
             class="compound-table"
             :items="items"
-            :pagination.sync="pagination"
-            :total-items="totalItems"
+            :items-per-page="tableOptions.itemsPerPage"
+            :server-items-length="totalItems"
+            :options.sync="tableOptions"
             :loading="loading"
             :headers="createHeaders"
-            :rows-per-page-items='[ 10, 20, 50 ]'>
+            :footer-props="{ 'items-per-page-options': [ 10, 20, 50 ] }"
+        >
 
-            <template slot="items" slot-scope="props">
-                <td v-for="header in createHeaders" :class="getClassesForRow(header.value)">
-                    <a v-if="header.value === 'compoundName'" :href="getCompoundLink(props.item[header.value])">
-                        {{props.item[header.value]}}
-                    </a>
-                    <span v-if="header.value !== 'compoundName'">
-                        {{props.item[header.value]}}
+            <template v-slot:item="{ item }">
+                <tr>
+                    <td v-for="header in createHeaders" :class="getClassesForRow(header.value)">
+                        <a v-if="header.value === 'compoundName'" :href="getCompoundLink(item[header.value])">
+                            {{item[header.value]}}
+                        </a>
+                        <span v-if="header.value !== 'compoundName'">
+                        {{item[header.value]}}
                     </span>
-                </td>
+                    </td>
+                </tr>
             </template>
 
         </v-data-table>
@@ -30,7 +34,7 @@ import Component from 'vue-class-component';
 import { Prop, Watch } from 'vue-property-decorator';
 import axios, { AxiosResponse } from 'axios';
 import debounce from 'debounce';
-import { PagedDataRep } from '@/rak';
+import { PagedDataRep, VueDataTableOptions } from '@/rak';
 
 export interface ColumnInfo {
     columnName: string;
@@ -57,7 +61,16 @@ export default class CompoundTable extends Vue {
 
     private loading: boolean = true;
 
-    pagination: any = {};
+    tableOptions: VueDataTableOptions = {
+        page: 0,
+        itemsPerPage: 10,
+        sortBy: [ 'compoundName' ],
+        sortDesc: [ false ],
+        groupBy: [],
+        groupDesc: [],
+        multiSort: true,
+        mustSort: false
+    };
 
     private getCompoundLink(compoundName: string) {
         return `#/compound/${compoundName}`;
@@ -111,14 +124,21 @@ export default class CompoundTable extends Vue {
     reloadTable() {
 
         this.loading = true;
+        const options: VueDataTableOptions = this.tableOptions;
 
-        const { sortBy, descending, page, rowsPerPage } = this.pagination;
-
-        const sort: string = sortBy ? `${sortBy},${descending ? 'desc' : 'asc'}` : '';
+        let sort: string = '';
+        for (let i: number = 0; i < options.sortBy.length; i++) {
+            const sortCol: string = options.sortBy[i];
+            const sortDir: string = options.sortDesc[i] ? 'desc' : 'asc';
+            sort += `${sortCol},${sortDir}`;
+            if (i < options.sortBy.length - 1) {
+                sort += ':';
+            }
+        }
 
         const firstParamChar: string = this.url.indexOf('?') > -1 ? '&' : '?';
 
-        let url: string = `${this.url}${firstParamChar}page=${page - 1}&size=${rowsPerPage}`;
+        let url: string = `${this.url}${firstParamChar}page=${options.page - 1}&size=${options.itemsPerPage}`;
         if (sort) {
             url += `&sort=${sort}`;
         }
@@ -133,10 +153,8 @@ export default class CompoundTable extends Vue {
             });
     }
 
-    @Watch('pagination')
-    private onPaginationHandlerChanged(newValue: any) {
-        // Note this triggers an unnecessary second query until
-        // https://github.com/vuetifyjs/vuetify/issues/3585 is fixed
+    @Watch('tableOptions')
+    private onTablePagingOrSortingChanged(newOptions: VueDataTableOptions) {
         return this.reloadTable();
     }
 

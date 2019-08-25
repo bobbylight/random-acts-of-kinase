@@ -1,5 +1,5 @@
 <template>
-    <v-chip small disabled>
+    <v-chip small>
         <v-avatar>
             <img src="https://randomuser.me/api/portraits/men/35.jpg" alt="trevor">
         </v-avatar>

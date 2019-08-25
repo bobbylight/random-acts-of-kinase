@@ -7,7 +7,7 @@
             :items="items"
             :headers="createHeaders()"
             :custom-sort="sortGrid"
-            :rows-per-page-items='[ 10, 20, 50 ]'>
+            :items-per-page-options='[ 10, 20, 50 ]'>
 
             <template slot="items" slot-scope="props">
                 <td v-for="header in createHeaders()"

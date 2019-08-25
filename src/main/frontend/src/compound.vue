@@ -7,10 +7,13 @@
                 Results for {{id}}
                 <div style="float: right" v-if="$store.getters.loggedIn">
                     <v-tooltip bottom>
-                        <v-btn flat icon @click="edit"
-                                slot="activator">
-                            <v-icon>fas fa-edit</v-icon>
-                        </v-btn>
+                        <template v-slot:activator="{ on }">
+                            <v-btn text icon @click="edit"
+                                    slot="activator"
+                                    v-on="on">
+                                <v-icon>fas fa-edit</v-icon>
+                            </v-btn>
+                        </template>
                         <span>Edit this compound</span>
                     </v-tooltip>
                 </div>
@@ -22,33 +25,37 @@
 
 
             <v-flex xs12 class="card-vertical-spacing">
-                <v-expansion-panel class="expansion-panel-no-left-margin" :value="0">
-                    <v-expansion-panel-content>
-                        <div slot="header">
-                            <h3 class="headline">Table View</h3>
-                        </div>
-                        <v-card>
-                            <v-card-text>
-                                <result-table :filters="gridFilters"></result-table>
-                            </v-card-text>
-                        </v-card>
-                    </v-expansion-panel-content>
-                </v-expansion-panel>
+                <v-expansion-panels>
+                    <v-expansion-panel class="expansion-panel-no-left-margin" :value="0">
+                        <v-expansion-panel-content>
+                            <div slot="header">
+                                <h3 class="headline">Table View</h3>
+                            </div>
+                            <v-card>
+                                <v-card-text>
+                                    <result-table :filters="gridFilters"></result-table>
+                                </v-card-text>
+                            </v-card>
+                        </v-expansion-panel-content>
+                    </v-expansion-panel>
+                </v-expansion-panels>
             </v-flex>
 
             <v-flex xs12 class="card-vertical-spacing" v-if="chartData">
-                <v-expansion-panel class="expansion-panel-no-left-margin">
-                    <v-expansion-panel-content>
-                        <div slot="header">
-                            <h3 class="headline">Chart View</h3>
-                        </div>
-                        <v-card>
-                            <v-card-text>
-                                <column-chart :data="chartData"></column-chart>
-                            </v-card-text>
-                        </v-card>
-                    </v-expansion-panel-content>
-                </v-expansion-panel>
+                <v-expansion-panels>
+                    <v-expansion-panel class="expansion-panel-no-left-margin">
+                        <v-expansion-panel-content>
+                            <div slot="header">
+                                <h3 class="headline">Chart View</h3>
+                            </div>
+                            <v-card>
+                                <v-card-text>
+                                    <column-chart :data="chartData"></column-chart>
+                                </v-card-text>
+                            </v-card>
+                        </v-expansion-panel-content>
+                    </v-expansion-panel>
+                </v-expansion-panels>
             </v-flex>
         </v-layout>
 

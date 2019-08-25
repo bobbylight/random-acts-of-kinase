@@ -10,12 +10,14 @@
 
                     <v-flex xs3 pt-0>
                         <v-tooltip bottom>
-                            <img v-if="compoundImageUrl"
-                                 :src="compoundImageUrl"
-                                 class="compound-image"
-                                 @click="onImageClicked"
-                                 width="200" height="200"
-                                 slot="activator">
+                            <template v-slot:activator="{ on }">
+                                <img v-if="compoundImageUrl"
+                                     :src="compoundImageUrl"
+                                     class="compound-image"
+                                     @click="onImageClicked"
+                                     width="200" height="200"
+                                     v-on="on">
+                            </template>
                             <span>Click to enlarge</span>
                         </v-tooltip>
                     </v-flex>

@@ -13,10 +13,10 @@
             :placeholder="placeholder"
             :prepend-icon="icon"
             :clearable="true"
-            browser-autocomplete="off"
             :item-text="responseLabelField"
             :item-value="responseValueField"
             :model="value"
+            autocomplete="off"
             @input="fireUpdateEvent($event)"
         ></v-autocomplete>
     </span>

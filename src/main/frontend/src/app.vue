@@ -21,11 +21,11 @@
                 <div class="copyright">
                     &copy; 2018&nbsp;<a href="http://sgc-unc.org">SGC-UNC</a>
                 </div>
-                <v-btn class="theme--dark" icon small @click="viewSource"
+                <v-btn class="footer-button theme--dark" icon small @click="viewSource"
                        title="View Source" aria-label="View Source">
                     <v-icon small>fab fa-github</v-icon>
                 </v-btn>
-                <v-btn class="theme--dark" icon small @click.stop="showAbout = true"
+                <v-btn class="footer-button theme--dark" icon small @click.stop="showAbout = true"
                        title="About" aria-label="About">
                     <v-icon small>fas fa-question-circle</v-icon>
                 </v-btn>
@@ -93,12 +93,17 @@ footer {
 
         display: flex;
         align-items: center;
-        margin-right: 1rem;
+        margin-right: 3rem;
 
         a {
             text-decoration: none;
             color: inherit;
         }
+    }
+
+    .footer-button {
+        padding-left: 1rem;
+        padding-right: 1rem;
     }
 
     .btn.btn--icon {

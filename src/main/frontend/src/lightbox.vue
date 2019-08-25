@@ -1,16 +1,18 @@
 <template>
     <transition name="fade">
-        <div class="lightbox v-overlay"
-             :class="{ 'v-overlay--active': show }"
-             @click="hide"
-             v-if="show">
+        <v-overlay class="lightbox v-overlay"
+             :value="show"
+             :dark="false"
+             @click="hide">
 
             <div class="lightbox-content-wrapper elevation-1 pa-3"
                     @click.stop="">
 
                 <div class="lightbox-close-icon" @click="hide">
                     <v-tooltip right>
-                        <v-icon slot="activator">close</v-icon>
+                        <template v-slot:activator="{ on }">
+                            <v-icon v-on="on">close</v-icon>
+                        </template>
                         <span>Close</span>
                     </v-tooltip>
                 </div>
@@ -31,14 +33,14 @@
                                 required
                                 hide-details
                                 ></v-select>
-                            <v-btn flat color="primary" class="lightbox-save-button" @click="saveImage">
+                            <v-btn text color="primary" class="lightbox-save-button" @click="saveImage">
                                 Download
                             </v-btn>
                         </div>
                     </div>
                 </v-flex>
             </div>
-        </div>
+        </v-overlay>
     </transition>
 </template>
 
@@ -78,6 +80,8 @@ export default class Lightbox extends Vue {
     }
 
     private hide() {
+        console.log('hidden!');
+        this.show = false;
         this.$emit('hide');
     }
 

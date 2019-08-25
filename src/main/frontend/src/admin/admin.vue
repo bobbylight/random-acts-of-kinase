@@ -18,28 +18,28 @@
             </v-btn>
         </v-fab-transition>
 
-        <v-layout row fill-height> <!-- don't wrap or justify-center -->
+        <v-layout fill-height> <!-- don't wrap or justify-center -->
 
             <transition name="slide-x-transition" mode="out-in">
-                <v-flex key="navDrawer" xs3 fill-height v-if="navDrawerOpen && this.$store.getters.loggedIn"
-                        elevation-1 class="slide-out-admin-options">
+                <v-navigation-drawer class="slide-out-admin-options"
+                                     :width="380" v-if="navDrawerOpen && this.$store.getters.loggedIn">
 
                     <v-toolbar flat class="transparent">
-                        <v-list class="pt-0">
-                            <v-list-tile avatar>
-                                <v-list-tile-action>
+                        <v-list class="pt-0 admin-nav-header">
+                            <v-list-item class="admin-nav-header-list-item">
+                                <v-list-item-action class="admin-menu-icon">
                                     <v-icon>fas fa-cog</v-icon>
-                                </v-list-tile-action>
-                                <v-list-tile-content>
+                                </v-list-item-action>
+                                <v-list-item-content>
                                     Admin Actions
-                                </v-list-tile-content>
-                                <v-list-tile-action>
+                                </v-list-item-content>
+                                <v-list-item-action>
                                     <v-btn icon class="close-nav-drawer-button"
                                            @click.stop="navDrawerOpen = false">
                                         <v-icon>chevron_left</v-icon>
                                     </v-btn>
-                                </v-list-tile-action>
-                            </v-list-tile>
+                                </v-list-item-action>
+                            </v-list-item>
                         </v-list>
                     </v-toolbar>
 
@@ -48,85 +48,88 @@
                         <v-divider></v-divider>
 
                         <v-list-group
-                            prepend-icon="fa fa-upload"
                             no-action
                             v-model="importSubMenuExpanded">
 
-                            <v-list-tile slot="activator">
-                                <v-list-tile-content>
-                                    <v-list-tile-title>Import Data</v-list-tile-title>
-                                </v-list-tile-content>
-                            </v-list-tile>
+                            <template v-slot:activator>
+                                <v-list-item-action class="admin-menu-icon">
+                                    <v-icon>fa-upload</v-icon>
+                                </v-list-item-action>
+                                <v-list-item-content>
+                                    <v-list-item-title>Import Data</v-list-item-title>
+                                </v-list-item-content>
+                            </template>
 
-                            <v-list-tile to="import-compounds">
-                                <v-list-tile-content>
-                                    <v-list-tile-title>Import Compounds</v-list-tile-title>
-                                </v-list-tile-content>
-                            </v-list-tile>
+                            <v-list-item to="import-compounds" class="admin-sub-item">
+                                <v-list-item-content>
+                                    <v-list-item-title>Import Compounds</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
 
-                            <v-list-tile to="import-activity-profiles">
-                                <v-list-tile-content>
-                                    <v-list-tile-title>Import Activity Profiles</v-list-tile-title>
-                                </v-list-tile-content>
-                            </v-list-tile>
+                            <v-list-item to="import-activity-profiles" class="admin-sub-item">
+                                <v-list-item-content>
+                                    <v-list-item-title>Import Activity Profiles</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
 
-                            <v-list-tile to="import-kds">
-                                <v-list-tile-content>
-                                    <v-list-tile-title>Import K<sub>d</sub>s</v-list-tile-title>
-                                </v-list-tile-content>
-                            </v-list-tile>
+                            <v-list-item to="import-kds" class="admin-sub-item">
+                                <v-list-item-content>
+                                    <v-list-item-title>Import K<sub>d</sub>s</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
 
-                            <v-list-tile to="import-nanobret">
-                                <v-list-tile-content>
-                                    <v-list-tile-title>Import NanoBRET</v-list-tile-title>
-                                </v-list-tile-content>
-                            </v-list-tile>
+                            <v-list-item to="import-nanobret" class="admin-sub-item">
+                                <v-list-item-content>
+                                    <v-list-item-title>Import NanoBRET</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
 
-                            <v-list-tile to="import-s10s">
-                                <v-list-tile-content>
-                                    <v-list-tile-title>Import s(10)s</v-list-tile-title>
-                                </v-list-tile-content>
-                            </v-list-tile>
+                            <v-list-item to="import-s10s" class="admin-sub-item">
+                                <v-list-item-content>
+                                    <v-list-item-title>Import s(10)s</v-list-item-title>
+                                </v-list-item-content>
+                            </v-list-item>
                         </v-list-group>
 
-                        <v-list-tile to="blog-manager">
-                            <v-list-tile-action>
+                        <v-list-item to="blog-manager">
+                            <v-list-item-action class="admin-menu-icon">
                                 <v-icon>fa-newspaper</v-icon>
-                            </v-list-tile-action>
-                            <v-list-tile-content>
-                                <v-list-tile-title>News Posts</v-list-tile-title>
-                            </v-list-tile-content>
-                        </v-list-tile>
+                            </v-list-item-action>
+                            <v-list-item-content>
+                                <v-list-item-title>News Posts</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
 
-                        <v-list-tile to="stats">
-                            <v-list-tile-action>
+                        <v-list-item to="stats">
+                            <v-list-item-action class="admin-menu-icon">
                                 <v-icon>fa-database</v-icon>
-                            </v-list-tile-action>
-                            <v-list-tile-content>
-                                <v-list-tile-title>Missing Data</v-list-tile-title>
-                            </v-list-tile-content>
-                        </v-list-tile>
+                            </v-list-item-action>
+                            <v-list-item-content>
+                                <v-list-item-title>Missing Data</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
 
-                        <v-list-tile to="feedback">
-                            <v-list-tile-action>
+                        <v-list-item to="feedback">
+                            <v-list-item-action class="admin-menu-icon">
                                 <v-icon>fa-comments</v-icon>
-                            </v-list-tile-action>
-                            <v-list-tile-content>
-                                <v-list-tile-title>Feedback</v-list-tile-title>
-                            </v-list-tile-content>
-                        </v-list-tile>
+                            </v-list-item-action>
+                            <v-list-item-content>
+                                <v-list-item-title>Feedback</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
 
-                        <v-list-tile to="audit">
-                            <v-list-tile-action>
+                        <v-list-item to="audit">
+                            <v-list-item-action class="admin-menu-icon">
                                 <v-icon>fa-history</v-icon>
-                            </v-list-tile-action>
-                            <v-list-tile-content>
-                                <v-list-tile-title>Audit</v-list-tile-title>
-                            </v-list-tile-content>
-                        </v-list-tile>
+                            </v-list-item-action>
+                            <v-list-item-content>
+                                <v-list-item-title>Audit</v-list-item-title>
+                            </v-list-item-content>
+                        </v-list-item>
 
                     </v-list>
-                </v-flex>
+<!--                </v-flex>-->
+</v-navigation-drawer>
             </transition>
 
             <v-container grid-list-md fill-height class="page-wrapper">
@@ -176,11 +179,30 @@ export default class AdminHome extends Vue {
     }
 
     .slide-out-admin-options {
-        max-width: 380px;
-        background: white; // Match the list contained in it
 
-        .close-nav-drawer-button {
-            margin: -6px; // Make this icon align better with others in the drawer
+        .v-toolbar__content {
+            padding: 0;
+        }
+
+        .admin-nav-header {
+            width: 100%;
+            padding: 0 !important;
+
+            .admin-nav-header-list-item {
+                padding-right: 5px;
+            }
+        }
+
+        .admin-menu-icon {
+            width: 27px;
+
+            svg {
+                margin: 0 auto;
+            }
+        }
+
+        .admin-sub-item {
+            padding-left: 5rem !important;
         }
 
         a:hover {

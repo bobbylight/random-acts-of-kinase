@@ -3,6 +3,7 @@
 
         <v-flex xs12>
             <v-text-field type="text" label="Search by compound" class="search-field"
+                          autocomplete="off"
                           v-model="nanoBretFilters.inhibitor"></v-text-field>
         </v-flex>
 
@@ -24,6 +25,7 @@
                 <v-flex sm4>
                     <v-text-field type="number" label="IC50" class="search-field right-aligned"
                                   :rules="ic50ValidationRules" v-model="nanoBretFilters.ic50"
+                                  autocomplete="off"
                                   :step="0.1" min="0" max="10000" suffix="nM">
                     </v-text-field>
                 </v-flex>

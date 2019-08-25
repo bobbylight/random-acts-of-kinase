@@ -7,7 +7,7 @@
             :pagination.sync="pagination"
             :total-items="totalItems"
             :loading="loading"
-            :rows-per-page-items='[ 20, 50, 100 ]'
+            :items-per-page-options='[ 20, 50, 100 ]'
         >
 
             <!-- Custom header rendering is solely to allow HTML in header.text! -->

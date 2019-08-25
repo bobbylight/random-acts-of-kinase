@@ -19,15 +19,16 @@
                     :headers="headers"
                     class="elevation-1"
                     :items="items"
-                    :pagination.sync="pagination"
-                    :total-items="totalItems"
+                    :items-per-page="tableOptions.itemsPerPage"
+                    :server-items-length="totalItems"
+                    :options.sync="tableOptions"
                     :loading="loading"
-                    :rows-per-page-items='[ 20, 50, 100 ]'
+                    :footer-props="{ 'items-per-page-options': [ 20, 50, 100 ] }"
                 >
 
-                    <template slot="items" slot-scope="props">
+                    <template v-slot:item="{ item }">
                         <blog-manager-post-name-cell
-                            :post="props.item"
+                            :post="item"
                             @deletePost="onDelete($event)"
                             @editPost="onEdit($event)"
                             @postsUpdated="reloadTable"></blog-manager-post-name-cell>
@@ -56,7 +57,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Watch } from 'vue-property-decorator';
-import { BlogPost, ErrorResponse, PagedDataRep } from '../rak';
+import { BlogPost, ErrorResponse, PagedDataRep, VueDataTableOptions } from '../rak';
 import ConfirmModal, { ConfirmResult } from '../confirm-modal.vue';
 import SectionHeader from '../header.vue';
 import BlogManagerPostNameCell from './blog-manager-post-name-cell.vue';
@@ -83,9 +84,15 @@ export default class BlogManager extends Vue {
 
     private blogEditorPost: BlogPost | null = null;
 
-    pagination: any = {
-        sortBy: 'createDate',
-        descending: true
+    tableOptions: VueDataTableOptions = {
+        page: 0,
+        itemsPerPage: 10,
+        sortBy: [ 'createDate' ],
+        sortDesc: [ true ],
+        groupBy: [],
+        groupDesc: [],
+        multiSort: true,
+        mustSort: false
     };
 
     onBlogEditorModalClosed() {
@@ -137,12 +144,19 @@ export default class BlogManager extends Vue {
     reloadTable() {
 
         this.loading = true;
+        const options: VueDataTableOptions = this.tableOptions;
 
-        const { sortBy, descending, page, rowsPerPage } = this.pagination;
+        let sort: string = '';
+        for (let i: number = 0; i < options.sortBy.length; i++) {
+            const sortCol: string = options.sortBy[i];
+            const sortDir: string = options.sortDesc[i] ? 'desc' : 'asc';
+            sort += `${sortCol},${sortDir}`;
+            if (i < options.sortBy.length - 1) {
+                sort += ':';
+            }
+        }
 
-        const sort: string = sortBy ? `${sortBy},${descending ? 'desc' : 'asc'}` : '';
-
-        return restApi.getBlogPosts(page - 1, 10000, {}, sort)
+        return restApi.getBlogPosts(options.page - 1, 10000, {}, sort)
             .then((pagedData: PagedDataRep<BlogPost>) => {
                 this.items = pagedData.data;
                 this.totalItems = pagedData.total;
@@ -151,10 +165,8 @@ export default class BlogManager extends Vue {
             });
     }
 
-    @Watch('pagination')
-    private onPaginationHandlerChanged(newValue: any) {
-        // Note this triggers an unnecessary second query until
-        // https://github.com/vuetifyjs/vuetify/issues/3585 is fixed
+    @Watch('tableOptions')
+    private onTablePagingOrSortingChanged(newOptions: VueDataTableOptions) {
         return this.reloadTable();
     }
 }

@@ -1,38 +1,45 @@
 <template>
     <div>
         <v-data-table
-            hide-headers
+            hide-default-header
             class="search-result-table"
             :items="items"
-            :pagination.sync="pagination"
-            :total-items="totalItems"
+            :items-per-page="itemsPerPage"
+            :server-items-length="totalItems"
+            :options.sync="tableOptions"
             :loading="loading"
-            :rows-per-page-items='[ 20, 50, 100 ]'
+            :footer-props="{ 'items-per-page-options': [ 20, 50, 100 ] }"
             >
 
-            <template slot="items" slot-scope="props">
-                <td>
-                    <div class="compound-name-cell">
-                        <img class="b-lazy compound-image"
-                             src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
-                             :data-src="getCompoundImage(props.item.compoundName)"
-                             @click="onImageClicked(props.item.compoundName)"
-                             width=80 height=80>
-                        &nbsp;&nbsp;&nbsp;
-                        <div class="compound-desc" @click="openCompound(props.item.compoundName)">
-                            <span class="compound-name">{{props.item.compoundName}}</span>
-                            <br>
-                            <div class="s10">s(10): {{getDisplayS10(props.item.s10)}}</div>
-                            <div class="chemotype" v-if="props.item.chemotype">{{props.item.chemotype}}</div>
-                        </div>
-                        <div v-if="props.item.hidden" class="hidden-compound-icon">
-                            <v-tooltip right>
-                                <v-icon slot="activator">fa-mask</v-icon>
-                                <span>Only admins can see this compound</span>
-                            </v-tooltip>
-                        </div>
-                    </div>
-                </td>
+            <template v-slot:body="{ items }">
+                <tbody>
+                    <tr v-for="item in items" :key="item.name">
+                        <td>
+                            <div class="compound-name-cell">
+                                <img class="b-lazy compound-image"
+                                     src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+                                     :data-src="getCompoundImage(item.compoundName)"
+                                     @click="onImageClicked(item.compoundName)"
+                                     width=80 height=80>
+                                &nbsp;&nbsp;&nbsp;
+                                <div class="compound-desc" @click="openCompound(item.compoundName)">
+                                    <span class="compound-name">{{item.compoundName}}</span>
+                                    <br>
+                                    <div class="s10">s(10): {{getDisplayS10(item.s10)}}</div>
+                                    <div class="chemotype" v-if="item.chemotype">{{item.chemotype}}</div>
+                                </div>
+                                <div v-if="item.hidden" class="hidden-compound-icon">
+                                    <v-tooltip right>
+                                        <template v-slot:activator="{ on }">
+                                            <v-icon v-on="on">lock</v-icon>
+                                        </template>
+                                        <span>Only admins can see this compound</span>
+                                    </v-tooltip>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
             </template>
         </v-data-table>
     </div>
@@ -41,7 +48,7 @@
 <script lang="ts">
 import restApi from '../rest-api';
 import Blazy from 'blazy';
-import { Compound, PagedDataRep } from '@/rak';
+import { Compound, PagedDataRep, VueDataTableOptions } from '@/rak';
 
 export default {
     name: 'search-result-table',
@@ -58,22 +65,30 @@ export default {
             totalItems: 0,
             items: [],
             loading: true,
-            pagination: {}
+            tableOptions: {
+                page: 0,
+                itemsPerPage: 10,
+                sortBy: [],
+                sortDesc: [],
+                groupBy: [],
+                groupDesc: [],
+                multiSort: false,
+                mustSort: false
+            },
+            itemsPerPage: 20
         };
     },
     watch: {
-        filters: {
+        tableOptions: {
             handler(newValue: any) {
-                console.log('Filterable property changed');
+                console.log('Table options changed');
                 this.reloadTable();
             },
             deep: true
         },
-
-        pagination: {
-            handler () {
-                // Note this triggers an unnecessary second query until
-                // https://github.com/vuetifyjs/vuetify/issues/3585 is fixed
+        filters: {
+            handler(newValue: any) {
+                console.log('Filterable property changed');
                 this.reloadTable();
             },
             deep: true
@@ -105,10 +120,19 @@ export default {
         reloadTable: function() {
 
             this.loading = true;
+            const options: VueDataTableOptions = this.tableOptions;
 
-            const { sortBy, descending, page, rowsPerPage }: any = this.pagination;
+            let sort: string = '';
+            for (let i: number = 0; i < options.sortBy.length; i++) {
+                const sortCol: string = options.sortBy[i];
+                const sortDir: string = options.sortDesc[i] ? 'desc' : 'asc';
+                sort += `${sortCol},${sortDir}`;
+                if (i < options.sortBy.length - 1) {
+                    sort += ':';
+                }
+            }
 
-            return restApi.getCompounds(page - 1, rowsPerPage, this.filters)
+            return restApi.getCompounds(options.page - 1, options.itemsPerPage, this.filters)
                 .then((pagedData: PagedDataRep<Compound>) => {
                     this.items = pagedData.data;
                     this.totalItems = pagedData.total;
@@ -127,6 +151,11 @@ export default {
             }
         }
     },
+
+    mounted: function() {
+        this.reloadTable();
+    },
+
     updated: function() {
 
         if (this.blazy) {
@@ -211,6 +240,7 @@ export default {
         height: 100%;
         vertical-align: top;
         display: inline-block;
+        margin-left: 1rem;
         margin-top: 0.5rem;
 
         .v-icon {

@@ -3,8 +3,8 @@
         <v-card>
 
             <v-card-title>
-                <div class="headline">Feedback</div>
-                <div>
+                <div>Feedback</div>
+                <div class="feedback-subtitle">
                     Have suggestions for improvements or new features?  Found a bug?  Provide feedback here.
                     Your email is optional, and allows us to follow up with you if we need more information.
                 </div>
@@ -38,7 +38,7 @@
                 <v-btn color="primary"
                        :disabled="submitButtonDisabled()"
                        @click="onSubmit">Submit</v-btn>
-                <v-btn flat color="primary"
+                <v-btn text color="primary"
                        @click="visible = false">Cancel</v-btn>
             </v-card-actions>
         </v-card>
@@ -138,4 +138,9 @@ export default class FeedbackModal extends Vue {
 </script>
 
 <style lang="less">
+.feedback-subtitle {
+    font-size: initial;
+    font-weight: initial;
+    line-height: 1.5;
+}
 </style>

@@ -1,5 +1,5 @@
 <template>
-   <v-btn flat class="activity-or-kd-toggle" @click="toggle">
+   <v-btn text class="activity-or-kd-toggle" @click="toggle">
        {{suffix}}
        <v-icon right>arrow_drop_down</v-icon>
    </v-btn>
@@ -28,9 +28,9 @@ export default class ActivityOrKdToggleButton extends Vue {
 .activity-or-kd-toggle {
 
     margin: 0;
-    height: initial;
+    height: 32px !important;
     min-width: initial;
-    padding: 0 6px;
+    padding: 0 !important;
 
     .v-btn__content {
 
