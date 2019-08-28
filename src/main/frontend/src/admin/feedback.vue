@@ -216,7 +216,7 @@ export default class FeedbackManager extends Vue {
             const sortDir: string = options.sortDesc[i] ? 'desc' : 'asc';
             sort += `${sortCol},${sortDir}`;
             if (i < options.sortBy.length - 1) {
-                sort += ':';
+                sort += '&sort=';
             }
         }
 

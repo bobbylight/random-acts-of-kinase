@@ -7,6 +7,7 @@
             :server-items-length="totalItems"
             :options.sync="tableOptions"
             :loading="loading"
+            multi-sort
             :headers="createHeaders"
             :footer-props="{ 'items-per-page-options': [ 10, 20, 50 ] }"
         >
@@ -132,7 +133,7 @@ export default class CompoundTable extends Vue {
             const sortDir: string = options.sortDesc[i] ? 'desc' : 'asc';
             sort += `${sortCol},${sortDir}`;
             if (i < options.sortBy.length - 1) {
-                sort += ':';
+                sort += '&sort=';
             }
         }
 

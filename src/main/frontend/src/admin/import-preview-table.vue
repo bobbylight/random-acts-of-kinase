@@ -8,6 +8,7 @@
             :headers="createHeaders()"
             :custom-sort="sortGrid"
             :options.sync="tableOptions"
+            multi-sort
             :footer-props="{ 'items-per-page-options': [ 10, 20, 50 ] }"
         >
 

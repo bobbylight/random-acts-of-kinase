@@ -23,6 +23,7 @@
                     :server-items-length="totalItems"
                     :options.sync="tableOptions"
                     :loading="loading"
+                    multi-sort
                     :footer-props="{ 'items-per-page-options': [ 20, 50, 100 ] }"
                 >
 
@@ -152,7 +153,7 @@ export default class BlogManager extends Vue {
             const sortDir: string = options.sortDesc[i] ? 'desc' : 'asc';
             sort += `${sortCol},${sortDir}`;
             if (i < options.sortBy.length - 1) {
-                sort += ':';
+                sort += '&sort=';
             }
         }
 

@@ -4,11 +4,11 @@
             :headers="headers"
             class="compound-table"
             :items="items"
-            :items-per-page="tableOptions.itemsPerPage"
             :server-items-length="totalItems"
             :options.sync="tableOptions"
             :loading="loading"
-            :footer-props="{ 'items-per-page-options': [ 20, 50, 100 ] }"
+            multi-sort
+            :footer-props="{ 'items-per-page-options': [ 10, 20, 50, 100 ] }"
         >
 
             <!-- Custom header rendering is solely to allow HTML in header.text! -->
@@ -75,7 +75,7 @@ export default {
                 sortDesc: [ false ],
                 groupBy: [],
                 groupDesc: [],
-                multiSort: false,
+                multiSort: true,
                 mustSort: false
             }
         };
@@ -126,7 +126,7 @@ export default {
                 const sortDir: string = options.sortDesc[i] ? 'desc' : 'asc';
                 sort += `${sortCol},${sortDir}`;
                 if (i < options.sortBy.length - 1) {
-                    sort += ':';
+                    sort += '&sort=';
                 }
             }
 
