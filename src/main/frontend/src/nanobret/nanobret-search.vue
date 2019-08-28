@@ -5,7 +5,7 @@
             <v-layout row wrap justify-center>
                 <v-flex xs12 class="search-part-layout">
 
-                    <h1>Search NanoBRET Data (DOESN'T WORK YET)</h1>
+                    <section-header>Search NanoBRET Data (DOESN'T WORK YET)</section-header>
 
                     <nano-bret-search-filters></nano-bret-search-filters>
                 </v-flex>
@@ -30,8 +30,9 @@ import debounce from 'debounce';
 import NanoBretSearchFilters from './nanobret-search-filters.vue';
 import SearchResultTable from '../search/search-result-table.vue';
 import { NanoBretSearchFilter } from '../rak';
+import SectionHeader from '../header.vue';
 
-@Component({ components: { NanoBretSearchFilters, SearchResultTable } })
+@Component({ components: { NanoBretSearchFilters, SearchResultTable, SectionHeader } })
 export default class NanoBretSearch extends Vue {
 
     gridFilters: NanoBretSearchFilter = {

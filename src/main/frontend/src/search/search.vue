@@ -5,7 +5,7 @@
             <v-layout row wrap justify-center>
                 <v-flex xs12 class="search-part-layout">
 
-                    <div class="headline primary--text">Search Compounds</div>
+                    <section-header>Search Compounds</section-header>
 
                     <search-filters></search-filters>
                 </v-flex>
@@ -30,8 +30,9 @@ import debounce from 'debounce';
 import SearchFilters from './search-filters.vue';
 import SearchResultTable from './search-result-table.vue';
 import { SearchFilter } from '../rak';
+import SectionHeader from '../header.vue';
 
-@Component({ components: { SearchFilters, SearchResultTable } })
+@Component({ components: { SearchFilters, SearchResultTable, SectionHeader } })
 export default class Search extends Vue {
 
     gridFilters: SearchFilter = {
