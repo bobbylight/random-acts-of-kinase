@@ -4,7 +4,7 @@
 
             <section-header>News Posts</section-header>
 
-            <v-flex xs12>
+            <v-flex xs12 class="blog-manager-top-section">
 
                 <p>
                     Create, edit, or delete news posts.
@@ -173,4 +173,10 @@ export default class BlogManager extends Vue {
 </script>
 
 <style lang="less">
+.blog-manager-wrapper {
+
+    .blog-manager-top-section {
+        margin-bottom: 0.5rem;
+    }
+}
 </style>

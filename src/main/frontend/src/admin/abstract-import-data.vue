@@ -33,9 +33,9 @@
 
             <v-flex xs6 v-if="file">
                 <v-layout justify-end>
-                    <v-btn color="success" @click="onImport"
+                    <v-btn class="import-data-button" color="success" @click="onImport"
                            :disabled="loading">Import</v-btn>
-                    <v-btn @click="onCancel"
+                    <v-btn class="import-data-button" @click="onCancel"
                            :disabled="loading">Cancel</v-btn>
                 </v-layout>
             </v-flex>
@@ -256,6 +256,11 @@ export default class AbstractImportData extends Vue {
 @import '../../styles/app';
 
 .import-wrapper {
+
+    .import-data-button {
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+    }
 
     .import-form-field {
         .import-form-field();

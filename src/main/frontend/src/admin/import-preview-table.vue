@@ -7,18 +7,27 @@
             :items="items"
             :headers="createHeaders()"
             :custom-sort="sortGrid"
-            :items-per-page-options='[ 10, 20, 50 ]'>
+            :options.sync="tableOptions"
+            :footer-props="{ 'items-per-page-options': [ 10, 20, 50 ] }"
+        >
 
-            <template slot="items" slot-scope="props">
-                <td v-for="header in createHeaders()"
-                    :class="getClassesForRow(header.value, props.item[header.value])">
-                    <v-tooltip bottom>
-                        <span slot="activator">
-                            {{props.item[header.value].newValue}}
-                        </span>
-                        <span>{{getToolTip(props.item[header.value])}}</span>
-                    </v-tooltip>
-                </td>
+            <!-- Custom header rendering is solely to allow HTML in header.text! -->
+            <template v-slot:header.kd="{ header }">
+                <span v-html="header.text"></span>
+            </template>
+
+            <template v-slot:item="{ item }">
+                <tr>
+                    <td v-for="header in createHeaders()"
+                        :class="getClassesForRow(header.value, item[header.value])">
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on }">
+                                <span v-on="on">{{item[header.value].newValue}}</span>
+                            </template>
+                            <span>{{getToolTip(item[header.value])}}</span>
+                        </v-tooltip>
+                    </td>
+                </tr>
             </template>
         </v-data-table>
     </div>
@@ -28,7 +37,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop, Watch } from 'vue-property-decorator';
-import { FieldStatus } from '@/rak';
+import { FieldStatus, VueDataTableOptions } from '@/rak';
 
 export interface ColumnInfo {
     name: string;
@@ -50,6 +59,17 @@ export default class ImportPreviewTable extends Vue {
 
     @Prop({ required: false, default: false })
     private readonly loading: boolean;
+
+    tableOptions: VueDataTableOptions = {
+        page: 0,
+        itemsPerPage: 10,
+        sortBy: [],
+        sortDesc: [],
+        groupBy: [],
+        groupDesc: [],
+        multiSort: true,
+        mustSort: false
+    };
 
     private createHeaders(): any[] {
 
@@ -112,38 +132,50 @@ export default class ImportPreviewTable extends Vue {
         return this.loading ? 'Loading...' : 'No data available';
     }
 
-    private sortGrid(items: object[], sortCol: string, descending: boolean): object[] {
+    private sortGrid(items: object[], sortBy: string[], sortDesc: boolean[]): object[] {
 
-        if (!sortCol) {
+        if (!sortBy || !sortBy.length) {
             return items;
         }
 
         return items.sort((a: any, b: any) => {
 
-            if (descending) {
-                const temp: any = b;
-                b = a;
-                a = temp;
+            for (let i: number = 0; i < sortBy.length; i++) {
+
+                const sortCol: string = sortBy[i];
+                const descending: boolean = sortDesc[i];
+
+                if (descending) {
+                    const temp: any = b;
+                    b = a;
+                    a = temp;
+                }
+
+                let aValue: string | number | null | undefined = a[sortCol].newValue;
+                let bValue: string | number | null | undefined = b[sortCol].newValue;
+
+                if (typeof aValue === 'string') {
+                    aValue = aValue.toLowerCase();
+                }
+                if (typeof bValue === 'string') {
+                    bValue = bValue.toLowerCase();
+                }
+
+                if (aValue == null) {
+                    aValue = '';
+                }
+                if (bValue == null) {
+                    bValue = '';
+                }
+
+                const sortResult: number =  aValue < bValue ? -1 : (aValue > bValue ? 1 : 0);
+                if (sortResult !== 0) {
+                    return sortResult;
+                }
             }
 
-            let aValue: string | number | null | undefined = a[sortCol].newValue;
-            let bValue: string | number | null | undefined = b[sortCol].newValue;
-
-            if (typeof aValue === 'string') {
-                aValue = aValue.toLowerCase();
-            }
-            if (typeof bValue === 'string') {
-                bValue = bValue.toLowerCase();
-            }
-
-            if (aValue == null) {
-                aValue = '';
-            }
-            if (bValue == null) {
-                bValue = '';
-            }
-
-            return aValue < bValue ? -1 : (aValue > bValue ? 1 : 0);
+            // All sorted-on columns compared equally
+            return 0;
         });
     }
 }

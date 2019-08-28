@@ -23,19 +23,14 @@
                 <compound-details-card ref="compoundDetailsCard" :compound="compound"></compound-details-card>
             </v-flex>
 
-
             <v-flex xs12 class="card-vertical-spacing">
-                <v-expansion-panels>
-                    <v-expansion-panel class="expansion-panel-no-left-margin" :value="0">
+                <v-expansion-panels :value="0">
+                    <v-expansion-panel class="expansion-panel-no-left-margin">
+                        <v-expansion-panel-header>
+                            <h3 class="headline">Table View</h3>
+                        </v-expansion-panel-header>
                         <v-expansion-panel-content>
-                            <div slot="header">
-                                <h3 class="headline">Table View</h3>
-                            </div>
-                            <v-card>
-                                <v-card-text>
-                                    <result-table :filters="gridFilters"></result-table>
-                                </v-card-text>
-                            </v-card>
+                            <result-table :filters="gridFilters"></result-table>
                         </v-expansion-panel-content>
                     </v-expansion-panel>
                 </v-expansion-panels>
@@ -44,15 +39,11 @@
             <v-flex xs12 class="card-vertical-spacing" v-if="chartData">
                 <v-expansion-panels>
                     <v-expansion-panel class="expansion-panel-no-left-margin">
+                        <v-expansion-panel-header>
+                            <h3 class="headline">Chart View</h3>
+                        </v-expansion-panel-header>
                         <v-expansion-panel-content>
-                            <div slot="header">
-                                <h3 class="headline">Chart View</h3>
-                            </div>
-                            <v-card>
-                                <v-card-text>
-                                    <column-chart :data="chartData"></column-chart>
-                                </v-card-text>
-                            </v-card>
+                            <column-chart :data="chartData"></column-chart>
                         </v-expansion-panel-content>
                     </v-expansion-panel>
                 </v-expansion-panels>

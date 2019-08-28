@@ -4,38 +4,34 @@
             :headers="headers"
             class="compound-table"
             :items="items"
-            :pagination.sync="pagination"
-            :total-items="totalItems"
+            :items-per-page="tableOptions.itemsPerPage"
+            :server-items-length="totalItems"
+            :options.sync="tableOptions"
             :loading="loading"
-            :items-per-page-options='[ 20, 50, 100 ]'
+            :footer-props="{ 'items-per-page-options': [ 20, 50, 100 ] }"
         >
 
             <!-- Custom header rendering is solely to allow HTML in header.text! -->
-            <template slot="headers" slot-scope="props">
-                <th
-                    v-for="header in props.headers"
-                    :key="header.text"
-                    :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
-                    :style="getHeaderStyle(header)"
-                    @click="changeSort(header.value)"
-                >
-                    <span v-html="header.text"></span>
-                    <v-icon small>arrow_upward</v-icon>
-                </th>
+            <template v-slot:header.kd="{ header }">
+                <span v-html="header.text"></span>
             </template>
 
-            <template slot="items" slot-scope="props">
-                <td>{{props.item.compoundName}}</td>
-                <td class="text-xs-right">{{props.item.percentControl}}</td>
-                <td class="text-xs-right">{{props.item.compoundConcentration}}</td>
-                <td>
-                    <a :href="props.item.kinase.discoverxUrl"
-                       target="_blank" rel="noopener noreferrer">
-                        {{props.item.kinase.discoverxGeneSymbol}}</a>
-                </td>
-                <td>{{props.item.kinase.entrezGeneSymbol}}</td>
-                <td>{{props.item.kinase.nanosynGeneSymbol}}</td>
-                <td>{{props.item.kd}}</td>
+            <template v-slot:item="{ item }">
+                <tr>
+                    <td>
+                        <a :href="'#/compound/' + item.compoundName">{{item.compoundName}}</a>
+                    </td>
+                    <td class="text-right">{{item.percentControl}}</td>
+                    <td class="text-right">{{item.compoundConcentration}}</td>
+                    <td>
+                        <a :href="item.kinase.discoverxUrl"
+                           target="_blank" rel="noopener noreferrer">
+                            {{item.kinase.discoverxGeneSymbol}}</a>
+                    </td>
+                    <td>{{item.kinase.entrezGeneSymbol}}</td>
+                    <td>{{item.kinase.nanosynGeneSymbol}}</td>
+                    <td class="text-right">{{item.kd}}</td>
+                </tr>
             </template>
         </v-data-table>
     </div>
@@ -43,7 +39,7 @@
 
 <script lang="ts">
 import restApi from './rest-api';
-import { PagedDataRep } from '@/rak';
+import { PagedDataRep, VueDataTableOptions } from '@/rak';
 
 export default {
     name: 'result-table',
@@ -72,8 +68,15 @@ export default {
             totalItems: 0,
             items: [],
             loading: true,
-            pagination: {
-                sortBy: 'percentControl'
+            tableOptions: {
+                page: 0,
+                itemsPerPage: 10,
+                sortBy: [ 'percentControl' ],
+                sortDesc: [ false ],
+                groupBy: [],
+                groupDesc: [],
+                multiSort: false,
+                mustSort: false
             }
         };
     },
@@ -91,8 +94,8 @@ export default {
             this.reloadTable();
         },
 
-        pagination: {
-            handler () {
+        tableOptions: {
+            handler() {
                 this.reloadTable();
             },
             deep: true
@@ -112,38 +115,28 @@ export default {
             }
         },
 
-        changeSort: function(column: string) {
-            if (this.pagination.sortBy === column) {
-                this.pagination.descending = !this.pagination.descending;
-            } else {
-                this.pagination.sortBy = column;
-                this.pagination.descending = false;
-            }
-        },
-
-        getHeaderStyle: function(header: any) {
-            return `text-align: ${header.align || 'left'}`;
-        },
-
         reloadTable: function() {
 
             this.loading = true;
+            const options: VueDataTableOptions = this.tableOptions;
 
-            const { sortBy, descending, page, rowsPerPage }: any = this.pagination;
+            let sort: string = '';
+            for (let i: number = 0; i < options.sortBy.length; i++) {
+                const sortCol: string = options.sortBy[i];
+                const sortDir: string = options.sortDesc[i] ? 'desc' : 'asc';
+                sort += `${sortCol},${sortDir}`;
+                if (i < options.sortBy.length - 1) {
+                    sort += ':';
+                }
+            }
 
-            const sort: string = sortBy ? `${sortBy},${descending ? 'desc' : 'asc'}` : '';
-
-            return restApi.getActivityProfiles(page - 1, rowsPerPage, this.filters, sort)
+            return restApi.getActivityProfiles(options.page - 1, options.itemsPerPage, this.filters, sort)
                 .then((pagedData: PagedDataRep<any>) => {
                     this.items = pagedData.data;
                     this.totalItems = pagedData.total;
                     this.loading = false;
                     return pagedData;
                 });
-        },
-
-        compoundRenderer: function(data: string, type: string, row: string) {
-            return '<a href="#/compound/' + data + '">' + data + '</a>';
         }
     }
 };
