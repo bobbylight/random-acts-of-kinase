@@ -9,10 +9,9 @@
                 <v-layout row wrap align-center>
 
                     <v-flex xs3 pt-0>
-                        <v-tooltip bottom>
+                        <v-tooltip bottom v-if="compoundImageUrl">
                             <template v-slot:activator="{ on }">
-                                <img v-if="compoundImageUrl"
-                                     :src="compoundImageUrl"
+                                <img :src="compoundImageUrl"
                                      class="compound-image"
                                      @click="onImageClicked"
                                      width="200" height="200"
@@ -118,16 +117,13 @@ export default class CompoundDetailsCard extends Vue {
         padding-bottom: 0;
     }
 
-    img {
+    .compound-image {
+        cursor: pointer;
+        transition: transform @transition-time;
         vertical-align: middle;
 
-        &.compound-image {
-            cursor: pointer;
-            transition: transform @transition-time;
-
-            &:hover {
-                transform: scale(1.1);
-            }
+        &:hover {
+            transform: scale(1.1);
         }
     }
 

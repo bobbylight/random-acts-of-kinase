@@ -201,7 +201,7 @@ export default class AuditHistory extends Vue {
     toDateFilter: string = '';
     showToDate: boolean = false;
     tableOptions: VueDataTableOptions = {
-        page: 0,
+        page: 1,
         itemsPerPage: 20,
         sortBy: [ 'createDate' ],
         sortDesc: [ true ],

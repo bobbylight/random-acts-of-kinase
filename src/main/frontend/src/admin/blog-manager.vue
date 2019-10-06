@@ -86,7 +86,7 @@ export default class BlogManager extends Vue {
     private blogEditorPost: BlogPost | null = null;
 
     tableOptions: VueDataTableOptions = {
-        page: 0,
+        page: 1,
         itemsPerPage: 10,
         sortBy: [ 'createDate' ],
         sortDesc: [ true ],

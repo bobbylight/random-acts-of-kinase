@@ -4,7 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.1.6.RELEASE'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.1.9.RELEASE'
     }
 }
 plugins {
@@ -29,7 +29,7 @@ repositories {
 }
 
 node {
-    version = '8.12.0'
+    version = '10.14.1'
     npmVersion = '6.4.1'
     download = true
 
@@ -66,7 +66,7 @@ dependencies {
 }
 
 wrapper {
-    gradleVersion = '5.5.1'
+    gradleVersion = '5.6.2'
 }
 
 //checkstyle {

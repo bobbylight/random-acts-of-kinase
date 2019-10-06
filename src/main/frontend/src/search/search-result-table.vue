@@ -4,7 +4,7 @@
             hide-default-header
             class="search-result-table"
             :items="items"
-            :items-per-page="itemsPerPage"
+            :items-per-page="tableOptions.itemsPerPage"
             :server-items-length="totalItems"
             :options.sync="tableOptions"
             :loading="loading"
@@ -66,16 +66,15 @@ export default {
             items: [],
             loading: true,
             tableOptions: {
-                page: 0,
-                itemsPerPage: 10,
+                page: 1,
+                itemsPerPage: 20,
                 sortBy: [],
                 sortDesc: [],
                 groupBy: [],
                 groupDesc: [],
                 multiSort: false,
                 mustSort: false
-            },
-            itemsPerPage: 20
+            }
         };
     },
     watch: {
@@ -97,11 +96,11 @@ export default {
     methods: {
 
         getCompoundImage: function(compoundName: string) {
-            return `api/compounds/images/${compoundName}`;
+            return `api/compounds/images/${encodeURIComponent(compoundName)}`;
         },
 
         getCompoundUrl: function(compoundName: string) {
-            return `#/compound/${compoundName}`;
+            return `#/compound/${encodeURIComponent(compoundName)}`;
         },
 
         getDisplayS10: function(s10: string | null | undefined) {

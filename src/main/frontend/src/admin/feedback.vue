@@ -121,7 +121,7 @@ export default class FeedbackManager extends Vue {
     private showConfirmDeleteModal: boolean = false;
 
     tableOptions: VueDataTableOptions = {
-        page: 0,
+        page: 1,
         itemsPerPage: 20,
         sortBy: [ 'createDate' ],
         sortDesc: [ true ],

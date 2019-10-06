@@ -80,7 +80,7 @@
                         </v-flex>
                         <v-flex xs9>
                             <transition name="fade">
-                                <v-chip disabled color="warning" v-if="compoundCopy.hidden">
+                                <v-chip color="warning" v-if="compoundCopy.hidden">
                                     <v-icon class="pr-1">warning</v-icon>
                                     Hidden compounds won't appear in search results except for admins
                                 </v-chip>

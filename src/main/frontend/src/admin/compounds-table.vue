@@ -18,9 +18,20 @@
                         <a v-if="header.value === 'compoundName'" :href="getCompoundLink(item[header.value])">
                             {{item[header.value]}}
                         </a>
-                        <span v-if="header.value !== 'compoundName'">
-                        {{item[header.value]}}
-                    </span>
+                        <a v-else-if="header.value.indexOf('Url') > -1" :href="item[header.value]" target="_blank"
+                                rel="noopener noreferrer">
+                            {{item[header.value]}}
+                        </a>
+                        <span v-else-if="header.value === 'hidden'">
+                            <v-checkbox
+                                class="audit-enabled-cb"
+                                disabled
+                                v-model="item[header.value]"
+                            ></v-checkbox>
+                       </span>
+                        <span v-else>
+                            {{item[header.value]}}
+                        </span>
                     </td>
                 </tr>
             </template>
@@ -63,7 +74,7 @@ export default class CompoundTable extends Vue {
     private loading: boolean = true;
 
     tableOptions: VueDataTableOptions = {
-        page: 0,
+        page: 1,
         itemsPerPage: 10,
         sortBy: [ 'compoundName' ],
         sortDesc: [ false ],
@@ -117,7 +128,7 @@ export default class CompoundTable extends Vue {
     private getClassesForRow(columnId: string): string | undefined {
         // TODO: Extract this hard-coded knowledge of numeric columns somewhere else
         if ('s10' === columnId) {
-            return 'text-xs-right';
+            return 'text-right';
         }
         return undefined;
     }

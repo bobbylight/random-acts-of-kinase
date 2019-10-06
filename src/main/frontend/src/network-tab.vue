@@ -11,9 +11,7 @@
                             sub-title="View compounds and activity profiles in a network diagram">
                         <v-tooltip right>
                             <template v-slot:activator="{ on }">
-                                <v-menu
-                                    :close-on-content-click="false"
-                                >
+                                <v-menu :close-on-content-click="false">
                                     <template v-slot:activator="{ on: on2 }">
                                         <v-btn fab text v-on="{ ...on, ...on2 }">
                                             <v-icon>settings</v-icon>

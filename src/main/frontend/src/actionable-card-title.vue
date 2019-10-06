@@ -3,7 +3,7 @@
         <div class="title-content">
             <div>
                 <div>{{title}}</div>
-                <div class="actionable-card-subtitle" v-if="subTitle">{{subTitle}}</div>
+                <div class="actionable-card-subtitle text--secondary" v-if="subTitle">{{subTitle}}</div>
             </div>
             <div class="admin-card-button-area">
                 <slot></slot>
