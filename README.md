@@ -52,6 +52,7 @@ open reports/coverage/index.html
 To deploy to AWS (we build a zip containing just the jar and a Procfile to launch
 it, as configured in `.elasticbeanstalk/config.yml`):
 ```sh
+./gradlew clean build  # Be sure to perform a production build
 ./gradlew makeAwsArchive
 eb deploy --label "something"
 ```

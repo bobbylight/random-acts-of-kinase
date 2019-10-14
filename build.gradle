@@ -115,17 +115,28 @@ task integration(type: Test, description: 'Runs the integration tests.', group: 
 }
 
 clean.doLast {
-    delete "${rootDir}/aws-archive.zip"
+    // Must disambiguate with project.delete since we're doing this in clean's doLast
+    project.delete "${rootDir}/aws-archive.zip"
 }
 
 task webpack(type: NpmTask, dependsOn: 'npmInstall') {
     execOverrides {
         it.workingDir = "${project.projectDir}/src/main/frontend/"
     }
-    args = [ 'build' ]
+    args = [ 'run', 'build' ]
 }
 
 processResources.dependsOn 'webpack'
+
+// Generate SVG files for each compound in the local database.
+// If you don't have openbabel set up, you can comment out this section.
+// In that case the app will be built but without images for compounds.
+task createSmileSvgs(type: Exec) {
+    workingDir "${rootDir}"
+    commandLine '/bin/sh', '-c', './util/create-smiles-svgs.sh'
+}
+processResources.dependsOn 'createSmileSvgs'
+createSmileSvgs.dependsOn 'webpack' // Ensure smiles generation occurs after webpack build
 
 task webpackWatch(type: NpmTask) {
     args = [ 'run', 'watch' ]
