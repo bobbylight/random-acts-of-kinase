@@ -4,7 +4,7 @@ jdk:
   - oraclejdk8
 
 script:
-  - ./gradlew build
+  - ./gradlew -xcreateSmileSvgs build
 
 # Update coverage info on coveralls.io
 after_success:

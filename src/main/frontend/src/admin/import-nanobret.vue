@@ -2,7 +2,6 @@
     <abstract-import-data
         header="Import NanoBRET"
         :details="details"
-        image="img/import-nanobret-headers.png"
         :importFunction="importFunction"
         :previewGridColumnInfos="previewGridColumnInfos">
     </abstract-import-data>

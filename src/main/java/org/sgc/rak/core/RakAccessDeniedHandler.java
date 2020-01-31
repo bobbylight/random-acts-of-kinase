@@ -31,6 +31,9 @@ public class RakAccessDeniedHandler extends AccessDeniedHandlerImpl {
 
         String user = request.getRemoteUser();
         String details = "Access denied (403) accessing URL: " + request.getMethod() + " " + request.getRequestURL();
+        if (request.getQueryString() != null) {
+            details += '?' + request.getQueryString();
+        }
 
         LOGGER.warn(details);
         auditService.createAudit(user, AuditAction.ACCESS_DENIED, false, details);

@@ -2,6 +2,7 @@
     <div>
         <v-data-table
             class="compound-table"
+            :dense="dense"
             :items="items"
             :items-per-page="tableOptions.itemsPerPage"
             :server-items-length="totalItems"
@@ -24,7 +25,9 @@
                         </a>
                         <span v-else-if="header.value === 'hidden'">
                             <v-checkbox
-                                class="audit-enabled-cb"
+                                class="audit-enabled-cb ma-0 pa-0"
+                                dense
+                                hide-details
                                 disabled
                                 v-model="item[header.value]"
                             ></v-checkbox>
@@ -66,6 +69,9 @@ export default class CompoundTable extends Vue {
 
     @Prop({ required: true })
     private readonly columnInfo: ColumnInfo[];
+
+    @Prop({ default: false })
+    private readonly dense: boolean;
 
     private totalItems: number = 0;
 

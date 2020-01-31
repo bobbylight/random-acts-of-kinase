@@ -20,7 +20,7 @@
             <template v-slot:item="{ item }">
                 <tr>
                     <td v-for="header in createHeaders()"
-                        :class="getClassesForRow(header.value, item[header.value])">
+                        :class="getClassesForRow(header.value, item[header.value], item)">
                         <v-tooltip bottom>
                             <template v-slot:activator="{ on }">
                                 <span v-on="on">{{item[header.value].newValue}}</span>
@@ -98,7 +98,7 @@ export default class ImportPreviewTable extends Vue {
      * @param {string} columnId
      * @returns {string}
      */
-    private getClassesForRow(columnId: string, value: FieldStatus): string | undefined {
+    private getClassesForRow(columnId: string, value: FieldStatus, all: any): string | undefined {
 
         let classes: string = '';
 
@@ -119,7 +119,7 @@ export default class ImportPreviewTable extends Vue {
 
     private getToolTip(value: FieldStatus): string {
 
-        if (value.oldValue) {
+        if (value.oldValue != null) {
             if (value.oldValue !== value.newValue) {
                 return `Prior value: ${value.oldValue}`;
             }

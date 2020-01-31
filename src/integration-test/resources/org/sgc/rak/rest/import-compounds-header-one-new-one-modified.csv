@@ -1,3 +1,3 @@
-compoundName,chemotype,s-10,smiles,source,primaryReference,primary reference url,hidden
-compoundA,chemotypeA,0,smilesA,sourceA,reference A,url A,false
-compoundNew,chemotypeNew,0,smilesNew,sourceNew,reference New,url New,false
+compoundName,chemotype,s-10,solubility,smiles,source,primaryReference,primary reference url,hidden
+compoundA,chemotypeA,0,1,smilesA,sourceA,reference A,url A,false
+compoundNew,chemotypeNew,0,1,smilesNew,sourceNew,reference New,url New,false

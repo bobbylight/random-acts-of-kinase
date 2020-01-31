@@ -17,9 +17,9 @@
         </v-content>
 
         <v-footer class="theme--dark" height="auto">
-            <v-layout row wrap justify-center>
+            <v-layout class="align-center" row wrap justify-center>
                 <div class="copyright">
-                    &copy; 2018&nbsp;<a href="http://sgc-unc.org">SGC-UNC</a>
+                    &copy; 2020 <a href="http://sgc-unc.org">SGC-UNC</a>
                 </div>
                 <v-btn class="footer-button theme--dark" icon small @click="viewSource"
                        title="View Source" aria-label="View Source">
@@ -91,7 +91,6 @@ export default class App extends Vue {
 footer {
     .copyright {
 
-        display: flex;
         align-items: center;
         margin-right: 3rem;
 

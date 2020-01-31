@@ -57,6 +57,7 @@ public class CompoundService {
         String existingChemotype = null;
         String existingSmiles = null;
         Double existingS10 = null;
+        Double existingSolubility = null;
         String existingSource = null;
         String existingPrimaryReference = null;
         String existingPrimaryReferenceUrl = null;
@@ -67,6 +68,7 @@ public class CompoundService {
             existingChemotype = existing.getChemotype();
             existingSmiles = existing.getSmiles();
             existingS10 = existing.getS10();
+            existingSolubility = existing.getSolubility();
             existingSource = existing.getSource();
             existingPrimaryReference = existing.getPrimaryReference();
             existingPrimaryReferenceUrl = existing.getPrimaryReferenceUrl();
@@ -78,6 +80,7 @@ public class CompoundService {
             Util.createFieldStatus("chemotype", compound.getChemotype(), existingChemotype),
             Util.createFieldStatus("smiles", compound.getSmiles(), existingSmiles),
             Util.createFieldStatus("s10", compound.getS10(), existingS10),
+            Util.createFieldStatus("solubility", compound.getSolubility(), existingSolubility),
             Util.createFieldStatus("source", compound.getSource(), existingSource),
             Util.createFieldStatus("primaryReference", compound.getPrimaryReference(), existingPrimaryReference),
             Util.createFieldStatus("primaryReferenceUrl", compound.getPrimaryReferenceUrl(),

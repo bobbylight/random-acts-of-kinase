@@ -2,7 +2,6 @@
     <abstract-import-data
         header="Import Compounds"
         :details="details"
-        image="img/import-compound-headers.png"
         :importFunction="importFunction"
         :previewGridColumnInfos="previewGridColumnInfos">
     </abstract-import-data>
@@ -28,6 +27,7 @@ export default class ImportCompounds extends Vue {
             { name: 'Compound Name', value: 'compoundName' },
             { name: 'Chemotype', value: 'chemotype' },
             { name: 's(10)', value: 's10' },
+            { name: 'Solubility', value: 'solubility' },
             { name: 'SMILES', value: 'smiles' },
             { name: 'Source', value: 'source' },
             { name: 'Reference', value: 'primaryReference' },

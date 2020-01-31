@@ -2,8 +2,8 @@
     <abstract-import-data
         header="Import K<sub>d</sub>s"
         :details="details"
-        image="img/import-kd-headers.png"
         :importFunction="importFunction"
+        :importFileColumns="importFileColumns"
         :previewGridColumnInfos="previewGridColumnInfos">
     </abstract-import-data>
 </template>
@@ -22,16 +22,15 @@ export default class ImportKds extends Vue {
         'The file should contain the following columns, in this order. If there is a header row, the ' +
         'actual column names in the CSV file do not matter. Data can be sparse:';
 
-    get previewGridColumnInfos(): ColumnInfo[] {
+    private readonly importFileColumns: string[] = [ 'Compound', 'Kinase Discoverx', 'Kinase Entrez',
+            'Modifier', 'K<sub>d</sub>' ];
 
-        return [
-            { name: 'Compound', value: 'compoundName' },
-            { name: 'Kinase Discoverx', value: 'discoverxGeneSymbol' },
-            { name: 'Kinase Entrez', value: 'entrezGeneSymbol' },
-            //{ name: 'Modifier', value: 'modifier' },
-            { name: 'K<sub>d</sub> (nM)', value: 'kd' }
-        ];
-    }
+    private readonly previewGridColumnInfos: ColumnInfo[] = [
+        { name: 'Compound', value: 'compoundName' },
+        { name: 'Kinase Discoverx', value: 'discoverxGeneSymbol' },
+        { name: 'Kinase Entrez', value: 'entrezGeneSymbol' },
+        { name: 'K<sub>d</sub> (nM)', value: 'kd' }
+    ];
 
     get importFunction(): ImportFunction {
         return restApi.importKds.bind(restApi);

@@ -1,3 +1,3 @@
-aaaCompound,imidazotriazine fragment,0,c1nc2nccnn2c1-c1ccccc1,,,,false
-aabCompound,,0.035,O[C@H]([C@H](O)[C@@H](CO)O3)[C@@H]3N1C2=C(C(N)=NC=N2)C(I)=C1,hide,,,false
-aacCompound,6-aminopurines and related,0,Nc1ncnc2n(cnc12)-c1ccc(Cl)cc1,,,,false
+aaaCompound,imidazotriazine fragment,0,,c1nc2nccnn2c1-c1ccccc1,,,,false
+aabCompound,,0.035,,O[C@H]([C@H](O)[C@@H](CO)O3)[C@@H]3N1C2=C(C(N)=NC=N2)C(I)=C1,hide,,,false
+aacCompound,6-aminopurines and related,0,,Nc1ncnc2n(cnc12)-c1ccc(Cl)cc1,,,,false

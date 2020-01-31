@@ -147,6 +147,7 @@ public class ImportController {
             .addColumn("compoundName", CsvSchema.ColumnType.STRING)
             .addColumn("chemotype", CsvSchema.ColumnType.STRING)
             .addColumn("s10", CsvSchema.ColumnType.NUMBER)
+            .addColumn("solubility", CsvSchema.ColumnType.NUMBER)
             .addColumn("smiles", CsvSchema.ColumnType.STRING)
             .addColumn("source", CsvSchema.ColumnType.STRING)
             .addColumn("primaryReference", CsvSchema.ColumnType.STRING)

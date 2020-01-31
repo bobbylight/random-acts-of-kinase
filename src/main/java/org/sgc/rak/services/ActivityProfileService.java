@@ -69,12 +69,14 @@ public class ActivityProfileService {
 
         String existingCompoundName = null;
         String existingDiscoverx = null;
+        String existingEntrez = null;
         Double existingPercentControl = null;
         Integer existingCompoundConcentration = null;
 
         if (existingProfile != null) {
             existingCompoundName = existingProfile.getCompoundName();
             existingDiscoverx = existingProfile.getKinase().getDiscoverxGeneSymbol();
+            existingEntrez = existingProfile.getKinase().getEntrezGeneSymbol();
             existingPercentControl = existingProfile.getPercentControl();
             existingCompoundConcentration = existingProfile.getCompoundConcentration();
         }
@@ -83,6 +85,8 @@ public class ActivityProfileService {
             Util.createFieldStatus("compoundName", newProfile.getCompoundName(), existingCompoundName),
             Util.createFieldStatus("discoverxGeneSymbol", newProfile.getKinase().getDiscoverxGeneSymbol(),
                 existingDiscoverx),
+            Util.createFieldStatus("entrezGeneSymbol", newProfile.getKinase().getEntrezGeneSymbol(),
+                existingEntrez),
             Util.createFieldStatus("percentControl", newProfile.getPercentControl(), existingPercentControl),
             Util.createFieldStatus("compoundConcentration",
                 newProfile.getCompoundConcentration(), existingCompoundConcentration)

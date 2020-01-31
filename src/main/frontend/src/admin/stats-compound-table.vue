@@ -12,7 +12,7 @@
             </actionable-card-title>
 
             <v-card-text>
-                <compounds-table :url="fullUrl" :columnInfo="tableColumnInfo"></compounds-table>
+                <compounds-table :url="fullUrl" :columnInfo="tableColumnInfo" :dense="dense"></compounds-table>
             </v-card-text>
         </v-card>
     </v-flex>
@@ -44,6 +44,9 @@ export default class StatsCompoundTable extends Vue {
 
     @Prop({ required: true })
     private readonly tableColumnInfo: ColumnInfo[];
+
+    @Prop({ default: false })
+    private readonly dense: boolean;
 
     compoundNameFilter: string = '';
     private fullUrl: string = '';

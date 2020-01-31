@@ -13,7 +13,7 @@ You can still test the application without this data by running it with the `dev
 
 ```sh
 git clone git@github.com/github.com/bobbylight/rak.git
-./gradlew build -xwebpack
+./gradlew build -xwebpack --warning-mode all
 ./gradlew bootRun -xwebpack # Starts application at localhost:8080
 ./gradlew webpackWatch      # In another window, run webpack watch for UI updates
 ./gradlew copyStaticResourcesToBuildWatch # Copy webpack build into build/ for hot deploys
@@ -52,7 +52,7 @@ open reports/coverage/index.html
 To deploy to AWS (we build a zip containing just the jar and a Procfile to launch
 it, as configured in `.elasticbeanstalk/config.yml`):
 ```sh
-./gradlew clean build  # Be sure to perform a production build
+./gradlew clean build --warning-mode all # Be sure to perform a production build
 ./gradlew makeAwsArchive
 eb deploy --label "something"
 ```

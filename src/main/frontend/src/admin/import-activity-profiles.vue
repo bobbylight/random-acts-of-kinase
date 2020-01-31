@@ -2,7 +2,6 @@
     <abstract-import-data
         header="Import Activity Profiles"
         :details="details"
-        image="img/import-activity-profile-headers.png"
         :importFunction="importFunction"
         :previewGridColumnInfos="previewGridColumnInfos">
     </abstract-import-data>
@@ -27,6 +26,7 @@ export default class ImportActivityProfiles extends Vue {
         return [
             { name: 'Compound', value: 'compoundName' },
             { name: 'Kinase Discoverx', value: 'discoverxGeneSymbol' },
+            { name: 'Kinase Entrez', value: 'entrezGeneSymbol' },
             { name: '% Control', value: 'percentControl' },
             { name: 'Concentration', value: 'compoundConcentration' }
         ];

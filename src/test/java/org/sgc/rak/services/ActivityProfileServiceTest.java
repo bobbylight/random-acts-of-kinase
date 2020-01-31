@@ -200,12 +200,15 @@ public class ActivityProfileServiceTest {
         Assert.assertEquals("discoverxGeneSymbol", rowData.get(1).getFieldName());
         Assert.assertEquals("discoverxA", rowData.get(1).getNewValue());
         Assert.assertEquals("discoverxA", rowData.get(1).getOldValue());
-        Assert.assertEquals("percentControl", rowData.get(2).getFieldName());
-        Assert.assertEquals(0.9, (Double)rowData.get(2).getNewValue(), 0.001);
-        Assert.assertEquals(0.1, (Double)rowData.get(2).getOldValue(), 0.001);
-        Assert.assertEquals("compoundConcentration", rowData.get(3).getFieldName());
-        Assert.assertEquals(4, ((Integer)rowData.get(3).getNewValue()).intValue());
-        Assert.assertEquals(1, ((Integer)rowData.get(3).getOldValue()).intValue());
+        Assert.assertEquals("entrezGeneSymbol", rowData.get(2).getFieldName());
+        Assert.assertEquals("entrezA", rowData.get(2).getNewValue());
+        Assert.assertEquals("entrezA", rowData.get(2).getOldValue());
+        Assert.assertEquals("percentControl", rowData.get(3).getFieldName());
+        Assert.assertEquals(0.9, (Double)rowData.get(3).getNewValue(), 0.001);
+        Assert.assertEquals(0.1, (Double)rowData.get(3).getOldValue(), 0.001);
+        Assert.assertEquals("compoundConcentration", rowData.get(4).getFieldName());
+        Assert.assertEquals(4, ((Integer)rowData.get(4).getNewValue()).intValue());
+        Assert.assertEquals(1, ((Integer)rowData.get(4).getOldValue()).intValue());
 
         // Verify that the second response row shows all new values
         rowData = fieldStatuses.get(1);
@@ -215,12 +218,15 @@ public class ActivityProfileServiceTest {
         Assert.assertEquals("discoverxGeneSymbol", rowData.get(1).getFieldName());
         Assert.assertEquals("discoverxB", rowData.get(1).getNewValue());
         Assert.assertNull(rowData.get(1).getOldValue());
-        Assert.assertEquals("percentControl", rowData.get(2).getFieldName());
-        Assert.assertEquals(0.8, (Double)rowData.get(2).getNewValue(), 0.001);
+        Assert.assertEquals("entrezGeneSymbol", rowData.get(2).getFieldName());
+        Assert.assertEquals("entrezB", rowData.get(2).getNewValue());
         Assert.assertNull(rowData.get(2).getOldValue());
-        Assert.assertEquals("compoundConcentration", rowData.get(3).getFieldName());
-        Assert.assertEquals(3, ((Integer)rowData.get(3).getNewValue()).intValue());
+        Assert.assertEquals("percentControl", rowData.get(3).getFieldName());
+        Assert.assertEquals(0.8, (Double)rowData.get(3).getNewValue(), 0.001);
         Assert.assertNull(rowData.get(3).getOldValue());
+        Assert.assertEquals("compoundConcentration", rowData.get(4).getFieldName());
+        Assert.assertEquals(3, ((Integer)rowData.get(4).getNewValue()).intValue());
+        Assert.assertNull(rowData.get(4).getOldValue());
 
         // Verify the commit only happens if commit == true
         verify(mockActivityProfileDao, times(commit ? 1 : 0)).save(any());

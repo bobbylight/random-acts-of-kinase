@@ -1,9 +1,9 @@
 <template>
-    <v-flex xs12>
+    <v-col cols="12">
         <div class="rak-header headline pb-2 primary--text">
             <slot></slot>
         </div>
-    </v-flex>
+    </v-col>
 </template>
 
 <script lang="ts">

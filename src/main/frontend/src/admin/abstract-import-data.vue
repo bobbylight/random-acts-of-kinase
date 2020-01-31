@@ -8,9 +8,7 @@
 
                 <div v-html="details"></div>
 
-                <div class="headers-example">
-                    <img :src="image">
-                </div>
+                <expected-column-listing  :column-names="expectedColumnNames"/>
 
                 <v-checkbox class="import-form-field"
                             label="The CSV file contains a header row"
@@ -85,6 +83,7 @@ import { ObjectImportRep, ErrorResponse, FieldStatus } from '../rak';
 import { Prop, Watch } from 'vue-property-decorator';
 import RakUtil from '../util';
 import ImportSummary, { LoadingStatus, PreviewGridFilterType } from './import-summary.vue';
+import ExpectedColumnListing from './expected-column-listing.vue';
 
 /**
  * This just so happens to align with how the service is configured.
@@ -99,7 +98,8 @@ export interface ImportFunction {
     (file: File, headerRow: boolean, commit?: boolean): Promise<ObjectImportRep>;
 }
 
-@Component({ components: { SectionHeader, FileDropzone, ImportPreviewTable, ImportPreviewTableFilter, ImportSummary } })
+@Component({ components: { ExpectedColumnListing, SectionHeader, FileDropzone, ImportPreviewTable,
+        ImportPreviewTableFilter, ImportSummary } })
 export default class AbstractImportData extends Vue {
 
     @Prop({ required: true })
@@ -108,8 +108,8 @@ export default class AbstractImportData extends Vue {
     @Prop({ required: true })
     private readonly details: string;
 
-    @Prop({ required: true })
-    private readonly image: string;
+    @Prop()
+    private readonly importFileColumns: string[] | undefined;
 
     @Prop({ required: true })
     private readonly previewGridColumnInfos: ColumnInfo[];
@@ -157,6 +157,11 @@ export default class AbstractImportData extends Vue {
         });
 
         return items;
+    }
+
+    private get expectedColumnNames(): string[] {
+        return this.importFileColumns ? this.importFileColumns :
+            this.previewGridColumnInfos.map((ci: ColumnInfo) => ci.name);
     }
 
     private static isFileTooLargeToUpload(file: File): boolean {

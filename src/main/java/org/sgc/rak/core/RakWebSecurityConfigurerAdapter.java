@@ -9,12 +9,15 @@ import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 /**
  * App application configuration related to security.
@@ -76,6 +79,9 @@ public class RakWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
                     .anyRequest().permitAll()
             .and()
                 .csrf()
+                    // Annoyingly, we must itemize POST calls made by bots that we want to return 404's, since
+                    // Spring Security will return 403 for any POST without a CSRF token otherwise
+                    .ignoringRequestMatchers(new RegexRequestMatcher(".+\\.php", "POST"))
                     // CookieCsrfTokenRepository uses the default cookie & header names as axios
                     .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
             .and()

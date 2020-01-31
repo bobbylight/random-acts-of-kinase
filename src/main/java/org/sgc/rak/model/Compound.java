@@ -16,7 +16,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "compound")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "compoundName", "chemotype", "s10", "smiles", "source", "primaryReference",
+@JsonPropertyOrder({ "compoundName", "chemotype", "s10", "solubility", "smiles", "source", "primaryReference",
     "primaryReferenceUrl", "hidden" })
 public class Compound extends AbstractCompound {
 }

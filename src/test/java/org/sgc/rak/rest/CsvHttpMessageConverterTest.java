@@ -72,9 +72,9 @@ public class CsvHttpMessageConverterTest {
         converter.writeInternal(pagedDataRep, type, outputMessage);
 
         String expected =
-            "compoundName,chemotype,s10,smiles,source,primaryReference,primaryReferenceUrl,hidden,solubility\n" +
-            "compoundA,,0.3,smilesA,,,,,\n" +
-            "compoundB,,,smilesB,,,,,\n";
+            "compoundName,chemotype,s10,solubility,smiles,source,primaryReference,primaryReferenceUrl,hidden\n" +
+            "compoundA,,0.3,,smilesA,,,,\n" +
+            "compoundB,,,,smilesB,,,,\n";
         Assert.assertEquals(expected, outputMessage.getBodyAsString());
     }
 }
