@@ -2,22 +2,22 @@
     <div class="search-wrapper">
 
         <v-container fluid grid-list-md class="search-filter-wrapper">
-            <v-layout row wrap justify-center>
-                <v-flex xs12 class="search-part-layout">
+            <v-row class="justify-center">
+                <v-col cols="12" class="search-part-layout">
 
-                    <section-header>Search Compounds</section-header>
+                    <section-header style="padding: unset">Search Compounds</section-header>
 
                     <search-filters></search-filters>
-                </v-flex>
-            </v-layout>
+                </v-col>
+            </v-row>
         </v-container>
 
         <v-container class="search-results">
-            <v-layout row wrap justify-center>
-                <v-flex xs12 class="search-part-layout">
+            <v-row class="justify-center">
+                <v-col cols="12" class="search-part-layout">
                     <search-result-table :filters="gridFilters"></search-result-table>
-                </v-flex>
-            </v-layout>
+                </v-col>
+            </v-row>
         </v-container>
     </div>
 </template>

@@ -9,7 +9,7 @@ A Spring Boot application exposes the data via a REST API.  The frontend is writ
 Note:  The actual kinase data is not included in this repository, for obvious reasons.
 You can still test the application without this data by running it with the `dev` Spring profile.
 
-## Install
+## Hacking
 
 ```sh
 git clone git@github.com/github.com/bobbylight/rak.git
@@ -56,6 +56,23 @@ it, as configured in `.elasticbeanstalk/config.yml`):
 ./gradlew makeAwsArchive
 eb deploy --label "something"
 ```
+
+## Utilities
+
+The `util` folder contains shell scripts to do mundane tasks.  For these scripts
+to run you'll need to create a file named `env.sh` from the `env.sh.orig` template
+file with connection info for a database containing the SGC data.
+
+### Creating SVG images for compounds from SMILES strings
+The SVG images of compounds used by the application are generated from their
+SMILES strings.  Generate them by running `./create-smiles-svgs.sh`.  You'll
+need to have `psql` on your `PATH` or this script will fail silently.  This
+script is run as part of `./gradlew build` so you typically don't need to
+run it directly.
+
+### Exporting data from our database into CSV files
+To back up the database into CSV files, you can run `./export-to-csv.sh`.
+
 
 ## Updating the AWS database
 We won't have to keep doing this once we have the data exported in a format we like...

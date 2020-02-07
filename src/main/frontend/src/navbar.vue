@@ -33,7 +33,7 @@
                          :compound="compound" @close="close($event)"></navbar-pill>
         </v-toolbar-items>
 
-        <v-spacer></v-spacer>
+        <v-spacer/>
 
         <span v-if="$store.getters.loggedIn" class="user-name">{{$store.state.user}}</span>
         <v-btn text icon large @click="showLogin = true" title="Login" aria-label="Login"

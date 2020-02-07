@@ -12,29 +12,35 @@
 
             <v-card-text>
 
-                <v-flex xs12>
-                    <v-text-field type="text" label="E-mail (optional)"
-                                  ref="emailField"
-                                  :rules="emailRules"
-                                  v-model="email"></v-text-field>
-                </v-flex>
+                <v-row>
 
-                <v-flex xs12>
-                    <v-text-field type="text" label="Summary"
-                                  :rules="summaryRules"
-                                  v-model="summary"></v-text-field>
-                </v-flex>
+                    <v-col cols="12">
+                        <v-text-field type="text" label="E-mail (optional)"
+                                      ref="emailField"
+                                      :rules="emailRules"
+                                      hide-details
+                                      v-model="email"></v-text-field>
+                    </v-col>
 
-                <v-flex xs12>
-                    <v-textarea label="Details"
-                                :rules="detailsRules"
-                                :counter="8000"
-                                v-model="details"></v-textarea>
-                </v-flex>
+                    <v-col cols="12">
+                        <v-text-field type="text" label="Summary"
+                                      :rules="summaryRules"
+                                      hide-details
+                                      v-model="summary"></v-text-field>
+                    </v-col>
+
+                    <v-col cols="12">
+                        <v-textarea label="Details"
+                                    :rules="detailsRules"
+                                    :counter="8000"
+                                    hide-details
+                                    v-model="details"></v-textarea>
+                    </v-col>
+                </v-row>
             </v-card-text>
 
             <v-card-actions>
-                <v-spacer></v-spacer>
+                <v-spacer/>
                 <v-btn color="primary"
                        :disabled="submitButtonDisabled()"
                        @click="onSubmit">Submit</v-btn>

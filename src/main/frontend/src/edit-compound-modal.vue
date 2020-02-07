@@ -6,29 +6,28 @@
                 <div class="headline">Edit Compound {{compoundCopy.compoundName}}</div>
             </v-card-title>
 
-            <v-card-text class="container grid-list-md">
+            <v-card-text class="edit-compound-modal container grid-list-md">
                 <v-form ref="form" v-model="valid">
 
-                    <v-flex xs12>
-                        <v-text-field type="text" label="Chemotype"
-                                      ref="chemotypeField"
-                                      @input="dirty = true"
-                                      autocomplete="off"
-                                      v-model="compoundCopy.chemotype"></v-text-field>
-                    </v-flex>
+                    <v-row>
+                        <v-col class="edit-compound-modal-col" cols="12">
+                            <v-text-field type="text" label="Chemotype"
+                                          ref="chemotypeField"
+                                          @input="dirty = true"
+                                          autocomplete="off"
+                                          v-model="compoundCopy.chemotype"></v-text-field>
+                        </v-col>
 
-                    <v-layout row>
-
-                        <v-flex xs6>
+                        <v-col class="edit-compound-modal-col" cols="6">
                             <v-text-field type="number" label="s(10)" class="right-aligned"
                                           :rules="s10ValidationRules" v-model="compoundCopy.s10"
                                           @input="dirty = true"
                                           autocomplete="off"
                                           :step="0.01" :min="0" :max="1">
                             </v-text-field>
-                        </v-flex>
+                        </v-col>
 
-                        <v-flex xs6>
+                        <v-col class="edit-compound-modal-col" cols="6">
                             <v-text-field type="number" label="Solubility" class="right-aligned"
                                           :rules="solubilityValidationRules"
                                           v-model="compoundCopy.solubility"
@@ -36,62 +35,58 @@
                                           autocomplete="off"
                                           :step="0.1" :min="0" :max="10000" suffix="µg/mL">
                             </v-text-field>
-                        </v-flex>
-                    </v-layout>
+                        </v-col>
 
-                    <v-flex xs12>
-                        <v-text-field type="text" label="SMILES"
-                                      @input="dirty = true"
-                                      autocomplete="off"
-                                      v-model="compoundCopy.smiles"></v-text-field>
-                    </v-flex>
+                        <v-col class="edit-compound-modal-col" cols="12">
+                            <v-text-field type="text" label="SMILES"
+                                          @input="dirty = true"
+                                          autocomplete="off"
+                                          v-model="compoundCopy.smiles"></v-text-field>
+                        </v-col>
+                        <v-col class="edit-compound-modal-col" cols="12">
+                            <v-text-field type="text" label="Source"
+                                          @input="dirty = true"
+                                          autocomplete="off"
+                                          v-model="compoundCopy.source"></v-text-field>
+                        </v-col>
 
-                    <v-flex xs12>
-                        <v-text-field type="text" label="Source"
-                                      @input="dirty = true"
-                                      autocomplete="off"
-                                      v-model="compoundCopy.source"></v-text-field>
-                    </v-flex>
+                        <v-col class="edit-compound-modal-col" cols="12">
+                            <v-text-field type="text" label="Primary Reference"
+                                          @input="dirty = true"
+                                          :rules="primaryReferenceRules"
+                                          autocomplete="off"
+                                          v-model="compoundCopy.primaryReference"></v-text-field>
+                        </v-col>
 
-                    <v-flex xs12>
-                        <v-text-field type="text" label="Primary Reference"
-                                      @input="dirty = true"
-                                      :rules="primaryReferenceRules"
-                                      autocomplete="off"
-                                      v-model="compoundCopy.primaryReference"></v-text-field>
-                    </v-flex>
+                        <v-col class="edit-compound-modal-col" cols="12">
+                            <v-text-field type="text" label="Primary Reference URL"
+                                          @input="dirty = true"
+                                          :rules="primaryReferenceUrlRules"
+                                          autocomplete="off"
+                                          v-model="compoundCopy.primaryReferenceUrl"></v-text-field>
+                        </v-col>
 
-                    <v-flex xs12>
-                        <v-text-field type="text" label="Primary Reference URL"
-                                      @input="dirty = true"
-                                      :rules="primaryReferenceUrlRules"
-                                      autocomplete="off"
-                                      v-model="compoundCopy.primaryReferenceUrl"></v-text-field>
-                    </v-flex>
-
-                    <v-layout row align-center>
-
-                        <v-flex xs3>
+                        <v-col class="edit-compound-modal-col" cols="3">
                             <v-switch
                                 class="edit-compound-hidden-switch"
                                 :label="`${compoundCopy.hidden ? 'Hidden' : 'Not hidden'}`"
                                 @change="dirty = true"
                                 v-model="compoundCopy.hidden"></v-switch>
-                        </v-flex>
-                        <v-flex xs9>
+                        </v-col>
+                        <v-col class="edit-compound-modal-col" cols="9">
                             <transition name="fade">
                                 <v-chip color="warning" v-if="compoundCopy.hidden">
                                     <v-icon class="pr-1">warning</v-icon>
                                     Hidden compounds won't appear in search results except for admins
                                 </v-chip>
                             </transition>
-                        </v-flex>
-                    </v-layout>
+                        </v-col>
+                    </v-row>
                 </v-form>
             </v-card-text>
 
             <v-card-actions>
-                <v-spacer></v-spacer>
+                <v-spacer/>
                 <v-btn color="primary"
                        :disabled="!dirty || !valid"
                        @click="onSubmit">Update</v-btn>
@@ -259,12 +254,20 @@ export default class EditCompoundModal extends Vue {
 </script>
 
 <style lang="less">
-.edit-compound-hidden-switch {
+.edit-compound-modal {
 
-    display: inline-block;
+    .edit-compound-modal-col {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
 
-    .v-messages {
-        display: none;
+    .edit-compound-hidden-switch {
+
+        display: inline-block;
+
+        .v-messages {
+            display: none;
+        }
     }
 }
 </style>

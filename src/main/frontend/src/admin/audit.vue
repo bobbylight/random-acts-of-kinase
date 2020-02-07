@@ -1,10 +1,10 @@
 <template>
     <v-container grid-list-md>
-        <v-layout row wrap class="audit-wrapper">
+        <v-row class="audit-wrapper">
 
             <section-header>Audit Records</section-header>
 
-            <v-flex xs12>
+            <v-col cols="12">
 
                 <p>
                     See who's done what in the application.
@@ -13,9 +13,9 @@
                 <p>
                     Click on a row to see more detail about the audit record.
                 </p>
-            </v-flex>
+            </v-col>
 
-            <v-flex xs12>
+            <v-col cols="12">
 
                 <v-card>
 
@@ -23,18 +23,18 @@
 
                     <v-card-text>
 
-                        <v-layout row wrap class="audit-filters-wrapper">
+                        <v-row class="audit-filters-wrapper">
 
-                            <v-flex xs6 class="audit-filter">
+                            <v-col cols="6" class="audit-filter">
                                 <v-text-field label="User"
                                               @input="debouncedReloadTable"
                                               prepend-icon="fa-user"
                                               hide-details
                                               clearable
                                               v-model="userFilter"></v-text-field>
-                            </v-flex>
+                            </v-col>
 
-                            <v-flex xs6 class="audit-filter">
+                            <v-col cols="6" class="audit-filter">
                                 <v-select
                                     label="Action"
                                     required
@@ -44,18 +44,18 @@
                                     hide-details
                                     @input="debouncedReloadTable"
                                 ></v-select>
-                            </v-flex>
+                            </v-col>
 
-                            <v-flex xs6 class="audit-filter">
+                            <v-col cols="6" class="audit-filter">
                                 <v-text-field label="IP Address"
                                               @input="debouncedReloadTable"
                                               prepend-icon="fa-map-marker-alt"
                                               hide-details
                                               clearable
                                               v-model="ipAddressFilter"></v-text-field>
-                            </v-flex>
+                            </v-col>
 
-                            <v-flex xs6 class="audit-filter">
+                            <v-col cols="6" class="audit-filter">
                                 <v-select
                                     label="Successful"
                                     required
@@ -65,9 +65,9 @@
                                     hide-details
                                     @input="debouncedReloadTable"
                                 ></v-select>
-                            </v-flex>
+                            </v-col>
 
-                            <v-flex xs6 class="audit-filter">
+                            <v-col cols="6" class="audit-filter">
                                 <v-menu
                                     v-model="showFromDate"
                                     :close-on-content-click="false"
@@ -93,9 +93,9 @@
                                                    :max="toDateFilter || maxAllowedDate"
                                                    @input="showFromDate = false; debouncedReloadTable()"></v-date-picker>
                                 </v-menu>
-                            </v-flex>
+                            </v-col>
 
-                            <v-flex xs6 class="audit-filter">
+                            <v-col cols="6" class="audit-filter">
                                 <v-menu
                                     v-model="showToDate"
                                     :close-on-content-click="false"
@@ -121,8 +121,8 @@
                                                    :max="maxAllowedDate"
                                                    @input="showToDate = false; debouncedReloadTable()"></v-date-picker>
                                 </v-menu>
-                            </v-flex>
-                        </v-layout>
+                            </v-col>
+                        </v-row>
 
                         <v-data-table
                             :headers="headers"
@@ -162,8 +162,8 @@
                         </v-data-table>
                     </v-card-text>
                 </v-card>
-            </v-flex>
-        </v-layout>
+            </v-col>
+        </v-row>
     </v-container>
 </template>
 

@@ -20,7 +20,7 @@
                 <section-header>{{title}}</section-header>
                 <img :src="image" width=600 height=450>
 
-                <v-flex xs12 style="text-align: right">
+                <v-col cols="12" style="text-align: right">
                     <div style="display: inline-block">
                         <div class="lightbox-footer-content">
                             <div class="lightbox-save-label">
@@ -38,7 +38,7 @@
                             </v-btn>
                         </div>
                     </div>
-                </v-flex>
+                </v-col>
             </div>
         </v-overlay>
     </transition>

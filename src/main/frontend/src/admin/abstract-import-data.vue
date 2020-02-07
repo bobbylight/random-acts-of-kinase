@@ -1,10 +1,10 @@
 <template>
     <v-container grid-list-md>
-        <v-layout row wrap class="import-wrapper">
+        <v-row class="import-wrapper">
 
             <section-header><span v-html="header"></span></section-header>
 
-            <v-flex xs12 v-if="!file">
+            <v-col cols="12" v-if="!file">
 
                 <div v-html="details"></div>
 
@@ -16,9 +16,9 @@
                 ></v-checkbox>
 
                 <file-dropzone v-model="file"></file-dropzone>
-            </v-flex>
+            </v-col>
 
-            <v-flex xs6 v-if="file">
+            <v-col cols="6" v-if="file">
                 <div class="headline">File: {{fileName}}</div>
                 <div class="import-details">
                     <import-summary
@@ -27,37 +27,37 @@
                         :totalCount="totalRecordCount"
                         :status="loadingStatus"></import-summary>
                 </div>
-            </v-flex>
+            </v-col>
 
-            <v-flex xs6 v-if="file">
-                <v-layout justify-end>
+            <v-col cols="6" v-if="file">
+                <div class="float-right">
                     <v-btn class="import-data-button" color="success" @click="onImport"
                            :disabled="loading">Import</v-btn>
                     <v-btn class="import-data-button" @click="onCancel"
                            :disabled="loading">Cancel</v-btn>
-                </v-layout>
-            </v-flex>
+                </div>
+            </v-col>
 
-            <v-flex class="import-preview-table-card" xs12 v-if="file">
+            <v-col cols="12" class="import-preview-table-card" v-if="file">
 
                 <v-card>
 
                     <v-card-title primary-title>
 
-                        <v-layout class="title-content" row wrap>
+                        <v-row no-gutters class="title-content">
 
-                            <v-flex xs8>
+                            <v-col cols="8">
                                 <h3 class="headline" style="display: inline-block">
                                     Imported Data Preview
                                 </h3>
-                            </v-flex>
-                            <v-flex xs4>
+                            </v-col>
+                            <v-col cols="4">
                                 <import-preview-table-filter
                                     :disabled="loading"
                                     @change="filterPreviewGridItems($event)"
                                 ></import-preview-table-filter>
-                            </v-flex>
-                        </v-layout>
+                            </v-col>
+                        </v-row>
                     </v-card-title>
 
                     <import-preview-table
@@ -66,8 +66,8 @@
                         :loading="loading">
                     </import-preview-table>
                 </v-card>
-            </v-flex>
-        </v-layout>
+            </v-col>
+        </v-row>
     </v-container>
 </template>
 

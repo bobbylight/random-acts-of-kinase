@@ -1,37 +1,32 @@
 <template>
-    <v-layout row wrap>
+    <v-row>
 
-        <v-flex xs12>
+        <v-col cols="12">
             <v-text-field type="text" label="Search by compound" class="search-field"
-                          autocomplete="off"
+                          autocomplete="off" hide-details
                           v-model="nanoBretFilters.inhibitor"></v-text-field>
-        </v-flex>
+        </v-col>
 
-        <v-flex xs12>
-            <v-layout row wrap>
+        <v-col md="8">
+            <lazy-dropdown v-model="nanoBretFilters.kinase"
+                           id="kinase"
+                           label="Or by kinase and IC50"
+                           name="kinase" url="api/kinases"
+                           :queryParams="kinaseQueryParams"
+                           filterParamName="entrez"
+                           responseLabelField="discoverxGeneSymbol"
+                           responseValueField="responseValueField"
+                           :transform="kinaseResponseTransformer"></lazy-dropdown>
+        </v-col>
 
-                <v-flex xm8>
-                    <lazy-dropdown v-model="nanoBretFilters.kinase"
-                                   id="kinase"
-                                   label="Or by kinase and IC50"
-                                   name="kinase" url="api/kinases"
-                                   :queryParams="kinaseQueryParams"
-                                   filterParamName="entrez"
-                                   responseLabelField="discoverxGeneSymbol"
-                                   responseValueField="responseValueField"
-                                   :transform="kinaseResponseTransformer"></lazy-dropdown>
-                </v-flex>
-
-                <v-flex sm4>
-                    <v-text-field type="number" label="IC50" class="search-field right-aligned"
-                                  :rules="ic50ValidationRules" v-model="nanoBretFilters.ic50"
-                                  autocomplete="off"
-                                  :step="0.1" min="0" max="10000" suffix="nM">
-                    </v-text-field>
-                </v-flex>
-            </v-layout>
-        </v-flex>
-    </v-layout>
+        <v-col sm="4">
+            <v-text-field type="number" label="IC50" class="search-field right-aligned"
+                          :rules="ic50ValidationRules" v-model="nanoBretFilters.ic50"
+                          autocomplete="off" hide-details
+                          :step="0.1" min="0" max="10000" suffix="nM">
+            </v-text-field>
+        </v-col>
+    </v-row>
 </template>
 
 <script lang="ts">

@@ -17,8 +17,8 @@ export default class SectionHeader extends Vue {
 
 <style lang="less">
 .v-application .rak-header.headline {
-    padding-top: 1rem !important;
-    padding-bottom: 1rem !important;
+    padding-top: .5rem !important;
+    padding-bottom: 0 !important;
     font-size: 2rem !important;
 }
 </style>

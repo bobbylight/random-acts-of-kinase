@@ -30,7 +30,7 @@ export default class ExpectedColumnListing extends Vue {
     .expected-column-name {
         border: 1px solid gray;
         background: #fafafa;
-        display:inline;
+        display: inline-block;
         padding: 0.5rem 1rem;
 
         &:first-child {

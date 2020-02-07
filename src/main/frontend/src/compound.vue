@@ -1,7 +1,7 @@
 <template>
     <v-container grid-list-md class="page-wrapper">
 
-        <v-layout row wrap v-if="authorized">
+        <v-row v-if="authorized">
 
             <section-header>
                 Results for {{id}}
@@ -19,11 +19,11 @@
                 </div>
             </section-header>
 
-            <v-flex xs12>
+            <v-col cols="12">
                 <compound-details-card ref="compoundDetailsCard" :compound="compound"></compound-details-card>
-            </v-flex>
+            </v-col>
 
-            <v-flex xs12 class="card-vertical-spacing">
+            <v-col cols="12" class="card-vertical-spacing">
                 <v-expansion-panels :value="0">
                     <v-expansion-panel class="expansion-panel-no-left-margin">
                         <v-expansion-panel-header>
@@ -34,9 +34,9 @@
                         </v-expansion-panel-content>
                     </v-expansion-panel>
                 </v-expansion-panels>
-            </v-flex>
+            </v-col>
 
-            <v-flex xs12 class="card-vertical-spacing" v-if="chartData">
+            <v-col cols="12" class="card-vertical-spacing" v-if="chartData">
                 <v-expansion-panels>
                     <v-expansion-panel class="expansion-panel-no-left-margin">
                         <v-expansion-panel-header>
@@ -47,12 +47,12 @@
                         </v-expansion-panel-content>
                     </v-expansion-panel>
                 </v-expansion-panels>
-            </v-flex>
-        </v-layout>
+            </v-col>
+        </v-row>
 
-        <v-layout row wrap v-if="!authorized">
+        <v-row v-if="!authorized">
             <unauthorized/>
-        </v-layout>
+        </v-row>
 
         <EditCompoundModal :compound="compound" :show="showEditCompound"
                 @updated="compoundUpdated" @close="showEditCompound = false">

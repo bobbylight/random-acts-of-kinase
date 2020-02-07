@@ -1,19 +1,19 @@
 <template>
     <v-container grid-list-md>
-        <v-layout row wrap class="blog-manager-wrapper">
+        <v-row wrap class="blog-manager-wrapper">
 
             <section-header>News Posts</section-header>
 
-            <v-flex xs12 class="blog-manager-top-section">
+            <v-col cols="12" class="blog-manager-top-section">
 
                 <p>
                     Create, edit, or delete news posts.
                 </p>
 
                 <v-btn color="info" @click="onNewPost">New Post</v-btn>
-            </v-flex>
+            </v-col>
 
-            <v-flex xs12>
+            <v-col cols="12">
 
                 <v-data-table
                     :headers="headers"
@@ -35,8 +35,8 @@
                             @postsUpdated="reloadTable"></blog-manager-post-name-cell>
                     </template>
                 </v-data-table>
-            </v-flex>
-        </v-layout>
+            </v-col>
+        </v-row>
 
         <confirm-modal
             :show="showDeleteConfirmation"

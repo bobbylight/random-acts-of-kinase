@@ -1,33 +1,28 @@
 <template>
-    <v-layout row wrap>
+    <v-row>
 
-        <v-flex xs12>
+        <v-col cols="12">
             <v-text-field type="text" label="Search by compound" class="search-field"
-                          autocomplete="off"
+                          autocomplete="off" hide-details
                           v-model="filters.inhibitor"></v-text-field>
-        </v-flex>
+        </v-col>
 
-        <v-flex xs12>
-            <v-layout row wrap>
+        <v-col md="8">
+            <lazy-dropdown v-model="filters.kinase"
+                           id="kinase"
+                           :label="kinaseDropdownLabel"
+                           name="kinase" url="api/kinases"
+                           :queryParams="kinaseQueryParams"
+                           filterParamName="entrez"
+                           responseLabelField="entrezGeneSymbol"
+                           responseValueField="responseValueField"
+                           :transform="kinaseResponseTransformer"></lazy-dropdown>
+        </v-col>
 
-                <v-flex xm8>
-                    <lazy-dropdown v-model="filters.kinase"
-                                   id="kinase"
-                                   :label="kinaseDropdownLabel"
-                                   name="kinase" url="api/kinases"
-                                   :queryParams="kinaseQueryParams"
-                                   filterParamName="entrez"
-                                   responseLabelField="entrezGeneSymbol"
-                                   responseValueField="responseValueField"
-                                   :transform="kinaseResponseTransformer"></lazy-dropdown>
-                </v-flex>
-
-                <v-flex sm4>
-                    <activity-or-kd-field></activity-or-kd-field>
-                </v-flex>
-            </v-layout>
-        </v-flex>
-    </v-layout>
+        <v-col sm="4">
+            <activity-or-kd-field></activity-or-kd-field>
+        </v-col>
+    </v-row>
 </template>
 
 <script lang="ts">

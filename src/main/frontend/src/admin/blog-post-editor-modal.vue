@@ -6,18 +6,25 @@
 
             <v-card-text>
 
-                <v-flex xs12>
-                    <v-text-field type="text" label="Post Title" v-model="title" ref="titleField"></v-text-field>
-                </v-flex>
+                <v-row>
 
-                <rich-text-editor
-                    :initial-content="body"
-                    :emitChangeEvents="true"
-                    @change="editorContentChanged"></rich-text-editor>
+                    <v-col cols="12">
+                        <v-text-field type="text" label="Post Title" v-model="title"
+                                      hide-details
+                                      ref="titleField"></v-text-field>
+                    </v-col>
+
+                    <v-col cols="12">
+                        <rich-text-editor
+                            :initial-content="body"
+                            :emitChangeEvents="true"
+                            @change="editorContentChanged"></rich-text-editor>
+                    </v-col>
+                </v-row>
             </v-card-text>
 
             <v-card-actions>
-                <v-spacer></v-spacer>
+                <v-spacer/>
                 <v-btn :disabled="!dirty || isFormIncomplate()" @click="onCreateOrUpdatePost">
                     {{submitButtonLabel}}
                 </v-btn>

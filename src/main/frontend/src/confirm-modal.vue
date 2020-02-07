@@ -12,7 +12,7 @@
             </v-card-text>
 
             <v-card-actions>
-                <v-spacer></v-spacer>
+                <v-spacer/>
                 <v-btn color="success" @click="onYes">
                     Yes
                 </v-btn>

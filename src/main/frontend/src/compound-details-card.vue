@@ -6,9 +6,9 @@
 
         <v-card-text class="pt-0 pb-0">
             <v-container grid-list-md>
-                <v-layout row wrap align-center>
+                <v-row no-gutters class="align-center">
 
-                    <v-flex xs3 pt-0>
+                    <v-col cols="3" pt-0>
                         <v-tooltip bottom v-if="compoundImageUrl">
                             <template v-slot:activator="{ on }">
                                 <img :src="compoundImageUrl"
@@ -19,9 +19,9 @@
                             </template>
                             <span>Click to enlarge</span>
                         </v-tooltip>
-                    </v-flex>
+                    </v-col>
 
-                    <v-flex xs9 pt-0 pl-5>
+                    <v-col cols="9" pt-0 pl-5>
 
                         <div class="compound-details-table">
 
@@ -60,8 +60,8 @@
                                 <div class="compound-details-table-cell" v-html="reference"></div>
                             </div>
                         </div>
-                    </v-flex>
-                </v-layout>
+                    </v-col>
+                </v-row>
             </v-container>
         </v-card-text>
     </v-card>

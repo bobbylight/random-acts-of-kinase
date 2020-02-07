@@ -1,10 +1,10 @@
 <template>
     <v-container grid-list-md>
-        <v-layout row wrap class="feedback-wrapper">
+        <v-row wrap class="feedback-wrapper">
 
             <section-header>Feedback</section-header>
 
-            <v-flex xs12>
+            <v-col cols="12">
 
                 <div>
                     <p>
@@ -17,9 +17,9 @@
                     </p>
                 </div>
 
-            </v-flex>
+            </v-col>
 
-            <v-flex xs12 class="feedback-button-section">
+            <v-col cols="12" class="feedback-button-section">
 
                 <v-btn class="feedback-button" @click="onReply" :disabled="isReplyDisabled()">
                     Reply
@@ -32,9 +32,9 @@
                 <v-btn class="feedback-button" @click="onDelete" :disabled="loading || selectedFeedback.length === 0">
                     Delete
                 </v-btn>
-            </v-flex>
+            </v-col>
 
-            <v-flex xs12>
+            <v-col cols="12">
 
                 <v-data-table
                     :headers="headers"
@@ -74,8 +74,8 @@
                         </td>
                     </template>
                 </v-data-table>
-            </v-flex>
-        </v-layout>
+            </v-col>
+        </v-row>
 
         <v-dialog v-model="showConfirmDeleteModal" max-width="500px">
             <v-card>
@@ -87,7 +87,7 @@
                     Are you sure you want to delete the selected feedback items?
                 </v-card-text>
                 <v-card-actions>
-                    <v-spacer></v-spacer>
+                    <v-spacer/>
                     <v-btn color="primary" @click.stop="deleteSelectedFeedback">Yes</v-btn>
                     <v-btn color="primary" text @click.stop="showConfirmDeleteModal = false">No</v-btn>
                 </v-card-actions>

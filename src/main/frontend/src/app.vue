@@ -17,7 +17,7 @@
         </v-content>
 
         <v-footer class="theme--dark" height="auto">
-            <v-layout class="align-center" row wrap justify-center>
+            <v-row class="justify-center align-center">
                 <div class="copyright">
                     &copy; 2020 <a href="http://sgc-unc.org">SGC-UNC</a>
                 </div>
@@ -29,7 +29,7 @@
                        title="About" aria-label="About">
                     <v-icon small>fas fa-question-circle</v-icon>
                 </v-btn>
-            </v-layout>
+            </v-row>
         </v-footer>
 
         <about-modal :show="showAbout" @close="showAbout = false"></about-modal>

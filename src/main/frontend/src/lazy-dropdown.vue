@@ -8,6 +8,7 @@
             cache-items
             :menu-props="{ openOnClick: false }"
             :hide-no-data="true"
+            hide-details
             :id="id"
             :label="label"
             :placeholder="placeholder"

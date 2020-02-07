@@ -1,11 +1,11 @@
 <template>
     <v-container grid-list-md class="page-wrapper">
 
-        <v-layout row wrap class="network-tab-wrapper">
+        <v-row wrap class="network-tab-wrapper">
 
             <section-header>Network</section-header>
 
-            <v-flex xs12>
+            <v-col cols="12">
                 <v-card class="expansion-panel-no-left-margin">
                     <actionable-card-title title="Compound Network"
                             sub-title="View compounds and activity profiles in a network diagram">
@@ -24,16 +24,17 @@
                                         </v-card-title>
                                         <v-card-text class="network-properties-popup-content">
                                             <v-container grid-list-md class="network-properties-popup-container">
-                                                <v-layout row wrap>
-                                                    <v-flex xs12>
+                                                <v-row>
+                                                    <v-col cols="12">
                                                         <v-switch
                                                             :label="`${physicsEnabled ? 'Physics' : 'No physics'}`"
-                                                            v-model="physicsEnabled"></v-switch>
-                                                    </v-flex>
-                                                    <v-flex xs12>
+                                                            hide-details
+                                                            v-model="physicsEnabled"/>
+                                                    </v-col>
+                                                    <v-col cols="12">
                                                         Other network properties will go here.
-                                                    </v-flex>
-                                                </v-layout>
+                                                    </v-col>
+                                                </v-row>
                                             </v-container>
                                         </v-card-text>
                                     </v-card>
@@ -43,9 +44,9 @@
                         </v-tooltip>
                     </actionable-card-title>
                     <v-card-text>
-                        <v-layout row wrap>
 
-                            <v-flex xs12 px-4>
+                        <v-row>
+                            <v-col cols="12" class="px-4">
                                 <v-form ref="form" lazy-validation>
                                     <v-autocomplete :loading="loading"
                                                     :items="compounds"
@@ -71,45 +72,45 @@
                                         </template>
                                     </v-autocomplete>
                                 </v-form>
-                            </v-flex>
-                        </v-layout>
+                            </v-col>
+                        </v-row>
 
-                        <v-layout row wrap>
-                            <v-flex xs6 px-4>
+                        <v-row>
+
+                            <v-col cols="6" class="px-4">
                                 <v-slider :min="1" v-model="percentControl"
                                           class="network-slider"
                                           hide-details
                                           :validate-on-blur="true"
                                           :thumb-label="true" label="% Control"></v-slider>
-                            </v-flex>
-                            <v-flex xs6 px-4>
+                            </v-col>
+                            <v-col cols="6" class="px-4">
                                 <v-text-field :disabled="true"
                                               type="number" label="Kd" class="search-field right-aligned"
                                               :rules="numericValidationRules(10000)" v-model="kd"
                                               :step="1" :min="0" :max="10000" suffix="nM">
                                 </v-text-field>
-                            </v-flex>
+                            </v-col>
 
-
-                            <v-flex xs12 px-4>
+                            <v-col cols="12" class="px-4">
                                 <v-card-actions>
-                                    <v-spacer></v-spacer>
+                                    <v-spacer/>
                                     <v-btn :disabled="formInvalid" color="primary" @click="rerender">
                                         Rerender
                                     </v-btn>
                                 </v-card-actions>
-                            </v-flex>
+                            </v-col>
 
-                            <v-flex xs12>
+                            <v-col cols="12">
                                 <compound-network :compounds="networkCompounds"
                                                   :physics-enabled="physicsEnabled"
                                                   :percent-control="percentControl"></compound-network>
-                            </v-flex>
-                        </v-layout>
+                            </v-col>
+                        </v-row>
                     </v-card-text>
                 </v-card>
-            </v-flex>
-        </v-layout>
+            </v-col>
+        </v-row>
     </v-container>
 </template>
 

@@ -18,7 +18,7 @@
             <div class="grey--text blog-post-viewCount">
                 0 views
             </div>
-            <v-spacer></v-spacer>
+            <v-spacer/>
             <div class="grey--text blog-post-date">
                 Posted by
                 <user-badge user="admin"></user-badge>

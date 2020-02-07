@@ -5,8 +5,8 @@
             <h1 class="display-3 words-in-image">We Are Open Science</h1>
         </div>
 
-        <v-layout row wrap justify-center class="home-text-section">
-            <v-flex xs8 lg6>
+        <v-row wrap class="home-text-section justify-center">
+            <v-col cols="8" lg="6">
                 <h1>Advancing Drug Discovery Through Open Collaboration</h1>
                 <div class="pt-3">
                     The SGC-UNC team of scientists is dedicated to discovering and openly sharing selective, small molecule
@@ -28,11 +28,11 @@
                     the annotation of phenotypic data and hypothesis generation. KCGS is now available from the SGC and
                     you can find the activity data we collected on the inhibitors using the search tab.
                 </div>
-            </v-flex>
-        </v-layout>
+            </v-col>
+        </v-row>
 
-        <v-layout row wrap justify-center grey lighten-3 class="home-text-section">
-            <v-flex xs8 lg6>
+        <v-row wrap class="home-text-section justify-center grey lighten-3">
+            <v-col cols="8" lg="6">
                 <h1>About This Tool</h1>
                 <div class="pt-3">
                     Random Acts of Kinase allows you to search for compound activity data collected on compounds in
@@ -40,8 +40,8 @@
                     <a href="mailto:SGC-UNC@unc.edu">SGC-UNC@unc.edu</a>. To request a physical copy of the set please
                     go to <a href="https://www.sgc-unc.org/request-kcgs/">https://www.sgc-unc.org/request-kcgs/</a>.
                 </div>
-            </v-flex>
-        </v-layout>
+            </v-col>
+        </v-row>
     </div>
 </template>
 

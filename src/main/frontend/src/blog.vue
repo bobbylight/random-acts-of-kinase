@@ -1,11 +1,11 @@
 <template>
     <v-container grid-list-md class="page-wrapper">
 
-        <v-layout row wrap class="blog-wrapper">
+        <v-row wrap class="blog-wrapper">
 
             <section-header>News</section-header>
 
-            <v-flex xs12>
+            <v-col cols="12">
 
                 <div v-if="postCount === -1">
                     Loading...
@@ -24,8 +24,8 @@
                         Showing {{postStart}} - {{postEnd}} of {{postTotal}}
                     </div>
                 </div>
-            </v-flex>
-        </v-layout>
+            </v-col>
+        </v-row>
     </v-container>
 </template>
 

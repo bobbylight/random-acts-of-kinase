@@ -1,21 +1,18 @@
 <template>
-    <v-flex xs12>
+    <v-card class="stats-missing-data-card-padding">
 
-        <v-card class="stats-missing-data-card-padding">
+        <actionable-card-title :title="title" :sub-title="subtitle">
+            <v-text-field label="Filter by compound" class="stats-filter-field d-inline-block"
+                          @input="computeFullUrl"
+                          v-model="compoundNameFilter"></v-text-field>
+            <download-button :url="fullUrl"
+                             :download-file-name="tweakedDownloadFileName"></download-button>
+        </actionable-card-title>
 
-            <actionable-card-title :title="title" :sub-title="subtitle">
-                <v-text-field label="Filter by compound" class="stats-filter-field d-inline-block"
-                              @input="computeFullUrl"
-                              v-model="compoundNameFilter"></v-text-field>
-                <download-button :url="fullUrl"
-                                 :download-file-name="tweakedDownloadFileName"></download-button>
-            </actionable-card-title>
-
-            <v-card-text>
-                <compounds-table :url="fullUrl" :columnInfo="tableColumnInfo" :dense="dense"></compounds-table>
-            </v-card-text>
-        </v-card>
-    </v-flex>
+        <v-card-text>
+            <compounds-table :url="fullUrl" :columnInfo="tableColumnInfo" :dense="dense"></compounds-table>
+        </v-card-text>
+    </v-card>
 </template>
 
 <script lang="ts">

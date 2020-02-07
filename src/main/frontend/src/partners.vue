@@ -1,14 +1,14 @@
 <template>
     <v-container grid-list-md class="page-wrapper">
 
-        <v-layout row wrap class="partners-wrapper">
+        <v-row wrap class="partners-wrapper">
 
             <section-header>Partners</section-header>
 
-            <v-flex md6 sm12 v-for="partner in partners" :key="partner.id">
+            <v-col sm="12" md="6" v-for="partner in partners" :key="partner.id">
                 <partner-badge :partner="partner"></partner-badge>
-            </v-flex>
-        </v-layout>
+            </v-col>
+        </v-row>
     </v-container>
 </template>
 
