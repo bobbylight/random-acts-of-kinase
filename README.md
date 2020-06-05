@@ -1,6 +1,7 @@
 # Random Acts of Kinase
-[![Build Status](https://travis-ci.org/bobbylight/https://travis-ci.org/bobbylight/random-acts-of-kinase.svg?branch=master)](https://travis-ci.org/bobbylight/https://travis-ci.org/bobbylight/random-acts-of-kinase)
-[![Coverage Status](https://coveralls.io/repos/github/bobbylight/rak/badge.svg?branch=master)](https://coveralls.io/github/bobbylight/rak?branch=master)
+
+[![Build Status](https://travis-ci.org/bobbylight/random-acts-of-kinase.svg?branch=master)](https://travis-ci.org/bobbylight/random-acts-of-kinase)
+[![Coverage Status](https://coveralls.io/repos/github/bobbylight/random-acts-of-kinase/badge.svg?branch=master)](https://coveralls.io/github/bobbylight/random-acts-of-kinase?branch=master)
 
 A web frontend for SGC kinase information.
 
