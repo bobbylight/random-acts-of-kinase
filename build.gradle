@@ -4,14 +4,14 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.3.0.RELEASE'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.3.3.RELEASE'
     }
 }
 plugins {
     id 'com.github.node-gradle.node' version '2.2.4'
     id 'jacoco'
-    id 'com.github.kt3k.coveralls' version '2.10.1'
-    id 'com.github.spotbugs' version '4.2.1'
+    id 'com.github.kt3k.coveralls' version '2.10.2'
+    id 'com.github.spotbugs' version '4.5.0'
 }
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -67,7 +67,7 @@ dependencies {
 }
 
 wrapper {
-    gradleVersion = '6.4.1'
+    gradleVersion = '6.6.1'
 }
 
 //checkstyle {

@@ -11,11 +11,14 @@ Note:  The actual kinase data is not included in this repository, for obvious re
 You can still test the application without this data by running it with the `dev` Spring profile.
 
 ## Hacking
+You can omit the `-xcreateSmileSvgs` options if you actually have openbabel installed
+and configured properly in your environment.  If you don't, you need to use this option to
+omit that build task to prevent a build failure:
 
 ```sh
 git clone git@github.com/github.com/bobbylight/rak.git
-./gradlew build -xwebpack --warning-mode all
-./gradlew bootRun -xwebpack # Starts application at localhost:8080
+./gradlew build -xwebpack --warning-mode all -xcreateSmileSvgs
+./gradlew bootRun -xwebpack -xcreateSmileSvgs # Starts application at localhost:8080
 ./gradlew webpackWatch      # In another window, run webpack watch for UI updates
 ./gradlew copyStaticResourcesToBuildWatch # Copy webpack build into build/ for hot deploys
 ```
