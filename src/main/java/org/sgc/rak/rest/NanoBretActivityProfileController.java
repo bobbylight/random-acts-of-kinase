@@ -33,6 +33,8 @@ class NanoBretActivityProfileController {
     private final KinaseService kinaseService;
     private final Messages messages;
 
+    private static final int MAX_IC50 = 10000;
+
     @Autowired
     NanoBretActivityProfileController(NanoBretActivityProfileService activityProfileService,
                                       KinaseService kinaseService, Messages messages) {
@@ -60,7 +62,7 @@ class NanoBretActivityProfileController {
               @SortDefault.SortDefaults({ @SortDefault("kd"), @SortDefault("percentControl") }) Pageable pageInfo) {
 
         // ic50 must be between 0 and 1
-        if (ic50 != null && (ic50 > 10000 || ic50 < 0)) {
+        if (ic50 != null && (ic50 > MAX_IC50 || ic50 < 0)) {
             throw new BadRequestException(messages.get("error.ic50OutOfRange"));
         }
 
@@ -75,7 +77,8 @@ class NanoBretActivityProfileController {
                 .collect(Collectors.toList());
         }
 
-//        Page<NanoBretActivityProfile> page = activityProfileService.getActivityProfiles(compound, kinaseIds, ic50, pageInfo);
+//        Page<NanoBretActivityProfile> page = activityProfileService.
+//       getActivityProfiles(compound, kinaseIds, ic50, pageInfo);
         Page<NanoBretActivityProfile> page = new PageImpl<>(Collections.emptyList(), pageInfo, 0);
 
         long start = page.getNumber() * pageInfo.getPageSize();

@@ -28,6 +28,8 @@ class ActivityProfileController {
     private final KinaseService kinaseService;
     private final Messages messages;
 
+    private static final int MAX_ACTIVITY = 100;
+
     @Autowired
     ActivityProfileController(ActivityProfileService activityProfileService, KinaseService kinaseService,
                               Messages messages) {
@@ -56,7 +58,7 @@ class ActivityProfileController {
                                     Pageable pageInfo) {
 
         // Activity must be between 0 and 1
-        if (activity != null && (activity > 100 || activity < 0)) {
+        if (activity != null && (activity > MAX_ACTIVITY || activity < 0)) {
             throw new BadRequestException(messages.get("error.actvityOutOfRange"));
         }
 

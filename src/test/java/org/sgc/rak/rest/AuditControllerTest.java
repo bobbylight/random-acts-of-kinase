@@ -10,7 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.sgc.rak.exceptions.BadRequestException;
-import org.sgc.rak.exceptions.ErrorResponse;
 import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.model.Audit;
 import org.sgc.rak.model.AuditAction;
@@ -74,7 +73,8 @@ public class AuditControllerTest {
 
         List<Audit> audits = Collections.singletonList(TestUtil.createAudit("gclooney", AuditAction.LOGIN, true));
         PageImpl<Audit> expectedPage = new PageImpl<>(audits, pr, 1);
-        doReturn(expectedPage).when(mockService).getAudits(any(Pageable.class), any(), any(), any(), any(), any(), any());
+        doReturn(expectedPage).when(mockService).getAudits(any(Pageable.class), any(), any(), any(), any(), any(),
+            any());
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/admin/api/audits")
             .param("fromDate", "2019-01-01")
@@ -103,7 +103,8 @@ public class AuditControllerTest {
 
         List<Audit> audits = Collections.singletonList(TestUtil.createAudit("gclooney", AuditAction.LOGIN, true));
         PageImpl<Audit> expectedPage = new PageImpl<>(audits, pr, 1);
-        doReturn(expectedPage).when(mockService).getAudits(any(Pageable.class), any(), any(), any(), any(), any(), any());
+        doReturn(expectedPage).when(mockService).getAudits(any(Pageable.class), any(), any(), any(), any(), any(),
+            any());
 
         try {
             mockMvc.perform(MockMvcRequestBuilders.get("/admin/api/audits")

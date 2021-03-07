@@ -162,6 +162,7 @@ public final class TestUtil {
         return rep;
     }
 
+    @SuppressWarnings("checkstyle:ParameterNumber")
     public static NanoBretActivityProfile createNanoBretActivityProfile(String compoundName, Date date,
                                 String comment, String nluc, Double ic50, int compoundConcentration,
                                 String discoverx, String entrez, NanoBretActivityProfileModifier modifier,
@@ -180,6 +181,7 @@ public final class TestUtil {
         return rep;
     }
 
+    @SuppressWarnings("checkstyle:ParameterNumber")
     public static NanoBretActivityProfileCsvRecord createNanoBretActivityProfileCsvRecord(String compoundName,
                                   String date, String comment, String nluc, Double ic50, int compoundConcentration,
                                   String discoverx, NanoBretActivityProfileModifier modifier, double percentInhibition,

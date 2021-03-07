@@ -19,12 +19,12 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'com.github.node-gradle.node'
 apply plugin: 'com.github.spotbugs'
-//apply plugin: 'checkstyle'
+apply plugin: 'checkstyle'
 
 import static org.gradle.api.JavaVersion.*
 
-// We require building with JDK 11 or later.
-assert current().isJava11Compatible()
+// We require building with JDK 14 or later, but there is no 14 check yet
+assert current().isJava12Compatible()
 
 group = 'org.sgc'
 version = '1.4.0-SNAPSHOT'
@@ -79,9 +79,10 @@ wrapper {
     gradleVersion = '6.8.3'
 }
 
-//checkstyle {
-//    toolVersion '8.32'
-//}
+checkstyle {
+    toolVersion '8.41'
+    configDirectory = file("${project.projectDir}/config/checkstyle")
+}
 
 idea {
     module {
