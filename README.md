@@ -16,7 +16,7 @@ and configured properly in your environment.  If you don't, you need to use this
 omit that build task to prevent a build failure:
 
 ```sh
-git clone git@github.com/github.com/bobbylight/rak.git
+git clone https://github.com/bobbylight/random-acts-of-kinase.git
 ./gradlew build -xwebpack --warning-mode all -xcreateSmileSvgs
 ./gradlew bootRun -xwebpack -xcreateSmileSvgs # Starts application at localhost:8080
 ./gradlew webpackWatch      # In another window, run webpack watch for UI updates

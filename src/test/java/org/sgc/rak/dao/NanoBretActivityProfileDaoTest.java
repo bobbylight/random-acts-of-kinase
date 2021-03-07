@@ -26,7 +26,7 @@ public class NanoBretActivityProfileDaoTest {
     @Before
     public void setUp() {
 
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test(expected = IllegalStateException.class)

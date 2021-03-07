@@ -49,7 +49,7 @@ public class ImportControllerTest {
     @Before
     public void setUp() {
 
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 

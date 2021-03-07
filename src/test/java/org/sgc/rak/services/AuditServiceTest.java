@@ -39,7 +39,7 @@ public class AuditServiceTest {
     @Before
     public void setUp() {
 
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
 
         when(mockRepository.save(any())).thenAnswer(invocation -> {
             Audit audit = (Audit)invocation.getArguments()[0];
