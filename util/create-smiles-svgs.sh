@@ -12,6 +12,11 @@ if [ ! -f ${DIR}/env.sh ]; then
 fi
 . ${DIR}/env.sh
 
+if ! command -v obabel &>/dev/null ; then
+  echo "obabel is not on your PATH.  Exiting without generating SMILES svg files"
+  exit 0
+fi
+
 rm -fr ${OUTDIR}
 mkdir ${OUTDIR}
 

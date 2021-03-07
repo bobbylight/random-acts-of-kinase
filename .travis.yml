@@ -1,7 +1,7 @@
 dist: trusty
 
 jdk:
-  - oraclejdk8
+  - openjdk11
 
 script:
   - ./gradlew -xcreateSmileSvgs build

@@ -129,12 +129,18 @@ task webpack(type: NpmTask, dependsOn: 'npmInstall') {
 
 processResources.dependsOn 'webpack'
 
-// Generate SVG files for each compound in the local database.
-// If you don't have openbabel set up, you can comment out this section.
-// In that case the app will be built but without images for compounds.
+// Generate SVG files for each compound in the local database.  This
+// assumes openbabel (obabel) is on your PATH.  If you don't have openbabel
+// set up, the app will be built but without images for compounds.
 task createSmileSvgs(type: Exec) {
     workingDir "${rootDir}"
-    commandLine '/bin/sh', '-c', './util/create-smiles-svgs.sh'
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        def dir = rootDir.absolutePath.replace('\\', '/')
+        commandLine 'cmd', '/c', "C:\\Progra~1\\Git\\bin\\sh.exe --login -c '${dir}/util/create-smiles-svgs.sh'"
+    }
+    else {
+        commandLine '/bin/sh', '-c', './util/create-smiles-svgs.sh'
+    }
 }
 processResources.dependsOn 'createSmileSvgs'
 createSmileSvgs.onlyIf { !file('src/main/resources/static/img/smiles').exists() }
