@@ -446,8 +446,7 @@ public final class Util {
     private static void possiblyAddDifference(List<String> differences, String fieldName, Object oldValue,
                                                 Object newValue) {
         if (!Objects.equals(oldValue, newValue)) {
-            differences.add(String.format("%s: '%s' -> '%s'", fieldName, String.valueOf(oldValue),
-                String.valueOf(newValue)));
+            differences.add(String.format("%s: '%s' -> '%s'", fieldName, oldValue, newValue));
         }
     }
 

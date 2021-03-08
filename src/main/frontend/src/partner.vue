@@ -1,7 +1,8 @@
 <template>
     <div class="partner-badge-wrapper">
         <a :href="partner.url" target="_blank" rel="noopener noreferrer">
-            <img class="partner-image" :src="getImageUrl(partner.image)">
+            <img class="partner-image" :src="getImageUrl(partner.image)"
+                 alt="Partner logo">
         </a>
     </div>
 </template>

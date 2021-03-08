@@ -9,7 +9,7 @@ public class ActivityProfileTest {
     public void testEquals_sameObject() {
         ActivityProfile profile = new ActivityProfile();
         profile.setId(42L);
-        Assert.assertTrue(profile.equals(profile));
+        Assert.assertEquals(profile, profile);
     }
 
     @Test
@@ -18,14 +18,14 @@ public class ActivityProfileTest {
         profile.setId(42L);
         ActivityProfile profile2 = new ActivityProfile();
         profile2.setId(42L);
-        Assert.assertTrue(profile.equals(profile2));
+        Assert.assertEquals(profile, profile2);
     }
 
     @Test
     public void testEquals_null() {
         ActivityProfile profile = new ActivityProfile();
         profile.setId(42L);
-        Assert.assertFalse(profile.equals(null));
+        Assert.assertNotEquals(null, profile);
     }
 
     @Test
@@ -34,7 +34,7 @@ public class ActivityProfileTest {
         profile.setId(42L);
         ActivityProfile profile2 = new ActivityProfile();
         profile2.setId(43L);
-        Assert.assertFalse(profile.equals(profile2));
+        Assert.assertNotEquals(profile, profile2);
     }
 
     @Test

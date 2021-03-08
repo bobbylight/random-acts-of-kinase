@@ -28,7 +28,7 @@ public class KinaseDaoTest {
     private KinaseRepository kinaseRepository;
 
     @InjectMocks
-    private KinaseDao kinaseDao = new KinaseDao();
+    private final KinaseDao kinaseDao = new KinaseDao();
 
     @Before
     public void setUp() {

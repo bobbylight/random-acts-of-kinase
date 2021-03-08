@@ -15,6 +15,7 @@
                                      class="compound-image"
                                      @click="onImageClicked"
                                      width="200" height="200"
+                                     alt="Image of molecule"
                                      v-on="on">
                             </template>
                             <span>Click to enlarge</span>

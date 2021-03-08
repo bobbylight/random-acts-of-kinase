@@ -6,8 +6,8 @@ package org.sgc.rak.model;
  */
 public class CompoundCountPair {
 
-    private String compoundName;
-    private int count;
+    private final String compoundName;
+    private final int count;
 
     public CompoundCountPair(String compoundName, int count) {
         this.compoundName = compoundName;

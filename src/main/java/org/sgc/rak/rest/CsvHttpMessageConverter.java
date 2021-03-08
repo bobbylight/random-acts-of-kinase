@@ -129,7 +129,7 @@ public final class CsvHttpMessageConverter extends AbstractGenericHttpMessageCon
      * @return An {@link ObjectWriter}.
      */
     private ObjectWriter getWriter(Type type) {
-        Class<?> parameterType = (Class)((ParameterizedType)type).getActualTypeArguments()[0];
+        Class<?> parameterType = (Class<?>)((ParameterizedType)type).getActualTypeArguments()[0];
         return this.writers.computeIfAbsent(parameterType, c -> this.csvMapper.writer(getSchema(type)));
     }
 
@@ -140,7 +140,7 @@ public final class CsvHttpMessageConverter extends AbstractGenericHttpMessageCon
      * @return A {@link CsvSchema}.
      */
     private CsvSchema getSchema(Type type) {
-        Class<?> parameterType = (Class)((ParameterizedType)type).getActualTypeArguments()[0];
+        Class<?> parameterType = (Class<?>)((ParameterizedType)type).getActualTypeArguments()[0];
         CsvSchema schema = this.csvMapper.schemaFor(parameterType).withColumnSeparator(this.delimiter);
         return this.includeHeader ? schema.withHeader() : schema;
     }

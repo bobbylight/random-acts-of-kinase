@@ -36,7 +36,7 @@ public class CompoundDaoTest {
     private EntityManager entityManager;
 
     @InjectMocks
-    private CompoundDao compoundDao = new CompoundDao();
+    private final CompoundDao compoundDao = new CompoundDao();
 
     @Before
     public void setUp() {

@@ -5,9 +5,9 @@ package org.sgc.rak.exceptions;
  */
 public class ErrorResponse {
 
-    private int statusCode;
+    private final int statusCode;
 
-    private String message;
+    private final String message;
 
     ErrorResponse(int statusCode, String message) {
         this.statusCode = statusCode;

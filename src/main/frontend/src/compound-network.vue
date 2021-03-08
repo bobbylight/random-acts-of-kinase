@@ -321,7 +321,7 @@ export default class CompoundNetwork extends Vue {
         height: @height; // Needed for visjs-generated div to fill parent
 
         div.vis-tooltip {
-            font-family: 'Roboto' // Override visjs's default of 'verdana'
+            font-family: 'Roboto', sans-serif; // Override visjs's default of 'verdana'
         }
     }
 }

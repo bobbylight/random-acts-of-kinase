@@ -13,7 +13,7 @@ import java.util.Locale;
  */
 public class Messages {
 
-    private MessageSource messageSource;
+    private final MessageSource messageSource;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Messages.class);
 

@@ -3,7 +3,10 @@
     <v-app-bar app absolute dark class="rak-navbar">
 
         <v-toolbar-title class="toolbar-title-fix" @click="setActiveTab('home')">
-            <img src="/img/molecule-white.svg" width="50" height="50" class="navbar-image">
+            <img src="/img/molecule-white.svg"
+                 width="50" height="50"
+                 alt="Random Acts of Kinase image"
+                 class="navbar-image">
         </v-toolbar-title>
 
         <v-toolbar-items>

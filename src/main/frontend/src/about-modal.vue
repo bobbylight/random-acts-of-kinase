@@ -12,7 +12,7 @@
 
                 <div>
                     <div class="about-image">
-                        <img src="img/molecule.svg"><!-- :src="aboutImagePath">-->
+                        <img src="img/molecule.svg" alt="Image of molecule"><!-- :src="aboutImagePath">-->
                     </div>
                     <div class="description">
                         <div class="ui header">A kinase search tool.</div>

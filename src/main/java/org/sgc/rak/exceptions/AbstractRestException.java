@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
  */
 abstract class AbstractRestException extends RuntimeException {
 
-    private HttpStatus status;
+    private final HttpStatus status;
 
     AbstractRestException(HttpStatus status, String message) {
         this(status, message, null);
