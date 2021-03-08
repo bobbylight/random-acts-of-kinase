@@ -14,7 +14,7 @@
     "webpack-size-view": "webpack-bundle-size-analyzer size-info.json > size-info.txt"
   },
   "dependencies": {
-    "axios": "0.20.0",
+    "axios": "0.21.1",
     "blazy": "1.8.2",
     "chart.js": "2.9.3",
     "debounce": "1.2.0",
