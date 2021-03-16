@@ -16,20 +16,18 @@
             </transition>
         </v-content>
 
-        <v-footer class="theme--dark" height="auto">
-            <v-row class="justify-center align-center">
-                <div class="copyright">
-                    &copy; 2020 <a href="http://sgc-unc.org">SGC-UNC</a>
-                </div>
-                <v-btn class="footer-button theme--dark" icon small @click="viewSource"
-                       title="View Source" aria-label="View Source">
-                    <v-icon small>fab fa-github</v-icon>
-                </v-btn>
-                <v-btn class="footer-button theme--dark" icon small @click.stop="showAbout = true"
-                       title="About" aria-label="About">
-                    <v-icon small>fas fa-question-circle</v-icon>
-                </v-btn>
-            </v-row>
+        <v-footer class="theme--dark justify-center" height="auto">
+                    <div class="copyright">
+                        &copy; 2021 <a href="http://sgc-unc.org">SGC-UNC</a>
+                    </div>
+                    <v-btn class="footer-button theme--dark" icon small @click="viewSource"
+                           title="View Source" aria-label="View Source">
+                        <v-icon small>fab fa-github</v-icon>
+                    </v-btn>
+                    <v-btn class="footer-button theme--dark" icon small @click.stop="showAbout = true"
+                           title="About" aria-label="About">
+                        <v-icon small>fas fa-question-circle</v-icon>
+                    </v-btn>
         </v-footer>
 
         <about-modal :show="showAbout" @close="showAbout = false"></about-modal>
