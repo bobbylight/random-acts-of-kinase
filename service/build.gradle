@@ -1,0 +1,200 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.4.3'
+    }
+}
+plugins {
+    id 'com.github.node-gradle.node' version '3.0.1'
+    id 'jacoco'
+    id 'com.github.kt3k.coveralls' version '2.10.2'
+    id 'com.github.spotbugs' version '4.7.0'
+}
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'com.github.node-gradle.node'
+apply plugin: 'com.github.spotbugs'
+apply plugin: 'checkstyle'
+
+import static org.gradle.api.JavaVersion.*
+
+// We require building with JDK 14 or later, but there is no 14 check yet
+assert current().isJava12Compatible()
+
+group = 'org.sgc'
+version = '1.4.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+node {
+    version = '14.16.0'
+    npmVersion = '6.14.11'
+    download = true
+
+    // Node and npm should work in our 'frontend' folder
+    workDir = file("${project.buildDir}/nodejs")
+    npmWorkDir = file("${project.buildDir}/npm")
+    yarnWorkDir = file("${project.buildDir}/yarn")
+
+    // Where node_modules should be located
+    nodeModulesDir = file("${project.projectDir}/src/main/frontend")
+}
+
+dependencies {
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-devtools'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    implementation 'org.slf4j:slf4j-api'
+    implementation 'ch.qos.logback:logback-classic'
+    implementation 'ch.qos.logback:logback-core'
+
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'org.postgresql:postgresql'
+    implementation 'org.apache.xmlgraphics:batik-transcoder:1.14'
+    implementation 'org.apache.xmlgraphics:batik-codec:1.14'
+    implementation 'com.h2database:h2'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    // TODO: Remove and update tests to JUnit 5 syntax
+    testImplementation('org.junit.vintage:junit-vintage-engine') {
+        exclude group: 'org.hamcrest', module: 'hamcrest-core'
+    }
+}
+
+checkstyle {
+    toolVersion '8.41'
+    configDirectory = file("${project.projectDir}/config/checkstyle")
+}
+
+compileJava {
+    sourceCompatibility javaVersion
+    targetCompatibility javaVersion
+    options.debug = true
+    options.debugOptions.debugLevel = 'source,vars,lines'
+    options.compilerArgs << '-Xlint:deprecation' << '-Xlint:unchecked'
+}
+
+compileTestJava {
+    sourceCompatibility javaVersion
+    targetCompatibility javaVersion
+    options.debug = true
+    options.debugOptions.debugLevel = 'source,vars,lines'
+    options.compilerArgs << '-Xlint:deprecation' << '-Xlint:unchecked'
+}
+
+sourceSets {
+    integrationTest {
+        java.srcDirs = [ 'src/integration-test/java' ]
+        resources.srcDirs = [ 'src/integration-test/resources' ]
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
+    }
+}
+
+configurations {
+    integrationTestCompile.extendsFrom testImplementation
+    integrationTestRuntime.extendsFrom testRuntime
+}
+
+task integration(type: Test, description: 'Runs the integration tests.', group: 'Verification') {
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
+clean.doLast {
+    // Must disambiguate with project.delete since we're doing this in clean's doLast
+    project.delete "${rootDir}/aws-archive.zip"
+}
+
+task webpack(type: NpmTask, dependsOn: 'npmInstall') {
+    execOverrides {
+        it.workingDir = "${project.projectDir}/src/main/frontend/"
+    }
+    args = [ 'run', 'build' ]
+}
+
+processResources.dependsOn 'webpack'
+
+// Generate SVG files for each compound in the local database.  This
+// assumes openbabel (obabel) is on your PATH.  If you don't have openbabel
+// set up, the app will be built but without images for compounds.
+task createSmileSvgs(type: Exec) {
+    workingDir "${project.projectDir.absolutePath}"
+    def dir = project.projectDir.absolutePath.replace('\\', '/')
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        commandLine 'cmd', '/c', "C:\\Progra~1\\Git\\bin\\sh.exe --login -c '${dir}/util/create-smiles-svgs.sh'"
+    }
+    else {
+        commandLine '/bin/sh', '-c', "'${dir}/util/create-smiles-svgs.sh'"
+    }
+}
+processResources.dependsOn 'createSmileSvgs'
+createSmileSvgs.onlyIf { !file('src/main/resources/static/img/smiles').exists() }
+createSmileSvgs.dependsOn 'webpack' // Ensure smiles generation occurs after webpack build
+
+task webpackWatch(type: NpmTask) {
+    args = [ 'run', 'watch' ]
+}
+
+task copyStaticResourcesToBuildWatch(type: NpmTask) {
+    args = [ 'run', 'watch-static-into-build' ]
+}
+
+task makeAwsArchive(type: Zip) {
+    from "${rootDir}/build/libs/"
+    include 'random-acts-of-kinase*.jar'
+    from '.'
+    include 'Procfile'
+    include '.ebextensions/**'
+    archiveFileName = 'aws-archive.zip'
+    destinationDirectory = file(rootDir)
+}
+
+spotbugs {
+    includeFilter = file('config/spotbugs-exclude.xml')
+}
+
+spotbugsMain {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+spotbugsTest {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+
+bootRun {
+
+    jvmArgs = [ '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=10356' ]
+
+    if (System.getProperty('spring.profiles.active') == null) {
+        println 'Defaulting to dev Spring profile'
+        System.setProperty('spring.profiles.active', 'dev')
+    }
+    // Forward -D properties to the Spring Boot app
+    systemProperties = System.properties
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+    }
+}

@@ -5,7 +5,7 @@
             <v-row class="justify-center">
                 <v-col cols="12" class="search-part-layout">
 
-                    <section-header style="padding: unset">Search Compounds</section-header>
+                    <section-header style="padding: unset"> Search Compounds</section-header>
 
                     <search-filters></search-filters>
                 </v-col>
