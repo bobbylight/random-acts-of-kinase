@@ -16,6 +16,7 @@
                                      @click="onImageClicked"
                                      width="200" height="200"
                                      alt="Image of molecule"
+                                     onerror="this.src = 'img/molecule-unknown.svg';"
                                      v-on="on">
                             </template>
                             <span>Click to enlarge</span>
@@ -72,9 +73,8 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
-import restApi from './rest-api';
-import { Compound, ErrorResponse } from './rak';
-import Toaster from './toaster';
+import { Compound } from './rak';
+import RakUtil from '@/util';
 
 @Component
 export default class CompoundDetailsCard extends Vue {
@@ -84,9 +84,9 @@ export default class CompoundDetailsCard extends Vue {
 
     get compoundImageUrl(): string | null {
         if (this.compound && this.compound.compoundName) {
-            return `api/compounds/images/${this.compound.compoundName}`;
+            return RakUtil.getCompoundImageUrl(this.compound.compoundName);
         }
-        return null;
+        return 'img/molecule-unknown.svg';
     }
 
     get reference() {

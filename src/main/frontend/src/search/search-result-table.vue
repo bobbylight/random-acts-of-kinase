@@ -49,6 +49,7 @@
 import restApi from '../rest-api';
 import Blazy from 'blazy';
 import { Compound, PagedDataRep, VueDataTableOptions } from '@/rak';
+import RakUtil from '@/util';
 
 export default {
     name: 'search-result-table',
@@ -96,7 +97,7 @@ export default {
     methods: {
 
         getCompoundImage: function(compoundName: string) {
-            return `api/compounds/images/${encodeURIComponent(compoundName)}`;
+            return RakUtil.getCompoundImageUrl(compoundName);
         },
 
         getCompoundUrl: function(compoundName: string) {
@@ -104,7 +105,7 @@ export default {
         },
 
         getDisplayS10: function(s10: string | null | undefined) {
-            return typeof s10 === 'undefined' ? '?' : s10;
+            return s10 || '?';
         },
 
         openCompound: function(compoundName: string) {
@@ -164,7 +165,10 @@ export default {
         }
         else {
             this.blazy = new Blazy({
-                container: 'search-result-table'
+                container: 'search-result-table',
+                error(elem: HTMLImageElement) {
+                    elem.src = 'img/molecule-unknown.svg';
+                }
             });
         }
     }

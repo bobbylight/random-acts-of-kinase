@@ -8,6 +8,10 @@ export default class RakUtil {
         return includeTime ? date.toLocaleString() : date.toLocaleDateString();
     }
 
+    static getCompoundImageUrl(compoundName: string): string {
+        return `img/smiles/${encodeURIComponent(compoundName)}.svg`;
+    }
+
     static isActiveTab($route: Route, tabName: string): boolean {
         const tabNameRegex: RegExp = new RegExp('^' + tabName.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&'));
         console.log(`tabName: ${tabName}, tabNameRegex: ${tabNameRegex}, ` +
