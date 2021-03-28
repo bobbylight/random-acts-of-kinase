@@ -18,8 +18,8 @@
                             <div class="compound-name-cell">
                                 <img class="b-lazy compound-image"
                                      src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
-                                     :data-src="getCompoundImage(item.compoundName)"
-                                     @click="onImageClicked(item.compoundName)"
+                                     :data-src="getCompoundImage(item)"
+                                     @click="onImageClicked(item)"
                                      width=80 height=80>
                                 &nbsp;&nbsp;&nbsp;
                                 <div class="compound-desc" @click="openCompound(item.compoundName)">
@@ -49,7 +49,7 @@
 import restApi from '../rest-api';
 import Blazy from 'blazy';
 import { Compound, PagedDataRep, VueDataTableOptions } from '@/rak';
-import RakUtil from '@/util';
+import RakUtil, { DEFAULT_MOLECULE_SVG } from '@/util';
 
 export default {
     name: 'search-result-table',
@@ -96,8 +96,8 @@ export default {
     },
     methods: {
 
-        getCompoundImage: function(compoundName: string) {
-            return RakUtil.getCompoundImageUrl(compoundName);
+        getCompoundImage: function(compound: Compound) {
+            return RakUtil.getCompoundImageUrl(compound);
         },
 
         getCompoundUrl: function(compoundName: string) {
@@ -112,9 +112,9 @@ export default {
             window.location.href = this.getCompoundUrl(compoundName);
         },
 
-        onImageClicked: function(compoundName: string) {
-            this.$store.commit('setLightboxImage', this.getCompoundImage(compoundName));
-            this.$store.commit('setLightboxTitle', compoundName);
+        onImageClicked: function(compound: Compound) {
+            this.$store.commit('setLightboxImage', this.getCompoundImage(compound));
+            this.$store.commit('setLightboxTitle', compound.compoundName);
         },
 
         reloadTable: function() {
@@ -167,7 +167,7 @@ export default {
             this.blazy = new Blazy({
                 container: 'search-result-table',
                 error(elem: HTMLImageElement) {
-                    elem.src = 'img/molecule-unknown.svg';
+                    elem.src = DEFAULT_MOLECULE_SVG;
                 }
             });
         }
