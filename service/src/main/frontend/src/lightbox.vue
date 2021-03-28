@@ -18,7 +18,8 @@
                 </div>
 
                 <section-header>{{title}}</section-header>
-                <img :src="image" width=600 height=450>
+                <img :src="image" width=600 height=450
+                    onerror="this.src = 'img/molecule-unknown.svg';">
 
                 <v-col cols="12" style="text-align: right">
                     <div style="display: inline-block">
