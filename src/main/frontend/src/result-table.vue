@@ -69,7 +69,7 @@ export default {
             items: [],
             loading: true,
             tableOptions: {
-                page: 0,
+                page: 1,
                 itemsPerPage: 10,
                 sortBy: [ 'percentControl' ],
                 sortDesc: [ false ],
