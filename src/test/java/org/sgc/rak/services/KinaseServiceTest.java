@@ -1,8 +1,8 @@
 package org.sgc.rak.services;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -33,7 +33,7 @@ public class KinaseServiceTest {
     private static final String DISCOVERX = "discoverxA";
     private static final String ENTREZ = "entrezA";
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
@@ -70,9 +70,9 @@ public class KinaseServiceTest {
         doReturn(expectedPage).when(mockKinaseDao).getKinases(any(Pageable.class));
 
         Page<Kinase> actualKinases = service.getKinases(null, pr);
-        Assert.assertEquals(1, actualKinases.getNumberOfElements());
-        Assert.assertEquals(1, actualKinases.getTotalElements());
-        Assert.assertEquals(1, actualKinases.getTotalPages());
+        Assertions.assertEquals(1, actualKinases.getNumberOfElements());
+        Assertions.assertEquals(1, actualKinases.getTotalElements());
+        Assertions.assertEquals(1, actualKinases.getTotalPages());
         for (int i = 0; i < expectedKinases.size(); i++) {
             TestUtil.assertKinasesEqual(expectedKinases.get(i), actualKinases.getContent().get(i));
         }
@@ -90,9 +90,9 @@ public class KinaseServiceTest {
             eq(ENTREZ), any(Pageable.class));
 
         Page<Kinase> actualKinases = service.getKinases(ENTREZ, pr);
-        Assert.assertEquals(1, actualKinases.getNumberOfElements());
-        Assert.assertEquals(1, actualKinases.getTotalElements());
-        Assert.assertEquals(1, actualKinases.getTotalPages());
+        Assertions.assertEquals(1, actualKinases.getNumberOfElements());
+        Assertions.assertEquals(1, actualKinases.getTotalElements());
+        Assertions.assertEquals(1, actualKinases.getTotalPages());
         for (int i = 0; i < expectedKinases.size(); i++) {
             TestUtil.assertKinasesEqual(expectedKinases.get(i), actualKinases.getContent().get(i));
         }

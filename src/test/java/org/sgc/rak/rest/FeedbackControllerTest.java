@@ -2,10 +2,10 @@ package org.sgc.rak.rest;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -49,7 +49,7 @@ public class FeedbackControllerTest {
 
     private MockMvc mockMvc;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
@@ -58,7 +58,7 @@ public class FeedbackControllerTest {
         mapper = new ObjectMapper();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         // It seems MockMvcBuilders.standaloneSetup() populates RequestContextHolder, which breaks other test classes
         RequestContextHolder.resetRequestAttributes();
@@ -93,21 +93,23 @@ public class FeedbackControllerTest {
         verify(mockService, times(1)).deleteFeedback(eq(feedbackId));
     }
 
-    @Test(expected = BadRequestException.class)
-    public void testDeleteFeedback_error_noSuchFeedback() throws Throwable {
+    @Test
+    public void testDeleteFeedback_error_noSuchFeedback() {
 
         Long feedbackId = 42L;
 
         doReturn(false).when(mockService).getFeedbackExists(eq(feedbackId));
 
-        try {
-            mockMvc.perform(MockMvcRequestBuilders.delete("/api/feedback/" + feedbackId)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-            );
-        } catch (NestedServletException e) {
-            throw e.getCause();
-        }
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            try {
+                mockMvc.perform(MockMvcRequestBuilders.delete("/api/feedback/" + feedbackId)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
+                );
+            } catch (NestedServletException e) {
+                throw e.getCause();
+            }
+        });
     }
 
     @Test
@@ -132,9 +134,9 @@ public class FeedbackControllerTest {
         // jackson converts collections of objects to Collection<LinkedHashMap>, so we must manually deserialize
         // the list that's one-level deep
         actualFeedbacks.setData(mapper.convertValue(actualFeedbacks.getData(), new TypeReference<List<Feedback>>() {}));
-        Assert.assertEquals(0, actualFeedbacks.getStart());
-        Assert.assertEquals(1, actualFeedbacks.getTotal());
-        Assert.assertEquals(1, actualFeedbacks.getCount());
+        Assertions.assertEquals(0, actualFeedbacks.getStart());
+        Assertions.assertEquals(1, actualFeedbacks.getTotal());
+        Assertions.assertEquals(1, actualFeedbacks.getCount());
         for (int i = 0; i < feedbacks.size(); i++) {
             TestUtil.assertFeedbacksEqual(feedbacks.get(i), actualFeedbacks.getData().get(i));
         }

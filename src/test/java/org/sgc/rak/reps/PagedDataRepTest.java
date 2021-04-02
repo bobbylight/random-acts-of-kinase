@@ -1,8 +1,8 @@
 package org.sgc.rak.reps;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,7 +11,7 @@ public class PagedDataRepTest {
 
     private PagedDataRep<String> rep;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         List<String> data = Arrays.asList(
             "one",
@@ -22,37 +22,37 @@ public class PagedDataRepTest {
 
     @Test
     public void testGetCount() {
-        Assert.assertEquals(2, rep.getCount());
+        Assertions.assertEquals(2, rep.getCount());
     }
 
     @Test
     public void testGetSetData() {
 
         List<String> data = rep.getData();
-        Assert.assertEquals(2, rep.getCount());
-        Assert.assertEquals(2, data.size());
-        Assert.assertEquals("one", data.get(0));
-        Assert.assertEquals("two", data.get(1));
+        Assertions.assertEquals(2, rep.getCount());
+        Assertions.assertEquals(2, data.size());
+        Assertions.assertEquals("one", data.get(0));
+        Assertions.assertEquals("two", data.get(1));
 
         rep.setData(Arrays.asList("three", "four", "five"));
-        Assert.assertEquals(3, rep.getCount());
-        Assert.assertEquals(3, rep.getData().size());
-        Assert.assertEquals("three", rep.getData().get(0));
-        Assert.assertEquals("four", rep.getData().get(1));
-        Assert.assertEquals("five", rep.getData().get(2));
+        Assertions.assertEquals(3, rep.getCount());
+        Assertions.assertEquals(3, rep.getData().size());
+        Assertions.assertEquals("three", rep.getData().get(0));
+        Assertions.assertEquals("four", rep.getData().get(1));
+        Assertions.assertEquals("five", rep.getData().get(2));
     }
 
     @Test
     public void testGetSetStart() {
-        Assert.assertEquals(10, rep.getStart());
+        Assertions.assertEquals(10, rep.getStart());
         rep.setStart(2);
-        Assert.assertEquals(2, rep.getStart());
+        Assertions.assertEquals(2, rep.getStart());
     }
 
     @Test
     public void testGetSetTotal() {
-        Assert.assertEquals(100, rep.getTotal());
+        Assertions.assertEquals(100, rep.getTotal());
         rep.setTotal(200);
-        Assert.assertEquals(200, rep.getTotal());
+        Assertions.assertEquals(200, rep.getTotal());
     }
 }

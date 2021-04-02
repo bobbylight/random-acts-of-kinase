@@ -1,8 +1,8 @@
 package org.sgc.rak.services;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -25,7 +25,7 @@ public class FeedbackServiceTest {
     @InjectMocks
     private FeedbackService service;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
@@ -56,9 +56,9 @@ public class FeedbackServiceTest {
         doReturn(expectedPage).when(mockRepository).findAll(any(Pageable.class));
 
         Page<Feedback> actualPosts = service.getFeedback(pr);
-        Assert.assertEquals(1, actualPosts.getNumberOfElements());
-        Assert.assertEquals(1, actualPosts.getTotalElements());
-        Assert.assertEquals(1, actualPosts.getTotalPages());
+        Assertions.assertEquals(1, actualPosts.getNumberOfElements());
+        Assertions.assertEquals(1, actualPosts.getTotalElements());
+        Assertions.assertEquals(1, actualPosts.getTotalPages());
         for (int i = 0; i < posts.size(); i++) {
             TestUtil.assertFeedbacksEqual(posts.get(i), actualPosts.getContent().get(i));
         }

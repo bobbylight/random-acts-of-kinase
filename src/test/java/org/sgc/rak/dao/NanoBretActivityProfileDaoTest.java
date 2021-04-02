@@ -1,8 +1,8 @@
 package org.sgc.rak.dao;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -23,30 +23,34 @@ public class NanoBretActivityProfileDaoTest {
     @InjectMocks
     private NanoBretActivityProfileDao dao;
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testGetActivityProfiles_compoundNamesAndDiscoverxes_badDiscoverxListLength() {
 
         List<String> compoundNames = Collections.singletonList("compoundA");
         List<String> discoverxes = Arrays.asList("discoverxA", "discoverxB");
         List<Date> dates = Collections.singletonList(new Date(0));
 
-        dao.getNanoBretActivityProfiles(compoundNames, discoverxes, dates);
+        Assertions.assertThrows(IllegalStateException.class, () -> {
+            dao.getNanoBretActivityProfiles(compoundNames, discoverxes, dates);
+        });
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testGetActivityProfiles_compoundNamesAndDiscoverxes_badDateListLength() {
 
         List<String> compoundNames = Collections.singletonList("compoundA");
         List<String> discoverxes = Collections.singletonList("discoverxA");
         List<Date> dates = Arrays.asList(new Date(0), new Date(1000));
 
-        dao.getNanoBretActivityProfiles(compoundNames, discoverxes, dates);
+        Assertions.assertThrows(IllegalStateException.class, () -> {
+            dao.getNanoBretActivityProfiles(compoundNames, discoverxes, dates);
+        });
     }
 
     @Test
@@ -67,7 +71,7 @@ public class NanoBretActivityProfileDaoTest {
 
         Set<NanoBretActivityProfile> actualProfiles = dao.getNanoBretActivityProfiles(compoundNames, discoverxes,
             dates);
-        Assert.assertEquals(compoundNames.size(), actualProfiles.size());
+        Assertions.assertEquals(compoundNames.size(), actualProfiles.size());
     }
 
     @Test

@@ -1,9 +1,9 @@
 package org.sgc.rak.i18n;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.context.support.StaticMessageSource;
 
 import java.util.Locale;
@@ -17,7 +17,7 @@ public class MessagesTest {
 
     private Messages messages;
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
         origLocale = Locale.getDefault();
@@ -29,18 +29,18 @@ public class MessagesTest {
         messages = new Messages(messageSource);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         Locale.setDefault(origLocale);
     }
 
     @Test
     public void testGet_validKey() {
-        Assert.assertEquals("found", messages.get("key"));
+        Assertions.assertEquals("found", messages.get("key"));
     }
 
     @Test
     public void testGet_invalidKey() {
-        Assert.assertEquals("???notDefined???", messages.get("notDefined"));
+        Assertions.assertEquals("???notDefined???", messages.get("notDefined"));
     }
 }

@@ -2,8 +2,8 @@ package org.sgc.rak.rest;
 
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import org.apache.commons.lang3.reflect.TypeUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.sgc.rak.model.Compound;
 import org.sgc.rak.reps.PagedDataRep;
 import org.springframework.mock.http.MockHttpOutputMessage;
@@ -28,7 +28,7 @@ public class CsvHttpMessageConverterTest {
         CsvMapper csvMapper = new CsvMapper();
 
         CsvHttpMessageConverter converter = CsvHttpMessageConverter.csv(csvMapper);
-        Assert.assertTrue(converter.supports(PagedDataRep.class));
+        Assertions.assertTrue(converter.supports(PagedDataRep.class));
     }
 
     @Test
@@ -37,23 +37,27 @@ public class CsvHttpMessageConverterTest {
         CsvMapper csvMapper = new CsvMapper();
 
         CsvHttpMessageConverter converter = CsvHttpMessageConverter.csv(csvMapper);
-        Assert.assertFalse(converter.supports(String.class));
-        Assert.assertFalse(converter.supports(null));
+        Assertions.assertFalse(converter.supports(String.class));
+        Assertions.assertFalse(converter.supports(null));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testRead_happyPath() {
         CsvMapper csvMapper = new CsvMapper();
         CsvHttpMessageConverter converter = CsvHttpMessageConverter.csv(csvMapper);
         ParameterizedType type = TypeUtils.parameterize(PagedDataRep.class, Compound.class);
-        converter.read(type, PagedDataRep.class, null);
+        Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+            converter.read(type, PagedDataRep.class, null);
+        });
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testReadInternal_happyPath() {
         CsvMapper csvMapper = new CsvMapper();
         CsvHttpMessageConverter converter = CsvHttpMessageConverter.csv(csvMapper);
-        converter.readInternal(PagedDataRep.class, null);
+        Assertions.assertThrows(UnsupportedOperationException.class, () -> {
+            converter.readInternal(PagedDataRep.class, null);
+        });
     }
 
     @Test
@@ -75,6 +79,6 @@ public class CsvHttpMessageConverterTest {
             "compoundName,chemotype,s10,solubility,smiles,source,primaryReference,primaryReferenceUrl,hidden\n" +
             "compoundA,,0.3,,smilesA,,,,\n" +
             "compoundB,,,,smilesB,,,,\n";
-        Assert.assertEquals(expected, outputMessage.getBodyAsString());
+        Assertions.assertEquals(expected, outputMessage.getBodyAsString());
     }
 }

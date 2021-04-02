@@ -1,6 +1,6 @@
 package org.sgc.rak.util;
 
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.sgc.rak.model.*;
 import org.sgc.rak.model.csv.ActivityProfileCsvRecord;
 import org.sgc.rak.model.csv.KdCsvRecord;
@@ -21,57 +21,57 @@ public final class TestUtil {
     }
 
     public static void assertActivityProfilesEqual(ActivityProfile expected, ActivityProfile actual) {
-        Assert.assertEquals(expected.getId(), actual.getId());
-        Assert.assertEquals(expected.getCompoundConcentration(), actual.getCompoundConcentration());
-        Assert.assertEquals(expected.getCompoundName(), actual.getCompoundName());
-        Assert.assertEquals(expected.getKd(), actual.getKd());
-        //Assert.assertEquals(expected.getKinase(), actual.getKinase());
-        Assert.assertEquals(expected.getPercentControl(), actual.getPercentControl());
+        Assertions.assertEquals(expected.getId(), actual.getId());
+        Assertions.assertEquals(expected.getCompoundConcentration(), actual.getCompoundConcentration());
+        Assertions.assertEquals(expected.getCompoundName(), actual.getCompoundName());
+        Assertions.assertEquals(expected.getKd(), actual.getKd());
+        //Assertions.assertEquals(expected.getKinase(), actual.getKinase());
+        Assertions.assertEquals(expected.getPercentControl(), actual.getPercentControl());
     }
 
     public static void assertAuditsEqual(Audit expected, Audit actual) {
-        Assert.assertEquals(expected.getId(), actual.getId());
-        Assert.assertEquals(expected.getUserName(), actual.getUserName());
-        Assert.assertEquals(expected.getAction(), actual.getAction());
-        Assert.assertEquals(expected.getIpAddress(), actual.getIpAddress());
-        Assert.assertEquals(expected.getCreateDate(), actual.getCreateDate());
-        Assert.assertEquals(expected.getSuccess(), actual.getSuccess());
+        Assertions.assertEquals(expected.getId(), actual.getId());
+        Assertions.assertEquals(expected.getUserName(), actual.getUserName());
+        Assertions.assertEquals(expected.getAction(), actual.getAction());
+        Assertions.assertEquals(expected.getIpAddress(), actual.getIpAddress());
+        Assertions.assertEquals(expected.getCreateDate(), actual.getCreateDate());
+        Assertions.assertEquals(expected.getSuccess(), actual.getSuccess());
     }
 
     public static void assertBlogPostsEqual(BlogPost expected, BlogPost actual) {
-        Assert.assertEquals(expected.getId(), actual.getId());
-        Assert.assertEquals(expected.getTitle(), actual.getTitle());
-        Assert.assertEquals(expected.getBody(), actual.getBody());
-        Assert.assertEquals(expected.getCreateDate(), actual.getCreateDate());
-        Assert.assertEquals(expected.getViewCount(), actual.getViewCount());
+        Assertions.assertEquals(expected.getId(), actual.getId());
+        Assertions.assertEquals(expected.getTitle(), actual.getTitle());
+        Assertions.assertEquals(expected.getBody(), actual.getBody());
+        Assertions.assertEquals(expected.getCreateDate(), actual.getCreateDate());
+        Assertions.assertEquals(expected.getViewCount(), actual.getViewCount());
     }
 
     public static void assertCompoundsEqual(Compound expected, Compound actual) {
-        Assert.assertEquals(expected.getChemotype(), actual.getChemotype());
-        Assert.assertEquals(expected.getCompoundName(), actual.getCompoundName());
-        Assert.assertEquals(expected.getPrimaryReference(), actual.getPrimaryReference());
-        Assert.assertEquals(expected.getPrimaryReferenceUrl(), actual.getPrimaryReferenceUrl());
-        Assert.assertEquals(expected.getS10(), actual.getS10());
-        Assert.assertEquals(expected.getSmiles(), actual.getSmiles());
-        Assert.assertEquals(expected.getSource(), actual.getSource());
+        Assertions.assertEquals(expected.getChemotype(), actual.getChemotype());
+        Assertions.assertEquals(expected.getCompoundName(), actual.getCompoundName());
+        Assertions.assertEquals(expected.getPrimaryReference(), actual.getPrimaryReference());
+        Assertions.assertEquals(expected.getPrimaryReferenceUrl(), actual.getPrimaryReferenceUrl());
+        Assertions.assertEquals(expected.getS10(), actual.getS10());
+        Assertions.assertEquals(expected.getSmiles(), actual.getSmiles());
+        Assertions.assertEquals(expected.getSource(), actual.getSource());
     }
 
     public static void assertFeedbacksEqual(Feedback expected, Feedback actual) {
-        Assert.assertEquals(expected.getId(), actual.getId());
-        Assert.assertEquals(expected.getTitle(), actual.getTitle());
-        Assert.assertEquals(expected.getBody(), actual.getBody());
-        Assert.assertEquals(expected.getCreateDate(), actual.getCreateDate());
+        Assertions.assertEquals(expected.getId(), actual.getId());
+        Assertions.assertEquals(expected.getTitle(), actual.getTitle());
+        Assertions.assertEquals(expected.getBody(), actual.getBody());
+        Assertions.assertEquals(expected.getCreateDate(), actual.getCreateDate());
     }
 
     public static void assertKinasesEqual(Kinase expected, Kinase actual) {
-        Assert.assertEquals(expected.getId(), actual.getId());
-        Assert.assertEquals(expected.getDiscoverxGeneSymbol(), actual.getDiscoverxGeneSymbol());
-        Assert.assertEquals(expected.getEntrezGeneSymbol(), actual.getEntrezGeneSymbol());
+        Assertions.assertEquals(expected.getId(), actual.getId());
+        Assertions.assertEquals(expected.getDiscoverxGeneSymbol(), actual.getDiscoverxGeneSymbol());
+        Assertions.assertEquals(expected.getEntrezGeneSymbol(), actual.getEntrezGeneSymbol());
     }
 
     public static void assertKinasesEqual(List<Kinase> expected, List<Kinase> actual) {
 
-        Assert.assertEquals(expected.size(), actual.size());
+        Assertions.assertEquals(expected.size(), actual.size());
 
         for (int i = 0; i < expected.size(); i++) {
             assertKinasesEqual(expected.get(i), actual.get(i));
@@ -79,9 +79,9 @@ public final class TestUtil {
     }
 
     public static void assertPartnersEqual(Partner expected, Partner actual) {
-        Assert.assertEquals(expected.getId(), actual.getId());
-        Assert.assertEquals(expected.getName(), actual.getName());
-        Assert.assertEquals(expected.getUrl(), actual.getUrl());
+        Assertions.assertEquals(expected.getId(), actual.getId());
+        Assertions.assertEquals(expected.getName(), actual.getName());
+        Assertions.assertEquals(expected.getUrl(), actual.getUrl());
     }
 
     public static ActivityProfile createActivityProfile(Long id) {

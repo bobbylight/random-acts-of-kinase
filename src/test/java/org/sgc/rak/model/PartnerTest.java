@@ -1,49 +1,49 @@
 package org.sgc.rak.model;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class PartnerTest {
 
     private Partner partner;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         partner = new Partner();
     }
 
     @Test
     public void testGetSetId() {
-        Assert.assertNull(partner.getId());
+        Assertions.assertNull(partner.getId());
         partner.setId(5L);
-        Assert.assertEquals(Long.valueOf(5), partner.getId());
+        Assertions.assertEquals(Long.valueOf(5), partner.getId());
     }
 
     @Test
     public void testGetSetName() {
-        Assert.assertNull(partner.getName());
+        Assertions.assertNull(partner.getName());
         partner.setName("foo");
-        Assert.assertEquals("foo", partner.getName());
+        Assertions.assertEquals("foo", partner.getName());
     }
 
     @Test
     public void testGetSetUrl() {
-        Assert.assertNull(partner.getUrl());
+        Assertions.assertNull(partner.getUrl());
         partner.setUrl("foo");
-        Assert.assertEquals("foo", partner.getUrl());
+        Assertions.assertEquals("foo", partner.getUrl());
     }
 
     @Test
     public void testGetSetImage() {
-        Assert.assertNull(partner.getImage());
+        Assertions.assertNull(partner.getImage());
         partner.setImage("foo");
-        Assert.assertEquals("foo", partner.getImage());
+        Assertions.assertEquals("foo", partner.getImage());
     }
 
     @Test
     public void testToString() {
         String expected = "Partner[id=<null>,name=<null>,url=<null>,image=<null>]";
-        Assert.assertEquals(expected, partner.toString());
+        Assertions.assertEquals(expected, partner.toString());
     }
 }

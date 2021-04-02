@@ -1,8 +1,8 @@
 package org.sgc.rak.util;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.sgc.rak.core.Application;
 import org.sgc.rak.model.ActivityProfile;
 import org.sgc.rak.model.Audit;
@@ -18,7 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.Instant;
 import java.util.Collections;
@@ -31,7 +31,7 @@ import static org.sgc.rak.util.QuerySpecifications.*;
  * Unit tests for our query specifications.  These are hard to unit test, so we instead
  * use an in-memory database and essentially integration-test them.
  */
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @DataJpaTest
 @ContextConfiguration(classes = Application.class)
 @Sql("query-specifications-test-data.sql")
@@ -66,10 +66,10 @@ public class QuerySpecificationsTest {
         PageRequest pr = createPageRequest(0, 20, "compoundName");
         Page<ActivityProfile> actual = apRepository.findAll(activityProfilesMatching(null, null, null), pr);
 
-        Assert.assertEquals(3, actual.getNumberOfElements());
-        Assert.assertEquals("compoundA", actual.getContent().get(0).getCompoundName());
-        Assert.assertEquals("compoundB", actual.getContent().get(1).getCompoundName());
-        Assert.assertEquals("compoundC", actual.getContent().get(2).getCompoundName());
+        Assertions.assertEquals(3, actual.getNumberOfElements());
+        Assertions.assertEquals("compoundA", actual.getContent().get(0).getCompoundName());
+        Assertions.assertEquals("compoundB", actual.getContent().get(1).getCompoundName());
+        Assertions.assertEquals("compoundC", actual.getContent().get(2).getCompoundName());
     }
 
     @Test
@@ -78,8 +78,8 @@ public class QuerySpecificationsTest {
         PageRequest pr = createPageRequest(0, 20, "compoundName");
         Page<ActivityProfile> actual = apRepository.findAll(activityProfilesMatching("compoundB", null, null), pr);
 
-        Assert.assertEquals(1, actual.getNumberOfElements());
-        Assert.assertEquals("compoundB", actual.getContent().get(0).getCompoundName());
+        Assertions.assertEquals(1, actual.getNumberOfElements());
+        Assertions.assertEquals("compoundB", actual.getContent().get(0).getCompoundName());
     }
 
     @Test
@@ -89,8 +89,8 @@ public class QuerySpecificationsTest {
         List<Long> kinaseIds = Collections.singletonList(2L);
         Page<ActivityProfile> actual = apRepository.findAll(activityProfilesMatching(null, kinaseIds, null), pr);
 
-        Assert.assertEquals(1, actual.getNumberOfElements());
-        Assert.assertEquals("compoundB", actual.getContent().get(0).getCompoundName());
+        Assertions.assertEquals(1, actual.getNumberOfElements());
+        Assertions.assertEquals("compoundB", actual.getContent().get(0).getCompoundName());
     }
 
     @Test
@@ -99,9 +99,9 @@ public class QuerySpecificationsTest {
         PageRequest pr = createPageRequest(0, 20, "compoundName:desc");
         Page<ActivityProfile> actual = apRepository.findAll(activityProfilesMatching(null, null, 0.4), pr);
 
-        Assert.assertEquals(2, actual.getNumberOfElements());
-        Assert.assertEquals("compoundB", actual.getContent().get(0).getCompoundName());
-        Assert.assertEquals("compoundA", actual.getContent().get(1).getCompoundName());
+        Assertions.assertEquals(2, actual.getNumberOfElements());
+        Assertions.assertEquals("compoundB", actual.getContent().get(0).getCompoundName());
+        Assertions.assertEquals("compoundA", actual.getContent().get(1).getCompoundName());
     }
 
     @Test
@@ -111,7 +111,7 @@ public class QuerySpecificationsTest {
         Page<ActivityProfile> actual = apRepository.findAll(activityProfilesMatching("compoundA", null, 0.2), pr);
 
         // No activity profiles with compoundA and % control 0.2 or less
-        Assert.assertEquals(0, actual.getNumberOfElements());
+        Assertions.assertEquals(0, actual.getNumberOfElements());
     }
 
     @Test
@@ -121,9 +121,9 @@ public class QuerySpecificationsTest {
         Page<Audit> actual = auditRepository.findAll(auditRecordsMatching(null, null, null, null,
             null, null), pr);
 
-        Assert.assertEquals(2, actual.getNumberOfElements());
-        Assert.assertEquals("capplegate", actual.getContent().get(0).getUserName());
-        Assert.assertEquals("gclooney", actual.getContent().get(1).getUserName());
+        Assertions.assertEquals(2, actual.getNumberOfElements());
+        Assertions.assertEquals("capplegate", actual.getContent().get(0).getUserName());
+        Assertions.assertEquals("gclooney", actual.getContent().get(1).getUserName());
     }
 
     @Test
@@ -133,8 +133,8 @@ public class QuerySpecificationsTest {
         Page<Audit> actual = auditRepository.findAll(auditRecordsMatching("gclooney", AuditAction.LOGIN, "1.2.3.4",
             true, new Date(0), new Date()), pr);
 
-        Assert.assertEquals(1, actual.getNumberOfElements());
-        Assert.assertEquals("gclooney", actual.getContent().get(0).getUserName());
+        Assertions.assertEquals(1, actual.getNumberOfElements());
+        Assertions.assertEquals("gclooney", actual.getContent().get(0).getUserName());
     }
 
     @Test
@@ -147,8 +147,8 @@ public class QuerySpecificationsTest {
         Page<Audit> actual = auditRepository.findAll(auditRecordsMatching(null, null, null,
             null, fromDate, toDate), pr);
 
-        Assert.assertEquals(1, actual.getNumberOfElements());
-        Assert.assertEquals("gclooney", actual.getContent().get(0).getUserName());
+        Assertions.assertEquals(1, actual.getNumberOfElements());
+        Assertions.assertEquals("gclooney", actual.getContent().get(0).getUserName());
     }
 
     @Test
@@ -157,9 +157,9 @@ public class QuerySpecificationsTest {
         PageRequest pr = createPageRequest(0, 20, "compoundName");
         Page<Compound> actual = compoundRepository.findAll(hasNullFields(null, "smiles", "s10"), pr);
 
-        Assert.assertEquals(2, actual.getNumberOfElements());
-        Assert.assertEquals("compoundA", actual.getContent().get(0).getCompoundName());
-        Assert.assertEquals("compoundB", actual.getContent().get(1).getCompoundName());
+        Assertions.assertEquals(2, actual.getNumberOfElements());
+        Assertions.assertEquals("compoundA", actual.getContent().get(0).getCompoundName());
+        Assertions.assertEquals("compoundB", actual.getContent().get(1).getCompoundName());
     }
 
     @Test
@@ -168,8 +168,8 @@ public class QuerySpecificationsTest {
         PageRequest pr = createPageRequest(0, 20, "compoundName");
         Page<Compound> actual = compoundRepository.findAll(hasNullFields("a", "smiles", "s10"), pr);
 
-        Assert.assertEquals(1, actual.getNumberOfElements());
-        Assert.assertEquals("compoundA", actual.getContent().get(0).getCompoundName());
+        Assertions.assertEquals(1, actual.getNumberOfElements());
+        Assertions.assertEquals("compoundA", actual.getContent().get(0).getCompoundName());
     }
 
     @Test
@@ -178,8 +178,8 @@ public class QuerySpecificationsTest {
         PageRequest pr = createPageRequest(0, 20, "compoundName");
         Page<Compound> actual = compoundRepository.findAll(isHidden(null, true), pr);
 
-        Assert.assertEquals(1, actual.getNumberOfElements());
-        Assert.assertEquals("compoundB", actual.getContent().get(0).getCompoundName());
+        Assertions.assertEquals(1, actual.getNumberOfElements());
+        Assertions.assertEquals("compoundB", actual.getContent().get(0).getCompoundName());
     }
 
     @Test
@@ -188,7 +188,7 @@ public class QuerySpecificationsTest {
         PageRequest pr = createPageRequest(0, 20, "compoundName");
         Page<Compound> actual = compoundRepository.findAll(isHidden("xxx", true), pr);
 
-        Assert.assertEquals(0, actual.getNumberOfElements());
+        Assertions.assertEquals(0, actual.getNumberOfElements());
     }
 
     @Test
@@ -197,10 +197,10 @@ public class QuerySpecificationsTest {
         PageRequest pr = createPageRequest(0, 20, "compoundName");
         Page<Compound> actual = compoundRepository.findAll(standardSearch(null, true), pr);
 
-        Assert.assertEquals(3, actual.getNumberOfElements());
-        Assert.assertEquals("compoundA", actual.getContent().get(0).getCompoundName());
-        Assert.assertEquals("compoundB", actual.getContent().get(1).getCompoundName());
-        Assert.assertEquals("compoundC", actual.getContent().get(2).getCompoundName());
+        Assertions.assertEquals(3, actual.getNumberOfElements());
+        Assertions.assertEquals("compoundA", actual.getContent().get(0).getCompoundName());
+        Assertions.assertEquals("compoundB", actual.getContent().get(1).getCompoundName());
+        Assertions.assertEquals("compoundC", actual.getContent().get(2).getCompoundName());
     }
 
     @Test
@@ -209,9 +209,9 @@ public class QuerySpecificationsTest {
         PageRequest pr = createPageRequest(0, 20, "compoundName");
         Page<Compound> actual = compoundRepository.findAll(standardSearch(null, false), pr);
 
-        Assert.assertEquals(2, actual.getNumberOfElements());
-        Assert.assertEquals("compoundA", actual.getContent().get(0).getCompoundName());
-        Assert.assertEquals("compoundC", actual.getContent().get(1).getCompoundName());
+        Assertions.assertEquals(2, actual.getNumberOfElements());
+        Assertions.assertEquals("compoundA", actual.getContent().get(0).getCompoundName());
+        Assertions.assertEquals("compoundC", actual.getContent().get(1).getCompoundName());
     }
 
     @Test
@@ -220,8 +220,8 @@ public class QuerySpecificationsTest {
         PageRequest pr = createPageRequest(0, 20, "compoundName");
         Page<Compound> actual = compoundRepository.findAll(standardSearch("b", true), pr);
 
-        Assert.assertEquals(1, actual.getNumberOfElements());
-        Assert.assertEquals("compoundB", actual.getContent().get(0).getCompoundName());
+        Assertions.assertEquals(1, actual.getNumberOfElements());
+        Assertions.assertEquals("compoundB", actual.getContent().get(0).getCompoundName());
     }
 
     @Test
@@ -230,6 +230,6 @@ public class QuerySpecificationsTest {
         PageRequest pr = createPageRequest(0, 20, "compoundName");
         Page<Compound> actual = compoundRepository.findAll(standardSearch("b", false), pr);
 
-        Assert.assertEquals(0, actual.getNumberOfElements());
+        Assertions.assertEquals(0, actual.getNumberOfElements());
     }
 }

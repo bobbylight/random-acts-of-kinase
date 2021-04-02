@@ -1,8 +1,8 @@
 package org.sgc.rak.rest;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -49,7 +49,7 @@ public class CompoundControllerTest {
 
     private static final String COMPOUND_NAME = "compoundA";
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
@@ -62,16 +62,18 @@ public class CompoundControllerTest {
         doReturn(expectedCompound).when(mockCompoundService).getCompound(anyString());
 
         Compound actualCompound = controller.getCompound(COMPOUND_NAME);
-        Assert.assertEquals(COMPOUND_NAME, actualCompound.getCompoundName());
+        Assertions.assertEquals(COMPOUND_NAME, actualCompound.getCompoundName());
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void testGetCompound_notFound() {
         doReturn(null).when(mockCompoundService).getCompound(anyString());
-        controller.getCompound("compoundA");
+        Assertions.assertThrows(NotFoundException.class, () -> {
+            controller.getCompound("compoundA");
+        });
     }
 
-    @Test(expected = ForbiddenException.class)
+    @Test
     public void testGetCompound_forbidden() {
 
         Compound compound = TestUtil.createCompound(COMPOUND_NAME);
@@ -80,7 +82,9 @@ public class CompoundControllerTest {
 
         doReturn(compound).when(mockCompoundService).getCompound(anyString());
 
-        controller.getCompound("compoundA");
+        Assertions.assertThrows(ForbiddenException.class, () -> {
+            controller.getCompound("compoundA");
+        });
     }
 
     @Test
@@ -96,10 +100,10 @@ public class CompoundControllerTest {
             anyBoolean());
 
         PagedDataRep<Compound> compounds = controller.getCompounds(null, null, null, null, null, pr);
-        Assert.assertEquals(0, compounds.getStart());
-        Assert.assertEquals(1, compounds.getCount());
-        Assert.assertEquals(1, compounds.getTotal());
-        Assert.assertEquals(COMPOUND_NAME, compounds.getData().get(0).getCompoundName());
+        Assertions.assertEquals(0, compounds.getStart());
+        Assertions.assertEquals(1, compounds.getCount());
+        Assertions.assertEquals(1, compounds.getTotal());
+        Assertions.assertEquals(COMPOUND_NAME, compounds.getData().get(0).getCompoundName());
     }
 
     @Test
@@ -114,10 +118,10 @@ public class CompoundControllerTest {
         doReturn(expectedPage).when(mockCompoundService).getCompounds(any(), any(Pageable.class), anyBoolean());
 
         PagedDataRep<Compound> compounds = controller.getCompounds(null, null, null, null, null, pr);
-        Assert.assertEquals(20, compounds.getStart());
-        Assert.assertEquals(1, compounds.getCount());
-        Assert.assertEquals(21, compounds.getTotal());
-        Assert.assertEquals(COMPOUND_NAME, compounds.getData().get(0).getCompoundName());
+        Assertions.assertEquals(20, compounds.getStart());
+        Assertions.assertEquals(1, compounds.getCount());
+        Assertions.assertEquals(21, compounds.getTotal());
+        Assertions.assertEquals(COMPOUND_NAME, compounds.getData().get(0).getCompoundName());
     }
 
     @Test
@@ -133,10 +137,10 @@ public class CompoundControllerTest {
             eq(COMPOUND_NAME), any(Pageable.class), anyBoolean());
 
         PagedDataRep<Compound> compounds = controller.getCompounds(COMPOUND_NAME, null, null, null, null, pr);
-        Assert.assertEquals(0, compounds.getStart());
-        Assert.assertEquals(1, compounds.getCount());
-        Assert.assertEquals(1, compounds.getTotal());
-        Assert.assertEquals(COMPOUND_NAME, compounds.getData().get(0).getCompoundName());
+        Assertions.assertEquals(0, compounds.getStart());
+        Assertions.assertEquals(1, compounds.getCount());
+        Assertions.assertEquals(1, compounds.getTotal());
+        Assertions.assertEquals(COMPOUND_NAME, compounds.getData().get(0).getCompoundName());
     }
 
     @Test
@@ -152,10 +156,10 @@ public class CompoundControllerTest {
             any(Pageable.class));
 
         PagedDataRep<Compound> compounds = controller.getCompounds(null, "kinase", 0.8, null, null, pr);
-        Assert.assertEquals(0, compounds.getStart());
-        Assert.assertEquals(1, compounds.getCount());
-        Assert.assertEquals(1, compounds.getTotal());
-        Assert.assertEquals(COMPOUND_NAME, compounds.getData().get(0).getCompoundName());
+        Assertions.assertEquals(0, compounds.getStart());
+        Assertions.assertEquals(1, compounds.getCount());
+        Assertions.assertEquals(1, compounds.getTotal());
+        Assertions.assertEquals(COMPOUND_NAME, compounds.getData().get(0).getCompoundName());
     }
 
     @Test
@@ -171,10 +175,10 @@ public class CompoundControllerTest {
             any(Pageable.class));
 
         PagedDataRep<Compound> compounds = controller.getCompounds(null, "kinase", null, 42d, null, pr);
-        Assert.assertEquals(0, compounds.getStart());
-        Assert.assertEquals(1, compounds.getCount());
-        Assert.assertEquals(1, compounds.getTotal());
-        Assert.assertEquals(COMPOUND_NAME, compounds.getData().get(0).getCompoundName());
+        Assertions.assertEquals(0, compounds.getStart());
+        Assertions.assertEquals(1, compounds.getCount());
+        Assertions.assertEquals(1, compounds.getTotal());
+        Assertions.assertEquals(COMPOUND_NAME, compounds.getData().get(0).getCompoundName());
     }
 
     @Test
@@ -183,9 +187,9 @@ public class CompoundControllerTest {
         doReturn(new byte[0]).when(mockImageTranscoder).svgToPng(anyString(), any(), anyFloat(), anyFloat());
 
         MockHttpServletResponse response = new MockHttpServletResponse();
-        Assert.assertNotNull(controller.getCompoundImageAsPng("compoundA", response, 200, 200, true));
+        Assertions.assertNotNull(controller.getCompoundImageAsPng("compoundA", response, 200, 200, true));
         String contentDisposition = response.getHeader("Content-Disposition");
-        Assert.assertTrue(contentDisposition != null && contentDisposition.startsWith("attachment"));
+        Assertions.assertTrue(contentDisposition != null && contentDisposition.startsWith("attachment"));
     }
 
     @Test
@@ -194,32 +198,34 @@ public class CompoundControllerTest {
         doReturn(new byte[0]).when(mockImageTranscoder).svgToPng(anyString(), any(), anyFloat(), anyFloat());
 
         MockHttpServletResponse response = new MockHttpServletResponse();
-        Assert.assertNotNull(controller.getCompoundImageAsPng("compoundA", response, 200, 200, false));
-        Assert.assertNull(response.getHeader("Content-Disposition"));
+        Assertions.assertNotNull(controller.getCompoundImageAsPng("compoundA", response, 200, 200, false));
+        Assertions.assertNull(response.getHeader("Content-Disposition"));
     }
 
-    @Test(expected = InternalServerErrorException.class)
+    @Test
     public void testGetCompoundImageAsPng_errorGeneratingPng() throws Exception {
 
         doThrow(new IOException()).when(mockImageTranscoder).svgToPng(anyString(), any(), anyFloat(), anyFloat());
 
         MockHttpServletResponse response = new MockHttpServletResponse();
-        controller.getCompoundImageAsPng("compoundA", response, 200, 200, false);
+        Assertions.assertThrows(InternalServerErrorException.class, () -> {
+            controller.getCompoundImageAsPng("compoundA", response, 200, 200, false);
+        });
     }
 
     @Test
     public void testGetCompoundImageAsSvg_download() {
         MockHttpServletResponse response = new MockHttpServletResponse();
-        Assert.assertNotNull(controller.getCompoundImageAsSvg("compoundA", response, true));
+        Assertions.assertNotNull(controller.getCompoundImageAsSvg("compoundA", response, true));
         String contentDisposition = response.getHeader("Content-Disposition");
-        Assert.assertTrue(contentDisposition != null && contentDisposition.startsWith("attachment"));
+        Assertions.assertTrue(contentDisposition != null && contentDisposition.startsWith("attachment"));
     }
 
     @Test
     public void testGetCompoundImageAsSvg_noDownload() {
         MockHttpServletResponse response = new MockHttpServletResponse();
-        Assert.assertNotNull(controller.getCompoundImageAsSvg("compoundA", response, false));
-        Assert.assertNull(response.getHeader("Content-Disposition"));
+        Assertions.assertNotNull(controller.getCompoundImageAsSvg("compoundA", response, false));
+        Assertions.assertNull(response.getHeader("Content-Disposition"));
     }
 
     @Test
@@ -237,17 +243,19 @@ public class CompoundControllerTest {
         TestUtil.assertCompoundsEqual(compound, updatedCompound);
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     public void testUpdateCompound_error_compoundNamesNotEqual() {
 
         String compoundName = "compoundA";
 
         Compound compound = TestUtil.createCompound(compoundName);
 
-        controller.updateCompound("compoundB", compound);
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            controller.updateCompound("compoundB", compound);
+        });
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void testUpdateCompound_error_compoundDoesNotExist() {
 
         String compoundName = "compoundA";
@@ -257,6 +265,8 @@ public class CompoundControllerTest {
 
         doReturn(false).when(mockCompoundService).getCompoundExists(eq(compoundName));
 
-        controller.updateCompound(compoundName, compound);
+        Assertions.assertThrows(NotFoundException.class, () -> {
+            controller.updateCompound(compoundName, compound);
+        });
     }
 }

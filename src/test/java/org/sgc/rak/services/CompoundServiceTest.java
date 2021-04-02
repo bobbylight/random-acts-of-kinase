@@ -1,8 +1,8 @@
 package org.sgc.rak.services;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -48,7 +48,7 @@ public class CompoundServiceTest {
     private static final String KINASE_DISCOVERX = "discoverxA";
     private static final String KINASE_ENTREZ = "entrezA";
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
@@ -67,7 +67,7 @@ public class CompoundServiceTest {
     @Test
     public void testGetCompoundExists() {
         doReturn(true).when(mockCompoundDao).getCompoundExists(eq(COMPOUND_NAME));
-        Assert.assertTrue(service.getCompoundExists(COMPOUND_NAME));
+        Assertions.assertTrue(service.getCompoundExists(COMPOUND_NAME));
     }
 
     @Test
@@ -81,9 +81,9 @@ public class CompoundServiceTest {
         doReturn(expectedPage).when(mockCompoundDao).getCompounds(any(), any(Pageable.class), anyBoolean());
 
         Page<Compound> actualCompounds = service.getCompounds(null, pr, true);
-        Assert.assertEquals(1, actualCompounds.getNumberOfElements());
-        Assert.assertEquals(1, actualCompounds.getTotalElements());
-        Assert.assertEquals(1, actualCompounds.getTotalPages());
+        Assertions.assertEquals(1, actualCompounds.getNumberOfElements());
+        Assertions.assertEquals(1, actualCompounds.getTotalElements());
+        Assertions.assertEquals(1, actualCompounds.getTotalPages());
         for (int i = 0; i < expectedCompounds.size(); i++) {
             TestUtil.assertCompoundsEqual(expectedCompounds.get(i), actualCompounds.getContent().get(i));
         }
@@ -100,9 +100,9 @@ public class CompoundServiceTest {
         doReturn(expectedPage).when(mockCompoundDao).getCompounds(anyString(), any(Pageable.class), anyBoolean());
 
         Page<Compound> actualCompounds = service.getCompounds("foo", pr, true);
-        Assert.assertEquals(1, actualCompounds.getNumberOfElements());
-        Assert.assertEquals(1, actualCompounds.getTotalElements());
-        Assert.assertEquals(1, actualCompounds.getTotalPages());
+        Assertions.assertEquals(1, actualCompounds.getNumberOfElements());
+        Assertions.assertEquals(1, actualCompounds.getTotalElements());
+        Assertions.assertEquals(1, actualCompounds.getTotalPages());
         for (int i = 0; i < expectedCompounds.size(); i++) {
             TestUtil.assertCompoundsEqual(expectedCompounds.get(i), actualCompounds.getContent().get(i));
         }
@@ -131,9 +131,9 @@ public class CompoundServiceTest {
         doReturn(expectedCompounds).when(mockCompoundDao).getCompounds(anyList());
 
         Page<Compound> actualPage = service.getCompoundsByKinaseAndActivity(KINASE_ENTREZ, 0.3, pr);
-        Assert.assertEquals(1, actualPage.getNumberOfElements());
-        Assert.assertEquals(1, actualPage.getTotalElements());
-        Assert.assertEquals(1, actualPage.getTotalPages());
+        Assertions.assertEquals(1, actualPage.getNumberOfElements());
+        Assertions.assertEquals(1, actualPage.getTotalElements());
+        Assertions.assertEquals(1, actualPage.getTotalPages());
         for (int i = 0; i < expectedCompounds.size(); i++) {
             TestUtil.assertCompoundsEqual(expectedCompounds.get(i), actualPage.getContent().get(i));
         }
@@ -162,15 +162,15 @@ public class CompoundServiceTest {
         doReturn(expectedCompounds).when(mockCompoundDao).getCompounds(anyList());
 
         Page<Compound> actualPage = service.getCompoundsByKinaseAndKd(KINASE_ENTREZ, 42, pr);
-        Assert.assertEquals(1, actualPage.getNumberOfElements());
-        Assert.assertEquals(1, actualPage.getTotalElements());
-        Assert.assertEquals(1, actualPage.getTotalPages());
+        Assertions.assertEquals(1, actualPage.getNumberOfElements());
+        Assertions.assertEquals(1, actualPage.getTotalElements());
+        Assertions.assertEquals(1, actualPage.getTotalPages());
         for (int i = 0; i < expectedCompounds.size(); i++) {
             TestUtil.assertCompoundsEqual(expectedCompounds.get(i), actualPage.getContent().get(i));
         }
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void testGetCompoundsByKinaseAndKd_error_noSuchKinase() {
 
         doReturn(Collections.emptyList()).when(mockKinaseService).getKinase(eq(KINASE_ENTREZ));
@@ -178,7 +178,9 @@ public class CompoundServiceTest {
         Sort sort = Sort.by(Sort.Order.desc("compoundName"));
         PageRequest pr = PageRequest.of(0, 20, sort);
 
-        service.getCompoundsByKinaseAndKd(KINASE_ENTREZ, 42, pr);
+        Assertions.assertThrows(NotFoundException.class, () -> {
+            service.getCompoundsByKinaseAndKd(KINASE_ENTREZ, 42, pr);
+        });
     }
 
     @Test
@@ -195,14 +197,14 @@ public class CompoundServiceTest {
         doReturn(page).when(mockCompoundDao).getCompoundsMissingPublicationInfo(any(), any(Pageable.class));
 
         Page<Compound> actualResponse = service.getCompoundsMissingPublicationInfo(null, pageable);
-        Assert.assertEquals(2, actualResponse.getNumberOfElements());
-        Assert.assertEquals(100, actualResponse.getTotalElements());
-        Assert.assertEquals(50, actualResponse.getTotalPages());
-        Assert.assertEquals(compounds.size(), actualResponse.getSize());
+        Assertions.assertEquals(2, actualResponse.getNumberOfElements());
+        Assertions.assertEquals(100, actualResponse.getTotalElements());
+        Assertions.assertEquals(50, actualResponse.getTotalPages());
+        Assertions.assertEquals(compounds.size(), actualResponse.getSize());
         for (int i = 0; i < compounds.size(); i++) {
             Compound expected = compounds.get(i);
             Compound actual = actualResponse.getContent().get(i);
-            Assert.assertEquals(expected.getCompoundName(), actual.getCompoundName());
+            Assertions.assertEquals(expected.getCompoundName(), actual.getCompoundName());
         }
     }
 
@@ -219,15 +221,15 @@ public class CompoundServiceTest {
         doReturn(page).when(mockCompoundDao).getCompoundsMissingActivityProfiles(any(), any(Pageable.class));
 
         Page<CompoundCountPair> actualResponse = service.getCompoundsMissingActivityProfiles(null, pageable);
-        Assert.assertEquals(2, actualResponse.getNumberOfElements());
-        Assert.assertEquals(100, actualResponse.getTotalElements());
-        Assert.assertEquals(50, actualResponse.getTotalPages());
-        Assert.assertEquals(pairs.size(), actualResponse.getSize());
+        Assertions.assertEquals(2, actualResponse.getNumberOfElements());
+        Assertions.assertEquals(100, actualResponse.getTotalElements());
+        Assertions.assertEquals(50, actualResponse.getTotalPages());
+        Assertions.assertEquals(pairs.size(), actualResponse.getSize());
         for (int i = 0; i < pairs.size(); i++) {
             CompoundCountPair expected = pairs.get(i);
             CompoundCountPair actual = actualResponse.getContent().get(i);
-            Assert.assertEquals(expected.getCompoundName(), actual.getCompoundName());
-            Assert.assertEquals(expected.getCount(), actual.getCount());
+            Assertions.assertEquals(expected.getCompoundName(), actual.getCompoundName());
+            Assertions.assertEquals(expected.getCount(), actual.getCount());
         }
     }
 
@@ -245,14 +247,14 @@ public class CompoundServiceTest {
         doReturn(page).when(mockCompoundDao).getHiddenCompounds(any(), any(Pageable.class));
 
         Page<Compound> actualResponse = service.getHiddenCompounds(null, pageable);
-        Assert.assertEquals(2, actualResponse.getNumberOfElements());
-        Assert.assertEquals(100, actualResponse.getTotalElements());
-        Assert.assertEquals(50, actualResponse.getTotalPages());
-        Assert.assertEquals(compounds.size(), actualResponse.getSize());
+        Assertions.assertEquals(2, actualResponse.getNumberOfElements());
+        Assertions.assertEquals(100, actualResponse.getTotalElements());
+        Assertions.assertEquals(50, actualResponse.getTotalPages());
+        Assertions.assertEquals(compounds.size(), actualResponse.getSize());
         for (int i = 0; i < compounds.size(); i++) {
             Compound expected = compounds.get(i);
             Compound actual = actualResponse.getContent().get(i);
-            Assert.assertEquals(expected.getCompoundName(), actual.getCompoundName());
+            Assertions.assertEquals(expected.getCompoundName(), actual.getCompoundName());
         }
     }
 
@@ -270,14 +272,14 @@ public class CompoundServiceTest {
         doReturn(page).when(mockCompoundDao).getIncompleteCompounds(any(), any(Pageable.class));
 
         Page<Compound> actualResponse = service.getIncompleteCompounds(null, pageable);
-        Assert.assertEquals(2, actualResponse.getNumberOfElements());
-        Assert.assertEquals(100, actualResponse.getTotalElements());
-        Assert.assertEquals(50, actualResponse.getTotalPages());
-        Assert.assertEquals(compounds.size(), actualResponse.getSize());
+        Assertions.assertEquals(2, actualResponse.getNumberOfElements());
+        Assertions.assertEquals(100, actualResponse.getTotalElements());
+        Assertions.assertEquals(50, actualResponse.getTotalPages());
+        Assertions.assertEquals(compounds.size(), actualResponse.getSize());
         for (int i = 0; i < compounds.size(); i++) {
             Compound expected = compounds.get(i);
             Compound actual = actualResponse.getContent().get(i);
-            Assert.assertEquals(expected.getCompoundName(), actual.getCompoundName());
+            Assertions.assertEquals(expected.getCompoundName(), actual.getCompoundName());
         }
     }
 

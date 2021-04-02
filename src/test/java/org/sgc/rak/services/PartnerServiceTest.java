@@ -1,8 +1,8 @@
 package org.sgc.rak.services;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -25,7 +25,7 @@ public class PartnerServiceTest {
     @InjectMocks
     private PartnerService service;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
@@ -41,9 +41,9 @@ public class PartnerServiceTest {
         doReturn(expectedPage).when(mockRepository).findAll(any(Pageable.class));
 
         Page<Partner> actualPartners = service.getPartners(pr);
-        Assert.assertEquals(1, actualPartners.getNumberOfElements());
-        Assert.assertEquals(1, actualPartners.getTotalElements());
-        Assert.assertEquals(1, actualPartners.getTotalPages());
+        Assertions.assertEquals(1, actualPartners.getNumberOfElements());
+        Assertions.assertEquals(1, actualPartners.getTotalElements());
+        Assertions.assertEquals(1, actualPartners.getTotalPages());
         for (int i = 0; i < partners.size(); i++) {
             TestUtil.assertPartnersEqual(partners.get(i), actualPartners.getContent().get(i));
         }

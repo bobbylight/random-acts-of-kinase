@@ -1,8 +1,8 @@
 package org.sgc.rak.services;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -35,7 +35,7 @@ public class BlogPostServiceTest {
     @InjectMocks
     private BlogPostService service;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
@@ -68,9 +68,9 @@ public class BlogPostServiceTest {
         doReturn(expectedPage).when(mockRepository).findAll(any(Pageable.class));
 
         Page<BlogPost> actualPosts = service.getBlogPosts(pr);
-        Assert.assertEquals(1, actualPosts.getNumberOfElements());
-        Assert.assertEquals(1, actualPosts.getTotalElements());
-        Assert.assertEquals(1, actualPosts.getTotalPages());
+        Assertions.assertEquals(1, actualPosts.getNumberOfElements());
+        Assertions.assertEquals(1, actualPosts.getTotalElements());
+        Assertions.assertEquals(1, actualPosts.getTotalPages());
         for (int i = 0; i < posts.size(); i++) {
             TestUtil.assertBlogPostsEqual(posts.get(i), actualPosts.getContent().get(i));
         }
@@ -90,13 +90,13 @@ public class BlogPostServiceTest {
         doReturn(origPost).when(mockRepository).save(any(BlogPost.class));
 
         BlogPost actual = service.updateBlogPost(post);
-        Assert.assertEquals(42, actual.getId().longValue());
-        Assert.assertEquals("new title", actual.getTitle());
-        Assert.assertEquals("new body", actual.getBody());
-        Assert.assertEquals(4, actual.getViewCount().longValue());
+        Assertions.assertEquals(42, actual.getId().longValue());
+        Assertions.assertEquals("new title", actual.getTitle());
+        Assertions.assertEquals("new body", actual.getBody());
+        Assertions.assertEquals(4, actual.getViewCount().longValue());
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test
     public void testUpdateBlogPost_error_blogPostNotFound() {
 
         BlogPost post = TestUtil.createBlogPost("title", "body");
@@ -104,6 +104,8 @@ public class BlogPostServiceTest {
 
         doReturn(Optional.empty()).when(mockRepository).findById(anyLong());
 
-        service.updateBlogPost(post);
+        Assertions.assertThrows(NotFoundException.class, () -> {
+            service.updateBlogPost(post);
+        });
     }
 }

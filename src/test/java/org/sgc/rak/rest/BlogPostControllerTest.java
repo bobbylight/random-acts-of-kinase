@@ -2,10 +2,10 @@ package org.sgc.rak.rest;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -51,7 +51,7 @@ public class BlogPostControllerTest {
 
     private MockMvc mockMvc;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
@@ -60,7 +60,7 @@ public class BlogPostControllerTest {
         mapper = new ObjectMapper();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         // It seems MockMvcBuilders.standaloneSetup() populates RequestContextHolder, which breaks other test classes
         RequestContextHolder.resetRequestAttributes();
@@ -109,9 +109,9 @@ public class BlogPostControllerTest {
         // jackson converts collections of objects to Collection<LinkedHashMap>, so we must manually deserialize
         // the list that's one-level deep
         actualPosts.setData(mapper.convertValue(actualPosts.getData(), new TypeReference<List<BlogPost>>() {}));
-        Assert.assertEquals(0, actualPosts.getStart());
-        Assert.assertEquals(1, actualPosts.getTotal());
-        Assert.assertEquals(1, actualPosts.getCount());
+        Assertions.assertEquals(0, actualPosts.getStart());
+        Assertions.assertEquals(1, actualPosts.getTotal());
+        Assertions.assertEquals(1, actualPosts.getCount());
         for (int i = 0; i < posts.size(); i++) {
             TestUtil.assertBlogPostsEqual(posts.get(i), actualPosts.getData().get(i));
         }
@@ -132,36 +132,40 @@ public class BlogPostControllerTest {
         verify(mockService, times(1)).updateBlogPost(any(BlogPost.class));
     }
 
-    @Test(expected = BadRequestException.class)
-    public void testUpdateBlogPost_error_nonNumericBlogPostId() throws Exception {
+    @Test
+    public void testUpdateBlogPost_error_nonNumericBlogPostId() {
 
         BlogPost post = TestUtil.createBlogPost("title", "body");
 
-        try {
-            mockMvc.perform(MockMvcRequestBuilders.put("/api/blogPosts/notANumber")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(post))
-            );
-        } catch (NestedServletException e) {
-            throw (Exception)e.getCause();
-        }
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            try {
+                mockMvc.perform(MockMvcRequestBuilders.put("/api/blogPosts/notANumber")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(mapper.writeValueAsString(post))
+                );
+            } catch (NestedServletException e) {
+                throw e.getCause();
+            }
+        });
     }
 
-    @Test(expected = BadRequestException.class)
-    public void testUpdateBlogPost_error_postIdsDontMatch() throws Exception {
+    @Test
+    public void testUpdateBlogPost_error_postIdsDontMatch() {
 
         BlogPost post = TestUtil.createBlogPost("title", "body");
         post.setId(42L);
 
-        try {
-            mockMvc.perform(MockMvcRequestBuilders.put("/api/blogPosts/43")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(post))
-            );
-        } catch (NestedServletException e) {
-            throw (Exception)e.getCause();
-        }
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            try {
+                mockMvc.perform(MockMvcRequestBuilders.put("/api/blogPosts/43")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(mapper.writeValueAsString(post))
+                );
+            } catch (NestedServletException e) {
+                throw e.getCause();
+            }
+        });
     }
 }

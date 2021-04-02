@@ -1,7 +1,7 @@
 package org.sgc.rak.reps;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class UserRepTest {
 
@@ -11,14 +11,14 @@ public class UserRepTest {
     @Test
     public void testConstructor() {
         UserRep rep = new UserRep(USERID);
-        Assert.assertEquals(USERID, rep.getUserName());
+        Assertions.assertEquals(USERID, rep.getUserName());
     }
 
     @Test
     public void testGetSetUserName() {
         UserRep rep = new UserRep(USERID);
-        Assert.assertEquals(USERID, rep.getUserName());
+        Assertions.assertEquals(USERID, rep.getUserName());
         rep.setUserName(USERID2);
-        Assert.assertEquals(USERID2, rep.getUserName());
+        Assertions.assertEquals(USERID2, rep.getUserName());
     }
 }

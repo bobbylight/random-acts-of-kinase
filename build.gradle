@@ -69,10 +69,9 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
-    // TODO: Remove and update tests to JUnit 5 syntax
-    testImplementation('org.junit.vintage:junit-vintage-engine') {
-        exclude group: 'org.hamcrest', module: 'hamcrest-core'
-    }
+    testCompile "org.junit.jupiter:junit-jupiter-api"
+    testCompile "org.junit.jupiter:junit-jupiter-params"
+    testRuntime "org.junit.jupiter:junit-jupiter-engine"
 }
 
 wrapper {
@@ -88,6 +87,10 @@ idea {
     module {
         downloadSources = true
     }
+}
+
+test {
+    useJUnitPlatform()
 }
 
 compileJava {

@@ -1,9 +1,9 @@
 package org.sgc.rak.rest;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.sgc.rak.core.Application;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,7 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
 @SpringBootTest(classes = { Application.class })
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -45,7 +45,7 @@ public class ImportControllerIntegrationTest {
 
     private MockMvc mockMvc;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
@@ -67,7 +67,7 @@ public class ImportControllerIntegrationTest {
             actualCount = rs.getLong(1);
         }
 
-        Assert.assertEquals("Unexpected activity profile count after test completed", count, actualCount);
+        Assertions.assertEquals(count, actualCount, "Unexpected activity profile count after test completed");
     }
 
     /**
@@ -87,7 +87,7 @@ public class ImportControllerIntegrationTest {
             actualCount = rs.getLong(1);
         }
 
-        Assert.assertEquals("Unexpected compound count after test completed", count, actualCount);
+        Assertions.assertEquals(count, actualCount, "Unexpected compound count after test completed");
     }
 
     private void assertKdValue(String compoundName, int kinaseIndex, double expectedKd) throws SQLException {
@@ -107,14 +107,14 @@ public class ImportControllerIntegrationTest {
             }
         }
 
-        Assert.assertEquals("Unexpected kd for " + compoundName, expectedKd, actualKd, 0.001);
+        Assertions.assertEquals(expectedKd, actualKd, 0.001, "Unexpected kd for " + compoundName);
     }
 
     private void deleteCompound(String compoundName) throws SQLException {
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement("delete from compound where compound_nm = ?")) {
             stmt.setString(1, compoundName);
-            Assert.assertEquals("Row not deleted", 1, stmt.executeUpdate());
+            Assertions.assertEquals(1, stmt.executeUpdate(), "Row not deleted");
         }
     }
 

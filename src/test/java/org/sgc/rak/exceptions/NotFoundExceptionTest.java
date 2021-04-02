@@ -1,7 +1,7 @@
 package org.sgc.rak.exceptions;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
 public class NotFoundExceptionTest {
@@ -9,7 +9,7 @@ public class NotFoundExceptionTest {
     @Test
     public void testConstructor() {
         NotFoundException e = new NotFoundException("not found");
-        Assert.assertEquals(HttpStatus.NOT_FOUND, e.getStatus());
-        Assert.assertEquals("not found", e.getMessage());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, e.getStatus());
+        Assertions.assertEquals("not found", e.getMessage());
     }
 }
