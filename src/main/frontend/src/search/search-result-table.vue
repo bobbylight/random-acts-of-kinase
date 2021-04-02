@@ -89,6 +89,7 @@ export default {
         filters: {
             handler(newValue: any) {
                 console.log('Filterable property changed');
+                this.tableOptions.page = 1; // Always get first page if filters changed
                 this.reloadTable();
             },
             deep: true
