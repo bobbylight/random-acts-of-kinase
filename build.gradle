@@ -4,14 +4,14 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.4.3'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.4.4'
     }
 }
 plugins {
     id 'com.github.node-gradle.node' version '3.0.1'
     id 'jacoco'
-    id 'com.github.kt3k.coveralls' version '2.10.2'
-    id 'com.github.spotbugs' version '4.6.2'
+    id 'com.github.kt3k.coveralls' version '2.11.0'
+    id 'com.github.spotbugs' version '4.7.0'
 }
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -69,9 +69,9 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
-    testCompile "org.junit.jupiter:junit-jupiter-api"
-    testCompile "org.junit.jupiter:junit-jupiter-params"
-    testRuntime "org.junit.jupiter:junit-jupiter-engine"
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
 
 wrapper {
@@ -79,7 +79,7 @@ wrapper {
 }
 
 checkstyle {
-    toolVersion '8.41'
+    toolVersion '8.41.1'
     configDirectory = file("${project.projectDir}/config/checkstyle")
 }
 
