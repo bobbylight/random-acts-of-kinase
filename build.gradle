@@ -170,6 +170,7 @@ task makeAwsArchive(type: Zip) {
     from '.'
     include 'Procfile'
     include '.ebextensions/**'
+    include '.platform/**'
     archiveFileName = 'aws-archive.zip'
     destinationDirectory = file(rootDir)
 }
