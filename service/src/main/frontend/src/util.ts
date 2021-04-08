@@ -1,5 +1,7 @@
-import { FieldStatus } from './rak';
+import { Compound, FieldStatus } from './rak';
 import { Route } from 'vue-router';
+
+export const DEFAULT_MOLECULE_SVG: string = 'img/molecule-unknown.svg';
 
 export default class RakUtil {
 
@@ -8,8 +10,10 @@ export default class RakUtil {
         return includeTime ? date.toLocaleString() : date.toLocaleDateString();
     }
 
-    static getCompoundImageUrl(compoundName: string): string {
-        return `img/smiles/${encodeURIComponent(compoundName)}.svg`;
+    static getCompoundImageUrl(compound?: Compound): string {
+        // An SVG was generated for the molecule only if the SMILES string is known
+        return compound?.smiles ? `img/smiles/${encodeURIComponent(compound.compoundName)}.svg` :
+            DEFAULT_MOLECULE_SVG;
     }
 
     static isActiveTab($route: Route, tabName: string): boolean {

@@ -1,8 +1,8 @@
 package org.sgc.rak.model;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Date;
 
@@ -10,57 +10,57 @@ public class BlogPostTest {
 
     private BlogPost blogPost;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         blogPost = new BlogPost();
     }
 
     @Test
     public void testOnCreate() {
-        Assert.assertNull(blogPost.getViewCount());
+        Assertions.assertNull(blogPost.getViewCount());
         blogPost.onCreate();
-        Assert.assertEquals(0L, blogPost.getViewCount().longValue());
+        Assertions.assertEquals(0L, blogPost.getViewCount().longValue());
     }
 
     @Test
     public void testGetSetId() {
-        Assert.assertNull(blogPost.getId());
+        Assertions.assertNull(blogPost.getId());
         blogPost.setId(5L);
-        Assert.assertEquals(Long.valueOf(5), blogPost.getId());
+        Assertions.assertEquals(Long.valueOf(5), blogPost.getId());
     }
 
     @Test
     public void testGetSetTitle() {
-        Assert.assertNull(blogPost.getTitle());
+        Assertions.assertNull(blogPost.getTitle());
         blogPost.setTitle("Title");
-        Assert.assertEquals("Title", blogPost.getTitle());
+        Assertions.assertEquals("Title", blogPost.getTitle());
     }
 
     @Test
     public void testGetSetBody() {
-        Assert.assertNull(blogPost.getBody());
+        Assertions.assertNull(blogPost.getBody());
         blogPost.setBody("Body");
-        Assert.assertEquals("Body", blogPost.getBody());
+        Assertions.assertEquals("Body", blogPost.getBody());
     }
 
     @Test
     public void testGetSetCreateDate() {
-        Assert.assertNull(blogPost.getCreateDate());
+        Assertions.assertNull(blogPost.getCreateDate());
         Date now = new Date();
         blogPost.setCreateDate(now);
-        Assert.assertEquals(now, blogPost.getCreateDate());
+        Assertions.assertEquals(now, blogPost.getCreateDate());
     }
 
     @Test
     public void testGetSetViewCount() {
-        Assert.assertNull(blogPost.getViewCount());
+        Assertions.assertNull(blogPost.getViewCount());
         blogPost.setViewCount(42L);
-        Assert.assertEquals(42L, blogPost.getViewCount().longValue());
+        Assertions.assertEquals(42L, blogPost.getViewCount().longValue());
     }
 
     @Test
     public void testToString() {
         String expected = "BlogPost[id=<null>,title=<null>,body=<null>,createDate=<null>,viewCount=<null>]";
-        Assert.assertEquals(expected, blogPost.toString());
+        Assertions.assertEquals(expected, blogPost.toString());
     }
 }

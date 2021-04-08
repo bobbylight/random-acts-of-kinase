@@ -1,8 +1,8 @@
 package org.sgc.rak.dao;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.*;
@@ -38,7 +38,7 @@ public class CompoundDaoTest {
     @InjectMocks
     private final CompoundDao compoundDao = new CompoundDao();
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
@@ -53,7 +53,7 @@ public class CompoundDaoTest {
         doReturn(optional).when(compoundRepository).findById(eq(expectedCompoundName));
 
         Compound compound = compoundDao.getCompound(expectedCompoundName);
-        Assert.assertEquals(expectedCompoundName, compound.getCompoundName());
+        Assertions.assertEquals(expectedCompoundName, compound.getCompoundName());
     }
 
     @Test
@@ -62,7 +62,7 @@ public class CompoundDaoTest {
         String expectedCompoundName = "compoundA";
 
         doReturn(true).when(compoundRepository).existsById(eq(expectedCompoundName));
-        Assert.assertTrue(compoundDao.getCompoundExists(expectedCompoundName));
+        Assertions.assertTrue(compoundDao.getCompoundExists(expectedCompoundName));
     }
 
     @Test
@@ -135,14 +135,14 @@ public class CompoundDaoTest {
         Pageable pageInfo = PageRequest.of(0, 20, sort);
         Page<CompoundCountPair> actualPage = compoundDao.getCompoundsMissingActivityProfiles("foo", pageInfo);
 
-        Assert.assertEquals(expectedResult.size(), actualPage.getNumberOfElements());
-        Assert.assertEquals(601, actualPage.getTotalElements());
+        Assertions.assertEquals(expectedResult.size(), actualPage.getNumberOfElements());
+        Assertions.assertEquals(601, actualPage.getTotalElements());
         for (int i = 0; i < expectedResult.size(); i++) {
             Object[] temp = expectedResult.get(i);
             CompoundCountPair expected = new CompoundCountPair(temp[0].toString(), ((Number)temp[1]).intValue());
             CompoundCountPair actual = actualPage.getContent().get(i);
-            Assert.assertEquals(expected.getCompoundName(), actual.getCompoundName());
-            Assert.assertEquals(expected.getCount(), actual.getCount());
+            Assertions.assertEquals(expected.getCompoundName(), actual.getCompoundName());
+            Assertions.assertEquals(expected.getCount(), actual.getCount());
         }
     }
 
@@ -189,37 +189,37 @@ public class CompoundDaoTest {
     @Test
     public void testSortToOrderBy_oneOrder_compoundName() {
         Sort sort = Sort.by(new Sort.Order(Sort.Direction.DESC, "compoundName"));
-        Assert.assertEquals("order by compound_nm DESC", CompoundDao.sortToOrderBy(sort));
+        Assertions.assertEquals("order by compound_nm DESC", CompoundDao.sortToOrderBy(sort));
     }
 
     @Test
     public void testSortToOrderBy_oneOrder_count() {
         Sort sort = Sort.by(new Sort.Order(Sort.Direction.ASC, "count"));
-        Assert.assertEquals("order by count ASC", CompoundDao.sortToOrderBy(sort));
+        Assertions.assertEquals("order by count ASC", CompoundDao.sortToOrderBy(sort));
     }
 
     @Test
     public void testSortToOrderBy_twoOrders() {
         Sort sort = Sort.by(new Sort.Order(Sort.Direction.DESC, "compoundName"),
             new Sort.Order(Sort.Direction.ASC, "count"));
-        Assert.assertEquals("order by compound_nm DESC, count ASC", CompoundDao.sortToOrderBy(sort));
+        Assertions.assertEquals("order by compound_nm DESC, count ASC", CompoundDao.sortToOrderBy(sort));
     }
 
     private static void compareLists(List<Compound> expectedList, List<Compound> actualList) {
-        Assert.assertEquals(expectedList.size(), actualList.size());
+        Assertions.assertEquals(expectedList.size(), actualList.size());
         for (int i = 0; i < expectedList.size(); i++) {
             String expectedName = expectedList.get(i).getCompoundName();
             String actualName = actualList.get(i).getCompoundName();
-            Assert.assertEquals(expectedName, actualName);
+            Assertions.assertEquals(expectedName, actualName);
         }
     }
 
     private static void comparePages(Page<Compound> expectedPage, Page<Compound> actualPage) {
-        Assert.assertEquals(expectedPage.getNumberOfElements(), actualPage.getNumberOfElements());
+        Assertions.assertEquals(expectedPage.getNumberOfElements(), actualPage.getNumberOfElements());
         for (int i = 0; i < expectedPage.getNumberOfElements(); i++) {
             String expectedName = expectedPage.getContent().get(i).getCompoundName();
             String actualName = actualPage.getContent().get(i).getCompoundName();
-            Assert.assertEquals(expectedName, actualName);
+            Assertions.assertEquals(expectedName, actualName);
         }
     }
 }

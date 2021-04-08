@@ -1,92 +1,92 @@
 package org.sgc.rak.model.csv;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sgc.rak.model.NanoBretActivityProfileModifier;
 
 public class NanoBretActivityProfileCsvRecordTest {
 
     private NanoBretActivityProfileCsvRecord rep;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         rep = new NanoBretActivityProfileCsvRecord();
     }
 
     @Test
     public void testGetSetCompoundName() {
-        Assert.assertNull(rep.getCompoundName());
+        Assertions.assertNull(rep.getCompoundName());
         rep.setCompoundName("compoundA");
-        Assert.assertEquals("compoundA", rep.getCompoundName());
+        Assertions.assertEquals("compoundA", rep.getCompoundName());
     }
 
     @Test
     public void testGetSetEntrezGeneSymbol() {
-        Assert.assertNull(rep.getDiscoverxGeneSymbol());
+        Assertions.assertNull(rep.getDiscoverxGeneSymbol());
         rep.setDiscoverxGeneSymbol("entrez");
-        Assert.assertEquals("entrez", rep.getDiscoverxGeneSymbol());
+        Assertions.assertEquals("entrez", rep.getDiscoverxGeneSymbol());
     }
 
     @Test
     public void testGetSetNlucOrientation() {
-        Assert.assertNull(rep.getNlucOrientation());
+        Assertions.assertNull(rep.getNlucOrientation());
         rep.setNlucOrientation("foo");
-        Assert.assertEquals("foo", rep.getNlucOrientation());
+        Assertions.assertEquals("foo", rep.getNlucOrientation());
     }
 
     @Test
     public void testGetSetModifier() {
-        Assert.assertNull(rep.getModifier());
+        Assertions.assertNull(rep.getModifier());
         rep.setModifier(NanoBretActivityProfileModifier.EQUAL_TO);
-        Assert.assertEquals(NanoBretActivityProfileModifier.EQUAL_TO, rep.getModifier());
+        Assertions.assertEquals(NanoBretActivityProfileModifier.EQUAL_TO, rep.getModifier());
     }
 
     @Test
     public void testGetSetIc50() {
-        Assert.assertNull(rep.getIc50());
+        Assertions.assertNull(rep.getIc50());
         rep.setIc50(42.1);
-        Assert.assertEquals(42.1, rep.getIc50(), 0.001);
+        Assertions.assertEquals(42.1, rep.getIc50(), 0.001);
     }
 
     @Test
     public void testGetSetPercentInhibition() {
-        Assert.assertNull(rep.getPercentInhibition());
+        Assertions.assertNull(rep.getPercentInhibition());
         rep.setPercentInhibition(42.1);
-        Assert.assertEquals(42.1, rep.getPercentInhibition(), 0.001);
+        Assertions.assertEquals(42.1, rep.getPercentInhibition(), 0.001);
     }
 
     @Test
     public void testGetSetCompoundConcentration() {
-        Assert.assertNull(rep.getCompoundConcentration());
+        Assertions.assertNull(rep.getCompoundConcentration());
         rep.setCompoundConcentration(42);
-        Assert.assertEquals(42, rep.getCompoundConcentration().intValue());
+        Assertions.assertEquals(42, rep.getCompoundConcentration().intValue());
     }
 
     @Test
     public void testGetSetPoints() {
-        Assert.assertNull(rep.getPoints());
+        Assertions.assertNull(rep.getPoints());
         rep.setPoints(42);
-        Assert.assertEquals(42, rep.getPoints().intValue());
+        Assertions.assertEquals(42, rep.getPoints().intValue());
     }
 
     @Test
     public void testGetSetComment() {
-        Assert.assertNull(rep.getComment());
+        Assertions.assertNull(rep.getComment());
         rep.setComment("foo");
-        Assert.assertEquals("foo", rep.getComment());
+        Assertions.assertEquals("foo", rep.getComment());
     }
 
     @Test
     public void testGetSetDate() {
-        Assert.assertNull(rep.getDate());
+        Assertions.assertNull(rep.getDate());
         rep.setDate("foo");
-        Assert.assertEquals("foo", rep.getDate());
+        Assertions.assertEquals("foo", rep.getDate());
     }
 
     @Test
     public void testToString() {
-        Assert.assertEquals("NanoBretActivityProfileCsvRecord[" +
+        Assertions.assertEquals("NanoBretActivityProfileCsvRecord[" +
             "compoundName=<null>," +
             "discoverxGeneSymbol=<null>," +
             "nlucOrientation=<null>," +

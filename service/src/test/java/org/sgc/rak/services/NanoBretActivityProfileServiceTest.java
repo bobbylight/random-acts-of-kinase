@@ -1,8 +1,8 @@
 package org.sgc.rak.services;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -42,7 +42,7 @@ public class NanoBretActivityProfileServiceTest {
     @InjectMocks
     private NanoBretActivityProfileService service;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
@@ -84,80 +84,80 @@ public class NanoBretActivityProfileServiceTest {
 
         ObjectImportRep importRep = service.importNanoBretActivityProfiles(records, commit);
         List<List<ObjectImportRep.FieldStatus>> fieldStatuses = importRep.getFieldStatuses();
-        Assert.assertEquals(2, fieldStatuses.size());
+        Assertions.assertEquals(2, fieldStatuses.size());
 
         // Verify that the first response row shows properly merged values
         List<ObjectImportRep.FieldStatus> rowData = fieldStatuses.get(0);
-        Assert.assertEquals("date", rowData.get(0).getFieldName());
-        Assert.assertEquals("19_01_01", rowData.get(0).getNewValue());
-        Assert.assertEquals("19_01_01", rowData.get(0).getOldValue());
-        Assert.assertEquals("comment", rowData.get(1).getFieldName());
-        Assert.assertEquals("commentNew", rowData.get(1).getNewValue());
-        Assert.assertEquals("commentA", rowData.get(1).getOldValue());
-        Assert.assertEquals("compoundName", rowData.get(2).getFieldName());
-        Assert.assertEquals("compoundA", rowData.get(2).getNewValue());
-        Assert.assertEquals("compoundA", rowData.get(2).getOldValue());
-        Assert.assertEquals("concentration", rowData.get(3).getFieldName());
-        Assert.assertEquals(60, rowData.get(3).getNewValue());
-        Assert.assertEquals(0, rowData.get(3).getOldValue());
-        Assert.assertEquals("ic50", rowData.get(4).getFieldName());
-        Assert.assertEquals(60d, rowData.get(4).getNewValue());
-        Assert.assertEquals(0d, rowData.get(4).getOldValue());
-        Assert.assertEquals("discoverxGeneSymbol", rowData.get(5).getFieldName());
-        Assert.assertEquals("discoverxA", rowData.get(5).getNewValue());
-        Assert.assertEquals("discoverxA", rowData.get(5).getOldValue());
-        Assert.assertEquals("modifier", rowData.get(6).getFieldName());
-        Assert.assertEquals(NanoBretActivityProfileModifier.EQUAL_TO, rowData.get(6).getNewValue());
-        Assert.assertEquals(NanoBretActivityProfileModifier.GREATER_THAN, rowData.get(6).getOldValue());
-        Assert.assertEquals("nlucOrientation", rowData.get(7).getFieldName());
-        Assert.assertEquals("nlucNew", rowData.get(7).getNewValue());
-        Assert.assertEquals("nlucA", rowData.get(7).getOldValue());
-        Assert.assertEquals("percentInhibition", rowData.get(8).getFieldName());
-        Assert.assertEquals(99d, rowData.get(8).getNewValue());
-        Assert.assertEquals(1d, rowData.get(8).getOldValue());
-        Assert.assertEquals("points", rowData.get(9).getFieldName());
-        Assert.assertEquals(99, rowData.get(9).getNewValue());
-        Assert.assertEquals(1, rowData.get(9).getOldValue());
+        Assertions.assertEquals("date", rowData.get(0).getFieldName());
+        Assertions.assertEquals("19_01_01", rowData.get(0).getNewValue());
+        Assertions.assertEquals("19_01_01", rowData.get(0).getOldValue());
+        Assertions.assertEquals("comment", rowData.get(1).getFieldName());
+        Assertions.assertEquals("commentNew", rowData.get(1).getNewValue());
+        Assertions.assertEquals("commentA", rowData.get(1).getOldValue());
+        Assertions.assertEquals("compoundName", rowData.get(2).getFieldName());
+        Assertions.assertEquals("compoundA", rowData.get(2).getNewValue());
+        Assertions.assertEquals("compoundA", rowData.get(2).getOldValue());
+        Assertions.assertEquals("concentration", rowData.get(3).getFieldName());
+        Assertions.assertEquals(60, rowData.get(3).getNewValue());
+        Assertions.assertEquals(0, rowData.get(3).getOldValue());
+        Assertions.assertEquals("ic50", rowData.get(4).getFieldName());
+        Assertions.assertEquals(60d, rowData.get(4).getNewValue());
+        Assertions.assertEquals(0d, rowData.get(4).getOldValue());
+        Assertions.assertEquals("discoverxGeneSymbol", rowData.get(5).getFieldName());
+        Assertions.assertEquals("discoverxA", rowData.get(5).getNewValue());
+        Assertions.assertEquals("discoverxA", rowData.get(5).getOldValue());
+        Assertions.assertEquals("modifier", rowData.get(6).getFieldName());
+        Assertions.assertEquals(NanoBretActivityProfileModifier.EQUAL_TO, rowData.get(6).getNewValue());
+        Assertions.assertEquals(NanoBretActivityProfileModifier.GREATER_THAN, rowData.get(6).getOldValue());
+        Assertions.assertEquals("nlucOrientation", rowData.get(7).getFieldName());
+        Assertions.assertEquals("nlucNew", rowData.get(7).getNewValue());
+        Assertions.assertEquals("nlucA", rowData.get(7).getOldValue());
+        Assertions.assertEquals("percentInhibition", rowData.get(8).getFieldName());
+        Assertions.assertEquals(99d, rowData.get(8).getNewValue());
+        Assertions.assertEquals(1d, rowData.get(8).getOldValue());
+        Assertions.assertEquals("points", rowData.get(9).getFieldName());
+        Assertions.assertEquals(99, rowData.get(9).getNewValue());
+        Assertions.assertEquals(1, rowData.get(9).getOldValue());
 
         // Verify that the second response row shows all new values
         rowData = fieldStatuses.get(1);
-        Assert.assertEquals("date", rowData.get(0).getFieldName());
-        Assert.assertEquals("19_02_02", rowData.get(0).getNewValue());
-        Assert.assertNull(rowData.get(0).getOldValue());
-        Assert.assertEquals("comment", rowData.get(1).getFieldName());
-        Assert.assertEquals("commentB", rowData.get(1).getNewValue());
-        Assert.assertNull(rowData.get(1).getOldValue());
-        Assert.assertEquals("compoundName", rowData.get(2).getFieldName());
-        Assert.assertEquals("compoundB", rowData.get(2).getNewValue());
-        Assert.assertNull(rowData.get(2).getOldValue());
-        Assert.assertEquals("concentration", rowData.get(3).getFieldName());
-        Assert.assertEquals(60, rowData.get(3).getNewValue());
-        Assert.assertNull(rowData.get(3).getOldValue());
-        Assert.assertEquals("ic50", rowData.get(4).getFieldName());
-        Assert.assertEquals(50d, rowData.get(4).getNewValue());
-        Assert.assertNull(rowData.get(4).getOldValue());
-        Assert.assertEquals("discoverxGeneSymbol", rowData.get(5).getFieldName());
-        Assert.assertEquals("discoverxB", rowData.get(5).getNewValue());
-        Assert.assertNull(rowData.get(5).getOldValue());
-        Assert.assertEquals("modifier", rowData.get(6).getFieldName());
-        Assert.assertEquals(NanoBretActivityProfileModifier.GREATER_THAN, rowData.get(6).getNewValue());
-        Assert.assertNull(rowData.get(6).getOldValue());
-        Assert.assertEquals("nlucOrientation", rowData.get(7).getFieldName());
-        Assert.assertEquals("nlucB", rowData.get(7).getNewValue());
-        Assert.assertNull(rowData.get(7).getOldValue());
-        Assert.assertEquals("percentInhibition", rowData.get(8).getFieldName());
-        Assert.assertEquals(1d, rowData.get(8).getNewValue());
-        Assert.assertNull(rowData.get(8).getOldValue());
-        Assert.assertEquals("points", rowData.get(9).getFieldName());
-        Assert.assertEquals(1, rowData.get(9).getNewValue());
-        Assert.assertNull(rowData.get(9).getOldValue());
+        Assertions.assertEquals("date", rowData.get(0).getFieldName());
+        Assertions.assertEquals("19_02_02", rowData.get(0).getNewValue());
+        Assertions.assertNull(rowData.get(0).getOldValue());
+        Assertions.assertEquals("comment", rowData.get(1).getFieldName());
+        Assertions.assertEquals("commentB", rowData.get(1).getNewValue());
+        Assertions.assertNull(rowData.get(1).getOldValue());
+        Assertions.assertEquals("compoundName", rowData.get(2).getFieldName());
+        Assertions.assertEquals("compoundB", rowData.get(2).getNewValue());
+        Assertions.assertNull(rowData.get(2).getOldValue());
+        Assertions.assertEquals("concentration", rowData.get(3).getFieldName());
+        Assertions.assertEquals(60, rowData.get(3).getNewValue());
+        Assertions.assertNull(rowData.get(3).getOldValue());
+        Assertions.assertEquals("ic50", rowData.get(4).getFieldName());
+        Assertions.assertEquals(50d, rowData.get(4).getNewValue());
+        Assertions.assertNull(rowData.get(4).getOldValue());
+        Assertions.assertEquals("discoverxGeneSymbol", rowData.get(5).getFieldName());
+        Assertions.assertEquals("discoverxB", rowData.get(5).getNewValue());
+        Assertions.assertNull(rowData.get(5).getOldValue());
+        Assertions.assertEquals("modifier", rowData.get(6).getFieldName());
+        Assertions.assertEquals(NanoBretActivityProfileModifier.GREATER_THAN, rowData.get(6).getNewValue());
+        Assertions.assertNull(rowData.get(6).getOldValue());
+        Assertions.assertEquals("nlucOrientation", rowData.get(7).getFieldName());
+        Assertions.assertEquals("nlucB", rowData.get(7).getNewValue());
+        Assertions.assertNull(rowData.get(7).getOldValue());
+        Assertions.assertEquals("percentInhibition", rowData.get(8).getFieldName());
+        Assertions.assertEquals(1d, rowData.get(8).getNewValue());
+        Assertions.assertNull(rowData.get(8).getOldValue());
+        Assertions.assertEquals("points", rowData.get(9).getFieldName());
+        Assertions.assertEquals(1, rowData.get(9).getNewValue());
+        Assertions.assertNull(rowData.get(9).getOldValue());
 
         // Verify the commit only happens if commit == true
         verify(nanoBretActivityProfileDao, times(commit ? 1 : 0)).save(any());
     }
 
-    @Test(expected = BadRequestException.class)
-    public void testImportNanoBretActivityProfiles_error_unknownCompound() throws BadRequestException {
+    @Test
+    public void testImportNanoBretActivityProfiles_error_unknownCompound() {
 
         // compound name "unknown" doesn't match any existing compounds
         List<NanoBretActivityProfileCsvRecord> records = Collections.singletonList(
@@ -178,11 +178,13 @@ public class NanoBretActivityProfileServiceTest {
         Kinase kinase = TestUtil.createKinase("discoverxA", "entrezA");
         doReturn(Collections.singletonList(kinase)).when(kinaseService).getKinase(eq(kinase.getEntrezGeneSymbol()));
 
-        service.importNanoBretActivityProfiles(records, true);
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            service.importNanoBretActivityProfiles(records, true);
+        });
     }
 
-    @Test(expected = BadRequestException.class)
-    public void testImportNanoBretActivityProfiles_error_unknownKinase() throws BadRequestException {
+    @Test
+    public void testImportNanoBretActivityProfiles_error_unknownKinase() {
 
         List<NanoBretActivityProfileCsvRecord> records = Collections.singletonList(
             TestUtil.createNanoBretActivityProfileCsvRecord("compoundA", "19_01_01",
@@ -197,6 +199,8 @@ public class NanoBretActivityProfileServiceTest {
         doReturn(true).when(compoundService).getCompoundExists(anyString());
         doReturn(null).when(kinaseService).getKinase(eq("unknown"));
 
-        service.importNanoBretActivityProfiles(records, true);
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            service.importNanoBretActivityProfiles(records, true);
+        });
     }
 }

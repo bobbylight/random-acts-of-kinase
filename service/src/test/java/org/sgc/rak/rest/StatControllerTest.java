@@ -1,8 +1,8 @@
 package org.sgc.rak.rest;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -29,7 +29,7 @@ public class StatControllerTest {
     @InjectMocks
     private StatController controller;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
@@ -47,15 +47,15 @@ public class StatControllerTest {
         doReturn(page).when(mockCompoundService).getCompoundsMissingActivityProfiles(any(), any(Pageable.class));
 
         PagedDataRep<CompoundCountPair> actualResponse = controller.getCompoundsMissingActivityProfiles(null, pageable);
-        Assert.assertEquals(6, actualResponse.getStart());
-        Assert.assertEquals(2, actualResponse.getCount());
-        Assert.assertEquals(100, actualResponse.getTotal());
-        Assert.assertEquals(pairs.size(), actualResponse.getData().size());
+        Assertions.assertEquals(6, actualResponse.getStart());
+        Assertions.assertEquals(2, actualResponse.getCount());
+        Assertions.assertEquals(100, actualResponse.getTotal());
+        Assertions.assertEquals(pairs.size(), actualResponse.getData().size());
         for (int i = 0; i < pairs.size(); i++) {
             CompoundCountPair expected = pairs.get(i);
             CompoundCountPair actual = actualResponse.getData().get(i);
-            Assert.assertEquals(expected.getCompoundName(), actual.getCompoundName());
-            Assert.assertEquals(expected.getCount(), actual.getCount());
+            Assertions.assertEquals(expected.getCompoundName(), actual.getCompoundName());
+            Assertions.assertEquals(expected.getCount(), actual.getCount());
         }
     }
 
@@ -73,10 +73,10 @@ public class StatControllerTest {
         doReturn(page).when(mockCompoundService).getCompoundsMissingPublicationInfo(any(), any(Pageable.class));
 
         PagedDataRep<Compound> actualResponse = controller.getCompoundsMissingPublicationInfo(null, pageable);
-        Assert.assertEquals(6, actualResponse.getStart());
-        Assert.assertEquals(2, actualResponse.getCount());
-        Assert.assertEquals(100, actualResponse.getTotal());
-        Assert.assertEquals(compounds.size(), actualResponse.getData().size());
+        Assertions.assertEquals(6, actualResponse.getStart());
+        Assertions.assertEquals(2, actualResponse.getCount());
+        Assertions.assertEquals(100, actualResponse.getTotal());
+        Assertions.assertEquals(compounds.size(), actualResponse.getData().size());
         for (int i = 0; i < compounds.size(); i++) {
             TestUtil.assertCompoundsEqual(compounds.get(i), actualResponse.getData().get(i));
         }
@@ -96,10 +96,10 @@ public class StatControllerTest {
         doReturn(page).when(mockCompoundService).getHiddenCompounds(any(), any(Pageable.class));
 
         PagedDataRep<Compound> actualResponse = controller.getHiddenCompounds(null, pageable);
-        Assert.assertEquals(6, actualResponse.getStart());
-        Assert.assertEquals(2, actualResponse.getCount());
-        Assert.assertEquals(100, actualResponse.getTotal());
-        Assert.assertEquals(compounds.size(), actualResponse.getData().size());
+        Assertions.assertEquals(6, actualResponse.getStart());
+        Assertions.assertEquals(2, actualResponse.getCount());
+        Assertions.assertEquals(100, actualResponse.getTotal());
+        Assertions.assertEquals(compounds.size(), actualResponse.getData().size());
         for (int i = 0; i < compounds.size(); i++) {
             TestUtil.assertCompoundsEqual(compounds.get(i), actualResponse.getData().get(i));
         }
@@ -119,10 +119,10 @@ public class StatControllerTest {
         doReturn(page).when(mockCompoundService).getIncompleteCompounds(any(), any(Pageable.class));
 
         PagedDataRep<Compound> actualResponse = controller.getIncompleteCompounds(null, pageable);
-        Assert.assertEquals(6, actualResponse.getStart());
-        Assert.assertEquals(2, actualResponse.getCount());
-        Assert.assertEquals(100, actualResponse.getTotal());
-        Assert.assertEquals(compounds.size(), actualResponse.getData().size());
+        Assertions.assertEquals(6, actualResponse.getStart());
+        Assertions.assertEquals(2, actualResponse.getCount());
+        Assertions.assertEquals(100, actualResponse.getTotal());
+        Assertions.assertEquals(compounds.size(), actualResponse.getData().size());
         for (int i = 0; i < compounds.size(); i++) {
             TestUtil.assertCompoundsEqual(compounds.get(i), actualResponse.getData().get(i));
         }

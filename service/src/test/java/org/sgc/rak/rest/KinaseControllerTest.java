@@ -1,8 +1,8 @@
 package org.sgc.rak.rest;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -27,7 +27,7 @@ public class KinaseControllerTest {
     @InjectMocks
     private KinaseController controller;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
@@ -44,10 +44,10 @@ public class KinaseControllerTest {
         doReturn(returnedPage).when(mockKinaseService).getKinases(anyString(), any());
 
         PagedDataRep<Kinase> response = controller.getKinases("discoverx", pageRequest);
-        Assert.assertEquals(20, response.getStart());
-        Assert.assertEquals(1, response.getCount());
-        Assert.assertEquals(21, response.getTotal());
-        Assert.assertEquals(1, response.getData().size());
-        Assert.assertEquals(42, response.getData().get(0).getId());
+        Assertions.assertEquals(20, response.getStart());
+        Assertions.assertEquals(1, response.getCount());
+        Assertions.assertEquals(21, response.getTotal());
+        Assertions.assertEquals(1, response.getData().size());
+        Assertions.assertEquals(42, response.getData().get(0).getId());
     }
 }

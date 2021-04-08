@@ -1,9 +1,9 @@
 package org.sgc.rak.services;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -36,7 +36,7 @@ public class AuditServiceTest {
     private static final String IP_ADDRESS = "1.2.3.4";
     private static final AuditAction ACTION = AuditAction.LOGIN;
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
         MockitoAnnotations.openMocks(this);
@@ -48,7 +48,7 @@ public class AuditServiceTest {
         });
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         // Some tests populate RequestContextHolder.  Make sure it's clear for the next guy.
         RequestContextHolder.resetRequestAttributes();
@@ -80,8 +80,8 @@ public class AuditServiceTest {
 
         Audit audit = service.createAudit(null, ACTION, true);
         verify(mockRepository, times(1)).save(any());
-        Assert.assertEquals(USER_NAME, audit.getUserName());
-        Assert.assertEquals(IP_ADDRESS, audit.getIpAddress());
+        Assertions.assertEquals(USER_NAME, audit.getUserName());
+        Assertions.assertEquals(IP_ADDRESS, audit.getIpAddress());
     }
 
     @Test
@@ -89,8 +89,8 @@ public class AuditServiceTest {
 
         Audit audit = service.createAudit(null, ACTION, true);
         verify(mockRepository, times(1)).save(any());
-        Assert.assertEquals(AuditService.UNKNOWN_USER_NAME, audit.getUserName());
-        Assert.assertNull(audit.getIpAddress());
+        Assertions.assertEquals(AuditService.UNKNOWN_USER_NAME, audit.getUserName());
+        Assertions.assertNull(audit.getIpAddress());
     }
 
     @Test
@@ -98,9 +98,9 @@ public class AuditServiceTest {
 
         Audit audit = service.createAudit(null, ACTION, true, "details");
         verify(mockRepository, times(1)).save(any());
-        Assert.assertEquals(AuditService.UNKNOWN_USER_NAME, audit.getUserName());
-        Assert.assertNull(audit.getIpAddress());
-        Assert.assertEquals("details", audit.getDetails());
+        Assertions.assertEquals(AuditService.UNKNOWN_USER_NAME, audit.getUserName());
+        Assertions.assertNull(audit.getIpAddress());
+        Assertions.assertEquals("details", audit.getDetails());
     }
 
     @Test
@@ -109,7 +109,7 @@ public class AuditServiceTest {
         String details = getStringOfLength(ModelConstants.AUDIT_DETAILS_MAX + 1);
 
         Audit audit = service.createAudit(null, ACTION, true, details);
-        Assert.assertEquals(ModelConstants.AUDIT_DETAILS_MAX, audit.getDetails().length());
+        Assertions.assertEquals(ModelConstants.AUDIT_DETAILS_MAX, audit.getDetails().length());
     }
 
     @Test
@@ -124,9 +124,9 @@ public class AuditServiceTest {
         doReturn(expectedPage).when(mockRepository).findAll(any(Specification.class), any(Pageable.class));
 
         Page<Audit> actualPosts = service.getAudits(pr, null, null, null, null, null, null);
-        Assert.assertEquals(1, actualPosts.getNumberOfElements());
-        Assert.assertEquals(1, actualPosts.getTotalElements());
-        Assert.assertEquals(1, actualPosts.getTotalPages());
+        Assertions.assertEquals(1, actualPosts.getNumberOfElements());
+        Assertions.assertEquals(1, actualPosts.getTotalElements());
+        Assertions.assertEquals(1, actualPosts.getTotalPages());
         for (int i = 0; i < posts.size(); i++) {
             TestUtil.assertAuditsEqual(posts.get(i), actualPosts.getContent().get(i));
         }

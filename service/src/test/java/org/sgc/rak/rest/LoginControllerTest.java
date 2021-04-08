@@ -1,8 +1,8 @@
 package org.sgc.rak.rest;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.sgc.rak.reps.UserRep;
@@ -16,14 +16,14 @@ public class LoginControllerTest extends AbstractControllerTest {
 
     private static final String USERID = "gclooney";
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
     public void testUser_null() {
-        Assert.assertNull(controller.user(null));
+        Assertions.assertNull(controller.user(null));
     }
 
     @Test
@@ -32,6 +32,6 @@ public class LoginControllerTest extends AbstractControllerTest {
         Principal principal = () -> USERID;
 
         UserRep rep = controller.user(principal);
-        Assert.assertEquals(USERID, rep.getUserName());
+        Assertions.assertEquals(USERID, rep.getUserName());
     }
 }

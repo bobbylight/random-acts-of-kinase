@@ -17,10 +17,7 @@ size-info.txt
 exported-data/
 env.sh
 
-# Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
+.elasticbeanstalk
 
 aws-*.zip
 

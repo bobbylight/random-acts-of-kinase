@@ -1,8 +1,8 @@
 package org.sgc.rak.util;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -12,7 +12,7 @@ public class ImageTranscoderTest {
 
     private ImageTranscoder transcoder;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         transcoder = new ImageTranscoder();
     }
@@ -27,15 +27,17 @@ public class ImageTranscoderTest {
             "</svg>";
 
         ByteArrayInputStream in = new ByteArrayInputStream(svg.getBytes(StandardCharsets.UTF_8));
-        Assert.assertTrue(transcoder.svgToPng("foo.svg", in, 400f, 400f).length > 0);
+        Assertions.assertTrue(transcoder.svgToPng("foo.svg", in, 400f, 400f).length > 0);
     }
 
-    @Test(expected = IOException.class)
-    public void testSvgToPng_error_invalidSvg() throws IOException {
+    @Test
+    public void testSvgToPng_error_invalidSvg() {
 
         String notSvg = "This is not SVG data";
 
         ByteArrayInputStream in = new ByteArrayInputStream(notSvg.getBytes(StandardCharsets.UTF_8));
-        transcoder.svgToPng("foo.svg", in, 400f, 400f);
+        Assertions.assertThrows(IOException.class, () -> {
+            transcoder.svgToPng("foo.svg", in, 400f, 400f);
+        });
     }
 }

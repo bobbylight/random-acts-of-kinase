@@ -2,10 +2,10 @@ package org.sgc.rak.rest;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -43,7 +43,7 @@ public class PartnerControllerTest {
 
     private MockMvc mockMvc;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
@@ -52,7 +52,7 @@ public class PartnerControllerTest {
         mapper = new ObjectMapper();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         // It seems MockMvcBuilders.standaloneSetup() populates RequestContextHolder, which breaks other test classes
         RequestContextHolder.resetRequestAttributes();
@@ -79,9 +79,9 @@ public class PartnerControllerTest {
         // jackson converts collections of objects to Collection<LinkedHashMap>, so we must manually deserialize
         // the list that's one-level deep
         actualPartners.setData(mapper.convertValue(actualPartners.getData(), new TypeReference<List<Partner>>() {}));
-        Assert.assertEquals(0, actualPartners.getStart());
-        Assert.assertEquals(1, actualPartners.getTotal());
-        Assert.assertEquals(1, actualPartners.getCount());
+        Assertions.assertEquals(0, actualPartners.getStart());
+        Assertions.assertEquals(1, actualPartners.getTotal());
+        Assertions.assertEquals(1, actualPartners.getCount());
         for (int i = 0; i < partners.size(); i++) {
             TestUtil.assertPartnersEqual(partners.get(i), actualPartners.getData().get(i));
         }

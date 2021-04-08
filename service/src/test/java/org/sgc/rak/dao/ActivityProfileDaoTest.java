@@ -1,8 +1,8 @@
 package org.sgc.rak.dao;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -34,18 +34,21 @@ public class ActivityProfileDaoTest {
 
     private static final String COMPOUND_NAME = "compoundA";
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testGetActivityProfiles_compoundNamesAndDiscoverxes_badArgs() {
 
-        List<String> compoundNames = Collections.singletonList("compoundA");
-        List<String> discoverxes = Arrays.asList("discoverxA", "discoverxB");
+        Assertions.assertThrows(IllegalStateException.class, () -> {
 
-        activityProfileDao.getActivityProfiles(compoundNames, discoverxes);
+            List<String> compoundNames = Collections.singletonList("compoundA");
+            List<String> discoverxes = Arrays.asList("discoverxA", "discoverxB");
+
+            activityProfileDao.getActivityProfiles(compoundNames, discoverxes);
+        });
     }
 
     @Test
@@ -64,7 +67,7 @@ public class ActivityProfileDaoTest {
             });
 
         Set<ActivityProfile> actualProfiles = activityProfileDao.getActivityProfiles(compoundNames, discoverxes);
-        Assert.assertEquals(compoundNames.size(), actualProfiles.size());
+        Assertions.assertEquals(compoundNames.size(), actualProfiles.size());
     }
 
     @Test
@@ -89,9 +92,9 @@ public class ActivityProfileDaoTest {
     }
 
     private static void comparePages(Page<ActivityProfile> expectedPage, Page<ActivityProfile> actualPage) {
-        Assert.assertEquals(expectedPage.getNumberOfElements(), actualPage.getNumberOfElements());
+        Assertions.assertEquals(expectedPage.getNumberOfElements(), actualPage.getNumberOfElements());
         for (int i = 0; i < expectedPage.getNumberOfElements(); i++) {
-            Assert.assertEquals(expectedPage.getContent().get(i), actualPage.getContent().get(i));
+            Assertions.assertEquals(expectedPage.getContent().get(i), actualPage.getContent().get(i));
         }
     }
 }

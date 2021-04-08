@@ -1,8 +1,9 @@
 package org.sgc.rak.rest;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -46,14 +47,14 @@ public class ImportControllerTest {
 
     private MockMvc mockMvc;
 
-    @Before
+    @BeforeEach
     public void setUp() {
 
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         // It seems MockMvcBuilders.standaloneSetup() populates RequestContextHolder, which breaks other test classes
         RequestContextHolder.resetRequestAttributes();
@@ -83,14 +84,18 @@ public class ImportControllerTest {
         testImportActivityProfiles_impl("import-activity-profiles-happy-path-no-header.csv", false, true, true);
     }
 
-    @Test(expected = BadRequestException.class)
-    public void testImportActivityProfiles_error_missingAColumn() throws Exception {
-        testImportActivityProfiles_impl("import-activity-profiles-missing-entrez-column.csv", null, false, false);
+    @Test
+    public void testImportActivityProfiles_error_missingAColumn() {
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            testImportActivityProfiles_impl("import-activity-profiles-missing-entrez-column.csv", null, false, false);
+        });
     }
 
-    @Test(expected = BadRequestException.class)
-    public void testImportActivityProfiles_error_notCsv() throws Exception {
-        testImportActivityProfiles_impl("not-csv-data.csv", null, false, false);
+    @Test
+    public void testImportActivityProfiles_error_notCsv() {
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            testImportActivityProfiles_impl("not-csv-data.csv", null, false, false);
+        });
     }
 
     private void testImportActivityProfiles_impl(String csv, Boolean headerRow, Boolean commitParam,
@@ -145,14 +150,18 @@ public class ImportControllerTest {
         testImportCompounds_impl("import-compounds-happy-path.csv", true, true);
     }
 
-    @Test(expected = BadRequestException.class)
-    public void testImportCompounds_error_missingAColumn() throws Exception {
-        testImportCompounds_impl("import-compounds-missing-chemotype-column.csv", false, false);
+    @Test
+    public void testImportCompounds_error_missingAColumn() {
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            testImportCompounds_impl("import-compounds-missing-chemotype-column.csv", false, false);
+        });
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     public void testImportCompounds_error_notCsv() throws Exception {
-        testImportCompounds_impl("not-csv-data.csv", false, false);
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            testImportCompounds_impl("not-csv-data.csv", false, false);
+        });
     }
 
     private void testImportCompounds_impl(String csv, Boolean commitParam, boolean expectSuccess)
@@ -202,14 +211,18 @@ public class ImportControllerTest {
         testImportKdValues_impl("import-kdValues-happy-path.csv", true, true);
     }
 
-    @Test(expected = BadRequestException.class)
-    public void testImportKdValues_error_missingAColumn() throws Exception {
-        testImportKdValues_impl("import-kdValues-missing-kd-column.csv", false, false);
+    @Test
+    public void testImportKdValues_error_missingAColumn() {
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            testImportKdValues_impl("import-kdValues-missing-kd-column.csv", false, false);
+        });
     }
 
-    @Test(expected = BadRequestException.class)
-    public void testImportKdValues_error_notCsv() throws Exception {
-        testImportKdValues_impl("not-csv-data.csv", false, false);
+    @Test
+    public void testImportKdValues_error_notCsv() {
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            testImportKdValues_impl("not-csv-data.csv", false, false);
+        });
     }
 
     private void testImportKdValues_impl(String csv, Boolean commitParam, boolean expectSuccess)
@@ -259,14 +272,18 @@ public class ImportControllerTest {
         testImportSScores_impl("import-sScores-happy-path.csv", true, true);
     }
 
-    @Test(expected = BadRequestException.class)
-    public void testImportSScores_error_missingAColumn() throws Exception {
-        testImportSScores_impl("import-sScores-missing-selectivityScore-column.csv", false, false);
+    @Test
+    public void testImportSScores_error_missingAColumn() {
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            testImportSScores_impl("import-sScores-missing-selectivityScore-column.csv", false, false);
+        });
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     public void testImportSScores_error_notCsv() throws Exception {
-        testImportSScores_impl("not-csv-data.csv", false, false);
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            testImportSScores_impl("not-csv-data.csv", false, false);
+        });
     }
 
     private void testImportSScores_impl(String csv, Boolean commitParam, boolean expectSuccess)

@@ -2,10 +2,10 @@ package org.sgc.rak.rest;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -50,7 +50,7 @@ public class AuditControllerTest {
 
     private MockMvc mockMvc;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
@@ -59,7 +59,7 @@ public class AuditControllerTest {
         mapper = new ObjectMapper();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         // It seems MockMvcBuilders.standaloneSetup() populates RequestContextHolder, which breaks other test classes
         RequestContextHolder.resetRequestAttributes();
@@ -88,16 +88,16 @@ public class AuditControllerTest {
         // jackson converts collections of objects to Collection<LinkedHashMap>, so we must manually deserialize
         // the list that's one-level deep
         actualPosts.setData(mapper.convertValue(actualPosts.getData(), new TypeReference<List<Audit>>() {}));
-        Assert.assertEquals(0, actualPosts.getStart());
-        Assert.assertEquals(1, actualPosts.getTotal());
-        Assert.assertEquals(1, actualPosts.getCount());
+        Assertions.assertEquals(0, actualPosts.getStart());
+        Assertions.assertEquals(1, actualPosts.getTotal());
+        Assertions.assertEquals(1, actualPosts.getCount());
         for (int i = 0; i < audits.size(); i++) {
             TestUtil.assertAuditsEqual(audits.get(i), actualPosts.getData().get(i));
         }
     }
 
-    @Test(expected = BadRequestException.class)
-    public void testGetAudits_error_invalidDateParameter() throws Throwable {
+    @Test
+    public void testGetAudits_error_invalidDateParameter() {
 
         PageRequest pr = PageRequest.of(0, 20);
 
@@ -106,13 +106,15 @@ public class AuditControllerTest {
         doReturn(expectedPage).when(mockService).getAudits(any(Pageable.class), any(), any(), any(), any(), any(),
             any());
 
-        try {
-            mockMvc.perform(MockMvcRequestBuilders.get("/admin/api/audits")
-                .param("fromDate", "xxx")
-                .accept(MediaType.APPLICATION_JSON)
-            );
-        } catch (NestedServletException nse) {
-            throw nse.getCause();
-        }
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            try {
+                mockMvc.perform(MockMvcRequestBuilders.get("/admin/api/audits")
+                    .param("fromDate", "xxx")
+                    .accept(MediaType.APPLICATION_JSON)
+                );
+            } catch (NestedServletException nse) {
+                throw nse.getCause();
+            }
+        });
     }
 }

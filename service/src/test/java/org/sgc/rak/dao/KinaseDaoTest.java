@@ -1,8 +1,8 @@
 package org.sgc.rak.dao;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -30,7 +30,7 @@ public class KinaseDaoTest {
     @InjectMocks
     private final KinaseDao kinaseDao = new KinaseDao();
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
@@ -43,7 +43,7 @@ public class KinaseDaoTest {
         doReturn(expected).when(kinaseRepository).findOneByDiscoverxGeneSymbolIgnoreCase(anyString());
 
         Kinase actual = kinaseDao.getKinaseByDiscoverx("discoverx");
-        Assert.assertEquals(expected.getId(), actual.getId());
+        Assertions.assertEquals(expected.getId(), actual.getId());
     }
 
     @Test
@@ -96,11 +96,11 @@ public class KinaseDaoTest {
     }
 
     private static void comparePages(Page<Kinase> expectedPage, Page<Kinase> actualPage) {
-        Assert.assertEquals(expectedPage.getNumberOfElements(), actualPage.getNumberOfElements());
+        Assertions.assertEquals(expectedPage.getNumberOfElements(), actualPage.getNumberOfElements());
         for (int i = 0; i < expectedPage.getNumberOfElements(); i++) {
             long expectedId = expectedPage.getContent().get(i).getId();
             long actualId  = expectedPage.getContent().get(i).getId();
-            Assert.assertEquals(expectedId, actualId);
+            Assertions.assertEquals(expectedId, actualId);
         }
     }
 }

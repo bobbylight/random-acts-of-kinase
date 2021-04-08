@@ -1,8 +1,8 @@
 package org.sgc.rak.exceptions;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
@@ -23,7 +23,7 @@ public class AppExceptionHandlerTest {
 
     private AppExceptionHandler exceptionHandler;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         exceptionHandler = new AppExceptionHandler();
     }
@@ -45,7 +45,7 @@ public class AppExceptionHandlerTest {
 
         ResponseEntity<Object> response = exceptionHandler.handleBindException(e, headers, status, request);
 
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
@@ -66,7 +66,7 @@ public class AppExceptionHandlerTest {
 
         ResponseEntity<Object> response = exceptionHandler.handleMethodArgumentNotValid(e, headers, status, request);
 
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
@@ -77,6 +77,6 @@ public class AppExceptionHandlerTest {
 
         ResponseEntity<Object> response = exceptionHandler.handleRestException(mockRequest, e);
 
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 }

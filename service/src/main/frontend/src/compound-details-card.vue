@@ -82,11 +82,8 @@ export default class CompoundDetailsCard extends Vue {
     @Prop({ required: true })
     private readonly compound: Compound;
 
-    get compoundImageUrl(): string | null {
-        if (this.compound && this.compound.compoundName) {
-            return RakUtil.getCompoundImageUrl(this.compound.compoundName);
-        }
-        return 'img/molecule-unknown.svg';
+    get compoundImageUrl(): string {
+        return RakUtil.getCompoundImageUrl(this.compound);
     }
 
     get reference() {

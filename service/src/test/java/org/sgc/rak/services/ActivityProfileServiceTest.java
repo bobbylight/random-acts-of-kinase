@@ -1,8 +1,8 @@
 package org.sgc.rak.services;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -43,7 +43,7 @@ public class ActivityProfileServiceTest {
 
     private static final String COMPOUND_NAME = "compoundA";
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
@@ -60,9 +60,9 @@ public class ActivityProfileServiceTest {
             any(Pageable.class));
 
         Page<ActivityProfile> actualProfiles = service.getActivityProfiles(null, null, null, pr);
-        Assert.assertEquals(1, actualProfiles.getNumberOfElements());
-        Assert.assertEquals(1, actualProfiles.getTotalElements());
-        Assert.assertEquals(1, actualProfiles.getTotalPages());
+        Assertions.assertEquals(1, actualProfiles.getNumberOfElements());
+        Assertions.assertEquals(1, actualProfiles.getTotalElements());
+        Assertions.assertEquals(1, actualProfiles.getTotalPages());
         for (int i = 0; i < expectedProfiles.size(); i++) {
             TestUtil.assertActivityProfilesEqual(expectedProfiles.get(i), actualProfiles.getContent().get(i));
         }
@@ -82,15 +82,15 @@ public class ActivityProfileServiceTest {
             any(Pageable.class));
 
         Page<ActivityProfile> actualProfiles = service.getActivityProfiles(COMPOUND_NAME, null, null, pr);
-        Assert.assertEquals(1, actualProfiles.getNumberOfElements());
-        Assert.assertEquals(1, actualProfiles.getTotalElements());
-        Assert.assertEquals(1, actualProfiles.getTotalPages());
+        Assertions.assertEquals(1, actualProfiles.getNumberOfElements());
+        Assertions.assertEquals(1, actualProfiles.getTotalElements());
+        Assertions.assertEquals(1, actualProfiles.getTotalPages());
         for (int i = 0; i < expectedProfiles.size(); i++) {
             TestUtil.assertActivityProfilesEqual(expectedProfiles.get(i), actualProfiles.getContent().get(i));
         }
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     public void testGetActivityProfiles_compound_error_noSuchCompound() {
 
         doReturn(false).when(mockCompoundService).getCompoundExists(eq(COMPOUND_NAME));
@@ -98,7 +98,9 @@ public class ActivityProfileServiceTest {
         Sort sort = Sort.by(Sort.Order.desc("createDate"));
         PageRequest pr = PageRequest.of(0, 20, sort);
 
-        service.getActivityProfiles(COMPOUND_NAME, null, null, pr);
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            service.getActivityProfiles(COMPOUND_NAME, null, null, pr);
+        });
     }
 
     @Test
@@ -116,15 +118,15 @@ public class ActivityProfileServiceTest {
 
         List<Long> kinaseIds = Collections.singletonList(42L);
         Page<ActivityProfile> actualProfiles = service.getActivityProfiles(COMPOUND_NAME, kinaseIds, 0.3, pr);
-        Assert.assertEquals(1, actualProfiles.getNumberOfElements());
-        Assert.assertEquals(1, actualProfiles.getTotalElements());
-        Assert.assertEquals(1, actualProfiles.getTotalPages());
+        Assertions.assertEquals(1, actualProfiles.getNumberOfElements());
+        Assertions.assertEquals(1, actualProfiles.getTotalElements());
+        Assertions.assertEquals(1, actualProfiles.getTotalPages());
         for (int i = 0; i < expectedProfiles.size(); i++) {
             TestUtil.assertActivityProfilesEqual(expectedProfiles.get(i), actualProfiles.getContent().get(i));
         }
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     public void testGetActivityProfiles_compoundKinasePercentControl_error_noSuchCompound() {
 
         doReturn(false).when(mockCompoundService).getCompoundExists(eq(COMPOUND_NAME));
@@ -133,7 +135,9 @@ public class ActivityProfileServiceTest {
         PageRequest pr = PageRequest.of(0, 20, sort);
 
         List<Long> kinaseIds = Collections.singletonList(42L);
-        service.getActivityProfiles(COMPOUND_NAME, kinaseIds, 0.3, pr);
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            service.getActivityProfiles(COMPOUND_NAME, kinaseIds, 0.3, pr);
+        });
     }
 
     @Test
@@ -149,9 +153,9 @@ public class ActivityProfileServiceTest {
 
         List<Long> kinaseIds = Collections.singletonList(42L);
         Page<ActivityProfile> actualProfiles = service.getActivityProfiles(null, kinaseIds, 0.3, pr);
-        Assert.assertEquals(1, actualProfiles.getNumberOfElements());
-        Assert.assertEquals(1, actualProfiles.getTotalElements());
-        Assert.assertEquals(1, actualProfiles.getTotalPages());
+        Assertions.assertEquals(1, actualProfiles.getNumberOfElements());
+        Assertions.assertEquals(1, actualProfiles.getTotalElements());
+        Assertions.assertEquals(1, actualProfiles.getTotalPages());
         for (int i = 0; i < expectedProfiles.size(); i++) {
             TestUtil.assertActivityProfilesEqual(expectedProfiles.get(i), actualProfiles.getContent().get(i));
         }
@@ -190,49 +194,49 @@ public class ActivityProfileServiceTest {
 
         ObjectImportRep importRep = service.importActivityProfiles(records, commit);
         List<List<ObjectImportRep.FieldStatus>> fieldStatuses = importRep.getFieldStatuses();
-        Assert.assertEquals(2, fieldStatuses.size());
+        Assertions.assertEquals(2, fieldStatuses.size());
 
         // Verify that the first response row shows properly merged values
         List<ObjectImportRep.FieldStatus> rowData = fieldStatuses.get(0);
-        Assert.assertEquals("compoundName", rowData.get(0).getFieldName());
-        Assert.assertEquals("compoundA", rowData.get(0).getNewValue());
-        Assert.assertEquals("compoundA", rowData.get(0).getOldValue());
-        Assert.assertEquals("discoverxGeneSymbol", rowData.get(1).getFieldName());
-        Assert.assertEquals("discoverxA", rowData.get(1).getNewValue());
-        Assert.assertEquals("discoverxA", rowData.get(1).getOldValue());
-        Assert.assertEquals("entrezGeneSymbol", rowData.get(2).getFieldName());
-        Assert.assertEquals("entrezA", rowData.get(2).getNewValue());
-        Assert.assertEquals("entrezA", rowData.get(2).getOldValue());
-        Assert.assertEquals("percentControl", rowData.get(3).getFieldName());
-        Assert.assertEquals(0.9, (Double)rowData.get(3).getNewValue(), 0.001);
-        Assert.assertEquals(0.1, (Double)rowData.get(3).getOldValue(), 0.001);
-        Assert.assertEquals("compoundConcentration", rowData.get(4).getFieldName());
-        Assert.assertEquals(4, ((Integer)rowData.get(4).getNewValue()).intValue());
-        Assert.assertEquals(1, ((Integer)rowData.get(4).getOldValue()).intValue());
+        Assertions.assertEquals("compoundName", rowData.get(0).getFieldName());
+        Assertions.assertEquals("compoundA", rowData.get(0).getNewValue());
+        Assertions.assertEquals("compoundA", rowData.get(0).getOldValue());
+        Assertions.assertEquals("discoverxGeneSymbol", rowData.get(1).getFieldName());
+        Assertions.assertEquals("discoverxA", rowData.get(1).getNewValue());
+        Assertions.assertEquals("discoverxA", rowData.get(1).getOldValue());
+        Assertions.assertEquals("entrezGeneSymbol", rowData.get(2).getFieldName());
+        Assertions.assertEquals("entrezA", rowData.get(2).getNewValue());
+        Assertions.assertEquals("entrezA", rowData.get(2).getOldValue());
+        Assertions.assertEquals("percentControl", rowData.get(3).getFieldName());
+        Assertions.assertEquals(0.9, (Double)rowData.get(3).getNewValue(), 0.001);
+        Assertions.assertEquals(0.1, (Double)rowData.get(3).getOldValue(), 0.001);
+        Assertions.assertEquals("compoundConcentration", rowData.get(4).getFieldName());
+        Assertions.assertEquals(4, ((Integer)rowData.get(4).getNewValue()).intValue());
+        Assertions.assertEquals(1, ((Integer)rowData.get(4).getOldValue()).intValue());
 
         // Verify that the second response row shows all new values
         rowData = fieldStatuses.get(1);
-        Assert.assertEquals("compoundName", rowData.get(0).getFieldName());
-        Assert.assertEquals("compoundB", rowData.get(0).getNewValue());
-        Assert.assertNull(rowData.get(0).getOldValue());
-        Assert.assertEquals("discoverxGeneSymbol", rowData.get(1).getFieldName());
-        Assert.assertEquals("discoverxB", rowData.get(1).getNewValue());
-        Assert.assertNull(rowData.get(1).getOldValue());
-        Assert.assertEquals("entrezGeneSymbol", rowData.get(2).getFieldName());
-        Assert.assertEquals("entrezB", rowData.get(2).getNewValue());
-        Assert.assertNull(rowData.get(2).getOldValue());
-        Assert.assertEquals("percentControl", rowData.get(3).getFieldName());
-        Assert.assertEquals(0.8, (Double)rowData.get(3).getNewValue(), 0.001);
-        Assert.assertNull(rowData.get(3).getOldValue());
-        Assert.assertEquals("compoundConcentration", rowData.get(4).getFieldName());
-        Assert.assertEquals(3, ((Integer)rowData.get(4).getNewValue()).intValue());
-        Assert.assertNull(rowData.get(4).getOldValue());
+        Assertions.assertEquals("compoundName", rowData.get(0).getFieldName());
+        Assertions.assertEquals("compoundB", rowData.get(0).getNewValue());
+        Assertions.assertNull(rowData.get(0).getOldValue());
+        Assertions.assertEquals("discoverxGeneSymbol", rowData.get(1).getFieldName());
+        Assertions.assertEquals("discoverxB", rowData.get(1).getNewValue());
+        Assertions.assertNull(rowData.get(1).getOldValue());
+        Assertions.assertEquals("entrezGeneSymbol", rowData.get(2).getFieldName());
+        Assertions.assertEquals("entrezB", rowData.get(2).getNewValue());
+        Assertions.assertNull(rowData.get(2).getOldValue());
+        Assertions.assertEquals("percentControl", rowData.get(3).getFieldName());
+        Assertions.assertEquals(0.8, (Double)rowData.get(3).getNewValue(), 0.001);
+        Assertions.assertNull(rowData.get(3).getOldValue());
+        Assertions.assertEquals("compoundConcentration", rowData.get(4).getFieldName());
+        Assertions.assertEquals(3, ((Integer)rowData.get(4).getNewValue()).intValue());
+        Assertions.assertNull(rowData.get(4).getOldValue());
 
         // Verify the commit only happens if commit == true
         verify(mockActivityProfileDao, times(commit ? 1 : 0)).save(any());
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     public void testImportActivityProfiles_error_unknownCompound() throws BadRequestException {
 
         List<ActivityProfileCsvRecord> records = Collections.singletonList(
@@ -250,10 +254,12 @@ public class ActivityProfileServiceTest {
         Kinase kinase = TestUtil.createKinase("discoverxA", "entrezA");
         doReturn(Collections.singletonList(kinase)).when(mockKinaseService).getKinase(eq(kinase.getEntrezGeneSymbol()));
 
-        service.importActivityProfiles(records, true);
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            service.importActivityProfiles(records, true);
+        });
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     public void testImportActivityProfiles_error_unknownKinase() throws BadRequestException {
 
         List<ActivityProfileCsvRecord> records = Collections.singletonList(
@@ -268,7 +274,9 @@ public class ActivityProfileServiceTest {
         doReturn(true).when(mockCompoundService).getCompoundExists(anyString());
         doReturn(null).when(mockKinaseService).getKinase(eq("unknown"));
 
-        service.importActivityProfiles(records, true);
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            service.importActivityProfiles(records, true);
+        });
     }
 
     @Test
@@ -304,44 +312,44 @@ public class ActivityProfileServiceTest {
 
         ObjectImportRep importRep = service.importKdValues(records, commit);
         List<List<ObjectImportRep.FieldStatus>> fieldStatuses = importRep.getFieldStatuses();
-        Assert.assertEquals(2, fieldStatuses.size());
+        Assertions.assertEquals(2, fieldStatuses.size());
 
         // Verify that the first response row shows properly merged values
         List<ObjectImportRep.FieldStatus> rowData = fieldStatuses.get(0);
-        Assert.assertEquals("compoundName", rowData.get(0).getFieldName());
-        Assert.assertEquals("compoundA", rowData.get(0).getNewValue());
-        Assert.assertEquals("compoundA", rowData.get(0).getOldValue());
-        Assert.assertEquals("discoverxGeneSymbol", rowData.get(1).getFieldName());
-        Assert.assertEquals("discoverxA", rowData.get(1).getNewValue());
-        Assert.assertEquals("discoverxA", rowData.get(1).getOldValue());
-        Assert.assertEquals("entrezGeneSymbol", rowData.get(2).getFieldName());
-        Assert.assertEquals("entrezA", rowData.get(2).getNewValue());
-        Assert.assertEquals("entrezA", rowData.get(2).getOldValue());
-        Assert.assertEquals("kd", rowData.get(3).getFieldName());
-        Assert.assertEquals(0.3, ((Double)rowData.get(3).getNewValue()), 0.001);
-        Assert.assertNull(rowData.get(3).getOldValue());
+        Assertions.assertEquals("compoundName", rowData.get(0).getFieldName());
+        Assertions.assertEquals("compoundA", rowData.get(0).getNewValue());
+        Assertions.assertEquals("compoundA", rowData.get(0).getOldValue());
+        Assertions.assertEquals("discoverxGeneSymbol", rowData.get(1).getFieldName());
+        Assertions.assertEquals("discoverxA", rowData.get(1).getNewValue());
+        Assertions.assertEquals("discoverxA", rowData.get(1).getOldValue());
+        Assertions.assertEquals("entrezGeneSymbol", rowData.get(2).getFieldName());
+        Assertions.assertEquals("entrezA", rowData.get(2).getNewValue());
+        Assertions.assertEquals("entrezA", rowData.get(2).getOldValue());
+        Assertions.assertEquals("kd", rowData.get(3).getFieldName());
+        Assertions.assertEquals(0.3, ((Double)rowData.get(3).getNewValue()), 0.001);
+        Assertions.assertNull(rowData.get(3).getOldValue());
 
         // Verify that the second response row shows all new values
         rowData = fieldStatuses.get(1);
-        Assert.assertEquals("compoundName", rowData.get(0).getFieldName());
-        Assert.assertEquals("compoundB", rowData.get(0).getNewValue());
-        Assert.assertNull(rowData.get(0).getOldValue());
-        Assert.assertEquals("discoverxGeneSymbol", rowData.get(1).getFieldName());
-        Assert.assertEquals("discoverxB", rowData.get(1).getNewValue());
-        Assert.assertNull(rowData.get(1).getOldValue());
-        Assert.assertEquals("entrezGeneSymbol", rowData.get(2).getFieldName());
-        Assert.assertEquals("entrezB", rowData.get(2).getNewValue());
-        Assert.assertNull(rowData.get(2).getOldValue());
-        Assert.assertEquals("kd", rowData.get(3).getFieldName());
-        Assert.assertEquals(0.4, (Double)rowData.get(3).getNewValue(), 0.001);
-        Assert.assertNull(rowData.get(3).getOldValue());
+        Assertions.assertEquals("compoundName", rowData.get(0).getFieldName());
+        Assertions.assertEquals("compoundB", rowData.get(0).getNewValue());
+        Assertions.assertNull(rowData.get(0).getOldValue());
+        Assertions.assertEquals("discoverxGeneSymbol", rowData.get(1).getFieldName());
+        Assertions.assertEquals("discoverxB", rowData.get(1).getNewValue());
+        Assertions.assertNull(rowData.get(1).getOldValue());
+        Assertions.assertEquals("entrezGeneSymbol", rowData.get(2).getFieldName());
+        Assertions.assertEquals("entrezB", rowData.get(2).getNewValue());
+        Assertions.assertNull(rowData.get(2).getOldValue());
+        Assertions.assertEquals("kd", rowData.get(3).getFieldName());
+        Assertions.assertEquals(0.4, (Double)rowData.get(3).getNewValue(), 0.001);
+        Assertions.assertNull(rowData.get(3).getOldValue());
 
         // Verify the commit only happens if commit == true
         verify(mockActivityProfileDao, times(commit ? 1 : 0)).save(any());
     }
 
-    @Test(expected = BadRequestException.class)
-    public void testImportKdValues_error_unknownCompound() throws BadRequestException {
+    @Test
+    public void testImportKdValues_error_unknownCompound() {
 
         List<KdCsvRecord> records = Collections.singletonList(
             TestUtil.createKdCsvRecord("unknown", "discoverxA", "entrezA",
@@ -357,11 +365,13 @@ public class ActivityProfileServiceTest {
         doReturn(Collections.singletonList(kinase)).when(mockKinaseService).getKinase(eq(records.get(0)
             .getEntrezGeneSymbol()));
 
-        service.importKdValues(records, true);
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            service.importKdValues(records, true);
+        });
     }
 
-    @Test(expected = BadRequestException.class)
-    public void testImportKdValues_error_unknownKinase() throws BadRequestException {
+    @Test
+    public void testImportKdValues_error_unknownKinase() {
 
         List<KdCsvRecord> records = Collections.singletonList(
             TestUtil.createKdCsvRecord(COMPOUND_NAME, "unknown", "unknown", "=", 0.3)
@@ -374,6 +384,8 @@ public class ActivityProfileServiceTest {
         doReturn(true).when(mockCompoundService).getCompoundExists(anyString());
         doReturn(null).when(mockKinaseService).getKinase(eq(records.get(0).getDiscoverxGeneSymbol()));
 
-        service.importKdValues(records, true);
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            service.importKdValues(records, true);
+        });
     }
 }

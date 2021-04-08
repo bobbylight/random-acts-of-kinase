@@ -1,54 +1,54 @@
 package org.sgc.rak.model;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class KinaseTest {
 
     @Test
     public void testGetSetId() {
         Kinase kinase = new Kinase();
-        Assert.assertEquals(0, kinase.getId());
+        Assertions.assertEquals(0, kinase.getId());
         kinase.setId(42);
-        Assert.assertEquals(42, kinase.getId());
+        Assertions.assertEquals(42, kinase.getId());
     }
 
     @Test
     public void testGetSetDiscoverxGeneSymbol() {
         Kinase kinase = new Kinase();
-        Assert.assertNull(kinase.getDiscoverxGeneSymbol());
+        Assertions.assertNull(kinase.getDiscoverxGeneSymbol());
         kinase.setDiscoverxGeneSymbol("foo");
-        Assert.assertEquals("foo", kinase.getDiscoverxGeneSymbol());
+        Assertions.assertEquals("foo", kinase.getDiscoverxGeneSymbol());
     }
 
     @Test
     public void testGetSetEntrezGeneSymbol() {
         Kinase kinase = new Kinase();
-        Assert.assertNull(kinase.getEntrezGeneSymbol());
+        Assertions.assertNull(kinase.getEntrezGeneSymbol());
         kinase.setEntrezGeneSymbol("foo");
-        Assert.assertEquals("foo", kinase.getEntrezGeneSymbol());
+        Assertions.assertEquals("foo", kinase.getEntrezGeneSymbol());
     }
 
     @Test
     public void testGetSetNanosynGeneSymbol() {
         Kinase kinase = new Kinase();
-        Assert.assertNull(kinase.getNanosynGeneSymbol());
+        Assertions.assertNull(kinase.getNanosynGeneSymbol());
         kinase.setNanosynGeneSymbol("foo");
-        Assert.assertEquals("foo", kinase.getNanosynGeneSymbol());
+        Assertions.assertEquals("foo", kinase.getNanosynGeneSymbol());
     }
 
     @Test
     public void testGetSetDiscoverxUrl() {
         Kinase kinase = new Kinase();
-        Assert.assertNull(kinase.getDiscoverxUrl());
+        Assertions.assertNull(kinase.getDiscoverxUrl());
         kinase.setDiscoverxUrl("foo");
-        Assert.assertEquals("foo", kinase.getDiscoverxUrl());
+        Assertions.assertEquals("foo", kinase.getDiscoverxUrl());
     }
 
     @Test
     public void testToString() {
         String expected = "Kinase[id=0,discoverxGeneSymbol=<null>,entrezGeneSymbol=<null>," +
             "nanosynGeneSymbol=<null>,discoverxUrl=<null>]";
-        Assert.assertEquals(expected, new Kinase().toString());
+        Assertions.assertEquals(expected, new Kinase().toString());
     }
 }

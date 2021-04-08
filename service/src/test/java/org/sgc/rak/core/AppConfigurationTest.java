@@ -1,9 +1,9 @@
 package org.sgc.rak.core;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.rest.CsvHttpMessageConverter;
@@ -25,26 +25,26 @@ public class AppConfigurationTest {
     private AppConfiguration config;
     private Locale origLocale;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         config = new AppConfiguration();
         origLocale = Locale.getDefault();
         Locale.setDefault(Locale.US);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         Locale.setDefault(origLocale);
     }
 
     @Test
     public void testActivityProfileDao() {
-        Assert.assertNotNull(config.activityProfileDao(null));
+        Assertions.assertNotNull(config.activityProfileDao(null));
     }
 
     @Test
     public void testCompoundDao() {
-        Assert.assertNotNull(config.compoundDao());
+        Assertions.assertNotNull(config.compoundDao());
     }
 
     @Test
@@ -62,19 +62,19 @@ public class AppConfigurationTest {
         List<HttpMessageConverter<?>> converters = new ArrayList<>();
 
         config.extendMessageConverters(converters);
-        Assert.assertEquals(1, converters.size());
-        Assert.assertTrue(converters.get(0) instanceof CsvHttpMessageConverter);
+        Assertions.assertEquals(1, converters.size());
+        Assertions.assertTrue(converters.get(0) instanceof CsvHttpMessageConverter);
     }
 
     @Test
     public void testKinaseDao() {
-        Assert.assertNotNull(config.kinaseDao());
+        Assertions.assertNotNull(config.kinaseDao());
     }
 
     @Test
     public void testMessages() {
         Messages messages = config.messages();
         String result = messages.get("error.noSuchCompound", "foo");
-        Assert.assertEquals("No such compound: foo", result);
+        Assertions.assertEquals("No such compound: foo", result);
     }
 }

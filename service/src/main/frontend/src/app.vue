@@ -7,14 +7,14 @@
 
         <navbar></navbar>
 
-        <v-content class="main-content">
+        <v-main class="main-content">
 
             <transition name="fade">
                 <keep-alive>
                     <router-view :key="$route.params.id"></router-view>
                 </keep-alive>
             </transition>
-        </v-content>
+        </v-main>
 
         <v-footer class="theme--dark justify-center" height="auto">
                     <div class="copyright">

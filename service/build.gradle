@@ -4,13 +4,13 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.4.3'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.4.4'
     }
 }
 plugins {
     id 'com.github.node-gradle.node' version '3.0.1'
     id 'jacoco'
-    id 'com.github.kt3k.coveralls' version '2.10.2'
+    id 'com.github.kt3k.coveralls' version '2.11.0'
     id 'com.github.spotbugs' version '4.7.0'
 }
 apply plugin: 'java'
@@ -27,6 +27,7 @@ assert current().isJava12Compatible()
 
 group = 'org.sgc'
 version = '1.4.0-SNAPSHOT'
+archivesBaseName = 'random-acts-of-kinase'
 
 repositories {
     mavenCentral()
@@ -68,15 +69,18 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
-    // TODO: Remove and update tests to JUnit 5 syntax
-    testImplementation('org.junit.vintage:junit-vintage-engine') {
-        exclude group: 'org.hamcrest', module: 'hamcrest-core'
-    }
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
 
 checkstyle {
-    toolVersion '8.41'
+    toolVersion '8.41.1'
     configDirectory = file("${project.projectDir}/config/checkstyle")
+}
+
+test {
+    useJUnitPlatform()
 }
 
 compileJava {
@@ -154,11 +158,12 @@ task copyStaticResourcesToBuildWatch(type: NpmTask) {
 }
 
 task makeAwsArchive(type: Zip) {
-    from "${rootDir}/build/libs/"
+    from "build/libs/"
     include 'random-acts-of-kinase*.jar'
     from '.'
     include 'Procfile'
     include '.ebextensions/**'
+    include '.platform/**'
     archiveFileName = 'aws-archive.zip'
     destinationDirectory = file(rootDir)
 }

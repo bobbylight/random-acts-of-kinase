@@ -1,10 +1,11 @@
 package org.sgc.rak.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.sgc.rak.core.Application;
 import org.sgc.rak.model.Compound;
 import org.sgc.rak.util.TestUtil;
@@ -15,7 +16,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -25,7 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
 @SpringBootTest(classes = { Application.class })
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -39,33 +40,33 @@ public class CompoundControllerIntegrationTest {
 
     private MockMvc mockMvc;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
 
     @Test
-    @Ignore("Not yet implemented")
+    @Disabled("Not yet implemented")
     public void testGetCompound() {
     }
 
     @Test
-    @Ignore("Not yet implemented")
+    @Disabled("Not yet implemented")
     public void testGetCompounds() {
     }
 
     @Test
-    @Ignore("Not yet implemented")
+    @Disabled("Not yet implemented")
     public void testGetCompoundImageAsPng() {
     }
 
     @Test
-    @Ignore("Not yet implemented")
+    @Disabled("Not yet implemented")
     public void testGetCompoundImageAsSvg() {
     }
 
     @WithMockUser // Defaults to a non-admin user
-    @Test(expected = AccessDeniedException.class)
+    @Test
     public void testUpdateCompound_unauthenticatedUsersCantUpdate() throws Exception {
 
         String compoundName = "compoundA";
@@ -74,16 +75,18 @@ public class CompoundControllerIntegrationTest {
         Compound requestBodyCompound = TestUtil.createCompound(compoundName);
         String requestBody = objectMapper.writeValueAsString(requestBodyCompound);
 
-        try {
-            mockMvc.perform(put(url)
-                .content(requestBody)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-            )
-                .andDo(print());
-        } catch (NestedServletException e) {
-            throw (Exception)e.getCause(); // For tests that test failure paths, throw the underlying exception
-        }
+        Assertions.assertThrows(AccessDeniedException.class, () -> {
+            try {
+                mockMvc.perform(put(url)
+                    .content(requestBody)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
+                )
+                    .andDo(print());
+            } catch (NestedServletException e) {
+                throw e.getCause(); // For tests that test failure paths, throw the underlying exception
+            }
+        });
     }
 
     @WithMockUser(roles = { "ADMIN", "USER" })

@@ -1,7 +1,7 @@
 package org.sgc.rak.util;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.sgc.rak.model.*;
 import org.sgc.rak.model.csv.ActivityProfileCsvRecord;
 import org.sgc.rak.model.csv.KdCsvRecord;
@@ -20,7 +20,7 @@ public class UtilTest {
         activityProfileCsvRecord.setDiscoverxGeneSymbol("");
 
         Util.convertEmptyStringsToNulls(activityProfileCsvRecord);
-        Assert.assertNull(activityProfileCsvRecord.getDiscoverxGeneSymbol());
+        Assertions.assertNull(activityProfileCsvRecord.getDiscoverxGeneSymbol());
     }
 
     @Test
@@ -32,9 +32,9 @@ public class UtilTest {
         compound.setSource("  ");
 
         Util.convertEmptyStringsToNulls(compound);
-        Assert.assertNull(compound.getChemotype());
-        Assert.assertNull(compound.getSmiles());
-        Assert.assertNull(compound.getSource());
+        Assertions.assertNull(compound.getChemotype());
+        Assertions.assertNull(compound.getSmiles());
+        Assertions.assertNull(compound.getSource());
     }
 
     @Test
@@ -46,9 +46,9 @@ public class UtilTest {
         kd.setModifier("");
 
         Util.convertEmptyStringsToNulls(kd);
-        Assert.assertNull(kd.getDiscoverxGeneSymbol());
-        Assert.assertNull(kd.getEntrezGeneSymbol());
-        Assert.assertNull(kd.getModifier());
+        Assertions.assertNull(kd.getDiscoverxGeneSymbol());
+        Assertions.assertNull(kd.getEntrezGeneSymbol());
+        Assertions.assertNull(kd.getModifier());
     }
 
     @Test
@@ -61,30 +61,30 @@ public class UtilTest {
         csvRecord.setDate("");
 
         Util.convertEmptyStringsToNulls(csvRecord);
-        Assert.assertNull(csvRecord.getDiscoverxGeneSymbol());
-        Assert.assertNull(csvRecord.getNlucOrientation());
-        Assert.assertNull(csvRecord.getComment());
-        Assert.assertNull(csvRecord.getDate());
+        Assertions.assertNull(csvRecord.getDiscoverxGeneSymbol());
+        Assertions.assertNull(csvRecord.getNlucOrientation());
+        Assertions.assertNull(csvRecord.getComment());
+        Assertions.assertNull(csvRecord.getDate());
     }
 
     @Test
     public void testCreateFieldStatus() {
         ObjectImportRep.FieldStatus status = Util.createFieldStatus("name", "newValue", "oldValue");
-        Assert.assertEquals("name", status.getFieldName());
-        Assert.assertEquals("newValue", status.getNewValue());
-        Assert.assertEquals("oldValue", status.getOldValue());
+        Assertions.assertEquals("name", status.getFieldName());
+        Assertions.assertEquals("newValue", status.getNewValue());
+        Assertions.assertEquals("oldValue", status.getOldValue());
     }
 
     @Test
     public void testEscapeForLike() {
-        Assert.assertEquals("foo", Util.escapeForLike("foo"));
-        Assert.assertEquals("54\\% \\_", Util.escapeForLike("54% _"));
+        Assertions.assertEquals("foo", Util.escapeForLike("foo"));
+        Assertions.assertEquals("54\\% \\_", Util.escapeForLike("54% _"));
     }
 
     @Test
     public void testNanoBretCsvDateToRealDate_happyPath() throws Exception {
         Date date = Util.createNanoBretDataDateFormat().parse("81_02_06");
-        Assert.assertEquals(date, Util.nanoBretCsvDateToRealDate("1981_02_06"));
+        Assertions.assertEquals(date, Util.nanoBretCsvDateToRealDate("1981_02_06"));
     }
 
     @Test
@@ -111,11 +111,11 @@ public class UtilTest {
         ActivityProfile result = Util.patchActivityProfile(existing, newProfile);
 
         // New values for these fields overwrite prior values
-        Assert.assertEquals(7, result.getCompoundConcentration().intValue());
-        Assert.assertEquals(3.7, result.getPercentControl(), 0.001);
+        Assertions.assertEquals(7, result.getCompoundConcentration().intValue());
+        Assertions.assertEquals(3.7, result.getPercentControl(), 0.001);
 
         // Kd doesn't get cleared out just because it isn't in ActivityProfileCsvRecord
-        Assert.assertEquals(4.2, result.getKd(), 0.001);
+        Assertions.assertEquals(4.2, result.getKd(), 0.001);
     }
 
     @Test
@@ -142,11 +142,11 @@ public class UtilTest {
         ActivityProfile result = Util.patchActivityProfile(existing, newProfile);
 
         // New values for these fields overwrite prior values
-        Assert.assertEquals(0, result.getCompoundConcentration().intValue());
-        Assert.assertEquals(0, result.getPercentControl(), 0.001);
+        Assertions.assertEquals(0, result.getCompoundConcentration().intValue());
+        Assertions.assertEquals(0, result.getPercentControl(), 0.001);
 
         // Kd doesn't get cleared out just because it isn't in ActivityProfileCsvRecord
-        Assert.assertEquals(4.2, result.getKd(), 0.001);
+        Assertions.assertEquals(4.2, result.getKd(), 0.001);
     }
 
     @Test
@@ -171,11 +171,11 @@ public class UtilTest {
         ActivityProfile result = Util.patchActivityProfile(existing, newProfile);
 
         // Original values preserved because they were null in newProfile
-        Assert.assertEquals(3, result.getCompoundConcentration().intValue());
-        Assert.assertEquals(0.3, result.getPercentControl(), 0.001);
+        Assertions.assertEquals(3, result.getCompoundConcentration().intValue());
+        Assertions.assertEquals(0.3, result.getPercentControl(), 0.001);
 
         // Kd doesn't get cleared out just because it isn't in ActivityProfileCsvRecord
-        Assert.assertEquals(4.2, result.getKd(), 0.001);
+        Assertions.assertEquals(4.2, result.getKd(), 0.001);
     }
 
     @Test
@@ -203,11 +203,11 @@ public class UtilTest {
         ActivityProfile result = Util.patchActivityProfile(existing, newKd);
 
         // New values for these fields overwrite prior values
-        Assert.assertEquals(12.1, result.getKd(), 0.001);
+        Assertions.assertEquals(12.1, result.getKd(), 0.001);
 
         // These fields don't get cleared out just because they aren't in KdCsvRecord
-        Assert.assertEquals(3, result.getCompoundConcentration().intValue());
-        Assert.assertEquals(0.3, result.getPercentControl(), 0.001);
+        Assertions.assertEquals(3, result.getCompoundConcentration().intValue());
+        Assertions.assertEquals(0.3, result.getPercentControl(), 0.001);
     }
 
     @Test
@@ -233,11 +233,11 @@ public class UtilTest {
         ActivityProfile result = Util.patchActivityProfile(existing, newKd);
 
         // Original values preserved because they were null in newKd
-        Assert.assertEquals(4.2, result.getKd(), 0.001);
+        Assertions.assertEquals(4.2, result.getKd(), 0.001);
 
         // These fields don't get cleared out just because they aren't in KdCsvRecord
-        Assert.assertEquals(3, result.getCompoundConcentration().intValue());
-        Assert.assertEquals(0.3, result.getPercentControl(), 0.001);
+        Assertions.assertEquals(3, result.getCompoundConcentration().intValue());
+        Assertions.assertEquals(0.3, result.getPercentControl(), 0.001);
     }
 
     @Test
@@ -265,14 +265,14 @@ public class UtilTest {
 
         Compound result = Util.patchCompound(existing, newCompound);
 
-        Assert.assertEquals("compoundA", result.getCompoundName());
-        Assert.assertEquals("b", result.getChemotype());
-        Assert.assertEquals("b", result.getSmiles());
-        Assert.assertEquals("b", result.getSource());
-        Assert.assertEquals(0.4, result.getS10(), 0.01);
-        Assert.assertEquals("referenceB", result.getPrimaryReference());
-        Assert.assertEquals("urlB", result.getPrimaryReferenceUrl());
-        Assert.assertFalse(result.isHidden());
+        Assertions.assertEquals("compoundA", result.getCompoundName());
+        Assertions.assertEquals("b", result.getChemotype());
+        Assertions.assertEquals("b", result.getSmiles());
+        Assertions.assertEquals("b", result.getSource());
+        Assertions.assertEquals(0.4, result.getS10(), 0.01);
+        Assertions.assertEquals("referenceB", result.getPrimaryReference());
+        Assertions.assertEquals("urlB", result.getPrimaryReferenceUrl());
+        Assertions.assertFalse(result.isHidden());
     }
 
     @Test
@@ -293,14 +293,14 @@ public class UtilTest {
 
         Compound result = Util.patchCompound(existing, newCompound);
 
-        Assert.assertEquals("compoundA", result.getCompoundName());
-        Assert.assertEquals("a", result.getChemotype());
-        Assert.assertEquals("a", result.getSmiles());
-        Assert.assertEquals("a", result.getSource());
-        Assert.assertEquals(0.3, result.getS10(), 0.01);
-        Assert.assertEquals("referenceA", result.getPrimaryReference());
-        Assert.assertEquals("urlA", result.getPrimaryReferenceUrl());
-        Assert.assertTrue(result.isHidden());
+        Assertions.assertEquals("compoundA", result.getCompoundName());
+        Assertions.assertEquals("a", result.getChemotype());
+        Assertions.assertEquals("a", result.getSmiles());
+        Assertions.assertEquals("a", result.getSource());
+        Assertions.assertEquals(0.3, result.getS10(), 0.01);
+        Assertions.assertEquals("referenceA", result.getPrimaryReference());
+        Assertions.assertEquals("urlA", result.getPrimaryReferenceUrl());
+        Assertions.assertTrue(result.isHidden());
     }
 
     @Test
@@ -329,13 +329,13 @@ public class UtilTest {
         NanoBretActivityProfile result = Util.patchNanoBretActivityProfile(existing, newProfile);
 
         // New values for these fields overwrite prior values
-        Assert.assertEquals("commentNew", result.getComment());
-        Assert.assertEquals(4, result.getConcentration().intValue());
-        Assert.assertEquals(date, result.getDate());
-        Assert.assertEquals(50d, result.getIc50(), 0.0001);
-        Assert.assertEquals("nlucNew", result.getNlucOrientation());
-        Assert.assertEquals(50d, result.getPercentInhibition(), 0.0001);
-        Assert.assertEquals(50, result.getPoints().intValue());
+        Assertions.assertEquals("commentNew", result.getComment());
+        Assertions.assertEquals(4, result.getConcentration().intValue());
+        Assertions.assertEquals(date, result.getDate());
+        Assertions.assertEquals(50d, result.getIc50(), 0.0001);
+        Assertions.assertEquals("nlucNew", result.getNlucOrientation());
+        Assertions.assertEquals(50d, result.getPercentInhibition(), 0.0001);
+        Assertions.assertEquals(50, result.getPoints().intValue());
     }
 
     @Test
@@ -358,19 +358,19 @@ public class UtilTest {
         NanoBretActivityProfile result = Util.patchNanoBretActivityProfile(existing, newProfile);
 
         // New values for these fields overwrite prior values
-        Assert.assertEquals("commentA", result.getComment());
-        Assert.assertEquals(1, result.getConcentration().intValue());
-        Assert.assertEquals(date, result.getDate());
-        Assert.assertEquals(1d, result.getIc50(), 0.0001);
-        Assert.assertEquals("nlucA", result.getNlucOrientation());
-        Assert.assertEquals(1d, result.getPercentInhibition(), 0.0001);
-        Assert.assertEquals(1, result.getPoints().intValue());
+        Assertions.assertEquals("commentA", result.getComment());
+        Assertions.assertEquals(1, result.getConcentration().intValue());
+        Assertions.assertEquals(date, result.getDate());
+        Assertions.assertEquals(1d, result.getIc50(), 0.0001);
+        Assertions.assertEquals("nlucA", result.getNlucOrientation());
+        Assertions.assertEquals(1d, result.getPercentInhibition(), 0.0001);
+        Assertions.assertEquals(1, result.getPoints().intValue());
     }
 
     @Test
     public void testSanitizeForFileName() {
         String fileName = "abcdefghijlmnopqrstuvwxyz-_/\\ ()";
-        Assert.assertEquals("abcdefghijlmnopqrstuvwxyz-___ __", Util.sanitizeForFileName(fileName));
+        Assertions.assertEquals("abcdefghijlmnopqrstuvwxyz-___ __", Util.sanitizeForFileName(fileName));
     }
 
     @Test
@@ -381,7 +381,7 @@ public class UtilTest {
         rep.setSelectivityScore(0.3);
 
         Compound compound = Util.sScoreCsvRecordToCompound(rep);
-        Assert.assertEquals(rep.getCompoundName(), compound.getCompoundName());
-        Assert.assertEquals(rep.getSelectivityScore(), compound.getS10());
+        Assertions.assertEquals(rep.getCompoundName(), compound.getCompoundName());
+        Assertions.assertEquals(rep.getSelectivityScore(), compound.getS10());
     }
 }

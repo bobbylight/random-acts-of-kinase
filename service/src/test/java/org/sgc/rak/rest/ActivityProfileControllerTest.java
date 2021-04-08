@@ -1,8 +1,9 @@
 package org.sgc.rak.rest;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -52,7 +53,7 @@ public class ActivityProfileControllerTest {
     private static final String KINASE_DISCOVERX = "kinaseDiscoverx";
     private static final String KINASE_ENTREZ = "kinaseEntrez";
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
@@ -60,60 +61,66 @@ public class ActivityProfileControllerTest {
             .build();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         // It seems MockMvcBuilders.standaloneSetup() populates RequestContextHolder, which breaks other test classes
         RequestContextHolder.resetRequestAttributes();
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     public void testGetActivityProfiles_activityLessThanZero() throws Exception {
 
-        try {
-            mockMvc.perform(MockMvcRequestBuilders.get("/api/activityProfiles")
-                .param("kinaseDiscoverx", KINASE_DISCOVERX)
-                .param("activity", "-1")
-                .param("compound", COMPOUND_NAME)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-            );
-        } catch (NestedServletException e) {
-            throw (Exception)e.getCause();
-        }
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            try {
+                mockMvc.perform(MockMvcRequestBuilders.get("/api/activityProfiles")
+                    .param("kinaseDiscoverx", KINASE_DISCOVERX)
+                    .param("activity", "-1")
+                    .param("compound", COMPOUND_NAME)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
+                );
+            } catch (NestedServletException e) {
+                throw (Exception) e.getCause();
+            }
+        });
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     public void testGetActivityProfiles_activityGreaterThanOne() throws Exception {
 
-        try {
-            mockMvc.perform(MockMvcRequestBuilders.get("/api/activityProfiles")
-                .param("kinase", KINASE_ENTREZ)
-                .param("activity", "2")
-                .param("compound", COMPOUND_NAME)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-            );
-        } catch (NestedServletException e) {
-            throw (Exception)e.getCause();
-        }
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            try {
+                mockMvc.perform(MockMvcRequestBuilders.get("/api/activityProfiles")
+                    .param("kinase", KINASE_ENTREZ)
+                    .param("activity", "2")
+                    .param("compound", COMPOUND_NAME)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
+                );
+            } catch (NestedServletException e) {
+                throw e.getCause();
+            }
+        });
     }
 
-    @Test(expected = BadRequestException.class)
+    @Test
     public void testGetActivityProfiles_noSuchKinase() throws Exception {
 
         doReturn(Collections.emptyList()).when(mockKinaseService).getKinase(eq(KINASE_ENTREZ));
 
-        try {
-            mockMvc.perform(MockMvcRequestBuilders.get("/api/activityProfiles")
-                .param("kinase", KINASE_ENTREZ)
-                .param("activity", "1")
-                .param("compound", COMPOUND_NAME)
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-            );
-        } catch (NestedServletException e) {
-            throw (Exception)e.getCause();
-        }
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            try {
+                mockMvc.perform(MockMvcRequestBuilders.get("/api/activityProfiles")
+                    .param("kinase", KINASE_ENTREZ)
+                    .param("activity", "1")
+                    .param("compound", COMPOUND_NAME)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
+                );
+            } catch (NestedServletException e) {
+                throw (Exception) e.getCause();
+            }
+        });
     }
 
     @Test
