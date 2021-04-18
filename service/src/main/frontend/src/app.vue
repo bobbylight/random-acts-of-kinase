@@ -37,7 +37,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import Navbar from './navbar.vue';
+import Navbar from './navbar/navbar.vue';
 import restApi from './rest-api';
 import { UserRep } from './rak';
 import AboutModal from './about-modal.vue';

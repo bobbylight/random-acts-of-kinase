@@ -1,6 +1,6 @@
 <template>
     <div class="navbar-pill-wrapper">
-        <v-btn text class="navbar-pill" v-bind:class="{ active: isActiveTab() }" @click="navigate">
+        <v-btn text class="navbar-pill" v-bind:class="{ active: isActiveTab() }" @click="showCompound">
             {{compound}}
         </v-btn>
         <span class="close-icon" @click="close">
@@ -13,7 +13,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
-import RakUtil from './util';
+import RakUtil from '../util';
 
 @Component
 export default class NavbarPill extends Vue {
@@ -48,10 +48,6 @@ export default class NavbarPill extends Vue {
         closeButton.addEventListener('mouseout', this.onCloseButtonMouseOut);
     }
 
-    navigate() {
-        this.$router.push({ name: 'compound', params: { id: this.compound }});
-    }
-
     onCloseButtonMouseOver() {
         const elem: HTMLElement = this.$el.getElementsByClassName('navbar-pill')[0] as HTMLElement;
         elem.classList.add('closeButtonArmed');
@@ -61,11 +57,15 @@ export default class NavbarPill extends Vue {
         const elem: HTMLElement = this.$el.getElementsByClassName('navbar-pill')[0] as HTMLElement;
         elem.classList.remove('closeButtonArmed');
     }
+
+    showCompound() {
+        this.$emit('showCompoundDetails', this.compound);
+    }
 }
 </script>
 
 <style lang="less">
-@import '../styles/app-variables';
+@import '../../styles/app-variables';
 @close-icon-color: gray;
 
 .navbar-pill-wrapper {

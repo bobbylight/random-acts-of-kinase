@@ -18,12 +18,13 @@ import { faCog,
     faMask,
     faNewspaper,
     faQuestionCircle,
+    faSearch,
     faTimes,
     faUpload,
     faUser } from '@fortawesome/free-solid-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 library.add(faCog, faComments, faDatabase, faEdit, faExclamation, faFilter, faHandshake, faHistory,
-    faMapMarkerAlt, faMask, faNewspaper, faQuestionCircle, faTimes, faUpload, faUser, faGithub);
+    faMapMarkerAlt, faMask, faNewspaper, faQuestionCircle, faSearch, faTimes, faUpload, faUser, faGithub);
 dom.watch();
 
 // Register the router hooks with their names
