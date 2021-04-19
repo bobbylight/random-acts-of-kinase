@@ -38,7 +38,7 @@
                     Random Acts of Kinase allows you to search for compound activity data collected on compounds in
                     KCGS. If you have any feedback or questions, please contact
                     <a href="mailto:SGC-UNC@unc.edu">SGC-UNC@unc.edu</a>. To request a physical copy of the set please
-                    go to <a href="https://www.sgc-unc.org/request-kcgs/">https://www.sgc-unc.org/request-kcgs/</a>.
+                    go to <a href="https://ximbio.com/reagent/157681/the-kinase-chemogenomic-set-kcgs/">Ximbio</a>.
                 </div>
             </v-col>
         </v-row>
