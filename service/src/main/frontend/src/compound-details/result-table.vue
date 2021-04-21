@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import restApi from './rest-api';
+import restApi from '../rest-api';
 import { PagedDataRep, VueDataTableOptions } from '@/rak';
 
 export default {

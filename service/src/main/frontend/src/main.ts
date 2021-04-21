@@ -44,7 +44,7 @@ import Search from './search/search.vue';
 import NanoBretSearch from './nanobret/nanobret-search.vue';
 import Blog from './blog.vue';
 import NetworkTab from './network-tab.vue';
-import Compound from './compound.vue';
+import Compound from './compound-details/compound.vue';
 import Admin from './admin/admin.vue';
 import ImportCompounds from './admin/import-compounds.vue';
 import ImportActivityProfiles from './admin/import-activity-profiles.vue';

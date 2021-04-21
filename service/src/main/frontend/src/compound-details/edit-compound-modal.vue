@@ -104,9 +104,9 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop, Watch } from 'vue-property-decorator';
-import restApi from './rest-api';
-import { Compound, ErrorResponse } from './rak';
-import Toaster from './toaster';
+import restApi from '@/rest-api';
+import { Compound, ErrorResponse } from '@/rak';
+import Toaster from '@/toaster';
 
 // tslint:disable-next-line
 const URL_REGEX: RegExp = /^(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,})$/;

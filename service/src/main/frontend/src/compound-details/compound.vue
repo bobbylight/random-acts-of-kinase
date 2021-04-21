@@ -30,7 +30,8 @@
                             <h3 class="headline">Table View</h3>
                         </v-expansion-panel-header>
                         <v-expansion-panel-content>
-                            <result-table :filters="gridFilters"></result-table>
+                            <result-table class="hidden-sm-and-down" :filters="gridFilters"></result-table>
+                            <result-list class="hidden-md-and-up" :filters="gridFilters"></result-list>
                         </v-expansion-panel-content>
                     </v-expansion-panel>
                 </v-expansion-panels>
@@ -64,15 +65,23 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
-import SectionHeader from './header.vue';
+import SectionHeader from '@/header.vue';
 import ResultTable from './result-table.vue';
+import ResultList from './result-list.vue';
 import CompoundDetailsCard from './compound-details-card.vue';
 import EditCompoundModal from './edit-compound-modal.vue';
-import restApi from './rest-api';
-import { ActivityProfile, Compound, ErrorResponse, PagedDataRep } from './rak';
-import unauthorized from './admin/unauthorized.vue';
+import restApi from '@/rest-api';
+import { ActivityProfile, Compound, ErrorResponse, PagedDataRep } from '@/rak';
+import unauthorized from '@/admin/unauthorized.vue';
 
-@Component({ components: { CompoundDetailsCard, ResultTable, SectionHeader, EditCompoundModal, unauthorized } })
+@Component({ components: {
+        CompoundDetailsCard,
+        ResultTable,
+        ResultList,
+        SectionHeader,
+        EditCompoundModal,
+        unauthorized
+} })
 export default class CompoundView extends Vue {
 
     @Prop({ required: true })
@@ -144,7 +153,7 @@ export default class CompoundView extends Vue {
 </script>
 
 <style lang="less">
-@import '../styles/app-variables';
+@import '../../styles/app-variables';
 
 .expansion-panel-no-left-margin {
     margin-left: 0;

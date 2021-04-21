@@ -8,7 +8,7 @@
             <v-container grid-list-md>
                 <v-row no-gutters class="align-center">
 
-                    <v-col cols="3" pt-0>
+                    <v-col cols="12" md="3" pt-0>
                         <v-tooltip bottom v-if="compoundImageUrl">
                             <template v-slot:activator="{ on }">
                                 <img :src="compoundImageUrl"
@@ -23,7 +23,7 @@
                         </v-tooltip>
                     </v-col>
 
-                    <v-col cols="9" pt-0 pl-5>
+                    <v-col cols="12" md="9" pt-0 pl-5>
 
                         <div class="compound-details-table">
 
@@ -73,7 +73,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
-import { Compound } from './rak';
+import { Compound } from '../rak';
 import RakUtil from '@/util';
 
 @Component
@@ -107,7 +107,7 @@ export default class CompoundDetailsCard extends Vue {
 </script>
 
 <style lang="less">
-@import '../styles/app-variables';
+@import '../../styles/app-variables';
 
 .compound-details-card {
 
@@ -119,6 +119,7 @@ export default class CompoundDetailsCard extends Vue {
         cursor: pointer;
         transition: transform @transition-time;
         vertical-align: middle;
+        width: 100%; // Ensures horizontal centering on small screens
 
         &:hover {
             transform: scale(1.1);
