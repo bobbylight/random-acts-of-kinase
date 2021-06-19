@@ -2,7 +2,7 @@
 
 ![Java Build](https://github.com/bobbylight/random-acts-of-kinase/actions/workflows/gradle.yml/badge.svg)
 ![Java Build](https://github.com/bobbylight/random-acts-of-kinase/actions/workflows/codeql-analysis.yml/badge.svg)
-[![Coverage Status](https://coveralls.io/repos/github/bobbylight/random-acts-of-kinase/badge.svg?branch=master)](https://coveralls.io/github/bobbylight/random-acts-of-kinase?branch=master)
+[![codecov](https://codecov.io/gh/bobbylight/random-acts-of-kinase/branch/master/graph/badge.svg?token=Hktq3vfINy)](https://codecov.io/gh/bobbylight/random-acts-of-kinase)
 
 A web frontend for SGC kinase information.
 
