@@ -5,7 +5,7 @@
 #
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-OUTDIR="../../kinase-data/exported-data" # This can't be an absolute path, at least on Windows
+OUTDIR="../../../kinase-data/exported-data" # This can't be an absolute path, at least on Windows
 
 if [ ! -f "${DIR}"/env.sh ]; then
     echo "./env.sh not found.  Please create it to continue"
