@@ -108,8 +108,8 @@ sourceSets {
 }
 
 configurations {
-    integrationTestCompile.extendsFrom testImplementation
-    integrationTestRuntime.extendsFrom testRuntime
+    integrationTestImplementation.extendsFrom testImplementation
+    integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
 }
 
 task integration(type: Test, description: 'Runs the integration tests.', group: 'Verification') {
@@ -198,7 +198,7 @@ bootRun {
 
 jacocoTestReport {
     reports {
-        xml.enabled = true // coveralls plugin depends on xml format report
-        html.enabled = true
+        xml.required = true // coveralls plugin depends on xml format report
+        html.required = true
     }
 }
