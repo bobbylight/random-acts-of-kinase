@@ -1,28 +1,23 @@
 spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL95Dialect
-    properties:
-      hibernate:
-        jdbc:
-          lob:
-            # Prevent Hibernate from logging harmless exception - https://github.com/spring-projects/spring-boot/issues/12007
-            non_contextual_creation: true
   profiles:
     active: dev-postgres
   mvc:
     contentnegotiation:
       favor-parameter: true
       parameter-name: format
-  resources:
-    cache:
-      cachecontrol:
-        # Value, in seconds, Spring Security specifies for static resources' Cache-Control max-age
-        max-age: 28800
   servlet:
     multipart:
       # See also .ebextensions/nginx/conf.d/02_max_upload_size.conf
       max-file-size: 10MB
       max-request-size: 11MB
+  web:
+    resources:
+      cache:
+        cachecontrol:
+          # Value, in seconds, Spring Security specifies for static resources' Cache-Control max-age
+          max-age: 28800
 logging:
   level:
     root: INFO
@@ -40,16 +35,23 @@ server:
 ---
 
 spring:
-  profiles: dev,test
+  config:
+    activate:
+      on-profile: dev,test
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
+    # Wait for Hibernate to initialize schema before running data-h2.sql
+    # https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.5-Release-Notes#new-and-noteworthy
+    defer-datasource-initialization: true
   datasource:
-    # platform needed to load data-h2.sql
-    platform: h2
     url: jdbc:h2:mem:test
     driverClassName: org.h2.Driver
     username: sa
     password:
+  sql:
+    init:
+      # platform needed to load data-h2.sql
+      platform: h2
 rak:
   login:
     user: kinaseadmin
@@ -62,7 +64,9 @@ logging:
 
 # Development is done with a local copy of the Postgres database.
 spring:
-  profiles: dev-postgres
+  config:
+    activate:
+      on-profile: dev-postgres
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
     driverClassName: org.postgresql.Driver
@@ -80,7 +84,9 @@ logging:
 
 # RDS_* environment variables defined in AWS console, ${PORT} set magically (typically 5000)
 spring:
-  profiles: production
+  config:
+    activate:
+      on-profile: production
   datasource:
     url: jdbc:postgresql://${RDS_HOSTNAME}:${RDS_PORT}/${RDS_DB_NAME}
     driverClassName: org.postgresql.Driver
