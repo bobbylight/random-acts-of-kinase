@@ -18,8 +18,10 @@
                 </div>
 
                 <section-header>{{title}}</section-header>
-                <img :src="image" width=600 height=450
-                    onerror="this.src = 'img/molecule-unknown.svg';">
+                <v-col cols="12" class="pa-0">
+                    <img :src="image" height=450 style="width: 100%"
+                         onerror="this.src = 'img/molecule-unknown.svg';">
+                </v-col>
 
                 <v-col cols="12" style="text-align: right">
                     <div style="display: inline-block">
@@ -63,6 +65,8 @@ export default class Lightbox extends Vue {
 
     imageFormat: string = 'png500500';
 
+    private readonly imageWidth: number = 100;
+
     private show: boolean = false;
 
     private readonly downloadOptions: any[] = [
@@ -71,6 +75,16 @@ export default class Lightbox extends Vue {
         { text: 'PNG (500x500)', value: 'png500500' },
         { text: 'SVG', value: 'svg' }
     ];
+
+    created() {
+        console.log('Adding resize handler');
+        window.addEventListener('resize', this.onResize);
+    }
+
+    destroyed() {
+        console.log('Removing resize handler');
+        window.removeEventListener('resize', this.onResize);
+    }
 
     @Watch('image')
     private onImageChanged(newValue: string | undefined) {
@@ -84,6 +98,13 @@ export default class Lightbox extends Vue {
         console.log('hidden!');
         this.show = false;
         this.$emit('hide');
+    }
+
+    private onResize() {
+        // const screenWidth: number = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+        // const horizontalSpacing: number = 100;
+        // this.imageWidth = Math.min(600, screenWidth - horizontalSpacing);
+        // console.log('imageWidth now: ' + this.imageWidth);
     }
 
     keyHandler(e: KeyboardEvent) {
@@ -153,19 +174,18 @@ export default class Lightbox extends Vue {
             align-items: center;
 
             .lightbox-save-label {
-                margin-right: 8px; // Matches button's margin-left
+                margin-right: 1rem;
             }
 
             .lightbox-save-select {
-                min-width: 12rem;
+                min-width: 4rem;
                 padding-top: 0;
+                margin-top: 0;
             }
 
             .lightbox-save-button {
                 // Fit more snugly into bottom-right
-                margin-top: 0;
-                margin-right: 0;
-                margin-bottom: 0;
+                margin: 0 0 0 4px;
             }
         }
     }
