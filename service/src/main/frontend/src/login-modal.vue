@@ -47,7 +47,7 @@ export default class LoginModal extends Vue {
 
     private user: string = '';
     private password: string = '';
-    private passwordVisible: boolean = true;
+    passwordVisible: boolean = true; // Can't be private due to modification in template
 
     @Prop({ required: true })
     private readonly show: boolean;
