@@ -83,16 +83,14 @@ test {
 }
 
 compileJava {
-    sourceCompatibility javaVersion.toString()
-    targetCompatibility javaVersion.toString()
+    options.release = 11
     options.debug = true
     options.debugOptions.debugLevel = 'source,vars,lines'
     options.compilerArgs << '-Xlint:deprecation' << '-Xlint:unchecked'
 }
 
 compileTestJava {
-    sourceCompatibility javaVersion.toString()
-    targetCompatibility javaVersion.toString()
+    options.release = 11
     options.debug = true
     options.debugOptions.debugLevel = 'source,vars,lines'
     options.compilerArgs << '-Xlint:deprecation' << '-Xlint:unchecked'
