@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.sgc.rak.i18n.Messages;
+import org.sgc.rak.repositories.NanoBretActivityProfileRepository;
 import org.sgc.rak.rest.CsvHttpMessageConverter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -67,6 +68,11 @@ public class AppConfigurationTest {
     }
 
     @Test
+    public void testImageTranscoder() {
+        Assertions.assertNotNull(config.imageTranscoder());
+    }
+
+    @Test
     public void testKinaseDao() {
         Assertions.assertNotNull(config.kinaseDao());
     }
@@ -76,5 +82,11 @@ public class AppConfigurationTest {
         Messages messages = config.messages();
         String result = messages.get("error.noSuchCompound", "foo");
         Assertions.assertEquals("No such compound: foo", result);
+    }
+
+    @Test
+    public void testNanoBretActivityProfileDao() {
+        NanoBretActivityProfileRepository mockRepository = Mockito.mock(NanoBretActivityProfileRepository.class);
+        Assertions.assertNotNull(config.nanoBretActivityProfileDao(mockRepository));
     }
 }
