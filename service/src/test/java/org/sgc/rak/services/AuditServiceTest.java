@@ -54,14 +54,6 @@ public class AuditServiceTest {
         RequestContextHolder.resetRequestAttributes();
     }
 
-    private static String getStringOfLength(int length) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < length; i++) {
-            sb.append('a');
-        }
-        return sb.toString();
-    }
-
     @Test
     public void testAuditService_createAudit_2Arg() {
         service.createAudit(USER_NAME, ACTION);
@@ -106,7 +98,7 @@ public class AuditServiceTest {
     @Test
     public void testAuditService_createAudit_4Arg_tooLongDetailsIsTrimmed() {
 
-        String details = getStringOfLength(ModelConstants.AUDIT_DETAILS_MAX + 1);
+        String details = "a".repeat(ModelConstants.AUDIT_DETAILS_MAX + 1);
 
         Audit audit = service.createAudit(null, ACTION, true, details);
         Assertions.assertEquals(ModelConstants.AUDIT_DETAILS_MAX, audit.getDetails().length());
