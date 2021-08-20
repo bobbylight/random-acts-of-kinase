@@ -285,13 +285,15 @@ public class ImportControllerTest {
 
     @Test
     public void testImportNanoBretActivityProfiles_happyPath_headerRowExplicitlyFalse() throws Exception {
-        testImportNanoBretActivityProfiles_impl("import-nanobret-activity-profiles-happy-path-no-header.csv", false, true, true);
+        testImportNanoBretActivityProfiles_impl("import-nanobret-activity-profiles-happy-path-no-header.csv", false,
+            true, true);
     }
 
     @Test
     public void testImportNanoBretActivityProfiles_error_missingAColumn() {
         Assertions.assertThrows(BadRequestException.class, () -> {
-            testImportNanoBretActivityProfiles_impl("import-nanobret-activity-profiles-missing-discoverx-column.csv", null, false, false);
+            testImportNanoBretActivityProfiles_impl("import-nanobret-activity-profiles-missing-discoverx-column.csv",
+                null, false, false);
         });
     }
 

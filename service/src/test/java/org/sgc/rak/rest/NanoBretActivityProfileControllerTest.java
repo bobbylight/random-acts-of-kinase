@@ -9,13 +9,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.sgc.rak.exceptions.BadRequestException;
 import org.sgc.rak.i18n.Messages;
-import org.sgc.rak.model.ActivityProfile;
 import org.sgc.rak.model.Kinase;
 import org.sgc.rak.services.KinaseService;
 import org.sgc.rak.services.NanoBretActivityProfileService;
 import org.sgc.rak.util.TestUtil;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -28,7 +25,6 @@ import org.springframework.web.util.NestedServletException;
 import java.util.Collections;
 import java.util.List;
 
-import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doReturn;
 
