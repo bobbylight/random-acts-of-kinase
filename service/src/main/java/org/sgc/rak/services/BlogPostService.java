@@ -68,7 +68,7 @@ public class BlogPostService {
     public BlogPost updateBlogPost(BlogPost post) {
 
         Optional<BlogPost> optional = repository.findById(post.getId());
-        if (!optional.isPresent()) {
+        if (optional.isEmpty()) {
             throw new NotFoundException(messages.get("error.noSuchBlogPost", post.getId()));
         }
 

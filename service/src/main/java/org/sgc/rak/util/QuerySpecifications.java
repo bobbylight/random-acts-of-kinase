@@ -40,7 +40,7 @@ public final class QuerySpecifications {
     public static Specification<ActivityProfile> activityProfilesMatching(String compoundName, List<Long> kinaseIds,
                                                                           Double percentControl) {
 
-        return new Specification<ActivityProfile>() {
+        return new Specification<>() {
 
             @Nullable
             @Override
@@ -87,7 +87,7 @@ public final class QuerySpecifications {
     public static Specification<Audit> auditRecordsMatching(String user, AuditAction action, String ipAddress,
                                                             Boolean success, Date fromDate, Date toDate) {
 
-        return new Specification<Audit>() {
+        return new Specification<>() {
 
             @Nullable
             @Override
@@ -144,7 +144,7 @@ public final class QuerySpecifications {
      */
     public static Specification<Compound> hasNullFields(String compoundNamePart, String... possiblyNullFields) {
 
-        return new Specification<Compound>() {
+        return new Specification<>() {
 
             @Nullable
             @Override
@@ -183,7 +183,7 @@ public final class QuerySpecifications {
      */
     public static Specification<Compound> isHidden(String compoundNamePart, boolean hidden) {
 
-        return new Specification<Compound>() {
+        return new Specification<>() {
 
             @Nullable
             @Override
@@ -216,7 +216,7 @@ public final class QuerySpecifications {
      */
     public static Specification<Compound> standardSearch(String compoundNamePart, boolean includeHidden) {
 
-        return new Specification<Compound>() {
+        return new Specification<>() {
 
             @Nullable
             @Override

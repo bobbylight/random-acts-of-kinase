@@ -68,9 +68,7 @@ public class CompoundControllerTest {
     @Test
     public void testGetCompound_notFound() {
         doReturn(null).when(mockCompoundService).getCompound(anyString());
-        Assertions.assertThrows(NotFoundException.class, () -> {
-            controller.getCompound("compoundA");
-        });
+        Assertions.assertThrows(NotFoundException.class, () -> controller.getCompound("compoundA"));
     }
 
     @Test
@@ -82,9 +80,7 @@ public class CompoundControllerTest {
 
         doReturn(compound).when(mockCompoundService).getCompound(anyString());
 
-        Assertions.assertThrows(ForbiddenException.class, () -> {
-            controller.getCompound("compoundA");
-        });
+        Assertions.assertThrows(ForbiddenException.class, () -> controller.getCompound("compoundA"));
     }
 
     @Test
@@ -250,9 +246,7 @@ public class CompoundControllerTest {
 
         Compound compound = TestUtil.createCompound(compoundName);
 
-        Assertions.assertThrows(BadRequestException.class, () -> {
-            controller.updateCompound("compoundB", compound);
-        });
+        Assertions.assertThrows(BadRequestException.class, () -> controller.updateCompound("compoundB", compound));
     }
 
     @Test
@@ -265,8 +259,6 @@ public class CompoundControllerTest {
 
         doReturn(false).when(mockCompoundService).getCompoundExists(eq(compoundName));
 
-        Assertions.assertThrows(NotFoundException.class, () -> {
-            controller.updateCompound(compoundName, compound);
-        });
+        Assertions.assertThrows(NotFoundException.class, () -> controller.updateCompound(compoundName, compound));
     }
 }

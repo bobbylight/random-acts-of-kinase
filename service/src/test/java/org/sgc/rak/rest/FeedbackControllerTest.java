@@ -133,7 +133,7 @@ public class FeedbackControllerTest {
             PagedDataRep.class);
         // jackson converts collections of objects to Collection<LinkedHashMap>, so we must manually deserialize
         // the list that's one-level deep
-        actualFeedbacks.setData(mapper.convertValue(actualFeedbacks.getData(), new TypeReference<List<Feedback>>() {}));
+        actualFeedbacks.setData(mapper.convertValue(actualFeedbacks.getData(), new TypeReference<>() {}));
         Assertions.assertEquals(0, actualFeedbacks.getStart());
         Assertions.assertEquals(1, actualFeedbacks.getTotal());
         Assertions.assertEquals(1, actualFeedbacks.getCount());

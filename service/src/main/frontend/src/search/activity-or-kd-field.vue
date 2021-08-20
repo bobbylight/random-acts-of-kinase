@@ -14,7 +14,6 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Watch } from 'vue-property-decorator';
 import ActivityOrKdToggleButton from './activity-or-kd-toggle-button.vue';
-import { SearchByKinaseSecondComponent } from '../rak';
 
 @Component({ components: { ActivityOrKdToggleButton } })
 export default class ActivityOrKdField extends Vue {

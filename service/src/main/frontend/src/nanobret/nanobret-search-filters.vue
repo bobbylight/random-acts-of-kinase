@@ -34,7 +34,6 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import LazyDropdown from '../lazy-dropdown.vue';
 import { Kinase, NanoBretSearchFilter, PagedDataRep } from '../rak';
-import ActivityOrKdField from '../search/activity-or-kd-field.vue';
 
 @Component({ components: { LazyDropdown } })
 export default class NanoBretSearchFilters extends Vue {

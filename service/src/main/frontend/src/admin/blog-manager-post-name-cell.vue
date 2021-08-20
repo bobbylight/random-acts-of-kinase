@@ -26,7 +26,7 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
 import ConfirmModal from '../confirm-modal.vue';
-import { BlogPost, ErrorResponse } from '../rak';
+import { BlogPost } from '../rak';
 
 @Component({ components: { ConfirmModal } })
 export default class BlogManagerPostNameCell extends Vue {

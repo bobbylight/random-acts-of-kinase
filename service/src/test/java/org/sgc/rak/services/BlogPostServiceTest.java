@@ -104,8 +104,6 @@ public class BlogPostServiceTest {
 
         doReturn(Optional.empty()).when(mockRepository).findById(anyLong());
 
-        Assertions.assertThrows(NotFoundException.class, () -> {
-            service.updateBlogPost(post);
-        });
+        Assertions.assertThrows(NotFoundException.class, () -> service.updateBlogPost(post));
     }
 }

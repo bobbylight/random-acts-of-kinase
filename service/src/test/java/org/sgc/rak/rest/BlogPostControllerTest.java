@@ -108,7 +108,7 @@ public class BlogPostControllerTest {
             PagedDataRep.class);
         // jackson converts collections of objects to Collection<LinkedHashMap>, so we must manually deserialize
         // the list that's one-level deep
-        actualPosts.setData(mapper.convertValue(actualPosts.getData(), new TypeReference<List<BlogPost>>() {}));
+        actualPosts.setData(mapper.convertValue(actualPosts.getData(), new TypeReference<>() {}));
         Assertions.assertEquals(0, actualPosts.getStart());
         Assertions.assertEquals(1, actualPosts.getTotal());
         Assertions.assertEquals(1, actualPosts.getCount());

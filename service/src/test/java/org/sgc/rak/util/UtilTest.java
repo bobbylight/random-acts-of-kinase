@@ -306,10 +306,6 @@ public class UtilTest {
     @Test
     public void testPatchNanoBretActivityProfile_nonNullValuesOverwritePriorValues() {
 
-        Kinase existingKinase = new Kinase();
-        existingKinase.setId(3);
-        existingKinase.setDiscoverxGeneSymbol("existingDiscoverx");
-
         Date date = new Date(0);
         NanoBretActivityProfile existing = TestUtil.createNanoBretActivityProfile("compoundA", date,
             "commentA", "nlucA", 0d, 0, "discoverxA", "entrezA",
@@ -340,10 +336,6 @@ public class UtilTest {
 
     @Test
     public void testPatchNanoBretActivityProfile_nullValuesDontOverwriteNonNullValues() {
-
-        Kinase existingKinase = new Kinase();
-        existingKinase.setId(3);
-        existingKinase.setDiscoverxGeneSymbol("existingDiscoverx");
 
         Date date = new Date(0);
         NanoBretActivityProfile existing = TestUtil.createNanoBretActivityProfile("compoundA", date,

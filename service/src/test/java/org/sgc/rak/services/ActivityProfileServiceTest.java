@@ -254,9 +254,7 @@ public class ActivityProfileServiceTest {
         Kinase kinase = TestUtil.createKinase("discoverxA", "entrezA");
         doReturn(Collections.singletonList(kinase)).when(mockKinaseService).getKinase(eq(kinase.getEntrezGeneSymbol()));
 
-        Assertions.assertThrows(BadRequestException.class, () -> {
-            service.importActivityProfiles(records, true);
-        });
+        Assertions.assertThrows(BadRequestException.class, () -> service.importActivityProfiles(records, true));
     }
 
     @Test
@@ -274,9 +272,7 @@ public class ActivityProfileServiceTest {
         doReturn(true).when(mockCompoundService).getCompoundExists(anyString());
         doReturn(null).when(mockKinaseService).getKinase(eq("unknown"));
 
-        Assertions.assertThrows(BadRequestException.class, () -> {
-            service.importActivityProfiles(records, true);
-        });
+        Assertions.assertThrows(BadRequestException.class, () -> service.importActivityProfiles(records, true));
     }
 
     @Test
@@ -365,9 +361,7 @@ public class ActivityProfileServiceTest {
         doReturn(Collections.singletonList(kinase)).when(mockKinaseService).getKinase(eq(records.get(0)
             .getEntrezGeneSymbol()));
 
-        Assertions.assertThrows(BadRequestException.class, () -> {
-            service.importKdValues(records, true);
-        });
+        Assertions.assertThrows(BadRequestException.class, () -> service.importKdValues(records, true));
     }
 
     @Test
@@ -384,8 +378,6 @@ public class ActivityProfileServiceTest {
         doReturn(true).when(mockCompoundService).getCompoundExists(anyString());
         doReturn(null).when(mockKinaseService).getKinase(eq(records.get(0).getDiscoverxGeneSymbol()));
 
-        Assertions.assertThrows(BadRequestException.class, () -> {
-            service.importKdValues(records, true);
-        });
+        Assertions.assertThrows(BadRequestException.class, () -> service.importKdValues(records, true));
     }
 }

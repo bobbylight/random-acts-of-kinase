@@ -102,7 +102,7 @@ public class NanoBretActivityProfileControllerTest {
     }
 
     @Test
-    public void testGetActivityProfiles_noSuchKinase() throws Exception {
+    public void testGetActivityProfiles_noSuchKinase() {
 
         doReturn(Collections.emptyList()).when(mockKinaseService).getKinase(eq(KINASE_ENTREZ));
 
@@ -116,7 +116,7 @@ public class NanoBretActivityProfileControllerTest {
                     .contentType(MediaType.APPLICATION_JSON)
                 );
             } catch (NestedServletException e) {
-                throw (Exception) e.getCause();
+                throw e.getCause();
             }
         });
     }

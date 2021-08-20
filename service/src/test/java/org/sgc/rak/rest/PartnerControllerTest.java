@@ -78,7 +78,7 @@ public class PartnerControllerTest {
             PagedDataRep.class);
         // jackson converts collections of objects to Collection<LinkedHashMap>, so we must manually deserialize
         // the list that's one-level deep
-        actualPartners.setData(mapper.convertValue(actualPartners.getData(), new TypeReference<List<Partner>>() {}));
+        actualPartners.setData(mapper.convertValue(actualPartners.getData(), new TypeReference<>() {}));
         Assertions.assertEquals(0, actualPartners.getStart());
         Assertions.assertEquals(1, actualPartners.getTotal());
         Assertions.assertEquals(1, actualPartners.getCount());
