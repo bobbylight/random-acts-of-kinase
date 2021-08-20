@@ -43,10 +43,8 @@ public class RakAccessDeniedHandlerTest {
     private void testHandleImpl(String queryString) throws Exception {
 
         String uri = "/customers";
-        if (queryString != null) {
-            uri += queryString;
-        }
         MockHttpServletRequest request = new MockHttpServletRequest(HttpMethod.GET.name(), uri);
+        request.setQueryString(queryString);
         request.setRemoteUser("gclooney");
         MockHttpServletResponse response = new MockHttpServletResponse();
         AccessDeniedException e = new AccessDeniedException("Test exception");

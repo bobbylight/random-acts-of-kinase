@@ -68,7 +68,7 @@ public class ActivityProfileControllerTest {
     }
 
     @Test
-    public void testGetActivityProfiles_activityLessThanZero() throws Exception {
+    public void testGetActivityProfiles_activityLessThanZero() {
 
         Assertions.assertThrows(BadRequestException.class, () -> {
             try {
@@ -80,7 +80,7 @@ public class ActivityProfileControllerTest {
                     .contentType(MediaType.APPLICATION_JSON)
                 );
             } catch (NestedServletException e) {
-                throw (Exception) e.getCause();
+                throw e.getCause();
             }
         });
     }
@@ -104,7 +104,7 @@ public class ActivityProfileControllerTest {
     }
 
     @Test
-    public void testGetActivityProfiles_noSuchKinase() throws Exception {
+    public void testGetActivityProfiles_noSuchKinase() {
 
         doReturn(Collections.emptyList()).when(mockKinaseService).getKinase(eq(KINASE_ENTREZ));
 
@@ -118,13 +118,13 @@ public class ActivityProfileControllerTest {
                     .contentType(MediaType.APPLICATION_JSON)
                 );
             } catch (NestedServletException e) {
-                throw (Exception) e.getCause();
+                throw e.getCause();
             }
         });
     }
 
     @Test
-    public void testGetActivityProfiles_happyPath_nothingSpecified() throws Exception{
+    public void testGetActivityProfiles_happyPath_nothingSpecified() throws Exception {
 
         List<ActivityProfile> kapList = Collections.singletonList(
             TestUtil.createActivityProfile(33L)
@@ -191,39 +191,6 @@ public class ActivityProfileControllerTest {
 
         try {
             mockMvc.perform(MockMvcRequestBuilders.get("/api/activityProfiles")
-                .param("kinase", KINASE_ENTREZ)
-                .param("activity", "1")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-            ).andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.start", is(0)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.count", is(1)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.total", is(1)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.data[0].id", is(33)));
-        } catch (NestedServletException e) {
-            throw (Exception)e.getCause();
-        }
-    }
-
-    @Test
-    public void testGetActivityProfiles_happyPath_compoundAndKinaseAndPercentControl() throws Exception {
-
-        Kinase kinase = TestUtil.createKinase(42L, KINASE_DISCOVERX, KINASE_ENTREZ);
-        List<Kinase> kinaseList = Collections.singletonList(kinase);
-        doReturn(kinaseList).when(mockKinaseService).getKinase(eq(KINASE_ENTREZ));
-
-        List<ActivityProfile> kapList = Collections.singletonList(
-            TestUtil.createActivityProfile(33L)
-        );
-        PageImpl<ActivityProfile> expectedPage = new PageImpl<>(kapList);
-
-        List<Long> kinaseIds = Collections.singletonList(42L);
-        doReturn(expectedPage).when(mockActivityProfileService)
-            .getActivityProfiles(eq(COMPOUND_NAME), eq(kinaseIds), anyDouble(), any(Pageable.class));
-
-        try {
-            mockMvc.perform(MockMvcRequestBuilders.get("/api/activityProfiles")
-                .param("compound", COMPOUND_NAME)
                 .param("kinase", KINASE_ENTREZ)
                 .param("activity", "1")
                 .accept(MediaType.APPLICATION_JSON)

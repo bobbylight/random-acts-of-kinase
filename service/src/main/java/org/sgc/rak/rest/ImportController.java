@@ -205,7 +205,7 @@ public class ImportController {
 
         CsvSchema schema = CsvSchema.builder()
             .addColumn("compoundName", CsvSchema.ColumnType.STRING)
-            .addColumn("entrezGeneSymbol", CsvSchema.ColumnType.STRING)
+            .addColumn("discoverxGeneSymbol", CsvSchema.ColumnType.STRING)
             .addColumn("nlucOrientation", CsvSchema.ColumnType.STRING)
             .addColumn("modifier", CsvSchema.ColumnType.STRING)
             .addColumn("ic50", CsvSchema.ColumnType.NUMBER)

@@ -11,6 +11,7 @@ import org.sgc.rak.exceptions.BadRequestException;
 import org.sgc.rak.i18n.Messages;
 import org.sgc.rak.services.ActivityProfileService;
 import org.sgc.rak.services.CompoundService;
+import org.sgc.rak.services.NanoBretActivityProfileService;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -38,6 +39,9 @@ public class ImportControllerTest {
 
     @Mock
     private ActivityProfileService mockActivityProfileService;
+
+    @Mock
+    private NanoBretActivityProfileService mockNanoBretActivityProfileService;
 
     @Mock
     private Messages mockMessages;
@@ -95,6 +99,13 @@ public class ImportControllerTest {
     public void testImportActivityProfiles_error_notCsv() {
         Assertions.assertThrows(BadRequestException.class, () -> {
             testImportActivityProfiles_impl("not-csv-data.csv", null, false, false);
+        });
+    }
+
+    @Test
+    public void testImportActivityProfiles_error_noDataInCsvFile() {
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            testImportActivityProfiles_impl("zero-bytes.csv", null, false, false);
         });
     }
 
@@ -254,6 +265,84 @@ public class ImportControllerTest {
 
             verify(mockActivityProfileService, times(1))
                 .importKdValues(any(), eq(expectedCommit));
+        }
+    }
+
+    @Test
+    public void testImportNanoBretActivityProfiles_happyPath_noOptionalParams() throws Exception {
+        testImportNanoBretActivityProfiles_impl("import-nanobret-activity-profiles-happy-path.csv", null, null, true);
+    }
+
+    @Test
+    public void testImportNanoBretActivityProfiles_happyPath_commitExplicitlyFalse() throws Exception {
+        testImportNanoBretActivityProfiles_impl("import-nanobret-activity-profiles-happy-path.csv", null, false, true);
+    }
+
+    @Test
+    public void testImportNanoBretActivityProfiles_happyPath_commitExplicitlyTrue() throws Exception {
+        testImportNanoBretActivityProfiles_impl("import-nanobret-activity-profiles-happy-path.csv", null, true, true);
+    }
+
+    @Test
+    public void testImportNanoBretActivityProfiles_happyPath_headerRowExplicitlyFalse() throws Exception {
+        testImportNanoBretActivityProfiles_impl("import-nanobret-activity-profiles-happy-path-no-header.csv", false, true, true);
+    }
+
+    @Test
+    public void testImportNanoBretActivityProfiles_error_missingAColumn() {
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            testImportNanoBretActivityProfiles_impl("import-nanobret-activity-profiles-missing-discoverx-column.csv", null, false, false);
+        });
+    }
+
+    @Test
+    public void testImportNanoBretActivityProfiles_error_notCsv() {
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            testImportNanoBretActivityProfiles_impl("not-csv-data.csv", null, false, false);
+        });
+    }
+
+    @Test
+    public void testImportNanoBretActivityProfiles_error_noDataInCsvFile() {
+        Assertions.assertThrows(BadRequestException.class, () -> {
+            testImportNanoBretActivityProfiles_impl("zero-bytes.csv", null, false, false);
+        });
+    }
+
+    private void testImportNanoBretActivityProfiles_impl(String csv, Boolean headerRow, Boolean commitParam,
+                                                 boolean expectSuccess) throws Exception {
+
+        MockMultipartFile file = new MockMultipartFile("file", getCsv(csv));
+        boolean requestParams = false;
+
+        String url = "/admin/api/nanoBretActivityProfiles";
+        if (headerRow != null) {
+            url += "?headerRow=" + headerRow;
+            requestParams = true;
+        }
+        if (commitParam != null) {
+            url += (requestParams ? "&" : "?") + "commit=" + commitParam;
+        }
+        boolean expectedCommit = commitParam != null ? commitParam : true;
+
+        ResultActions actions;
+        try {
+            actions = mockMvc.perform(MockMvcRequestBuilders.multipart(url)
+                .file(file)
+                .with(new PatchRequestPostProcessor())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+            );
+        } catch (NestedServletException e) {
+            throw (Exception)e.getCause(); // For tests that test failure paths, throw the underlying exception
+        }
+
+        if (expectSuccess) {
+            actions.andExpect(MockMvcResultMatchers.status().isOk()
+            ).andReturn();
+
+            verify(mockNanoBretActivityProfileService, times(1))
+                .importNanoBretActivityProfiles(any(), eq(expectedCommit));
         }
     }
 
