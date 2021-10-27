@@ -17,17 +17,24 @@
         </v-main>
 
         <v-footer class="theme--dark justify-center" height="auto">
-                    <div class="copyright">
-                        &copy; 2021 <a href="http://sgc-unc.org">SGC-UNC</a>
-                    </div>
-                    <v-btn class="footer-button theme--dark" icon small @click="viewSource"
-                           title="View Source" aria-label="View Source">
-                        <v-icon small>fab fa-github</v-icon>
-                    </v-btn>
-                    <v-btn class="footer-button theme--dark" icon small @click.stop="showAbout = true"
-                           title="About" aria-label="About">
-                        <v-icon small>fas fa-question-circle</v-icon>
-                    </v-btn>
+            <div class="copyright">
+                &copy; 2021 <a href="http://sgc-unc.org">SGC-UNC</a>
+            </div>
+
+            <span class="footer-spacer">&bull;</span>
+
+            <a href="#/privacy-policy">Privacy Policy</a>
+
+            <span class="footer-spacer">&bull;</span>
+
+            <v-btn class="footer-button theme--dark" icon small @click="viewSource"
+                   title="View Source" aria-label="View Source">
+                <v-icon small>fab fa-github</v-icon>
+            </v-btn>
+            <v-btn class="footer-button theme--dark" icon small @click.stop="showAbout = true"
+                   title="About" aria-label="About">
+                <v-icon small>fas fa-question-circle</v-icon>
+            </v-btn>
         </v-footer>
 
         <about-modal :show="showAbout" @close="showAbout = false"></about-modal>
@@ -87,15 +94,19 @@ export default class App extends Vue {
 }
 
 footer {
+    .footer-spacer {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit !important;
+    }
+
     .copyright {
 
         align-items: center;
-        margin-right: 3rem;
-
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
     }
 
     .footer-button {

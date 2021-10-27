@@ -65,6 +65,7 @@ Vue.use(VueChartkick, { adapter: Chart });
 import vuetify from './vuetify-plugin';
 
 import store from './rak-store';
+import PrivacyPolicy from '@/privacy-policy.vue';
 
 const routes: RouteConfig[] = [
     {
@@ -152,6 +153,11 @@ const routes: RouteConfig[] = [
         name: 'compound',
         component: Compound,
         props: true
+    },
+    {
+        path: '/privacy-policy',
+        name: 'privacy-policy',
+        component: PrivacyPolicy
     },
     {
         path: '/partners',
