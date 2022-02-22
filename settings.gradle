@@ -1,4 +1,0 @@
-rootProject.name = 'random-acts-of-kinase'
-
-include 'service'
-

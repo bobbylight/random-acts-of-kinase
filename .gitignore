@@ -9,7 +9,6 @@ out/
 *.iml
 npm-debug.log
 kinase.db
-semantic
 .DS_Store
 size-info.json
 size-info.txt
