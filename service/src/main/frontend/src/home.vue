@@ -71,7 +71,7 @@ export default class Home extends Vue {
 
     .parallax {
         transition: opacity 1s;
-        background-image: url(/img/drew-hays-206414-unsplash-small.jpg);
+        background-image: url(../public/img/drew-hays-206414-unsplash-small.jpg);
         min-height: 600px;
 
         background-position: center;
