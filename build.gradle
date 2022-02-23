@@ -11,7 +11,7 @@ group 'org.sgc'
 // NOTE: Local Java 14:  /Library/Java/JavaVirtualMachines/jdk-14.jdk/Contents/Home/bin/java
 
 wrapper {
-    gradleVersion = '7.2'
+    gradleVersion = '7.4'
 }
 
 idea {
