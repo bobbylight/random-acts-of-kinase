@@ -1,2 +1,4 @@
-package org.sgc.rak.model;public class UsereAccountType {
+package org.sgc.rak.model;
+
+public class UserAccountType {
 }

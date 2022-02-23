@@ -166,7 +166,7 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import SectionHeader from '@/header.vue';
-import SubHeader from "@/sub-header.vue";
+import SubHeader from '@/sub-header.vue';
 
 @Component({
     components: {

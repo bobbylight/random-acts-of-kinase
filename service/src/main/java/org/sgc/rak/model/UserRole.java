@@ -1,2 +1,4 @@
-package org.sgc.rak.model;public class UserRole {
+package org.sgc.rak.model;
+
+public class UserRole {
 }
