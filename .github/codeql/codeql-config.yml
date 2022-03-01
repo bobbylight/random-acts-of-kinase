@@ -3,3 +3,4 @@ name: "My CodeQL config"
 paths-ignore:
   - service/src/main/frontend/node_modules
   - service/src/main/resources/static/js
+  - service/build/main/resources/static/js
