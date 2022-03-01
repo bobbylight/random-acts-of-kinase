@@ -228,5 +228,9 @@ export default class Navbar extends Vue {
         background: rgba(255, 255, 255, 0.15) !important;
         color: #fff;
     }
+
+    .user-name {
+        align-self: center;
+    }
 }
 </style>

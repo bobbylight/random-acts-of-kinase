@@ -78,6 +78,7 @@ export default class App extends Vue {
 <style lang="less">
 .main-content {
     min-height: 800px;
+    padding-top: 64px !important; // Matches navbar height
 }
 
 .fade-enter-active, .fade-leave-active {
